@@ -48,9 +48,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between relative z-10 h-full gap-8">
-            {/* Logo - Fixed Width Side */}
-            <div className="flex-1 min-w-[180px] flex items-center">
+          <div className="flex items-center justify-between relative z-10 h-full gap-4">
+            {/* Logo - Flexible Side */}
+            <div className="flex-1 min-w-[140px] flex items-center">
               <div
                 className="cursor-pointer group flex-shrink-0"
                 onClick={() => {
@@ -69,12 +69,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             </div>
 
             {/* Navigation Menu - Center Aligned */}
-            <nav className="hidden xl:flex items-center gap-1 min-w-0 flex-shrink-0">
+            <nav className="hidden xl:flex items-center gap-0.5 min-w-0 flex-shrink-0">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-3 py-2 rounded-full text-[12px] font-bold uppercase tracking-widest transition-all duration-500 relative group overflow-hidden whitespace-nowrap ${activeSection === item.id
+                  className={`px-2.5 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all duration-500 relative group overflow-hidden whitespace-nowrap ${activeSection === item.id
                     ? (isScrolled ? 'text-primary' : 'text-white bg-white/20')
                     : (isScrolled ? 'text-slate-600 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
                     }`}
@@ -87,14 +87,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               ))}
             </nav>
 
-            {/* Right side: Actions - Fixed Width Side */}
-            <div className="flex-1 min-w-[180px] flex items-center justify-end gap-4">
-              <div className={`hidden md:flex items-center rounded-full p-1 border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
+            {/* Right side: Actions - Flexible Side */}
+            <div className="flex-1 min-w-[140px] flex items-center justify-end gap-3 flex-shrink-0">
+              <div className={`hidden md:flex items-center rounded-full p-0.5 border transition-all duration-500 flex-shrink-0 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
                 {['id', 'en'].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
+                    className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
                       ? 'bg-primary text-white shadow-lg shadow-primary/20'
                       : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
                       }`}
@@ -104,22 +104,24 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 ))}
               </div>
 
-              <button
-                onClick={() => setIsSearchOpen(true)}
-                className={`p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
-                aria-label="Search"
-              >
-                <Search size={18} strokeWidth={2.5} />
-              </button>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => setIsSearchOpen(true)}
+                  className={`p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
+                  aria-label="Search"
+                >
+                  <Search size={18} strokeWidth={2.5} />
+                </button>
 
-              <button
-                className={`xl:hidden p-3 rounded-full transition-all duration-500 ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isMobileMenuOpen ? "M6 18L18 6" : "M4 6h16M4 12h16m-7 6h7"} />
-                </svg>
-              </button>
+                <button
+                  className={`xl:hidden p-3 rounded-full transition-all duration-500 ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isMobileMenuOpen ? "M6 18L18 6" : "M4 6h16M4 12h16m-7 6h7"} />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
