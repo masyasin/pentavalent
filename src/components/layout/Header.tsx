@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           : 'bg-transparent py-6'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1920px] mx-auto px-6 sm:px-10 lg:px-12">
           <div className="flex items-center justify-between relative z-10 h-full gap-4">
             {/* Logo - Flexible Side */}
             <div className="flex-1 min-w-[140px] flex items-center">
