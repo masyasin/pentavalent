@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import FileUpload from '../../components/admin/FileUpload';
 import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, Box, Image as ImageIcon,
-    X, Save, Layers, ArrowRight, Sparkles, RefreshCw
+    X, Save, Layers, ArrowRight, Sparkles, RefreshCw, Maximize2, Minimize2
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface BusinessLine {
     id: string;
@@ -25,7 +27,13 @@ const BusinessLineManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [isMaximized, setIsMaximized] = useState(false);
     const [editingLine, setEditingLine] = useState<BusinessLine | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState({
         slug: '',
         title_id: '',
@@ -126,14 +134,22 @@ const BusinessLineManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('business_lines').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('business_lines').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchLines();
         } catch (error) {
             console.error('Error deleting business line:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -181,7 +197,7 @@ const BusinessLineManager: React.FC = () => {
                                         <button onClick={() => handleEdit(item)} className="p-3 text-gray-400 hover:text-blue-600 bg-gray-50 rounded-xl transition-all">
                                             <Edit2 size={18} />
                                         </button>
-                                        <button onClick={() => handleDelete(item.id)} className="p-3 text-gray-400 hover:text-red-600 bg-gray-50 rounded-xl transition-all">
+                                        <button onClick={() => handleDelete(item.id, item.title_id)} className="p-3 text-gray-400 hover:text-red-600 bg-gray-50 rounded-xl transition-all">
                                             <Trash2 size={18} />
                                         </button>
                                     </div>
@@ -199,21 +215,38 @@ const BusinessLineManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                    <div className="bg-white rounded-[2.5rem] max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
-                        <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                            <div>
-                                <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter">
-                                    {editingLine ? 'Edit Division' : 'New Division'}
-                                </h3>
-                                <p className="text-gray-500">Configure business line identity and details</p>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
+                    <div className={`bg-white shadow-2xl transition-all duration-500 ease-in-out flex flex-col ${isMaximized
+                        ? 'w-full h-full rounded-0'
+                        : 'max-w-6xl w-full max-h-[92vh] rounded-[3rem]'
+                        }`}>
+                        <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 transition-all">
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-200">
+                                    <Layers size={28} />
+                                </div>
+                                <div>
+                                    <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic">
+                                        {editingLine ? 'Update Division' : 'New Division'}
+                                    </h3>
+                                    <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest leading-none">Business Architecture Unit</p>
+                                </div>
                             </div>
-                            <button
-                                onClick={() => setShowModal(false)}
-                                className="w-12 h-12 flex items-center justify-center hover:bg-white rounded-full transition-all text-gray-400 hover:text-gray-900"
-                            >
-                                <X size={28} />
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setIsMaximized(!isMaximized)}
+                                    className="p-3 hover:bg-white hover:shadow-md rounded-xl transition-all text-gray-400 hover:text-blue-600"
+                                    title={isMaximized ? "Exit Fullscreen" : "Fullscreen"}
+                                >
+                                    {isMaximized ? <Minimize2 size={24} /> : <Maximize2 size={24} />}
+                                </button>
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="p-3 hover:bg-white hover:shadow-md rounded-xl transition-all text-gray-400 hover:text-red-500"
+                                >
+                                    <X size={24} />
+                                </button>
+                            </div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-10 space-y-10">
@@ -265,12 +298,12 @@ const BusinessLineManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] px-1">Image URL</label>
-                                    <input
-                                        type="url"
-                                        value={formData.image_url}
-                                        onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium"
+                                    <FileUpload
+                                        onUploadComplete={(url) => setFormData({ ...formData, image_url: url })}
+                                        currentUrl={formData.image_url}
+                                        label="Division Hero Image"
+                                        bucket="images"
+                                        type="image"
                                     />
                                 </div>
                                 <div className="space-y-3">
@@ -288,12 +321,12 @@ const BusinessLineManager: React.FC = () => {
                             <div className="space-y-8 pt-6 border-t border-gray-100">
                                 <div className="flex items-center gap-3">
                                     <Layers className="text-blue-600" size={24} />
-                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tighter">Detailed Description</h4>
+                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tighter italic">Detailed Description</h4>
                                 </div>
-                                <div className="space-y-12">
+                                <div className={`grid gap-12 ${isMaximized ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                     <div className="space-y-4">
-                                        <label className="text-xs font-black text-gray-400 uppercase tracking-[0.15em] flex items-center gap-2">
-                                            <span className="w-8 h-px bg-gray-200"></span>
+                                        <label className="text-[10px] font-black text-gray-700 uppercase tracking-[0.15em] flex items-center gap-2">
+                                            <span className="w-6 h-1 bg-blue-500 rounded-full"></span>
                                             INDONESIAN DESCRIPTION
                                         </label>
                                         <RichTextEditor
@@ -303,9 +336,9 @@ const BusinessLineManager: React.FC = () => {
                                         />
                                     </div>
                                     <div className="space-y-4">
-                                        <div className="flex justify-between items-center">
-                                            <label className="text-xs font-black text-gray-400 uppercase tracking-[0.15em] flex items-center gap-2">
-                                                <span className="w-8 h-px bg-gray-200"></span>
+                                        <div className="flex justify-between items-center text-gray-700">
+                                            <label className="text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-2">
+                                                <span className="w-6 h-1 bg-emerald-500 rounded-full"></span>
                                                 ENGLISH DESCRIPTION
                                             </label>
                                             <button
@@ -360,6 +393,14 @@ const BusinessLineManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

@@ -6,6 +6,7 @@ import {
     Heart, Star, Shield, Zap, Target, Rocket,
     RefreshCw, CheckCircle2, AlertCircle, Sparkles
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface CorporateValue {
     id: string;
@@ -33,6 +34,11 @@ const ValuesManager: React.FC = () => {
     const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingValue, setEditingValue] = useState<CorporateValue | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState<Partial<CorporateValue>>({
         title_id: '',
         title_en: '',
@@ -120,14 +126,22 @@ const ValuesManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Scale back your principles? delete this value?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('corporate_values').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('corporate_values').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchValues();
         } catch (error) {
             console.error('Error deleting value:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -177,7 +191,7 @@ const ValuesManager: React.FC = () => {
                             <div key={val.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:border-blue-500 hover:shadow-2xl transition-all group relative overflow-hidden">
                                 <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-all flex gap-2">
                                     <button onClick={() => handleEdit(val)} className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"><Edit2 size={14} /></button>
-                                    <button onClick={() => handleDelete(val.id)} className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"><Trash2 size={14} /></button>
+                                    <button onClick={() => handleDelete(val.id, val.title_id)} className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"><Trash2 size={14} /></button>
                                 </div>
 
                                 <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 group-hover:bg-blue-600 group-hover:text-white transition-all mb-6">
@@ -323,6 +337,14 @@ const ValuesManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { motion } from 'framer-motion';
+import { Building2, Mail, MapPin, Globe, ShieldCheck, Users, Eye, ArrowUpRight, Phone, Clock, Shield } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 
 interface FooterProps {
   onNavigate: (section: string) => void;
@@ -57,153 +60,233 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
     },
   ];
 
-  const certifications = [
-    { name: 'CDOB', desc: 'Certified' },
-    { name: 'CDAKB', desc: 'Certified' },
-    { name: 'ISO 9001', desc: 'Quality' },
-    { name: 'ISO 27001', desc: 'Security' },
-  ];
+  const VisitorCounter = () => {
+    const [count, setCount] = useState<number | null>(null);
+    const [active, setActive] = useState<number>(0);
+
+    useEffect(() => {
+      const fetchAndIncrement = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('site_settings')
+            .select('*')
+            .single();
+
+          if (data && !error) {
+            const newCount = (data.visitor_count || 0) + 1;
+            setCount(newCount);
+
+            await supabase
+              .from('site_settings')
+              .update({ visitor_count: newCount })
+              .eq('id', data.id);
+          } else {
+            setCount(0);
+          }
+
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const { count: todayCount, error: logsError } = await supabase
+            .from('visitor_logs')
+            .select('*', { count: 'exact', head: true })
+            .gte('created_at', today.toISOString());
+
+          if (!logsError && todayCount !== null) {
+            setActive(todayCount);
+          } else {
+            setActive(0);
+          }
+
+          try {
+            const userAgent = navigator.userAgent;
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+
+            let browser = "Unknown";
+            if (userAgent.indexOf("Chrome") > -1) browser = "Chrome";
+            else if (userAgent.indexOf("Safari") > -1) browser = "Safari";
+            else if (userAgent.indexOf("Firefox") > -1) browser = "Firefox";
+            else if (userAgent.indexOf("MSIE") > -1 || !!(document as any).documentMode) browser = "IE";
+
+            let os = "Unknown";
+            if (navigator.platform.indexOf("Win") != -1) os = "Windows";
+            else if (navigator.platform.indexOf("Mac") != -1) os = "MacOS";
+            else if (navigator.platform.indexOf("Linux") != -1) os = "Linux";
+            else if (/Android/.test(userAgent)) os = "Android";
+            else if (/iPhone|iPad|iPod/.test(userAgent)) os = "iOS";
+
+            await supabase.from('visitor_logs').insert({
+              ip_address: 'localhost',
+              browser: browser,
+              os: os,
+              city: 'Local Development',
+              country: 'Local',
+              page_url: window.location.href,
+              referrer: document.referrer,
+              user_agent: userAgent,
+              is_mobile: isMobile
+            });
+          } catch (geoErr) {
+            console.warn('Analytics logging failed:', geoErr);
+          }
+        } catch (err) {
+          console.error('Counter update error:', err);
+        }
+      };
+
+      fetchAndIncrement();
+    }, []);
+
+    if (count === null) return null;
+
+    return (
+      <div className="flex flex-col gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-3xl backdrop-blur-2xl shadow-3xl shadow-blue-500/10 hover:bg-white/[0.06] hover:border-blue-500/30 transition-all group w-full max-w-[200px]">
+        {/* Live Traffic */}
+        <div className="flex flex-col items-center gap-2">
+          <div className="relative">
+            <div className="w-8 h-8 rounded-xl bg-green-500/10 flex items-center justify-center">
+              <Users size={14} className="text-green-400 group-hover:scale-110 transition-transform" />
+            </div>
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[#020617]"></span>
+          </div>
+          <div className="text-center">
+            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] leading-none mb-1">Traffic Live</p>
+            <p className="text-xl font-black text-white leading-none tracking-tighter group-hover:text-green-400 transition-colors uppercase italic">{active}</p>
+          </div>
+        </div>
+
+        <div className="w-full h-px bg-white/10"></div>
+
+        {/* Total Audit */}
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
+            <Eye size={14} className="text-blue-400 group-hover:scale-110 transition-transform" />
+          </div>
+          <div className="text-center">
+            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] leading-none mb-1">Total Audit</p>
+            <p className="text-xl font-black text-white leading-none tracking-tighter group-hover:text-blue-400 transition-colors uppercase italic">
+              {count.toLocaleString()}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <footer className="relative bg-slate-950 text-white overflow-hidden pt-24">
-      {/* Visual Depth Elements */}
-      <div className="absolute inset-0 z-0 opacity-20">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse delay-700"></div>
+    <footer className="relative bg-[#020617] text-white overflow-hidden pt-12 pb-12">
+      <div className="absolute bottom-0 left-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1e293b] via-[#0f172a] to-[#020617]"></div>
+        <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.8) 1.5px, transparent 1.5px)', backgroundSize: '60px 60px' }}></div>
+        <div className="absolute bottom-0 left-0 w-full h-[700px] bg-gradient-to-t from-blue-600/20 via-purple-600/10 to-transparent blur-3xl mix-blend-screen"></div>
+        <div className="absolute bottom-0 left-0 w-full items-end flex opacity-50 scale-110 origin-bottom mix-blend-luminosity">
+          <svg className="w-full h-[250px] text-slate-600" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="currentColor" d="M0,320 L0,120 L80,120 L80,200 L160,200 L160,80 L240,80 L240,240 L320,240 L320,160 L400,160 L400,280 L480,280 L480,100 L560,100 L560,220 L640,220 L640,140 L720,140 L720,260 L800,260 L800,60 L880,60 L880,180 L960,180 L960,100 L1040,100 L1040,220 L1120,220 L1120,140 L1200,140 L1200,40 L1280,40 L1280,200 L1360,200 L1360,320 Z"></path>
+          </svg>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full items-end flex opacity-80 mix-blend-normal">
+          <svg className="w-full h-[200px] text-slate-800" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="currentColor" d="M0,320 L0,160 L50,160 L50,140 L100,140 L100,200 L180,200 L180,100 L240,100 L240,250 L300,250 L300,120 L380,120 L380,220 L440,220 L440,180 L500,180 L500,280 L580,280 L580,80 L640,80 L640,190 L700,190 L700,150 L760,150 L760,240 L820,240 L820,110 L900,110 L900,200 L960,200 L960,130 L1020,130 L1020,260 L1080,260 L1080,90 L1140,90 L1140,170 L1200,170 L1200,230 L1280,230 L1280,140 L1350,140 L1350,320 Z"></path>
+          </svg>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-full overflow-hidden opacity-90">
+          <div className="absolute bottom-0 left-[10%] w-[2px] h-32 bg-cyan-400 shadow-[0_0_10px_cyan] animate-pulse"></div>
+          <div className="absolute bottom-0 left-[15%] w-[3px] h-48 bg-blue-500 shadow-[0_0_15px_blue]"></div>
+          <div className="absolute bottom-0 left-[25%] w-[2px] h-24 bg-purple-400 shadow-[0_0_10px_purple]"></div>
+          <div className="absolute bottom-0 left-[45%] w-[4px] h-64 bg-indigo-500 shadow-[0_0_20px_indigo] opacity-80"></div>
+          <div className="absolute bottom-0 left-[60%] w-[3px] h-40 bg-blue-300 shadow-[0_0_12px_blue]"></div>
+          <div className="absolute bottom-0 left-[80%] w-[2px] h-36 bg-cyan-300 shadow-[0_0_10px_cyan]"></div>
+          <div className="absolute bottom-0 left-[90%] w-[3px] h-56 bg-purple-500 shadow-[0_0_15px_purple]"></div>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-[200px] bg-gradient-to-t from-[#020617] to-transparent opacity-80"></div>
+        <div className="absolute bottom-[-50px] left-1/4 w-[800px] h-[500px] bg-blue-600/30 rounded-full blur-[100px] mix-blend-screen animate-pulse"></div>
+        <div className="absolute bottom-[-50px] right-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-700"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 pb-20 border-b border-white/5">
-
-          {/* Brand Architecture Column */}
-          <div className="lg:col-span-4 space-y-10">
-            <div className="relative group inline-block">
-              <div className="absolute -inset-4 bg-white/5 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <div className="relative bg-white p-6 rounded-[1.5rem] shadow-2xl transition-transform duration-500 group-hover:scale-105">
-                <img
-                  src="/logo-penta-valent.png"
-                  alt="Penta Valent"
-                  className="h-14 w-auto"
-                />
-              </div>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-0 pb-16 border-b border-white/5">
+          {/* Column 1: Logo, Social, Counter */}
+          <div className="space-y-8 flex flex-col items-center">
+            <div className="relative group p-2 hover:scale-105 transition-transform duration-300">
+              <img src="/logo-penta-valent.png" alt="Penta Valent" className="h-16 w-auto brightness-0 invert" />
             </div>
 
-            <div className="space-y-6">
-              <p className="text-slate-400 text-sm leading-relaxed font-bold max-w-sm">
-                {t('about.description')}
-              </p>
-
-              <div className="flex items-center gap-6">
+            <div className="space-y-6 w-full flex flex-col items-center">
+              <div className="flex items-center gap-3 justify-center">
                 {social.map((item) => (
                   <a
                     key={item.name}
                     href={item.link}
-                    className="group relative"
+                    className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-blue-600 hover:border-blue-500 hover:-translate-y-1 transition-all duration-300"
                     aria-label={item.name}
                   >
-                    <div className="absolute -inset-2 bg-cyan-500/0 rounded-lg blur group-hover:bg-cyan-500/10 transition-colors"></div>
-                    <svg className="w-5 h-5 text-slate-500 group-hover:text-cyan-400 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                       <path d={item.icon} />
                     </svg>
                   </a>
                 ))}
               </div>
-            </div>
 
-            {/* Micro-Certificates Widget */}
-            <div className="flex gap-3 pt-4">
-              {['CDOB', 'CDAKB', 'ISO 9001'].map(cert => (
-                <div key={cert} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-black tracking-widest text-slate-300 uppercase">
-                  {cert}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Navigation Intelligence Columns */}
-          <div className="lg:col-span-4 grid grid-cols-2 gap-8">
-            <div className="space-y-8">
-              <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Perusahaan</h4>
-              <ul className="space-y-4">
-                {quickLinks.slice(0, 4).map((link) => (
-                  <li key={link.key}>
-                    <button
-                      onClick={() => onNavigate(link.key)}
-                      className="text-slate-400 text-xs font-bold hover:text-cyan-400 transition-all duration-300 flex items-center gap-2 group"
-                    >
-                      <span className="w-0 h-px bg-cyan-500 group-hover:w-4 transition-all duration-300"></span>
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="space-y-8">
-              <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Investor</h4>
-              <ul className="space-y-4">
-                {investors.map((link) => (
-                  <li key={link.key}>
-                    <button
-                      onClick={() => onNavigate(link.key)}
-                      className="text-slate-400 text-xs font-bold hover:text-cyan-400 transition-all duration-300 flex items-center gap-2 group"
-                    >
-                      <span className="w-0 h-px bg-cyan-500 group-hover:w-4 transition-all duration-300"></span>
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Executive Contact Pulse Column */}
-          <div className="lg:col-span-4">
-            <div className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 space-y-8 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-bl-[4rem] group-hover:bg-cyan-500/10 transition-colors"></div>
-
-              <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Pusat Informasi</h4>
-
-              <div className="space-y-6 relative z-10">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 flex-shrink-0">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
-                  </div>
-                  <div>
-                    <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Markas Besar</h5>
-                    <p className="text-white text-xs font-bold leading-relaxed">Jl. Tanah Abang III No. 12, Jakarta</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 flex-shrink-0">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                  </div>
-                  <div>
-                    <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Email Resmi</h5>
-                    <p className="text-white text-xs font-bold">info@pentavalent.co.id</p>
-                  </div>
-                </div>
-
-                <button className="w-full py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:bg-cyan-500 hover:text-white transition-all duration-500">
-                  {t('hero.cta2')}
-                </button>
+              <div className="pt-2 w-full flex justify-center">
+                <VisitorCounter />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Global Footer Baseline */}
-        <div className="py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
-            © {new Date().getFullYear()} PT PENTA VALENT TBK. {t('footer.rights')}
+          {/* Column 2: Contact Information */}
+          <div className="pt-2 pl-4">
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>Contact Us</h4>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><MapPin size={16} /></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Jakarta HQ</p><p className="text-white text-xs font-medium leading-relaxed">Tanah Abang III No. 12<br />Jakarta, Indonesia</p></div>
+              </div>
+              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 shrink-0"><Mail size={16} /></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Digital Mail</p><p className="text-white text-xs font-medium">info@pentavalent.co.id</p></div>
+              </div>
+              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 shrink-0"><Phone size={16} /></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Head Office</p><p className="text-white text-xs font-medium">+62 21 350-1010</p></div>
+              </div>
+              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><Clock size={16} /></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Business Hours</p><p className="text-white text-xs font-medium">Mon - Fri: 08:00 - 17:00</p></div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex gap-8">
-            {['Privacy', 'Ethics', 'Admin'].map(nav => (
-              <a key={nav} href={nav === 'Admin' ? '/admin' : '#'} className="text-slate-500 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">
-                {nav}
-              </a>
-            ))}
+          {/* Column 3: Corporate Menu */}
+          <div className="pt-2 lg:pl-8">
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-blue-500 rounded-full"></span>Corporate</h4>
+            <ul className="space-y-4 pl-4 border-l border-white/5">
+              {quickLinks.slice(0, 4).map((link) => (
+                <li key={link.key}><button onClick={() => onNavigate(link.key)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 text-blue-400">→</span>{link.label}</button></li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Stakeholders Menu */}
+          <div className="pt-2">
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-cyan-500 rounded-full"></span>Stakeholders</h4>
+            <ul className="space-y-4 pl-4 border-l border-white/5">
+              {investors.map((link) => (
+                <li key={link.key}><button onClick={() => onNavigate(link.key)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 text-cyan-400">→</span>{link.label}</button></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5 mt-4">
+          <div className="flex items-center gap-6">
+            <div className="text-slate-400 text-xs font-bold uppercase tracking-widest">
+              © {new Date().getFullYear()} PT PENTA VALENT TBK. <span className="hidden sm:inline opacity-30 mx-2">|</span> <span className="text-slate-400">All rights reserved.</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-6 flex-wrap justify-center">
+            <a href="/privacy-policy" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Privacy Policy</a>
+            <a href="/code-of-conduct" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Code of Conduct</a>
           </div>
         </div>
       </div>

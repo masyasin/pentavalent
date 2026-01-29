@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import FileUpload from '../../components/admin/FileUpload';
 import { Save, RefreshCw, CheckCircle2, AlertCircle, Type, Image as ImageIcon, Briefcase, Eye, Target, Sparkles } from 'lucide-react';
 
 interface CompanyInfo {
@@ -279,23 +280,13 @@ const GeneralInfoManager: React.FC = () => {
                                 </div>
                                 <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight italic">Corporate Visual</h3>
                             </div>
-                            <div className="space-y-4">
-                                <div className="aspect-video rounded-[2rem] overflow-hidden border-4 border-gray-100 shadow-inner group relative">
-                                    <img src={info?.image_url} alt="Corp Preview" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                        <span className="text-white text-[10px] font-black uppercase tracking-widest">Preview</span>
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Image URL</label>
-                                    <input
-                                        type="text"
-                                        value={info?.image_url}
-                                        onChange={(e) => setInfo({ ...info!, image_url: e.target.value })}
-                                        className="w-full px-5 py-3 bg-gray-50 border-2 border-transparent rounded-2xl focus:border-purple-500 transition-all text-xs font-mono"
-                                    />
-                                </div>
-                            </div>
+                            <FileUpload
+                                onUploadComplete={(url) => setInfo({ ...info!, image_url: url })}
+                                currentUrl={info?.image_url || ''}
+                                label="Featured Corporate Image"
+                                bucket="images"
+                                type="image"
+                            />
                         </div>
 
                         {/* Statistics */}

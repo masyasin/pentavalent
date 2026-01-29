@@ -152,12 +152,16 @@ const MainWebsite: React.FC = () => {
 
 import FAQPage from '../pages/public/FAQPage';
 import SitemapPage from '../pages/public/SitemapPage';
+import PrivacyPolicyPage from '../pages/PrivacyPolicyPage';
+import CodeOfConductPage from '../pages/CodeOfConductPage';
 
 const AppLayout: React.FC = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isFAQRoute = location.pathname === '/faq';
   const isSitemapRoute = location.pathname === '/sitemap';
+  const isPrivacyRoute = location.pathname === '/privacy-policy';
+  const isCodeOfConductRoute = location.pathname === '/code-of-conduct';
 
   return (
     <LanguageProvider>
@@ -167,6 +171,10 @@ const AppLayout: React.FC = () => {
         <FAQPage />
       ) : isSitemapRoute ? (
         <SitemapPage />
+      ) : isPrivacyRoute ? (
+        <PrivacyPolicyPage />
+      ) : isCodeOfConductRoute ? (
+        <CodeOfConductPage />
       ) : (
         <MainWebsite />
       )}

@@ -5,6 +5,7 @@ import {
     Trash2, ExternalLink, Briefcase, User,
     CheckCircle2, XCircle, Clock, Search
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface Application {
     id: string;
@@ -26,6 +27,11 @@ const ApplicationsManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
 
     useEffect(() => {
         fetchApplications();
@@ -67,18 +73,26 @@ const ApplicationsManager: React.FC = () => {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this application record?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
+            setLoading(true);
             const { error } = await supabase
                 .from('job_applications')
                 .delete()
-                .eq('id', id);
+                .eq('id', deleteDialog.id);
 
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchApplications();
         } catch (error) {
             console.error('Error deleting application:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -183,7 +197,7 @@ const ApplicationsManager: React.FC = () => {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <button
-                                                onClick={() => handleDelete(app.id)}
+                                                onClick={() => handleDelete(app.id, app.full_name)}
                                                 className="p-3 text-gray-300 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
                                                 title="Delete record"
                                             >
@@ -293,6 +307,14 @@ const ApplicationsManager: React.FC = () => {
                     ))}
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

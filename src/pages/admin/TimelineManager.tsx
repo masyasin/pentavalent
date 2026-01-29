@@ -6,6 +6,7 @@ import {
     History, Calendar, MoveUp, MoveDown,
     RefreshCw, CheckCircle2, AlertCircle, Sparkles
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface TimelineEvent {
     id: string;
@@ -24,6 +25,11 @@ const TimelineManager: React.FC = () => {
     const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingEvent, setEditingEvent] = useState<TimelineEvent | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState<Partial<TimelineEvent>>({
         year: '',
         title_id: '',
@@ -111,14 +117,22 @@ const TimelineManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Permanent delete this milestone?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('company_timeline').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('company_timeline').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchEvents();
         } catch (error) {
             console.error('Error deleting event:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -188,7 +202,7 @@ const TimelineManager: React.FC = () => {
                                                 <Edit2 size={20} />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(event.id)}
+                                                onClick={() => handleDelete(event.id, `${event.year} - ${event.title_id}`)}
                                                 className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all"
                                             >
                                                 <Trash2 size={20} />
@@ -358,6 +372,14 @@ const TimelineManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

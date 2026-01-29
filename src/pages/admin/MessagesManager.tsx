@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface Message {
   id: string;
@@ -17,6 +18,11 @@ const MessagesManager: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [filter, setFilter] = useState('all');
+  const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+    isOpen: false,
+    id: null,
+    name: ''
+  });
 
   useEffect(() => {
     fetchMessages();
@@ -28,7 +34,7 @@ const MessagesManager: React.FC = () => {
         .from('contact_messages')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       setMessages(data || []);
     } catch (error) {
@@ -44,7 +50,7 @@ const MessagesManager: React.FC = () => {
         .from('contact_messages')
         .update({ is_read: true })
         .eq('id', id);
-      
+
       if (error) throw error;
       fetchMessages();
     } catch (error) {
@@ -52,24 +58,31 @@ const MessagesManager: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this message?')) return;
-    
+  const handleDelete = (id: string, name: string) => {
+    setDeleteDialog({ isOpen: true, id, name });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteDialog.id) return;
     try {
-      const { error } = await supabase.from('contact_messages').delete().eq('id', id);
+      setLoading(true);
+      const { error } = await supabase.from('contact_messages').delete().eq('id', deleteDialog.id);
       if (error) throw error;
       setSelectedMessage(null);
+      setDeleteDialog({ isOpen: false, id: null, name: '' });
       fetchMessages();
     } catch (error) {
       console.error('Error deleting message:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const filteredMessages = filter === 'all' 
-    ? messages 
-    : filter === 'unread' 
-    ? messages.filter(m => !m.is_read)
-    : messages.filter(m => m.is_read);
+  const filteredMessages = filter === 'all'
+    ? messages
+    : filter === 'unread'
+      ? messages.filter(m => !m.is_read)
+      : messages.filter(m => m.is_read);
 
   const unreadCount = messages.filter(m => !m.is_read).length;
 
@@ -91,11 +104,10 @@ const MessagesManager: React.FC = () => {
           <button
             key={type}
             onClick={() => setFilter(type)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === type
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === type
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+              }`}
           >
             {type.charAt(0).toUpperCase() + type.slice(1)}
             {type === 'unread' && unreadCount > 0 && (
@@ -123,9 +135,8 @@ const MessagesManager: React.FC = () => {
                     setSelectedMessage(msg);
                     if (!msg.is_read) markAsRead(msg.id);
                   }}
-                  className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-                    selectedMessage?.id === msg.id ? 'bg-blue-50' : ''
-                  } ${!msg.is_read ? 'bg-blue-50/50' : ''}`}
+                  className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${selectedMessage?.id === msg.id ? 'bg-blue-50' : ''
+                    } ${!msg.is_read ? 'bg-blue-50/50' : ''}`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
@@ -168,7 +179,7 @@ const MessagesManager: React.FC = () => {
                     </p>
                   </div>
                   <button
-                    onClick={() => handleDelete(selectedMessage.id)}
+                    onClick={() => handleDelete(selectedMessage.id, selectedMessage.name)}
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,6 +215,14 @@ const MessagesManager: React.FC = () => {
           )}
         </div>
       </div>
+
+      <DeleteConfirmDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+        onConfirm={confirmDelete}
+        itemName={deleteDialog.name}
+        isLoading={loading}
+      />
     </div>
   );
 };

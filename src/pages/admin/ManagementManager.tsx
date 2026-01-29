@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import FileUpload from '../../components/admin/FileUpload';
 import {
     Plus, Edit2, Trash2, Save, X,
     User as UserIcon, Camera, MoveUp, MoveDown,
     RefreshCw, CheckCircle2, AlertCircle, Sparkles
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface ManagementMember {
     id: string;
@@ -25,6 +27,11 @@ const ManagementManager: React.FC = () => {
     const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingMember, setEditingMember] = useState<ManagementMember | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState<Partial<ManagementMember>>({
         name: '',
         position_id: '',
@@ -114,14 +121,22 @@ const ManagementManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this leadership member?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('management').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('management').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchMembers();
         } catch (error) {
             console.error('Error deleting member:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -195,7 +210,7 @@ const ManagementManager: React.FC = () => {
                                         <Edit2 size={18} />
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(member.id)}
+                                        onClick={() => handleDelete(member.id, member.name)}
                                         className="p-3 bg-white text-red-600 rounded-xl shadow-lg hover:bg-red-600 hover:text-white transition-all"
                                     >
                                         <Trash2 size={18} />
@@ -257,29 +272,13 @@ const ManagementManager: React.FC = () => {
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-12 space-y-10">
                             {/* Identity Section */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                                <div className="md:col-span-1 space-y-4">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Profile Image</label>
-                                    <div className="aspect-square bg-gray-50 rounded-[2.5rem] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center group overflow-hidden relative">
-                                        {formData.image_url ? (
-                                            <>
-                                                <img src={formData.image_url} className="w-full h-full object-cover" />
-                                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                                                    <button type="button" onClick={() => setFormData({ ...formData, image_url: '' })} className="text-white font-black text-xs uppercase tracking-widest">Remove</button>
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <div className="text-center p-6 space-y-3">
-                                                <Camera className="mx-auto text-gray-200" size={40} />
-                                                <p className="text-[10px] font-black text-gray-300 uppercase leading-relaxed">Click to provide URL</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <input
-                                        type="url"
-                                        placeholder="Image URL (Direct link)"
-                                        value={formData.image_url || ''}
-                                        onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:ring-4 focus:ring-blue-50 transition-all"
+                                <div className="md:col-span-1">
+                                    <FileUpload
+                                        onUploadComplete={(url) => setFormData({ ...formData, image_url: url })}
+                                        currentUrl={formData.image_url || ''}
+                                        label="Profile Image"
+                                        bucket="images"
+                                        type="image"
                                     />
                                 </div>
 
@@ -402,6 +401,14 @@ const ManagementManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

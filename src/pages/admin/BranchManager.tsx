@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { Plus, Building2, MapPin, Phone, Mail, Globe, X, Save, Edit2, Trash2 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface Branch {
   id: string;
@@ -21,6 +23,11 @@ const BranchManager: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingBranch, setEditingBranch] = useState<Branch | null>(null);
   const [filter, setFilter] = useState('all');
+  const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+    isOpen: false,
+    id: null,
+    name: ''
+  });
   const [formData, setFormData] = useState({
     name: '',
     branch_type: 'branch',
@@ -44,7 +51,7 @@ const BranchManager: React.FC = () => {
         .from('branches')
         .select('*')
         .order('province');
-      
+
       if (error) throw error;
       setBranches(data || []);
     } catch (error) {
@@ -68,13 +75,13 @@ const BranchManager: React.FC = () => {
           .from('branches')
           .update(branchData)
           .eq('id', editingBranch.id);
-        
+
         if (error) throw error;
       } else {
         const { error } = await supabase.from('branches').insert(branchData);
         if (error) throw error;
       }
-      
+
       setShowModal(false);
       setEditingBranch(null);
       resetForm();
@@ -116,20 +123,27 @@ const BranchManager: React.FC = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this branch?')) return;
-    
+  const handleDelete = async (id: string, name: string) => {
+    setDeleteDialog({ isOpen: true, id, name });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteDialog.id) return;
     try {
-      const { error } = await supabase.from('branches').delete().eq('id', id);
+      setLoading(true);
+      const { error } = await supabase.from('branches').delete().eq('id', deleteDialog.id);
       if (error) throw error;
+      setDeleteDialog({ isOpen: false, id: null, name: '' });
       fetchBranches();
     } catch (error) {
       console.error('Error deleting branch:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const filteredBranches = filter === 'all' 
-    ? branches 
+  const filteredBranches = filter === 'all'
+    ? branches
     : branches.filter(b => b.branch_type === filter);
 
   const branchTypes = ['head_office', 'branch', 'depo'];
@@ -149,12 +163,10 @@ const BranchManager: React.FC = () => {
             resetForm();
             setShowModal(true);
           }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+          className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 active:scale-95"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          Add Branch
+          <Plus size={20} />
+          ADD BRANCH
         </button>
       </div>
 
@@ -186,11 +198,10 @@ const BranchManager: React.FC = () => {
           <button
             key={type}
             onClick={() => setFilter(type)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === type
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === type
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
           >
             {type === 'all' ? 'All' : type === 'head_office' ? 'Head Office' : type === 'branch' ? 'Branch' : 'Depot'}
           </button>
@@ -225,11 +236,10 @@ const BranchManager: React.FC = () => {
                   <tr key={branch.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 font-medium text-gray-900">{branch.name}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        branch.branch_type === 'head_office' ? 'bg-red-100 text-red-700' :
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${branch.branch_type === 'head_office' ? 'bg-red-100 text-red-700' :
                         branch.branch_type === 'depo' ? 'bg-green-100 text-green-700' :
-                        'bg-blue-100 text-blue-700'
-                      }`}>
+                          'bg-blue-100 text-blue-700'
+                        }`}>
                         {branch.branch_type === 'head_office' ? 'HQ' : branch.branch_type}
                       </span>
                     </td>
@@ -239,9 +249,8 @@ const BranchManager: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">{branch.phone || '-'}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        branch.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${branch.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                        }`}>
                         {branch.is_active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
@@ -256,7 +265,7 @@ const BranchManager: React.FC = () => {
                           </svg>
                         </button>
                         <button
-                          onClick={() => handleDelete(branch.id)}
+                          onClick={() => handleDelete(branch.id, branch.name)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -273,23 +282,29 @@ const BranchManager: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold text-gray-900">
-                  {editingBranch ? 'Edit Branch' : 'Add Branch'}
-                </h3>
-                <button onClick={() => setShowModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
+          <div className="bg-white rounded-[2.5rem] max-w-2xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col">
+            <div className="p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                  <Building2 size={24} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter italic">
+                    {editingBranch ? 'Update Branch' : 'Register Branch'}
+                  </h3>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Network Management Terminal</p>
+                </div>
               </div>
+              <button
+                onClick={() => setShowModal(false)}
+                className="p-3 hover:bg-white hover:shadow-md rounded-xl transition-all text-gray-400 hover:text-red-500"
+              >
+                <X size={20} />
+              </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-10 space-y-8 custom-scrollbar">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Branch Name</label>
                 <input
@@ -395,25 +410,34 @@ const BranchManager: React.FC = () => {
                 />
                 <label htmlFor="is_active" className="text-sm font-medium text-gray-700">Active</label>
               </div>
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-4 pt-6">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-8 py-4 border border-gray-200 text-gray-600 font-bold rounded-2xl hover:bg-gray-50 transition-all uppercase tracking-widest text-xs"
                 >
-                  Cancel
+                  Discard
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="flex-[2] px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-200 flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
                 >
-                  {editingBranch ? 'Update' : 'Create'}
+                  <Save size={18} />
+                  {editingBranch ? 'SUBMIT UPDATES' : 'CONFIRM REGISTRATION'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      <DeleteConfirmDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+        onConfirm={confirmDelete}
+        itemName={deleteDialog.name}
+        isLoading={loading}
+      />
     </div>
   );
 };

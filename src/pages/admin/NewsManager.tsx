@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import RichTextEditor from '../../components/admin/RichTextEditor';
-import { Sparkles, RefreshCw } from 'lucide-react';
+import FileUpload from '../../components/admin/FileUpload';
+import { Sparkles, RefreshCw, Maximize2, Minimize2, X, Newspaper, Trash2 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface NewsItem {
   id: string;
@@ -25,7 +27,13 @@ const NewsManager: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [translating, setTranslating] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
   const [editingNews, setEditingNews] = useState<NewsItem | null>(null);
+  const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; title: string }>({
+    isOpen: false,
+    id: null,
+    title: ''
+  });
   const [formData, setFormData] = useState({
     title_id: '',
     title_en: '',
@@ -137,15 +145,22 @@ const NewsManager: React.FC = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this news?')) return;
+  const handleDelete = (id: string, title: string) => {
+    setDeleteDialog({ isOpen: true, id, title });
+  };
 
+  const confirmDelete = async () => {
+    if (!deleteDialog.id) return;
     try {
-      const { error } = await supabase.from('news').delete().eq('id', id);
+      setLoading(true);
+      const { error } = await supabase.from('news').delete().eq('id', deleteDialog.id);
       if (error) throw error;
+      setDeleteDialog({ isOpen: false, id: null, title: '' });
       fetchNews();
     } catch (error) {
       console.error('Error deleting news:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -239,7 +254,7 @@ const NewsManager: React.FC = () => {
                           </svg>
                         </button>
                         <button
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handleDelete(item.id, item.title_id)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,24 +273,40 @@ const NewsManager: React.FC = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold text-gray-900">
-                  {editingNews ? 'Edit News' : 'Add News'}
-                </h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
+          <div className={`bg-white shadow-2xl transition-all duration-500 ease-in-out flex flex-col ${isMaximized
+            ? 'w-full h-full rounded-0'
+            : 'max-w-6xl w-full max-h-[92vh] rounded-[2.5rem]'
+            }`}>
+            <div className="p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 rounded-t-[2.5rem]">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                  <Newspaper size={24} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight italic">
+                    {editingNews ? 'Update Article' : 'Draft New Article'}
+                  </h3>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Content Management System</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsMaximized(!isMaximized)}
+                  className="p-3 hover:bg-white hover:shadow-md rounded-xl transition-all text-gray-500 hover:text-blue-600"
+                  title={isMaximized ? "Exit Fullscreen" : "Fullscreen"}
+                >
+                  {isMaximized ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                </button>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
+                  className="p-3 hover:bg-white hover:shadow-md rounded-xl transition-all text-gray-500 hover:text-red-500"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <X size={20} />
                 </button>
               </div>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-10 space-y-8 custom-scrollbar">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Title (ID)</label>
@@ -322,15 +353,13 @@ const NewsManager: React.FC = () => {
                     ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Featured Image URL</label>
-                  <input
-                    type="url"
-                    value={formData.featured_image}
-                    onChange={(e) => setFormData({ ...formData, featured_image: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
+                <FileUpload
+                  onUploadComplete={(url) => setFormData({ ...formData, featured_image: url })}
+                  currentUrl={formData.featured_image}
+                  label="Featured Image"
+                  bucket="images"
+                  type="image"
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -365,32 +394,40 @@ const NewsManager: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Content (ID)</label>
-                <RichTextEditor
-                  content={formData.content_id}
-                  onChange={(content) => setFormData({ ...formData, content_id: content })}
-                  placeholder="Isi berita dalam Bahasa Indonesia..."
-                />
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center mb-1">
-                  <label className="block text-sm font-medium text-gray-700">Content (EN)</label>
-                  <button
-                    type="button"
-                    onClick={() => handleAutoTranslate(formData.content_id, 'content_en')}
-                    disabled={!!translating}
-                    className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
-                  >
-                    {translating === 'content_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Auto Translate</span>
-                  </button>
+              <div className={`grid gap-8 ${isMaximized ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                <div className="space-y-4">
+                  <label className="block text-sm font-black text-gray-700 uppercase tracking-widest italic flex items-center gap-2">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                    Content (ID)
+                  </label>
+                  <RichTextEditor
+                    content={formData.content_id}
+                    onChange={(content) => setFormData({ ...formData, content_id: content })}
+                    placeholder="Isi berita dalam Bahasa Indonesia..."
+                  />
                 </div>
-                <RichTextEditor
-                  content={formData.content_en}
-                  onChange={(content) => setFormData({ ...formData, content_en: content })}
-                  placeholder="News content in English..."
-                />
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-black text-gray-700 uppercase tracking-widest italic flex items-center gap-2">
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                      Content (EN)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleAutoTranslate(formData.content_id, 'content_en')}
+                      disabled={!!translating}
+                      className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                    >
+                      {translating === 'content_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Auto Translate</span>
+                    </button>
+                  </div>
+                  <RichTextEditor
+                    content={formData.content_en}
+                    onChange={(content) => setFormData({ ...formData, content_en: content })}
+                    placeholder="News content in English..."
+                  />
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <input
@@ -423,6 +460,14 @@ const NewsManager: React.FC = () => {
           </div>
         </div>
       )}
+
+      <DeleteConfirmDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+        onConfirm={confirmDelete}
+        itemName={deleteDialog.title}
+        isLoading={loading}
+      />
     </div>
   );
 };

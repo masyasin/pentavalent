@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import FileUpload from '../../components/admin/FileUpload';
 import {
     Plus, Edit2, Trash2, FileText, Download,
     X, Save, Filter, FileUp, Calendar, Sparkles, RefreshCw
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface InvestorDocument {
     id: string;
@@ -33,6 +35,11 @@ const InvestorManager: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingDoc, setEditingDoc] = useState<InvestorDocument | null>(null);
     const [translating, setTranslating] = useState<string | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState({
         title_id: '',
         title_en: '',
@@ -128,14 +135,22 @@ const InvestorManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this document?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('investor_documents').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('investor_documents').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchDocuments();
         } catch (error) {
             console.error('Error deleting document:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -216,7 +231,7 @@ const InvestorManager: React.FC = () => {
                                                 <button onClick={() => handleEdit(doc)} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-white rounded-lg transition-all">
                                                     <Edit2 size={18} />
                                                 </button>
-                                                <button onClick={() => handleDelete(doc.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-white rounded-lg transition-all">
+                                                <button onClick={() => handleDelete(doc.id, doc.title_id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-white rounded-lg transition-all">
                                                     <Trash2 size={18} />
                                                 </button>
                                             </div>
@@ -230,7 +245,7 @@ const InvestorManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
                     <div className="bg-white rounded-[2rem] max-w-3xl w-full shadow-2xl overflow-hidden">
                         <div className="p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                             <div>
@@ -321,23 +336,14 @@ const InvestorManager: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">File URL (PDF)</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="url"
-                                        required
-                                        value={formData.file_url}
-                                        onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
-                                        className="flex-1 px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all"
-                                        placeholder="https://example.com/report.pdf"
-                                    />
-                                    <div className="px-5 py-3 bg-blue-50 text-blue-600 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-blue-100 transition-all">
-                                        <FileUp size={18} />
-                                        <span className="text-xs font-black uppercase">Browse</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <FileUpload
+                                onUploadComplete={(url) => setFormData({ ...formData, file_url: url })}
+                                currentUrl={formData.file_url}
+                                label="Document File (PDF)"
+                                bucket="documents"
+                                type="file"
+                                accept=".pdf"
+                            />
 
                             <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
                                 <input
@@ -372,6 +378,14 @@ const InvestorManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

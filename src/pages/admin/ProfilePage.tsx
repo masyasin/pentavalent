@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
+import FileUpload from '../../components/admin/FileUpload';
 import {
     User as UserIcon, Camera, Mail, Shield,
     Save, RefreshCw, CheckCircle2, AlertCircle,
@@ -108,41 +109,24 @@ const ProfilePage: React.FC = () => {
                             <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Public Profile</h3>
                         </div>
 
-                        <div className="flex flex-col md:flex-row gap-10">
-                            <div className="space-y-4">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Avatar Image</label>
-                                <div className="w-32 h-32 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative group">
-                                    {avatarUrl ? (
-                                        <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <UserIcon className="text-gray-200" size={48} />
-                                    )}
-                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                                        <Camera className="text-white" size={24} />
-                                    </div>
-                                </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 w-full items-start">
+                            <div className="md:col-span-1">
+                                <FileUpload
+                                    onUploadComplete={(url) => setAvatarUrl(url)}
+                                    currentUrl={avatarUrl}
+                                    label="Profile Avatar"
+                                    bucket="images"
+                                    type="image"
+                                />
                             </div>
-
-                            <div className="flex-1 space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Full Name</label>
-                                    <input
-                                        type="text"
-                                        value={fullName}
-                                        onChange={(e) => setFullName(e.target.value)}
-                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Avatar URL</label>
-                                    <input
-                                        type="url"
-                                        value={avatarUrl}
-                                        onChange={(e) => setAvatarUrl(e.target.value)}
-                                        placeholder="https://..."
-                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-medium text-sm"
-                                    />
-                                </div>
+                            <div className="md:col-span-2 space-y-2">
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Full Name</label>
+                                <input
+                                    type="text"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-black text-xl italic"
+                                />
                             </div>
                         </div>
 

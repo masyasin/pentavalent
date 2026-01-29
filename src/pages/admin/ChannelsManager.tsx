@@ -5,6 +5,7 @@ import {
     Instagram, Twitter, Linkedin, Youtube,
     Share2, ExternalLink, Save, X, Hash
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface Channel {
     id: string;
@@ -20,6 +21,11 @@ const ChannelsManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingChannel, setEditingChannel] = useState<Channel | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
 
     const [formData, setFormData] = useState({
         platform: 'facebook',
@@ -97,14 +103,22 @@ const ChannelsManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to remove this channel?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('social_channels').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('social_channels').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchChannels();
         } catch (error) {
             console.error('Error deleting channel:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -167,7 +181,7 @@ const ChannelsManager: React.FC = () => {
                                     <button onClick={() => handleEdit(channel)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all">
                                         <Edit2 size={18} />
                                     </button>
-                                    <button onClick={() => handleDelete(channel.id)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                                    <button onClick={() => handleDelete(channel.id, channel.platform)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
                                         <Trash2 size={18} />
                                     </button>
                                 </div>
@@ -196,7 +210,7 @@ const ChannelsManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
                     <div className="bg-white rounded-[3rem] max-w-xl w-full shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="p-10 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
                             <div>
@@ -281,6 +295,14 @@ const ChannelsManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

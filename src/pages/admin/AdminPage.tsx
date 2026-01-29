@@ -21,6 +21,8 @@ import ApplicationsManager from './ApplicationsManager';
 import MenuManager from './MenuManager';
 import ChannelsManager from './ChannelsManager';
 import FAQManager from './FAQManager';
+import AnalyticsManager from './AnalyticsManager';
+import LegalDocumentsManager from './LegalDocumentsManager';
 import LoginPage from './LoginPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 
@@ -70,27 +72,21 @@ const AdminContent: React.FC = () => {
 
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard />;
+        return <Dashboard onNavigate={setCurrentPage} />;
       case 'news':
         return <NewsManager />;
-      case 'branches':
-        return <BranchManager />;
       case 'messages':
         return <MessagesManager />;
       case 'careers':
         return <CareerManager />;
-      case 'partners':
-        return <PartnerManager />;
-      case 'certifications':
-        return <CertificationManager />;
       case 'investor':
         return <InvestorManager />;
-      case 'pages':
-        return <BusinessLineManager />;
       case 'hero':
         return <HeroSliderManager />;
       case 'seo':
         return <SeoManager />;
+      case 'analytics':
+        return <AnalyticsManager />;
       case 'company':
         return <CompanyProfileManager />;
       case 'settings':
@@ -107,10 +103,12 @@ const AdminContent: React.FC = () => {
         return <ChannelsManager />;
       case 'faqs':
         return <FAQManager />;
+      case 'legal':
+        return <LegalDocumentsManager />;
       case 'change_password':
         return <ProfilePage />; // Already handled in ProfilePage
       default:
-        return <Dashboard />;
+        return <Dashboard onNavigate={setCurrentPage} />;
     }
   };
 

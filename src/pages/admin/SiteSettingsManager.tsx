@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import FileUpload from '../../components/admin/FileUpload';
+import ResetCounterDialog from '../../components/admin/ResetCounterDialog';
 import {
     Save, Globe, Mail, Phone, MapPin,
     Facebook, Twitter, Instagram, Linkedin,
     Youtube, Link as LinkIcon, Image as ImageIcon,
-    CheckCircle2, AlertCircle, RefreshCw, Type, Sparkles
+    CheckCircle2, AlertCircle, RefreshCw, Type, Sparkles, Users
 } from 'lucide-react';
 
 interface SiteSettings {
@@ -26,6 +28,7 @@ interface SiteSettings {
     };
     footer_text_id: string;
     footer_text_en: string;
+    visitor_count: number;
 }
 
 const SiteSettingsManager: React.FC = () => {
@@ -34,6 +37,7 @@ const SiteSettingsManager: React.FC = () => {
     const [saving, setSaving] = useState(false);
     const [translating, setTranslating] = useState<string | null>(null);
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+    const [showResetDialog, setShowResetDialog] = useState(false);
 
     useEffect(() => {
         fetchSettings();
@@ -82,12 +86,42 @@ const SiteSettingsManager: React.FC = () => {
                     social_links: {},
                     footer_text_id: '',
                     footer_text_en: '',
+                    visitor_count: 0,
                 });
             }
         } catch (error) {
             console.error('Error fetching settings:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleResetCounter = async () => {
+        if (!settings) return;
+
+        try {
+            setSaving(true);
+
+            // Update visitor_count to 0 in database
+            const { error } = await supabase
+                .from('site_settings')
+                .update({ visitor_count: 0 })
+                .eq('id', settings.id);
+
+            if (error) throw error;
+
+            // Update local state
+            setSettings({ ...settings, visitor_count: 0 });
+
+            setShowResetDialog(false);
+            setStatus({ type: 'success', message: 'Visitor counter reset successfully!' });
+            setTimeout(() => setStatus(null), 3000);
+        } catch (error) {
+            console.error('Error resetting counter:', error);
+            setStatus({ type: 'error', message: 'Failed to reset counter. Please try again.' });
+            setTimeout(() => setStatus(null), 3000);
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -170,38 +204,22 @@ const SiteSettingsManager: React.FC = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-1">Logo URL</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={settings?.logo_url}
-                                        onChange={(e) => setSettings({ ...settings!, logo_url: e.target.value })}
-                                        className="flex-1 px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium text-sm"
-                                    />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-1">Favicon URL</label>
-                                <input
-                                    type="text"
-                                    value={settings?.favicon_url}
-                                    onChange={(e) => setSettings({ ...settings!, favicon_url: e.target.value })}
-                                    className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium text-sm"
-                                />
-                            </div>
+                            <FileUpload
+                                onUploadComplete={(url) => setSettings({ ...settings!, logo_url: url })}
+                                currentUrl={settings?.logo_url || ''}
+                                label="Company Logo"
+                                bucket="images"
+                                type="image"
+                            />
+                            <FileUpload
+                                onUploadComplete={(url) => setSettings({ ...settings!, favicon_url: url })}
+                                currentUrl={settings?.favicon_url || ''}
+                                label="Site Favicon"
+                                bucket="images"
+                                type="image"
+                            />
                         </div>
 
-                        <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100 flex items-center justify-center min-h-[120px]">
-                            {settings?.logo_url ? (
-                                <img src={settings.logo_url} alt="Logo Preview" className="max-h-16 object-contain" />
-                            ) : (
-                                <div className="text-center">
-                                    <ImageIcon className="text-blue-200 mx-auto mb-2" size={32} />
-                                    <p className="text-xs font-bold text-blue-400 uppercase tracking-widest">Logo Preview</p>
-                                </div>
-                            )}
-                        </div>
                     </div>
                 </div>
 
@@ -379,7 +397,57 @@ const SiteSettingsManager: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Visitor Statistics */}
+                <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 space-y-8">
+                    <div className="flex items-center gap-3 pb-4 border-b border-gray-50">
+                        <Sparkles className="text-blue-600" size={24} />
+                        <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Analytics & Statistics</h3>
+                    </div>
+
+                    <div className="space-y-6">
+                        <div className="p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm">
+                                    <Users size={24} />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Global Visitor Count</p>
+                                    <h4 className="text-2xl font-black text-blue-900 tracking-tighter">
+                                        {settings?.visitor_count?.toLocaleString()}
+                                    </h4>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowResetDialog(true)}
+                                disabled={saving}
+                                className="px-4 py-2 bg-white text-red-600 border border-red-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Reset Counter
+                            </button>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-1">Manual Adjust Count</label>
+                            <input
+                                type="number"
+                                value={settings?.visitor_count}
+                                onChange={(e) => setSettings({ ...settings!, visitor_count: parseInt(e.target.value) || 0 })}
+                                className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold"
+                            />
+                        </div>
+                    </div>
+                </div>
             </form>
+
+            <ResetCounterDialog
+                isOpen={showResetDialog}
+                onClose={() => setShowResetDialog(false)}
+                onConfirm={handleResetCounter}
+                currentCount={settings?.visitor_count || 0}
+                isLoading={saving}
+            />
         </div>
     );
 };

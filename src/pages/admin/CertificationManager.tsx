@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import FileUpload from '../../components/admin/FileUpload';
 import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, Award, Image as ImageIcon,
-    X, Save, FileCheck, ShieldCheck, Sparkles, RefreshCw
+    X, Save, FileCheck, ShieldCheck, Sparkles, RefreshCw, Maximize2, Minimize2
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface Certification {
     id: string;
@@ -24,7 +26,13 @@ const CertificationManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [isMaximized, setIsMaximized] = useState(false);
     const [editingCert, setEditingCert] = useState<Certification | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState({
         name: '',
         description_id: '',
@@ -119,14 +127,22 @@ const CertificationManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this certification?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('certifications').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('certifications').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchCertifications();
         } catch (error) {
             console.error('Error deleting certification:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -186,7 +202,7 @@ const CertificationManager: React.FC = () => {
                                             <button onClick={() => handleEdit(cert)} className="p-2 text-gray-400 hover:text-blue-600 bg-gray-50 rounded-lg">
                                                 <Edit2 size={16} />
                                             </button>
-                                            <button onClick={() => handleDelete(cert.id)} className="p-2 text-gray-400 hover:text-red-600 bg-gray-50 rounded-lg">
+                                            <button onClick={() => handleDelete(cert.id, cert.name)} className="p-2 text-gray-400 hover:text-red-600 bg-gray-50 rounded-lg">
                                                 <Trash2 size={16} />
                                             </button>
                                         </div>
@@ -209,21 +225,38 @@ const CertificationManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                    <div className="bg-white rounded-[2rem] max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
-                        <div className="p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                            <div>
-                                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">
-                                    {editingCert ? 'Modify Certificate' : 'Add Certificate'}
-                                </h3>
-                                <p className="text-gray-500 text-sm">Regulatory and quality standard details</p>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
+                    <div className={`bg-white shadow-2xl transition-all duration-500 ease-in-out flex flex-col ${isMaximized
+                        ? 'w-full h-full rounded-0'
+                        : 'max-w-6xl w-full max-h-[92vh] rounded-[2.5rem]'
+                        }`}>
+                        <div className="p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 transition-all">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                                    <Award size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter italic">
+                                        {editingCert ? 'Modify Certificate' : 'Add Certificate'}
+                                    </h3>
+                                    <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest">Quality Assurance System</p>
+                                </div>
                             </div>
-                            <button
-                                onClick={() => setShowModal(false)}
-                                className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all text-gray-400 hover:text-gray-900"
-                            >
-                                <X size={24} />
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setIsMaximized(!isMaximized)}
+                                    className="p-3 hover:bg-white hover:shadow-md rounded-xl transition-all text-gray-400 hover:text-blue-600"
+                                    title={isMaximized ? "Exit Fullscreen" : "Fullscreen"}
+                                >
+                                    {isMaximized ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                                </button>
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="p-3 hover:bg-white hover:shadow-md rounded-xl transition-all text-gray-400 hover:text-red-500"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-8 space-y-8">
@@ -265,18 +298,15 @@ const CertificationManager: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Image URL (Scan)</label>
-                                    <input
-                                        type="url"
-                                        value={formData.image_url}
-                                        onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                                        className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium"
-                                        placeholder="https://example.com/certificate.jpg"
-                                    />
-                                </div>
-                                <div className="flex items-center gap-3 mt-8">
+                            <div className="grid grid-cols-2 gap-6 items-end">
+                                <FileUpload
+                                    onUploadComplete={(url) => setFormData({ ...formData, image_url: url })}
+                                    currentUrl={formData.image_url}
+                                    label="Certificate Scan Image"
+                                    bucket="images"
+                                    type="image"
+                                />
+                                <div className="flex items-center gap-3 mb-6">
                                     <input
                                         type="checkbox"
                                         id="cert_active"
@@ -292,10 +322,13 @@ const CertificationManager: React.FC = () => {
 
                             {/* Description Sections */}
                             <div className="space-y-6 pt-4 border-t border-gray-100">
-                                <h4 className="text-sm font-black text-blue-600 uppercase tracking-[0.2em]">Certificate Description</h4>
-                                <div className="space-y-8">
+                                <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] italic">Certificate Description</h4>
+                                <div className={`grid gap-8 ${isMaximized ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Description (ID)</label>
+                                        <label className="text-[10px] font-black text-gray-700 uppercase tracking-widest px-1 flex items-center gap-2">
+                                            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                            Description (ID)
+                                        </label>
                                         <RichTextEditor
                                             content={formData.description_id}
                                             onChange={(val) => setFormData({ ...formData, description_id: val })}
@@ -304,7 +337,10 @@ const CertificationManager: React.FC = () => {
                                     </div>
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center px-1">
-                                            <label className="text-xs font-black text-gray-400 uppercase tracking-widest leading-none">Description (EN)</label>
+                                            <label className="text-[10px] font-black text-gray-700 uppercase tracking-widest leading-none flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                                Description (EN)
+                                            </label>
                                             <button
                                                 type="button"
                                                 onClick={() => handleAutoTranslate(formData.description_id, 'description_en')}
@@ -344,6 +380,14 @@ const CertificationManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

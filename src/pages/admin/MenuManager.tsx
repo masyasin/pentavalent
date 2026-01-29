@@ -6,6 +6,7 @@ import {
     Link as LinkIcon, ExternalLink, Layout,
     CheckCircle2, AlertCircle, Save, X, Settings, Sparkles, RefreshCw
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface NavMenu {
     id: string;
@@ -25,6 +26,11 @@ const MenuManager: React.FC = () => {
     const [editingMenu, setEditingMenu] = useState<NavMenu | null>(null);
     const [translating, setTranslating] = useState<string | null>(null);
     const [locationFilter, setLocationFilter] = useState<'header' | 'footer'>('header');
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
 
     const [formData, setFormData] = useState({
         label_id: '',
@@ -127,14 +133,22 @@ const MenuManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this menu item?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('nav_menus').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('nav_menus').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchMenus();
         } catch (error) {
             console.error('Error deleting menu:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -227,7 +241,7 @@ const MenuManager: React.FC = () => {
                                         <button onClick={() => handleEdit(menu)} className="p-2 text-gray-300 hover:text-blue-600 hover:bg-white rounded-lg transition-all">
                                             <Edit2 size={16} />
                                         </button>
-                                        <button onClick={() => handleDelete(menu.id)} className="p-2 text-gray-300 hover:text-red-500 hover:bg-white rounded-lg transition-all">
+                                        <button onClick={() => handleDelete(menu.id, menu.label_id)} className="p-2 text-gray-300 hover:text-red-500 hover:bg-white rounded-lg transition-all">
                                             <Trash2 size={16} />
                                         </button>
                                     </div>
@@ -262,7 +276,7 @@ const MenuManager: React.FC = () => {
                                             <button onClick={() => handleEdit(child)} className="p-2 text-gray-300 hover:text-blue-600 hover:bg-white rounded-lg transition-all">
                                                 <Edit2 size={14} />
                                             </button>
-                                            <button onClick={() => handleDelete(child.id)} className="p-2 text-gray-300 hover:text-red-500 hover:bg-white rounded-lg transition-all">
+                                            <button onClick={() => handleDelete(child.id, child.label_id)} className="p-2 text-gray-300 hover:text-red-500 hover:bg-white rounded-lg transition-all">
                                                 <Trash2 size={14} />
                                             </button>
                                         </div>
@@ -393,6 +407,14 @@ const MenuManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

@@ -7,6 +7,7 @@ import {
     MoreVertical, Eye, EyeOff
 } from 'lucide-react';
 import { UserRole } from '../../contexts/AuthContext';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface AdminUser {
     id: string;
@@ -24,6 +25,11 @@ const UserManager: React.FC = () => {
     const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
 
     const [formData, setFormData] = useState<Partial<AdminUser> & { password?: string }>({
         email: '',
@@ -154,15 +160,23 @@ const UserManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Permanently remove this user? This action cannot be undone.')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('users').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('users').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchUsers();
             setStatus({ type: 'success', message: 'User deleted successfully' });
         } catch (error) {
             console.error('Error deleting user:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -281,7 +295,7 @@ const UserManager: React.FC = () => {
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(user.id)}
+                                                    onClick={() => handleDelete(user.id, user.full_name || user.email)}
                                                     className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
                                                 >
                                                     <Trash2 size={16} />
@@ -297,7 +311,7 @@ const UserManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/90 backdrop-blur-xl z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-gray-900/90 backdrop-blur-xl z-[200] flex items-center justify-center p-4">
                     <div className="bg-white rounded-[3rem] max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col scale-in-center">
                         <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                             <div className="flex items-center gap-6">
@@ -413,6 +427,14 @@ const UserManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

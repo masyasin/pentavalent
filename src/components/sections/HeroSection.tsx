@@ -111,8 +111,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               {/* Background Media with Subtle Zoom */}
               <div className="absolute inset-0 overflow-hidden">
                 <div
-                  className={`absolute inset-0 transition-transform ease-out ${selectedIndex === index ? 'scale-110' : 'scale-100'}`}
-                  style={{ transitionDuration: '10s' }}
+                  className={`absolute inset-0 transition-all duration-[8000ms] ease-out ${selectedIndex === index ? 'animate-ken-burns opacity-100' : 'opacity-0'}`}
                 >
                   {slide.video_url ? (
                     <video
@@ -137,10 +136,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     />
                   )}
                 </div>
-                {/* Overlay - Always visible for consistency */}
-                <div className="absolute inset-0 bg-black/20"></div>
+                {/* Optimized Overlay for maximum clarity */}
+                <div className="absolute inset-0 bg-black/10"></div>
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/40 via-transparent to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent"></div>
 
                 {/* Cinematic Light Streak */}
                 <div className="absolute bottom-[20%] -left-1/4 w-[150%] h-[1px] bg-gradient-to-r from-transparent via-accent/40 to-transparent blur-[100px] rotate-[-5deg] animate-pulse"></div>
@@ -161,11 +160,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                       </div>
                     )}
 
-                    {/* Title - Conditional */}
+                    {/* Title - Conditional with Slide Reveal Effect */}
                     {(language === 'id' ? slide.title_id : slide.title_en) && (
-                      <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] animate-fade-in text-white">
-                        {language === 'id' ? slide.title_id : slide.title_en}
-                      </h1>
+                      <div className="relative group">
+                        <div className={`absolute -left-4 top-0 w-2 h-full bg-accent transition-all duration-700 ${selectedIndex === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}></div>
+                        <h1 className={`text-5xl sm:text-6xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] text-white transition-all duration-1000 ${selectedIndex === index ? 'animate-title-pop' : 'opacity-0'}`}>
+                          {language === 'id' ? slide.title_id : slide.title_en}
+                        </h1>
+                      </div>
                     )}
 
                     {/* Subtitle - Conditional */}

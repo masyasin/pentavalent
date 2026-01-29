@@ -7,6 +7,7 @@ import {
     MessageCircle, CheckCircle2, ChevronDown, Sparkles
 } from 'lucide-react';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface FAQ {
     id: string;
@@ -26,6 +27,11 @@ const FAQManager: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
 
     const [formData, setFormData] = useState<Partial<FAQ>>({
         question_id: '',
@@ -107,14 +113,22 @@ const FAQManager: React.FC = () => {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this FAQ?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('faqs').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('faqs').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchFaqs();
         } catch (error) {
             console.error('Error deleting FAQ:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -226,8 +240,8 @@ const FAQManager: React.FC = () => {
                                         <Edit2 size={18} />
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(faq.id)}
-                                        className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                                        onClick={() => handleDelete(faq.id, faq.question_id)}
+                                        className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-blue-50 rounded-xl transition-all"
                                     >
                                         <Trash2 size={18} />
                                     </button>
@@ -239,7 +253,7 @@ const FAQManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/90 backdrop-blur-xl z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
                     <div className="bg-white rounded-[3rem] max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col scale-in-center">
                         <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                             <div>
@@ -390,6 +404,14 @@ const FAQManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

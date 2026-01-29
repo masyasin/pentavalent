@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import FileUpload from '../../components/admin/FileUpload';
 import {
     Plus, Edit2, Trash2, Image as ImageIcon, Video,
     Save, X, MoveUp, MoveDown, CheckCircle2, AlertCircle,
     Link as LinkIcon, Type, Sparkles, RefreshCw
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface HeroSlide {
     id: string;
@@ -31,6 +33,11 @@ const HeroSliderManager: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingSlide, setEditingSlide] = useState<HeroSlide | null>(null);
     const [translating, setTranslating] = useState<string | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState<Partial<HeroSlide>>({
         title_id: '',
         title_en: '',
@@ -133,14 +140,22 @@ const HeroSliderManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Permanently delete this hero slide?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('hero_slides').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('hero_slides').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchSlides();
         } catch (error) {
             console.error('Error deleting slide:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -214,7 +229,7 @@ const HeroSliderManager: React.FC = () => {
                                                 <Edit2 size={20} />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(slide.id)}
+                                                onClick={() => handleDelete(slide.id, slide.title_id)}
                                                 className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all"
                                             >
                                                 <Trash2 size={20} />
@@ -246,7 +261,7 @@ const HeroSliderManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
                     <div className="bg-white rounded-[3rem] max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col scale-in-center">
                         <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                             <div>
@@ -273,27 +288,21 @@ const HeroSliderManager: React.FC = () => {
                                     <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">Media Assets</h4>
                                 </div>
                                 <div className="grid grid-cols-2 gap-8">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Background Image URL</label>
-                                        <input
-                                            type="url"
-                                            required
-                                            value={formData.image_url}
-                                            onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium"
-                                            placeholder="https://..."
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Video URL (Optional overlay)</label>
-                                        <input
-                                            type="url"
-                                            value={formData.video_url || ''}
-                                            onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
-                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium"
-                                            placeholder="Direct .mp4 link for background video"
-                                        />
-                                    </div>
+                                    <FileUpload
+                                        onUploadComplete={(url) => setFormData({ ...formData, image_url: url })}
+                                        currentUrl={formData.image_url}
+                                        label="Background Image"
+                                        bucket="images"
+                                        type="image"
+                                    />
+                                    <FileUpload
+                                        onUploadComplete={(url) => setFormData({ ...formData, video_url: url })}
+                                        currentUrl={formData.video_url || ''}
+                                        label="Background Video (Optional)"
+                                        bucket="videos"
+                                        type="video"
+                                        accept="video/*"
+                                    />
                                 </div>
                             </div>
 
@@ -312,7 +321,6 @@ const HeroSliderManager: React.FC = () => {
                                             <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-1">Headline (ID)</label>
                                             <input
                                                 type="text"
-                                                required
                                                 value={formData.title_id}
                                                 onChange={(e) => setFormData({ ...formData, title_id: e.target.value })}
                                                 className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-black text-xl italic"
@@ -321,7 +329,6 @@ const HeroSliderManager: React.FC = () => {
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Sub-headline (ID)</label>
                                             <textarea
-                                                required
                                                 value={formData.subtitle_id}
                                                 onChange={(e) => setFormData({ ...formData, subtitle_id: e.target.value })}
                                                 rows={2}
@@ -346,7 +353,6 @@ const HeroSliderManager: React.FC = () => {
                                             </div>
                                             <input
                                                 type="text"
-                                                required
                                                 value={formData.title_en}
                                                 onChange={(e) => setFormData({ ...formData, title_en: e.target.value })}
                                                 className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-black text-xl italic"
@@ -366,7 +372,6 @@ const HeroSliderManager: React.FC = () => {
                                                 </button>
                                             </div>
                                             <textarea
-                                                required
                                                 value={formData.subtitle_en}
                                                 onChange={(e) => setFormData({ ...formData, subtitle_en: e.target.value })}
                                                 rows={2}
@@ -501,6 +506,14 @@ const HeroSliderManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

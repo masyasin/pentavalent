@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import FileUpload from '../../components/admin/FileUpload';
 import { translateText } from '../../lib/translation';
 import {
     Plus, Search, Edit2, Trash2, Globe, Image as ImageIcon,
     ChevronRight, X, Save, AlertCircle, ExternalLink, Sparkles, RefreshCw
 } from 'lucide-react';
+import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
 interface Partner {
     id: string;
@@ -26,6 +28,11 @@ const PartnerManager: React.FC = () => {
     const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
+        isOpen: false,
+        id: null,
+        name: ''
+    });
     const [formData, setFormData] = useState({
         name: '',
         partner_type: 'principal' as 'principal' | 'international',
@@ -123,14 +130,22 @@ const PartnerManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this partner?')) return;
+    const handleDelete = (id: string, name: string) => {
+        setDeleteDialog({ isOpen: true, id, name });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.id) return;
         try {
-            const { error } = await supabase.from('partners').delete().eq('id', id);
+            setLoading(true);
+            const { error } = await supabase.from('partners').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchPartners();
         } catch (error) {
             console.error('Error deleting partner:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -179,7 +194,7 @@ const PartnerManager: React.FC = () => {
                                     <button onClick={() => handleEdit(partner)} className="p-2 text-gray-400 hover:text-blue-600 bg-gray-50 rounded-lg">
                                         <Edit2 size={16} />
                                     </button>
-                                    <button onClick={() => handleDelete(partner.id)} className="p-2 text-gray-400 hover:text-red-600 bg-gray-50 rounded-lg">
+                                    <button onClick={() => handleDelete(partner.id, partner.name)} className="p-2 text-gray-400 hover:text-red-600 bg-gray-50 rounded-lg">
                                         <Trash2 size={16} />
                                     </button>
                                 </div>
@@ -215,7 +230,7 @@ const PartnerManager: React.FC = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-0 md:p-4 transition-all duration-300">
                     <div className="bg-white rounded-[2rem] max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
                         <div className="p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                             <div>
@@ -259,16 +274,13 @@ const PartnerManager: React.FC = () => {
                             </div>
 
                             <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Logo URL</label>
-                                    <input
-                                        type="url"
-                                        value={formData.logo_url}
-                                        onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-                                        className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium"
-                                        placeholder="https://example.com/logo.png"
-                                    />
-                                </div>
+                                <FileUpload
+                                    onUploadComplete={(url) => setFormData({ ...formData, logo_url: url })}
+                                    currentUrl={formData.logo_url}
+                                    label="Partner Logo"
+                                    bucket="images"
+                                    type="image"
+                                />
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Website URL</label>
                                     <input
@@ -359,6 +371,14 @@ const PartnerManager: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ ...deleteDialog, isOpen: false })}
+                onConfirm={confirmDelete}
+                itemName={deleteDialog.name}
+                isLoading={loading}
+            />
         </div>
     );
 };

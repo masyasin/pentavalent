@@ -58,7 +58,9 @@ export type AdminModule =
   | 'seo'
   | 'company'
   | 'channels'
-  | 'faqs';
+  | 'analytics'
+  | 'faqs'
+  | 'legal';
 
 // Role-based permissions matrix
 const rolePermissions: Record<UserRole, Permission[]> = {
@@ -117,7 +119,9 @@ const moduleAccess: Record<AdminModule, UserRole[]> = {
   seo: ['super_admin', 'admin', 'editor'],
   company: ['super_admin', 'admin', 'editor'],
   channels: ['super_admin', 'admin', 'editor'],
+  analytics: ['super_admin', 'admin', 'viewer'],
   faqs: ['super_admin', 'admin', 'editor'],
+  legal: ['super_admin', 'admin', 'editor'],
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
