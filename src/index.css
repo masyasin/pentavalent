@@ -52,11 +52,15 @@
     scroll-behavior: smooth;
   }
 
+  html,
   body {
     @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1, "kern" 1;
     -webkit-font-smoothing: antialiased;
     letter-spacing: -0.01em;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
   }
 }
 
