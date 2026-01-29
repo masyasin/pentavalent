@@ -35,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
     { id: 'certification', label: t('nav.certification') },
     { id: 'investor', label: t('nav.investor') },
     { id: 'news', label: t('nav.news') },
+    { id: 'career', label: 'Karir' }, // Added Career menu
     { id: 'contact', label: t('nav.contact') },
   ];
 
@@ -43,15 +44,15 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
       <header
         className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled
           ? 'glass-panel py-3 enterprise-shadow'
-          : 'bg-transparent py-6'
+          : 'bg-transparent py-4'
           }`}
       >
-        <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16">
-          <div className="flex items-center justify-between relative z-10 h-full gap-8">
-            {/* Logo Column - Flex 1 to balance with Actions */}
-            <div className="flex-1 flex items-center justify-start">
+        <div className="w-full px-6 lg:px-8 mx-auto">
+          <div className="flex items-center justify-between relative z-10 h-full gap-2 xl:gap-4">
+            {/* Logo Column - Flexible but compact */}
+            <div className="flex-1 flex items-center justify-start min-w-0">
               <div
-                className="cursor-pointer group flex-shrink-0"
+                className="cursor-pointer group flex-shrink-0 ml-12"
                 onClick={() => {
                   onNavigate('hero');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -61,19 +62,19 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   <img
                     src="/logo-icon.png"
                     alt="Penta Valent"
-                    className={`${isScrolled ? 'h-10 lg:h-12' : 'h-14 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
+                    className={`${isScrolled ? 'h-12 lg:h-14' : 'h-14 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
                   />
                 </div>
               </div>
             </div>
 
-            {/* Navigation Column - Center Aligned, naturally sized */}
-            <nav className="hidden xl:flex items-center justify-center gap-2 min-w-0">
+            {/* Navigation Column - Optimized for density */}
+            <nav className="hidden xl:flex items-center justify-center gap-0.5 flex-none">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-4 py-2 rounded-full text-[15px] font-bold uppercase tracking-widest transition-all duration-500 relative group whitespace-nowrap ${activeSection === item.id
+                  className={`px-2 lg:px-3 py-2 rounded-full text-[12px] lg:text-[14px] font-bold uppercase tracking-wider transition-all duration-500 relative group whitespace-nowrap ${activeSection === item.id
                     ? (isScrolled ? 'text-primary' : 'text-white bg-white/20')
                     : (isScrolled ? 'text-slate-600 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
                     }`}
@@ -86,14 +87,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               ))}
             </nav>
 
-            {/* Actions Column - Flex 1 to balance with Logo */}
-            <div className="flex-1 flex items-center justify-end gap-3">
-              <div className={`hidden md:flex items-center rounded-full p-0.5 border transition-all duration-500 flex-shrink-0 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
+            {/* Actions Column - Compact right side */}
+            <div className="flex-1 flex items-center justify-end gap-2 xl:gap-3 min-w-0">
+              <div className={`hidden lg:flex items-center rounded-full p-1 border transition-all duration-500 flex-shrink-0 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
                 {['id', 'en'].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${language === lang
                       ? 'bg-primary text-white shadow-lg shadow-primary/20'
                       : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
                       }`}
@@ -103,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
                 <button
                   onClick={() => setIsSearchOpen(true)}
                   className={`p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
@@ -117,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isMobileMenuOpen ? "M6 18L18 6" : "M4 6h16M4 12h16m-7 6h7"} />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M8 18h12"} />
                   </svg>
                 </button>
               </div>
@@ -138,9 +139,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
         <div className={`absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white shadow-4xl transition-transform duration-500 ease-out transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex flex-col h-full">
             <div className="p-8 flex items-center justify-between border-b border-gray-100">
-              <img src="/logo-penta-valent.png" alt="Penta Valent - Healthcare & Beyond" className="h-9 w-auto" />
+              <img src="/logo-icon.png" alt="Penta Valent - Healthcare & Beyond" className="h-10 w-auto" />
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-3 bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-2xl transition-all">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6" /></svg>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             <div className="flex-1 overflow-y-auto py-8">
