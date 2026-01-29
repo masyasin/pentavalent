@@ -177,9 +177,6 @@ const ContactSection: React.FC = () => {
                   width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" title="PT Penta Valent HQ"
                 />
               </div>
-              <div className="absolute top-6 left-6 bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-[10px] font-black text-white uppercase tracking-widest border border-white/10">
-                Live HQ Terminal
-              </div>
             </div>
 
             {/* Strategic Information Cards */}
