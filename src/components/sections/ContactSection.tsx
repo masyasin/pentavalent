@@ -171,10 +171,10 @@ const ContactSection: React.FC = () => {
           <div className="lg:col-span-5 space-y-8">
             {/* Map Component with Data Node Styling */}
             <div className="relative h-80 bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-xl group">
-              <div className="absolute inset-0 grayscale contrast-125 group-hover:grayscale-0 transition-all duration-1000">
+              <div className="absolute inset-0 transition-all duration-1000 group-hover:scale-105">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.666073203082!2d106.81280931476882!3d-6.175392995527!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJl.%20Tanah%20Abang%20III%2C%20Petojo%20Sel.%2C%20Kecamatan%20Gambir%2C%20Kota%20Jakarta%20Pusat%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sen!2sid!4v1640000000000!5m2!1sen!2sid"
-                  width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" title="HQ"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.666073203082!2d106.81280931476882!3d-6.175392995527!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sPT%20Penta%20Valent!5e0!3m2!1sen!2sid!4v1706500000000!5m2!1sen!2sid"
+                  width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" title="PT Penta Valent HQ"
                 />
               </div>
               <div className="absolute top-6 left-6 bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-[10px] font-black text-white uppercase tracking-widest border border-white/10">

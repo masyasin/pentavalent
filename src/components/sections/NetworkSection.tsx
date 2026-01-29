@@ -473,9 +473,9 @@ const NetworkSection: React.FC = () => {
                     height="100%"
                     frameBorder="0"
                     style={{ border: 0 }}
-                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyA_REAL_KEY_WOULD_GO_HERE&q=${encodeURIComponent(modalBranch.name + ' ' + modalBranch.city)}&zoom=15`}
+                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3485.623190100465!2d${modalBranch.longitude}!3d${modalBranch.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${modalBranch.latitude},${modalBranch.longitude}!5e0!3m2!1sen!2sid!4v1706500000000!5m2!1sen!2sid`}
                     allowFullScreen
-                    className="opacity-90 contrast-110 grayscale-[0.2]"
+                    className="opacity-90 contrast-110"
                   ></iframe>
 
                   {/* Map Overlay Decor */}
