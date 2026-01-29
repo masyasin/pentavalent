@@ -173,7 +173,7 @@ const ContactSection: React.FC = () => {
             <div className="relative h-80 bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-xl group">
               <div className="absolute inset-0 transition-all duration-1000 group-hover:scale-105">
                 <iframe
-                  src="https://maps.google.com/maps?q=-6.175393,106.812809&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253848.58042025325!2d106.48640691741731!3d-6.2129721969640155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f7a7cddfa5db%3A0x4e855b5b65a13480!2sPT.%20Penta%20Valent%20Tbk!5e0!3m2!1sid!2sid!4v1769656976101!5m2!1sid!2sid"
                   width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" title="PT Penta Valent HQ"
                 />
               </div>
