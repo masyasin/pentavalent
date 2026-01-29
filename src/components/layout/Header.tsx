@@ -58,17 +58,11 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               >
-                <div className={`transition-all duration-700 flex items-center justify-center ${!isScrolled
-                    ? 'bg-white/95 backdrop-blur-xl px-6 py-2.5 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-white/80 relative overflow-hidden'
-                    : 'bg-transparent py-1 px-0'
-                  }`}>
-                  {!isScrolled && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-white via-cyan-50/10 to-white opacity-100"></div>
-                  )}
+                <div className="transition-all duration-700 flex items-center justify-center py-1">
                   <img
-                    src="/logo-penta-valent.png"
+                    src="/logo-icon.png"
                     alt="Penta Valent"
-                    className={`${isScrolled ? 'h-8 lg:h-9' : 'h-10 lg:h-11'} w-auto transition-all duration-700 scale-100 group-hover:scale-105 relative z-10`}
+                    className={`${isScrolled ? 'h-10 lg:h-12' : 'h-14 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
                   />
                 </div>
               </div>
