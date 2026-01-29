@@ -87,20 +87,20 @@ const CertificationSection: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-center gap-20">
           <div className="lg:w-1/3">
             <span className="inline-block px-5 py-2 bg-accent/5 text-accent rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-accent/10">
-              Quality Assurance
+              {t('qa.title')}
             </span>
             <h2 className="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Uncompromising <br />
-              <span className="italic">Standards</span>
+              {t('qa.subtitle')?.split(' ')[0]} <br />
+              <span className="italic">{t('qa.subtitle')?.split(' ').slice(1).join(' ')}</span>
             </h2>
             <p className="text-xl text-gray-500 font-medium leading-relaxed mb-10">
-              Penta Valent adheres to the highest global and national regulatory frameworks to ensure every product's safety and efficacy within our supply chain.
+              {t('qa.desc')}
             </p>
             <div className="space-y-6">
               {[
-                'CDOB Certified (GDP)',
+                t('qa.cdob.title'),
                 'CDAKB Certified (MDDP)',
-                'ISO 9001:2015 Compliant'
+                t('qa.iso.title')
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-4 group">
                   <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-inner">

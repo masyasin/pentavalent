@@ -222,7 +222,7 @@ const AboutSection: React.FC = () => {
                 {t('about.values.tagline')}
               </span>
               <h3 className="text-5xl sm:text-6xl font-black text-slate-900 tracking-tighter leading-none">
-                Filosofi <span className="text-cyan-500 italic">Penta Valent</span>
+                {language === 'id' ? 'Filosofi' : 'Philosophy of'} <span className="text-cyan-500 italic">Penta Valent</span>
               </h3>
             </div>
 

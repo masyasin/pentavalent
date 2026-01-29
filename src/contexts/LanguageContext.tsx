@@ -175,6 +175,15 @@ const translations: Translations = {
   'footer.privacy': { id: 'Kebijakan Privasi', en: 'Privacy Policy' },
   'footer.terms': { id: 'Syarat & Ketentuan', en: 'Terms & Conditions' },
   'footer.rights': { id: 'Seluruh hak cipta dilindungi.', en: 'All rights reserved.' },
+  'footer.column.contact': { id: 'Hubungi Kami', en: 'Contact Us' },
+  'footer.column.corporate': { id: 'Korporat', en: 'Corporate' },
+  'footer.column.stakeholders': { id: 'Pemangku Kepentingan', en: 'Stakeholders' },
+  'footer.contact.hq': { id: 'Markas Besar Jakarta', en: 'Jakarta HQ' },
+  'footer.contact.digital': { id: 'Surat Digital', en: 'Digital Mail' },
+  'footer.contact.ho': { id: 'Kantor Pusat', en: 'Head Office' },
+  'footer.contact.hours': { id: 'Jam Operasional', en: 'Business Hours' },
+  'footer.contact.days': { id: 'Senin - Jumat: 08:00 - 17:00', en: 'Mon - Fri: 08:00 - 17:00' },
+  'footer.code_conduct': { id: 'Kode Etik', en: 'Code of Conduct' },
 
   // Cookie
   'cookie.message': { id: 'Website ini menggunakan cookies untuk memastikan Anda mendapatkan pengalaman terbaik di website kami.', en: 'This website uses cookies to ensure you get the best experience on our website.' },
@@ -201,6 +210,38 @@ const translations: Translations = {
   'admin.logout': { id: 'Keluar', en: 'Logout' },
   'admin.profile': { id: 'Profil', en: 'Profile' },
   'admin.settings': { id: 'Pengaturan', en: 'Settings' },
+
+  // Public Page Updates (Step 1837)
+  'mgmt.title': { id: 'Kepemimpinan Eksekutif', en: 'Executive Leadership' },
+  'mgmt.visionary': { id: 'Visioner', en: 'Visionary' },
+  'mgmt.governance': { id: 'Tata Kelola', en: 'Governance' },
+  'mgmt.desc': { id: 'Keunggulan strategis dan operasional kami dipandu oleh tim veteran industri yang beragam, berdedikasi pada pertumbuhan berkelanjutan dan inovasi kesehatan.', en: 'Our strategic and operational excellence is guided by a diverse team of industry veterans dedicated to sustainable growth and healthcare innovation.' },
+
+  'stats.market_reach': { id: 'Jangkauan Pasar', en: 'Market Reach' },
+
+  'network.header.title': { id: 'Jaringan Distribusi Nasional', en: 'National Distribution Network' },
+  'network.header.subtitle': { id: 'Jaringan Penta Valent', en: 'Penta Valent Network' },
+  'network.header.desc': { id: 'Menjangkau seluruh pelosok Indonesia dengan infrastruktur logistik modern dan terintegrasi untuk memastikan ketersediaan produk kesehatan yang merata & tepat waktu.', en: 'Reaching every corner of Indonesia with modern and integrated logistics infrastructure to ensure equitable & timely availability of healthcare products.' },
+
+  'map.header': { id: 'Lokasi Kami', en: 'Our Locations' },
+  'map.subHeader': { id: 'Temukan cabang dan depo terdekat di kota Anda', en: 'Find the nearest branch and depot in your city' },
+
+  'qa.title': { id: 'Jaminan Kualitas', en: 'Quality Assurance' },
+  'qa.subtitle': { id: 'Standar Tak Terkompromi', en: 'Uncompromising Standards' },
+  'qa.desc': { id: 'Penta Valent mematuhi kerangka regulasi global dan nasional tertinggi untuk memastikan keamanan dan efikasi setiap produk dalam rantai pasok kami.', en: 'Penta Valent adheres to the highest global and national regulatory frameworks to ensure every product\'s safety and efficacy within our supply chain.' },
+  'qa.cdob.title': { id: 'Bersertifikat CDOB (GDP)', en: 'CDOB Certified (GDP)' },
+  'qa.cdob.desc': { id: 'Sertifikasi nasional untuk standar distribusi farmasi.', en: 'National certification for pharmaceutical distribution standards.' },
+  'qa.iso.title': { id: 'Kepatuhan ISO 9001:2015', en: 'ISO 9001:2015 Compliant' },
+  'qa.iso.desc': { id: 'Sertifikasi manajemen mutu internasional.', en: 'International quality management certification.' },
+
+  'gcg.title': { id: 'Tata Kelola Perusahaan yang Baik', en: 'Good Corporate Governance' },
+
+  'career.future.title': { id: 'Future Talent Pipeline', en: 'Future Talent Pipeline' },
+  'career.future.desc': { id: 'Bangun Masa Depan Kesehatan Bersama Kami', en: 'Build the Future of Healthcare With Us' },
+
+  'contact.cta.title': { id: 'Hubungkan Visi Anda', en: 'Connect Your Vision' },
+  'contact.cta.subtitle': { id: 'Saluran Intelijen Langsung', en: 'Direct Intelligence Channel' },
+  'contact.fast_response': { id: 'Jalur Respon Cepat', en: 'Fast Response Line' },
 
 };
 

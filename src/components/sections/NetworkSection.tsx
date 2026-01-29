@@ -99,7 +99,7 @@ const NetworkSection: React.FC = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-lg shadow-cyan-500/50"></span>
               </span>
-              <span className="text-xs font-black text-slate-700 uppercase tracking-[0.25em] relative">Jaringan Distribusi Nasional</span>
+              <span className="text-xs font-black text-slate-700 uppercase tracking-[0.25em] relative">{t('network.header.title')}</span>
             </div>
           </div>
 
@@ -108,7 +108,7 @@ const NetworkSection: React.FC = () => {
             <span className="text-slate-900">Penta Valent </span>
             <span className="relative inline-block">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-cyan-400 animate-gradient-x">
-                Network
+                {language === 'id' ? 'Network' : 'Network'}
               </span>
               {/* Underline Decoration */}
               <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-cyan-400 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
@@ -117,7 +117,7 @@ const NetworkSection: React.FC = () => {
 
           {/* Subtitle with Enhanced Typography */}
           <p className="text-slate-600 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto font-medium">
-            Menjangkau <span className="text-blue-600 font-bold">seluruh pelosok Indonesia</span> dengan infrastruktur logistik modern dan terintegrasi untuk memastikan ketersediaan produk kesehatan yang <span className="text-cyan-600 font-bold">merata & tepat waktu</span>.
+            {t('network.header.desc')}
           </p>
 
           {/* Decorative Line */}
@@ -131,9 +131,9 @@ const NetworkSection: React.FC = () => {
         {/* Stats Overview - Redesigned for Premium Look */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20 relative px-4">
           {[
-            { label: 'Cabang Utama', value: branchCount, icon: '🏢', color: 'blue', accent: 'from-blue-600 to-indigo-600' },
-            { label: 'Depo Distribusi', value: depoCount, icon: '📦', color: 'cyan', accent: 'from-cyan-500 to-blue-500' },
-            { label: 'Provinsi Tercover', value: '34', icon: '🗺️', color: 'indigo', accent: 'from-indigo-600 to-purple-600' },
+            { label: t('network.stats.main'), value: branchCount, icon: '🏢', color: 'blue', accent: 'from-blue-600 to-indigo-600' },
+            { label: t('network.stats.depots'), value: depoCount, icon: '📦', color: 'cyan', accent: 'from-cyan-500 to-blue-500' },
+            { label: t('network.stats.provinces'), value: '34', icon: '🗺️', color: 'indigo', accent: 'from-indigo-600 to-purple-600' },
             { label: 'On-Time Delivery', value: '99.8%', icon: '⚡', color: 'amber', accent: 'from-amber-500 to-orange-500' }
           ].map((stat, idx) => (
             <div key={idx} className="group relative bg-white/80 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
@@ -302,8 +302,8 @@ const NetworkSection: React.FC = () => {
           <div className="relative mt-24">
             <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-4 border-b border-slate-200 pb-10">
               <div>
-                <h3 className="text-4xl font-black text-slate-900 mb-3 tracking-tight">Lokasi Kami</h3>
-                <p className="text-slate-500 font-medium">Temukan cabang dan depo terdekat di kota Anda</p>
+                <h3 className="text-4xl font-black text-slate-900 mb-3 tracking-tight">{t('map.header')}</h3>
+                <p className="text-slate-500 font-medium">{t('map.subHeader')}</p>
               </div>
 
               {/* Filter Controls */}

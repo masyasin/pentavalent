@@ -98,7 +98,7 @@ const ContactSection: React.FC = () => {
             {t('contact.tagline')}
           </span>
           <h2 className="text-6xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
-            Hubungkan <span className="text-cyan-500 italic">Visi Anda</span>
+            {language === 'id' ? 'Hubungkan' : 'Connect'} <span className="text-cyan-500 italic">{language === 'id' ? 'Visi Anda' : 'Your Vision'}</span>
           </h2>
         </div>
 
@@ -107,7 +107,7 @@ const ContactSection: React.FC = () => {
           <div className="lg:col-span-7">
             <div className="bg-white rounded-[4rem] p-12 md:p-16 border border-slate-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] relative overflow-hidden group">
               <div className="relative z-10">
-                <h3 className="text-3xl font-black text-slate-900 mb-12 tracking-tighter">Direct Intelligence Channel</h3>
+                <h3 className="text-3xl font-black text-slate-900 mb-12 tracking-tighter">{t('contact.cta.subtitle')}</h3>
 
                 {submitSuccess && (
                   <div className="mb-10 p-8 bg-cyan-50 border border-cyan-100 rounded-3xl flex items-center gap-6 animate-fade-in">
@@ -219,10 +219,10 @@ const ContactSection: React.FC = () => {
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
-                  <span className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">Instant Action</span>
+                  <span className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">{language === 'id' ? 'Aksi Instan' : 'Instant Action'}</span>
                 </div>
-                <h4 className="text-3xl font-black text-white mb-2 tracking-tighter">Fast Response Line</h4>
-                <p className="text-white/60 text-sm font-bold mb-8">Connect with our executive support team.</p>
+                <h4 className="text-3xl font-black text-white mb-2 tracking-tighter">{t('contact.fast_response')}</h4>
+                <p className="text-white/60 text-sm font-bold mb-8">{language === 'id' ? 'Terhubung dengan tim dukungan eksekutif kami.' : 'Connect with our executive support team.'}</p>
                 <div className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
                   Chat di WhatsApp
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7-7 7" /></svg>

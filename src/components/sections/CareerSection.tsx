@@ -125,11 +125,14 @@ const CareerSection: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-end justify-between gap-12 mb-32">
           <div className="max-w-3xl">
             <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
-              Future Talent Pipeline
+              {t('career.future.title')}
             </span>
             <h2 className="text-6xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
-              Bangun <span className="text-cyan-500 italic">Masa Depan</span> <br />
-              Kesehatan Bersama Kami
+              {language === 'id' ? (
+                <>Bangun <span className="text-cyan-500 italic">Masa Depan</span> <br /> Kesehatan Bersama Kami</>
+              ) : (
+                <>Build the <span className="text-cyan-500 italic">Future of Healthcare</span> <br /> With Us</>
+              )}
             </h2>
           </div>
           <div className="flex items-center gap-8 pb-4">

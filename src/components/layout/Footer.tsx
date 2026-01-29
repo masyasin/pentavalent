@@ -236,30 +236,30 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Column 2: Contact Information */}
           <div className="pt-2 pl-4">
-            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>Contact Us</h4>
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>{t('footer.column.contact')}</h4>
             <div className="grid grid-cols-1 gap-3">
               <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
                 <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><MapPin size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Jakarta HQ</p><p className="text-white text-xs font-medium leading-relaxed">Tanah Abang III No. 12<br />Jakarta, Indonesia</p></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.hq')}</p><p className="text-white text-xs font-medium leading-relaxed">Tanah Abang III No. 12<br />Jakarta, Indonesia</p></div>
               </div>
               <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
                 <div className="mt-1 w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 shrink-0"><Mail size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Digital Mail</p><p className="text-white text-xs font-medium">info@pentavalent.co.id</p></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.digital')}</p><p className="text-white text-xs font-medium">info@pentavalent.co.id</p></div>
               </div>
               <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
                 <div className="mt-1 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 shrink-0"><Phone size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Head Office</p><p className="text-white text-xs font-medium">+62 21 350-1010</p></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.ho')}</p><p className="text-white text-xs font-medium">+62 21 350-1010</p></div>
               </div>
               <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
                 <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><Clock size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Business Hours</p><p className="text-white text-xs font-medium">Mon - Fri: 08:00 - 17:00</p></div>
+                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.hours')}</p><p className="text-white text-xs font-medium">{t('footer.contact.days')}</p></div>
               </div>
             </div>
           </div>
 
           {/* Column 3: Corporate Menu */}
           <div className="pt-2 lg:pl-8">
-            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-blue-500 rounded-full"></span>Corporate</h4>
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-blue-500 rounded-full"></span>{t('footer.column.corporate')}</h4>
             <ul className="space-y-4 pl-4 border-l border-white/5">
               {quickLinks.slice(0, 4).map((link) => (
                 <li key={link.key}><button onClick={() => onNavigate(link.key)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 text-blue-400">→</span>{link.label}</button></li>
@@ -269,7 +269,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Column 4: Stakeholders Menu */}
           <div className="pt-2">
-            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-cyan-500 rounded-full"></span>Stakeholders</h4>
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-cyan-500 rounded-full"></span>{t('footer.column.stakeholders')}</h4>
             <ul className="space-y-4 pl-4 border-l border-white/5">
               {investors.map((link) => (
                 <li key={link.key}><button onClick={() => onNavigate(link.key)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 text-cyan-400">→</span>{link.label}</button></li>
@@ -285,8 +285,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
           </div>
           <div className="flex items-center gap-6 flex-wrap justify-center">
-            <a href="/privacy-policy" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Privacy Policy</a>
-            <a href="/code-of-conduct" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Code of Conduct</a>
+            <a href="/privacy-policy" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">{t('footer.privacy')}</a>
+            <a href="/code-of-conduct" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">{t('footer.code_conduct')}</a>
           </div>
         </div>
       </div>

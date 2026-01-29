@@ -13,7 +13,7 @@ interface ManagementMember {
 }
 
 const ManagementSection: React.FC = () => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [management, setManagement] = useState<ManagementMember[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,14 +48,14 @@ const ManagementSection: React.FC = () => {
       <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
         <div className="text-center mb-24">
           <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
-            Executive Leadership
+            {t('mgmt.title')}
           </span>
           <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Visionary <br />
-            <span className="italic">Governance</span>
+            {t('mgmt.visionary')} <br />
+            <span className="italic">{t('mgmt.governance')}</span>
           </h2>
           <p className="text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
-            Our strategic and operational excellence is guided by a diverse team of industry veterans dedicated to sustainable growth and healthcare innovation.
+            {t('mgmt.desc')}
           </p>
         </div>
 
@@ -122,7 +122,7 @@ const ManagementSection: React.FC = () => {
           <div className="absolute top-0 left-0 w-2 h-full bg-accent"></div>
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left">
-              <h3 className="text-2xl font-black text-primary tracking-tighter mb-2">Good Corporate Governance</h3>
+              <h3 className="text-2xl font-black text-primary tracking-tighter mb-2">{t('gcg.title')}</h3>
               <p className="text-gray-400 font-bold text-sm">We strictly adhere to the highest standards of transparency and institutional ethics.</p>
             </div>
             <div className="flex gap-4">
