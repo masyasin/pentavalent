@@ -48,11 +48,11 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center relative z-10 h-full">
-            {/* Logo - Left Aligned with Flex-1 to balance centering */}
-            <div className="flex-1 flex items-center">
+          <div className="flex items-center justify-between relative z-10 h-full gap-8">
+            {/* Logo - Fixed Width Side */}
+            <div className="flex-1 min-w-[180px] flex items-center">
               <div
-                className="cursor-pointer group"
+                className="cursor-pointer group flex-shrink-0"
                 onClick={() => {
                   onNavigate('hero');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -69,12 +69,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             </div>
 
             {/* Navigation Menu - Center Aligned */}
-            <nav className="hidden xl:flex items-center gap-1 min-w-0">
+            <nav className="hidden xl:flex items-center gap-1 min-w-0 flex-shrink-0">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-4 py-2 rounded-full text-[13px] font-bold uppercase tracking-widest transition-all duration-500 relative group overflow-hidden whitespace-nowrap ${activeSection === item.id
+                  className={`px-3 py-2 rounded-full text-[12px] font-bold uppercase tracking-widest transition-all duration-500 relative group overflow-hidden whitespace-nowrap ${activeSection === item.id
                     ? (isScrolled ? 'text-primary' : 'text-white bg-white/20')
                     : (isScrolled ? 'text-slate-600 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
                     }`}
@@ -87,14 +87,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               ))}
             </nav>
 
-            {/* Right side: Actions - Flex-1 to balance centering */}
-            <div className="flex-1 flex items-center justify-end gap-5">
+            {/* Right side: Actions - Fixed Width Side */}
+            <div className="flex-1 min-w-[180px] flex items-center justify-end gap-4">
               <div className={`hidden md:flex items-center rounded-full p-1 border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
                 {['id', 'en'].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
+                    className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
                       ? 'bg-primary text-white shadow-lg shadow-primary/20'
                       : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
                       }`}
