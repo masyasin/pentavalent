@@ -65,243 +65,145 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <footer className="relative text-white overflow-hidden">
-      {/* Background Image & Gradient */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80"
-          alt="Building Background"
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A2351]/90 via-[#0D2B5F]/85 to-[#000000]/90"></div>
+    <footer className="relative bg-slate-950 text-white overflow-hidden pt-24">
+      {/* Visual Depth Elements */}
+      <div className="absolute inset-0 z-0 opacity-20">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse delay-700"></div>
       </div>
 
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 opacity-10 z-0">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 pb-20 border-b border-white/5">
 
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 opacity-[0.03] z-0" style={{
-        backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)',
-        backgroundSize: '50px 50px'
-      }}></div>
-
-      <div className="relative z-10">
-        {/* Main Footer Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-10">
-            {/* Company Info - Larger Column */}
-            <div className="lg:col-span-4">
-              {/* Logo and Company Info - Premium Design */}
-              <div className="mb-10">
-                {/* Logo and Badges Container - Horizontal Layout */}
-                <div className="flex flex-col lg:flex-row gap-8 lg:items-center mb-8">
-                  {/* Logo Container with Glassmorphism */}
-                  <div className="relative group flex-shrink-0">
-                    {/* Glow Effect Background */}
-                    <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/30 via-blue-400/30 to-cyan-400/30 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    {/* Main Logo Card */}
-                    <div className="relative bg-white rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-4 border-white/90">
-                      {/* Subtle Inner Glow */}
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-50 via-white to-blue-50 opacity-50"></div>
-
-                      {/* Logo */}
-                      <div className="relative">
-                        <img
-                          src="/logo-penta-valent.png"
-                          alt="PT Penta Valent - Healthcare & Beyond"
-                          className="h-20 w-auto transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Trust Badges - Restored & Enlarged */}
-                  <div className="flex flex-row lg:flex-col gap-4 justify-center">
-                    <div className="inline-flex items-center gap-3 px-6 py-3.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-400/20 rounded-2xl backdrop-blur-sm hover:from-cyan-500/20 hover:to-blue-500/20 transition-all flex-1">
-                      <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/50 animate-pulse"></div>
-                      <span className="text-sm font-black text-white uppercase tracking-wider">Trusted Partner</span>
-                    </div>
-                    <div className="inline-flex items-center gap-3 px-6 py-3.5 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-400/20 rounded-2xl backdrop-blur-sm hover:from-blue-500/20 hover:to-indigo-500/20 transition-all flex-1">
-                      <svg className="w-4 h-4 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <span className="text-sm font-black text-white uppercase tracking-wider">ISO Certified</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Company Description */}
-                <div className="relative">
-                  {/* Decorative Line */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/50"></div>
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                  </div>
-
-                  <p className="text-blue-100/80 text-sm leading-relaxed font-medium">
-                    {t('footer.description')}
-                  </p>
-                </div>
-
-
-
-                {/* Social Media */}
-                <div>
-                  <h4 className="text-sm font-bold text-white/80 mb-4 uppercase tracking-wider">
-                    {t('contact.social.label')}
-                  </h4>
-                  <div className="flex gap-3">
-                    {social.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.link}
-                        className={`w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center ${item.color} transition-all duration-300 group hover:scale-110 hover:shadow-lg hover:shadow-white/20`}
-                        aria-label={item.name}
-                      >
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d={item.icon} /></svg>
-                      </a>
-                    ))}
-                  </div>
-                </div>
+          {/* Brand Architecture Column */}
+          <div className="lg:col-span-4 space-y-10">
+            <div className="relative group inline-block">
+              <div className="absolute -inset-4 bg-white/5 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="relative bg-white p-6 rounded-[1.5rem] shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                <img
+                  src="/logo-penta-valent.png"
+                  alt="Penta Valent"
+                  className="h-14 w-auto"
+                />
               </div>
             </div>
 
-            {/* Navigation & Contact - 3 Columns for Balanced Proportions */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
-              {/* Column 1: Quick Links */}
-              <div>
-                <h4 className="text-white font-black text-sm mb-6 uppercase tracking-wider flex items-center gap-2">
-                  <div className="w-1 h-4 bg-accent rounded-full"></div>
-                  {t('footer.about')}
-                </h4>
-                <ul className="space-y-3">
-                  {quickLinks.map((link) => (
-                    <li key={link.key}>
-                      <button
-                        onClick={() => onNavigate(link.key)}
-                        className="text-blue-100/70 text-sm hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center gap-2 group hover-move-icon"
-                      >
-                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                        {link.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+            <div className="space-y-6">
+              <p className="text-slate-400 text-sm leading-relaxed font-bold max-w-sm">
+                {t('about.description')}
+              </p>
+
+              <div className="flex items-center gap-6">
+                {social.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.link}
+                    className="group relative"
+                    aria-label={item.name}
+                  >
+                    <div className="absolute -inset-2 bg-cyan-500/0 rounded-lg blur group-hover:bg-cyan-500/10 transition-colors"></div>
+                    <svg className="w-5 h-5 text-slate-500 group-hover:text-cyan-400 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                      <path d={item.icon} />
+                    </svg>
+                  </a>
+                ))}
               </div>
+            </div>
 
-              {/* Column 2: Investors (Center) */}
-              <div>
-                <h4 className="text-white font-black text-sm mb-6 uppercase tracking-wider flex items-center gap-2">
-                  <div className="w-1 h-4 bg-accent rounded-full"></div>
-                  {t('nav.investor')}
-                </h4>
-                <ul className="space-y-3">
-                  {investors.map((link) => (
-                    <li key={link.key}>
-                      <button
-                        onClick={() => onNavigate(link.key)}
-                        className="text-blue-100/70 text-sm hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center gap-2 group hover-move-icon"
-                      >
-                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                        {link.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Column 3: Contact Cards (Far Right) */}
-              <div className="flex flex-col gap-4">
-                {/* Office Card */}
-                <div className="bg-white/5 backdrop-blur-sm border border-white/5 rounded-2xl p-4 group hover:bg-white/10 transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-all">
-                      <svg className="w-5 h-5 text-accent group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h5 className="text-white font-bold text-sm mb-1">Kantor Pusat</h5>
-                      <p className="text-blue-100/70 text-[11px] leading-relaxed">
-                        Jl. Tanah Abang III No. 12<br />
-                        Jakarta Pusat 10160
-                      </p>
-                    </div>
-                  </div>
+            {/* Micro-Certificates Widget */}
+            <div className="flex gap-3 pt-4">
+              {['CDOB', 'CDAKB', 'ISO 9001'].map(cert => (
+                <div key={cert} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-black tracking-widest text-slate-300 uppercase">
+                  {cert}
                 </div>
-
-                {/* Contact Card */}
-                <div className="bg-white/5 backdrop-blur-sm border border-white/5 rounded-2xl p-4 group hover:bg-white/10 transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-all">
-                      <svg className="w-5 h-5 text-accent group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h5 className="text-white font-bold text-sm mb-1">Hubungi Kami</h5>
-                      <p className="text-blue-100/70 text-[11px] leading-relaxed">
-                        T. (021) 345-6789<br />
-                        E. info@pentavalent.co.id
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hours Card */}
-                <div className="bg-white/5 backdrop-blur-sm border border-white/5 rounded-2xl p-4 group hover:bg-white/10 transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-all">
-                      <svg className="w-5 h-5 text-accent group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h5 className="text-white font-bold text-sm mb-1">Jam Operasional</h5>
-                      <p className="text-blue-100/70 text-[11px] leading-relaxed">
-                        Senin - Jumat: 08:30 - 17:00 WIB
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
-
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10 bg-black/20 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <p className="text-blue-100/50 text-xs font-medium">
-                © {new Date().getFullYear()} PT PENTA VALENT TBK. {t('footer.rights')}
-              </p>
-              <div className="flex flex-wrap justify-center gap-6">
-                {['Privacy Policy', 'Legal Notice', 'Ethics Code', 'Whistleblowing'].map((item) => (
-                  <a key={item} href="#" className="text-blue-100/50 hover:text-white text-xs transition-colors font-medium">
-                    {item}
-                  </a>
+          {/* Navigation Intelligence Columns */}
+          <div className="lg:col-span-4 grid grid-cols-2 gap-8">
+            <div className="space-y-8">
+              <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Perusahaan</h4>
+              <ul className="space-y-4">
+                {quickLinks.slice(0, 4).map((link) => (
+                  <li key={link.key}>
+                    <button
+                      onClick={() => onNavigate(link.key)}
+                      className="text-slate-400 text-xs font-bold hover:text-cyan-400 transition-all duration-300 flex items-center gap-2 group"
+                    >
+                      <span className="w-0 h-px bg-cyan-500 group-hover:w-4 transition-all duration-300"></span>
+                      {link.label}
+                    </button>
+                  </li>
                 ))}
-                <a href="/admin" className="text-blue-100/30 hover:text-accent flex items-center gap-1.5 transition-colors group">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Admin Portal</span>
-                </a>
+              </ul>
+            </div>
+            <div className="space-y-8">
+              <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Investor</h4>
+              <ul className="space-y-4">
+                {investors.map((link) => (
+                  <li key={link.key}>
+                    <button
+                      onClick={() => onNavigate(link.key)}
+                      className="text-slate-400 text-xs font-bold hover:text-cyan-400 transition-all duration-300 flex items-center gap-2 group"
+                    >
+                      <span className="w-0 h-px bg-cyan-500 group-hover:w-4 transition-all duration-300"></span>
+                      {link.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Executive Contact Pulse Column */}
+          <div className="lg:col-span-4">
+            <div className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 space-y-8 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-bl-[4rem] group-hover:bg-cyan-500/10 transition-colors"></div>
+
+              <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Pusat Informasi</h4>
+
+              <div className="space-y-6 relative z-10">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 flex-shrink-0">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+                  </div>
+                  <div>
+                    <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Markas Besar</h5>
+                    <p className="text-white text-xs font-bold leading-relaxed">Jl. Tanah Abang III No. 12, Jakarta</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 flex-shrink-0">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                  </div>
+                  <div>
+                    <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Email Resmi</h5>
+                    <p className="text-white text-xs font-bold">info@pentavalent.co.id</p>
+                  </div>
+                </div>
+
+                <button className="w-full py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:bg-cyan-500 hover:text-white transition-all duration-500">
+                  {t('hero.cta2')}
+                </button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Global Footer Baseline */}
+        <div className="py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+            © {new Date().getFullYear()} PT PENTA VALENT TBK. {t('footer.rights')}
+          </div>
+
+          <div className="flex gap-8">
+            {['Privacy', 'Ethics', 'Admin'].map(nav => (
+              <a key={nav} href={nav === 'Admin' ? '/admin' : '#'} className="text-slate-500 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">
+                {nav}
+              </a>
+            ))}
           </div>
         </div>
       </div>

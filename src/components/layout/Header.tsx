@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 <img
                   src="/logo-penta-valent.png"
                   alt="Penta Valent - Healthcare & Beyond"
-                  className={`${isScrolled ? 'h-10' : 'h-12'} w-auto transition-all duration-[600ms] scale-100 group-hover:scale-105 relative z-10`}
+                  className={`${isScrolled ? 'h-10' : 'h-12'} w-auto transition-all duration-700 scale-100 group-hover:scale-105 relative z-10`}
                 />
               </div>
             </div>
