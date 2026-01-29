@@ -48,60 +48,61 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between relative z-10">
-            {/* Logo */}
-            <div
-              className="flex-shrink-0 cursor-pointer group"
-              onClick={() => {
-                onNavigate('hero');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            >
-              <div className={`transition-all duration-700 flex-shrink-0 flex items-center justify-center ${!isScrolled
-                  ? 'bg-white/95 backdrop-blur-xl px-7 py-4 rounded-[1.5rem] shadow-[0_25px_60px_-15px_rgba(255,255,255,0.4),0_10px_30px_-10px_rgba(6,182,212,0.2)] border border-white relative overflow-hidden'
-                  : 'bg-white/0 py-1'
-                }`}>
-                {!isScrolled && (
-                  <>
-                    <div className="absolute inset-0 bg-gradient-to-br from-white via-cyan-50/20 to-white opacity-100"></div>
-                    <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-cyan-200/20 rounded-full blur-2xl animate-pulse"></div>
-                  </>
-                )}
-                <img
-                  src="/logo-penta-valent.png"
-                  alt="Penta Valent - Healthcare & Beyond"
-                  className={`${isScrolled ? 'h-9 lg:h-10' : 'h-11 lg:h-12'} w-auto transition-all duration-700 scale-100 group-hover:scale-105 relative z-10 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.02)]`}
-                />
+          <div className="flex items-center relative z-10 h-full">
+            {/* Logo - Left Aligned with Flex-1 to balance centering */}
+            <div className="flex-1 flex items-center">
+              <div
+                className="cursor-pointer group"
+                onClick={() => {
+                  onNavigate('hero');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              >
+                <div className={`transition-all duration-700 flex items-center justify-center ${!isScrolled
+                    ? 'bg-white/95 backdrop-blur-xl px-6 py-2.5 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-white/80 relative overflow-hidden'
+                    : 'bg-transparent py-1 px-0'
+                  }`}>
+                  {!isScrolled && (
+                    <div className="absolute inset-0 bg-gradient-to-br from-white via-cyan-50/10 to-white opacity-100"></div>
+                  )}
+                  <img
+                    src="/logo-penta-valent.png"
+                    alt="Penta Valent"
+                    className={`${isScrolled ? 'h-8 lg:h-9' : 'h-10 lg:h-11'} w-auto transition-all duration-700 scale-100 group-hover:scale-105 relative z-10`}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Navigation Menu - Shifted Right */}
-            <nav className="hidden xl:flex items-center gap-0.5 ml-auto mr-12 min-w-0">
+            {/* Navigation Menu - Center Aligned */}
+            <nav className="hidden xl:flex items-center gap-1 min-w-0">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-3 py-2 rounded-xl text-[15px] font-bold tracking-tight transition-all duration-300 relative group overflow-hidden whitespace-nowrap ${activeSection === item.id
-                    ? (isScrolled ? 'text-primary bg-primary/5' : 'text-white bg-white/10')
-                    : (isScrolled ? 'text-gray-600 hover:text-primary hover:bg-primary/5' : 'text-white/80 hover:text-white hover:bg-white/10')
+                  className={`px-4 py-2 rounded-full text-[13px] font-bold uppercase tracking-widest transition-all duration-500 relative group overflow-hidden whitespace-nowrap ${activeSection === item.id
+                    ? (isScrolled ? 'text-primary' : 'text-white bg-white/20')
+                    : (isScrolled ? 'text-slate-600 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
                     }`}
                 >
                   <span className="relative z-10">{item.label}</span>
-                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ${activeSection === item.id && isScrolled ? 'translate-x-0' : '-translate-x-full'} group-hover:translate-x-0`}></span>
+                  {activeSection === item.id && isScrolled && (
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-primary rounded-full animate-fade-in"></div>
+                  )}
                 </button>
               ))}
             </nav>
 
-            {/* Right side: Actions */}
-            <div className="flex items-center gap-6 flex-shrink-0">
-              <div className={`hidden md:flex items-center rounded-xl p-1 border transition-all duration-300 ${isScrolled ? 'border-gray-200 bg-gray-50/50' : 'border-white/20 bg-white/10'}`}>
+            {/* Right side: Actions - Flex-1 to balance centering */}
+            <div className="flex-1 flex items-center justify-end gap-5">
+              <div className={`hidden md:flex items-center rounded-full p-1 border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
                 {['id', 'en'].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`px-4 py-1.5 rounded-lg text-[10px] font-extrabold uppercase tracking-widest transition-all duration-300 ${language === lang
+                    className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
                       ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                      : (isScrolled ? 'text-gray-500 hover:text-primary' : 'text-white/60 hover:text-white')
+                      : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
                       }`}
                   >
                     {lang}
@@ -111,14 +112,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
 
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className={`p-2.5 rounded-xl border transition-all duration-300 ${isScrolled ? 'border-gray-200 bg-gray-50 text-gray-400 hover:text-primary hover:border-primary/30' : 'border-white/20 bg-white/10 text-white/60 hover:text-white hover:border-white/40'}`}
+                className={`p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
                 aria-label="Search"
               >
                 <Search size={18} strokeWidth={2.5} />
               </button>
 
               <button
-                className={`xl:hidden p-3 rounded-xl transition-all duration-300 ${isScrolled ? 'text-primary bg-gray-50 hover:bg-gray-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
+                className={`xl:hidden p-3 rounded-full transition-all duration-500 ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
