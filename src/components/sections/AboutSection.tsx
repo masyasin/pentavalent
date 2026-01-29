@@ -64,7 +64,7 @@ const AboutSection: React.FC = () => {
 
   return (
     <section id="about" className="py-32 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
         <div className="flex flex-col lg:flex-row gap-20 items-center mb-32">
           <div className="lg:w-1/2">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">

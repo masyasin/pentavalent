@@ -91,10 +91,10 @@ const MainWebsite: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-clip w-full max-w-full relative">
       <Header activeSection={currentSection} onNavigate={handleNavigate} />
 
-      <main>
+      <main className="w-full overflow-hidden">
         <div ref={sectionRefs.home}>
           <HeroSection onNavigate={handleNavigate} />
         </div>

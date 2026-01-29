@@ -58,7 +58,7 @@ const BusinessSection: React.FC = () => {
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[1000px] h-[1000px] bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
         {/* Header Section */}
         <div className="relative flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-12">
           <div className="lg:max-w-2xl relative z-10">
@@ -144,7 +144,7 @@ const BusinessSection: React.FC = () => {
                 <div className="embla__container h-full w-full">
                   {((businessLines[activeTab].images && businessLines[activeTab].images.length > 0)
                     ? businessLines[activeTab].images
-                    : [businessLines[activeTab].image_url || 'https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&q=80&w=1200']
+                    : [businessLines[activeTab].image_url || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200']
                   ).map((img, idx) => (
                     <div key={idx} className="embla__slide relative h-full w-full flex-none">
                       <img
@@ -176,7 +176,7 @@ const BusinessSection: React.FC = () => {
               <div className="absolute top-12 right-12 flex gap-2">
                 {((businessLines[activeTab].images && businessLines[activeTab].images.length > 0)
                   ? businessLines[activeTab].images
-                  : [businessLines[activeTab].image_url || 'https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&q=80&w=1200']
+                  : [businessLines[activeTab].image_url || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200']
                 ).map((_, i) => (
                   <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === 0 ? 'w-8 bg-cyan-500' : 'w-2 bg-white/30'}`}></div>
                 ))}

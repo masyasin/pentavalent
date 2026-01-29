@@ -130,7 +130,7 @@ const GCGSection: React.FC = () => {
             {/* Background Pattern */}
             <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
                 {/* Header */}
                 <div className="text-center mb-20">
                     <div className="flex items-center justify-center gap-4 mb-6">

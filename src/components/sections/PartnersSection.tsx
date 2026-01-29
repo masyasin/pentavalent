@@ -54,7 +54,7 @@ const PartnersSection: React.FC = () => {
 
   return (
     <section id="partners" className="py-32 bg-gray-50 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-20 uppercase tracking-tight">
           <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] mb-6 border border-primary/10">

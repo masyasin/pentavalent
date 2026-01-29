@@ -45,7 +45,7 @@ const ManagementSection: React.FC = () => {
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
         <div className="text-center mb-24">
           <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
             Executive Leadership

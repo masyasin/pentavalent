@@ -80,7 +80,7 @@ const NetworkSection: React.FC = () => {
         }}></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
 
         {/* Header - Premium & Modern */}
         <div className="text-center max-w-4xl mx-auto mb-20 relative">
@@ -193,30 +193,11 @@ const NetworkSection: React.FC = () => {
                 className="w-full h-auto block mix-blend-multiply opacity-90 contrast-125"
               />
 
-              {/* Connection Lines */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30">
-                {branches.slice(0, 5).map((b, i) => {
-                  return (
-                    <path
-                      key={i}
-                      d={`M${50 + (i * 10)}% 50% Q 50% 20% ${40 + (i * 5)}% 60%`}
-                      fill="none"
-                      stroke="url(#gradient-line)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      className="animate-pulse"
-                      style={{ animationDuration: '3s' }}
-                    />
-                  )
-                })}
-                <defs>
-                  <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="transparent" />
-                    <stop offset="50%" stopColor="#0284c7" />
-                    <stop offset="100%" stopColor="transparent" />
-                  </linearGradient>
-                </defs>
-              </svg>
+              {/* Connection Lines - Decorative Pulse */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-1/4 left-1/4 w-1/2 h-1 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent blur-2xl animate-pulse"></div>
+                <div className="absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-400/10 to-transparent blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+              </div>
 
               {/* Interactive Dots */}
               {branches.map((branch) => {

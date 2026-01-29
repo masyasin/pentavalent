@@ -31,11 +31,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
   const navItems = [
     { id: 'about', label: t('nav.about') },
     { id: 'business', label: t('nav.business') },
-    { id: 'partners', label: t('nav.partners') },
     { id: 'network', label: t('nav.network') },
+    { id: 'certification', label: t('nav.certification') },
     { id: 'investor', label: t('nav.investor') },
     { id: 'news', label: t('nav.news') },
-    { id: 'career', label: t('nav.career') },
     { id: 'contact', label: t('nav.contact') },
   ];
 
@@ -47,10 +46,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           : 'bg-transparent py-6'
           }`}
       >
-        <div className="max-w-[1920px] mx-auto px-6 sm:px-10 lg:px-12">
-          <div className="flex items-center justify-between relative z-10 h-full gap-4">
-            {/* Logo - Flexible Side */}
-            <div className="flex-1 min-w-[140px] flex items-center">
+        <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16">
+          <div className="flex items-center justify-between relative z-10 h-full gap-8">
+            {/* Logo Column - Flex 1 to balance with Actions */}
+            <div className="flex-1 flex items-center justify-start">
               <div
                 className="cursor-pointer group flex-shrink-0"
                 onClick={() => {
@@ -68,13 +67,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               </div>
             </div>
 
-            {/* Navigation Menu - Center Aligned */}
-            <nav className="hidden xl:flex items-center gap-0.5 min-w-0 flex-shrink-0">
+            {/* Navigation Column - Center Aligned, naturally sized */}
+            <nav className="hidden xl:flex items-center justify-center gap-2 min-w-0">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-2.5 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all duration-500 relative group overflow-hidden whitespace-nowrap ${activeSection === item.id
+                  className={`px-4 py-2 rounded-full text-[15px] font-bold uppercase tracking-widest transition-all duration-500 relative group whitespace-nowrap ${activeSection === item.id
                     ? (isScrolled ? 'text-primary' : 'text-white bg-white/20')
                     : (isScrolled ? 'text-slate-600 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
                     }`}
@@ -87,14 +86,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               ))}
             </nav>
 
-            {/* Right side: Actions - Flexible Side */}
-            <div className="flex-1 min-w-[140px] flex items-center justify-end gap-3 flex-shrink-0">
+            {/* Actions Column - Flex 1 to balance with Logo */}
+            <div className="flex-1 flex items-center justify-end gap-3">
               <div className={`hidden md:flex items-center rounded-full p-0.5 border transition-all duration-500 flex-shrink-0 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
                 {['id', 'en'].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
+                    className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${language === lang
                       ? 'bg-primary text-white shadow-lg shadow-primary/20'
                       : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
                       }`}

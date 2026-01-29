@@ -107,7 +107,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
       <div className="overflow-hidden h-full" ref={emblaRef}>
         <div className="flex h-full">
           {slides.map((slide, index) => (
-            <div key={slide.id} className="relative flex-[0_0_100%] min-w-0 h-full">
+            <div key={slide.id} className="relative flex-[0_0_100%] min-w-0 h-full overflow-hidden">
               {/* Background Media with Subtle Zoom */}
               <div className="absolute inset-0 overflow-hidden">
                 <div
@@ -151,7 +151,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
 
               {/* Content */}
               <div className="relative h-full flex items-center pt-24 z-10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 w-full">
                   <div className="max-w-3xl">
                     {/* Decorative Top Line - Show ONLY if content exists */}
                     {((language === 'id' ? slide.title_id : slide.title_en) || (language === 'id' ? slide.subtitle_id : slide.subtitle_en) || (language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en)) && (

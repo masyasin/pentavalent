@@ -92,7 +92,7 @@ const ContactSection: React.FC = () => {
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-200/40 rounded-full blur-[100px] animate-float-slow"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
         <div className="mb-24">
           <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
             {t('contact.tagline')}
