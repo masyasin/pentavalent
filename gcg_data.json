@@ -1,0 +1,302 @@
+{
+    "gcg": {
+        "title": {
+            "id": "Good Corporate Governance",
+            "en": "Good Corporate Governance"
+        },
+        "subtitle": {
+            "id": "Kami mematuhi standar tertinggi transparansi dan etika institusional.",
+            "en": "We strictly adhere to the highest standards of transparency and institutional ethics."
+        },
+        "principles": [
+            {
+                "id": 1,
+                "icon": "eye",
+                "title_id": "Transparansi",
+                "title_en": "Transparency",
+                "description_id": "Keterbukaan dalam mengemukakan informasi yang material dan relevan serta keterbukaan dalam melaksanakan proses pengambilan keputusan.",
+                "description_en": "Openness in disclosing material and relevant information and openness in implementing the decision-making process."
+            },
+            {
+                "id": 2,
+                "icon": "clipboard-check",
+                "title_id": "Akuntabilitas",
+                "title_en": "Accountability",
+                "description_id": "Kejelasan fungsi, pelaksanaan dan pertanggungjawaban organ perusahaan sehingga pengelolaan perusahaan terlaksana secara efektif.",
+                "description_en": "Clarity of function, implementation and accountability of company organs so that company management is carried out effectively."
+            },
+            {
+                "id": 3,
+                "icon": "shield-check",
+                "title_id": "Responsibilitas",
+                "title_en": "Responsibility",
+                "description_id": "Kesesuaian pengelolaan perusahaan terhadap peraturan perundang-undangan dan prinsip korporasi yang sehat.",
+                "description_en": "Compliance of company management with laws and regulations and sound corporate principles."
+            },
+            {
+                "id": 4,
+                "icon": "scale",
+                "title_id": "Independensi",
+                "title_en": "Independence",
+                "description_id": "Pengelolaan perusahaan secara profesional tanpa benturan kepentingan dan pengaruh/tekanan dari pihak manapun.",
+                "description_en": "Professional company management without conflicts of interest and influence/pressure from any party."
+            },
+            {
+                "id": 5,
+                "icon": "users",
+                "title_id": "Kewajaran",
+                "title_en": "Fairness",
+                "description_id": "Keadilan dan kesetaraan dalam memenuhi hak-hak stakeholder yang timbul berdasarkan perjanjian dan peraturan perundang-undangan.",
+                "description_en": "Justice and equality in fulfilling stakeholder rights arising from agreements and laws and regulations."
+            }
+        ],
+        "board_of_commissioners": [
+            {
+                "id": 1,
+                "name": "Dr. Herman Kusuma",
+                "position_id": "Komisaris Utama",
+                "position_en": "President Commissioner",
+                "type": "independent",
+                "image_url": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400",
+                "bio_id": "Pakar tata kelola perusahaan dengan pengalaman 30+ tahun di industri farmasi dan kesehatan.",
+                "bio_en": "Corporate governance expert with 30+ years of experience in pharmaceutical and healthcare industry."
+            },
+            {
+                "id": 2,
+                "name": "Sarah Johnson, MBA",
+                "position_id": "Komisaris Independen",
+                "position_en": "Independent Commissioner",
+                "type": "independent",
+                "image_url": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400",
+                "bio_id": "Ahli hukum korporasi internasional dengan spesialisasi dalam compliance dan regulatory affairs.",
+                "bio_en": "International corporate law expert specializing in compliance and regulatory affairs."
+            },
+            {
+                "id": 3,
+                "name": "Prof. Dr. Bambang Sutrisno",
+                "position_id": "Komisaris Independen",
+                "position_en": "Independent Commissioner",
+                "type": "independent",
+                "image_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+                "bio_id": "Akademisi dan praktisi di bidang manajemen risiko dan audit internal.",
+                "bio_en": "Academic and practitioner in risk management and internal audit."
+            },
+            {
+                "id": 4,
+                "name": "Ir. Suharto Wijaya",
+                "position_id": "Komisaris",
+                "position_en": "Commissioner",
+                "type": "non_independent",
+                "image_url": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400",
+                "bio_id": "Berpengalaman dalam pengembangan bisnis dan strategi perusahaan di industri distribusi farmasi.",
+                "bio_en": "Experienced in business development and corporate strategy in pharmaceutical distribution industry."
+            }
+        ],
+        "committees": [
+            {
+                "id": 1,
+                "name_id": "Komite Audit",
+                "name_en": "Audit Committee",
+                "chairman": "Prof. Dr. Bambang Sutrisno",
+                "members": [
+                    "Prof. Dr. Bambang Sutrisno",
+                    "Sarah Johnson, MBA",
+                    "Ir. Suharto Wijaya"
+                ],
+                "description_id": "Membantu Dewan Komisaris dalam mengawasi proses pelaporan keuangan, sistem pengendalian internal, proses audit, dan kepatuhan terhadap peraturan.",
+                "description_en": "Assists the Board of Commissioners in overseeing financial reporting process, internal control systems, audit process, and regulatory compliance."
+            },
+            {
+                "id": 2,
+                "name_id": "Komite Nominasi dan Remunerasi",
+                "name_en": "Nomination and Remuneration Committee",
+                "chairman": "Dr. Herman Kusuma",
+                "members": [
+                    "Dr. Herman Kusuma",
+                    "Sarah Johnson, MBA",
+                    "Prof. Dr. Bambang Sutrisno"
+                ],
+                "description_id": "Memberikan rekomendasi kepada Dewan Komisaris mengenai komposisi, kebijakan remunerasi, dan evaluasi kinerja Direksi.",
+                "description_en": "Provides recommendations to the Board of Commissioners regarding composition, remuneration policy, and performance evaluation of Directors."
+            },
+            {
+                "id": 3,
+                "name_id": "Komite Manajemen Risiko",
+                "name_en": "Risk Management Committee",
+                "chairman": "Sarah Johnson, MBA",
+                "members": [
+                    "Sarah Johnson, MBA",
+                    "Prof. Dr. Bambang Sutrisno",
+                    "Ir. Suharto Wijaya"
+                ],
+                "description_id": "Mengidentifikasi, mengevaluasi, dan memantau implementasi manajemen risiko perusahaan secara menyeluruh.",
+                "description_en": "Identifies, evaluates, and monitors comprehensive implementation of company risk management."
+            },
+            {
+                "id": 4,
+                "name_id": "Komite Tata Kelola Perusahaan",
+                "name_en": "Corporate Governance Committee",
+                "chairman": "Dr. Herman Kusuma",
+                "members": [
+                    "Dr. Herman Kusuma",
+                    "Sarah Johnson, MBA",
+                    "Ir. Suharto Wijaya"
+                ],
+                "description_id": "Memastikan implementasi prinsip-prinsip GCG dan memberikan rekomendasi perbaikan tata kelola perusahaan.",
+                "description_en": "Ensures implementation of GCG principles and provides recommendations for corporate governance improvement."
+            }
+        ],
+        "policies": [
+            {
+                "id": 1,
+                "category": "ethics",
+                "title_id": "Kode Etik Perusahaan",
+                "title_en": "Corporate Code of Conduct",
+                "description_id": "Pedoman perilaku dan etika bisnis yang harus dipatuhi oleh seluruh jajaran perusahaan.",
+                "description_en": "Guidelines for business conduct and ethics that must be followed by all company personnel.",
+                "document_url": "/documents/code-of-conduct.pdf"
+            },
+            {
+                "id": 2,
+                "category": "compliance",
+                "title_id": "Kebijakan Anti Korupsi",
+                "title_en": "Anti-Corruption Policy",
+                "description_id": "Komitmen perusahaan untuk mencegah dan memberantas segala bentuk korupsi, suap, dan gratifikasi.",
+                "description_en": "Company commitment to prevent and eradicate all forms of corruption, bribery, and gratuities.",
+                "document_url": "/documents/anti-corruption.pdf"
+            },
+            {
+                "id": 3,
+                "category": "compliance",
+                "title_id": "Kebijakan Whistleblowing System",
+                "title_en": "Whistleblowing System Policy",
+                "description_id": "Sistem pelaporan pelanggaran yang melindungi pelapor dan memastikan tindak lanjut yang tepat.",
+                "description_en": "Violation reporting system that protects whistleblowers and ensures proper follow-up.",
+                "document_url": "/documents/whistleblowing.pdf"
+            },
+            {
+                "id": 4,
+                "category": "risk_management",
+                "title_id": "Kebijakan Manajemen Risiko",
+                "title_en": "Risk Management Policy",
+                "description_id": "Framework pengelolaan risiko perusahaan secara komprehensif dan terintegrasi.",
+                "description_en": "Comprehensive and integrated corporate risk management framework.",
+                "document_url": "/documents/risk-management.pdf"
+            },
+            {
+                "id": 5,
+                "category": "ethics",
+                "title_id": "Kebijakan Transaksi Benturan Kepentingan",
+                "title_en": "Conflict of Interest Transaction Policy",
+                "description_id": "Pedoman untuk mengidentifikasi dan mengelola transaksi yang mengandung benturan kepentingan.",
+                "description_en": "Guidelines for identifying and managing transactions containing conflicts of interest.",
+                "document_url": "/documents/conflict-of-interest.pdf"
+            },
+            {
+                "id": 6,
+                "category": "compliance",
+                "title_id": "Kebijakan Gratifikasi",
+                "title_en": "Gratuity Policy",
+                "description_id": "Aturan mengenai penerimaan dan pemberian hadiah, entertainment, dan fasilitas dalam konteks bisnis.",
+                "description_en": "Rules regarding acceptance and giving of gifts, entertainment, and facilities in business context.",
+                "document_url": "/documents/gratuity.pdf"
+            },
+            {
+                "id": 7,
+                "category": "compliance",
+                "title_id": "Kebijakan Kerahasiaan Informasi",
+                "title_en": "Information Confidentiality Policy",
+                "description_id": "Perlindungan terhadap informasi rahasia perusahaan dan data pribadi stakeholder.",
+                "description_en": "Protection of company confidential information and stakeholder personal data.",
+                "document_url": "/documents/confidentiality.pdf"
+            },
+            {
+                "id": 8,
+                "category": "governance",
+                "title_id": "Pedoman Tata Kelola Perusahaan",
+                "title_en": "Corporate Governance Guidelines",
+                "description_id": "Pedoman komprehensif mengenai struktur, tugas, dan tanggung jawab organ perusahaan.",
+                "description_en": "Comprehensive guidelines on structure, duties, and responsibilities of company organs.",
+                "document_url": "/documents/gcg-guidelines.pdf"
+            }
+        ],
+        "highlights": {
+            "transparency": [
+                "Quarterly financial reporting",
+                "Annual GCG report publication",
+                "Public disclosure of material information",
+                "Investor relations program",
+                "Corporate website with comprehensive information"
+            ],
+            "accountability": [
+                "Independent external audit (Big 4)",
+                "Internal audit function",
+                "Performance-based remuneration",
+                "Regular board evaluations",
+                "Clear KPI and targets"
+            ],
+            "compliance": [
+                "Compliance officer appointed",
+                "Regular compliance training",
+                "Compliance monitoring system",
+                "Regulatory reporting on-time",
+                "Certifications maintained (CDOB, CDAKB)"
+            ],
+            "independence": [
+                "75% independent commissioners",
+                "Independent committees",
+                "Related party transaction policy",
+                "Conflict of interest disclosure",
+                "Independent business judgment"
+            ],
+            "fairness": [
+                "Minority shareholder protection",
+                "Fair dividend policy",
+                "Equal information access",
+                "Grievance mechanism",
+                "Stakeholder engagement program"
+            ]
+        },
+        "awards": [
+            {
+                "year": 2024,
+                "title_id": "Penghargaan Tata Kelola Perusahaan Terbaik",
+                "title_en": "Best Corporate Governance Award",
+                "organization": "Indonesian Institute of Corporate Governance"
+            },
+            {
+                "year": 2024,
+                "title_id": "Top 50 Perusahaan Publik dalam Implementasi GCG",
+                "title_en": "Top 50 Public Companies in GCG Implementation",
+                "organization": "SWA Magazine"
+            },
+            {
+                "year": 2023,
+                "title_id": "Penghargaan Keunggulan IPO",
+                "title_en": "IPO Excellence Award",
+                "organization": "Indonesia Stock Exchange"
+            },
+            {
+                "year": 2023,
+                "title_id": "Penghargaan Transparansi",
+                "title_en": "Transparency Award",
+                "organization": "OJK (Financial Services Authority)"
+            }
+        ],
+        "contact": {
+            "corporate_secretary": {
+                "email": "corpsec@pentavalent.co.id",
+                "phone": "(021) 345-6789 ext. 101"
+            },
+            "investor_relations": {
+                "email": "ir@pentavalent.co.id",
+                "phone": "(021) 345-6789 ext. 102"
+            },
+            "whistleblowing": {
+                "email": "whistleblow@pentavalent.co.id",
+                "hotline": "0800-1-PENTA (24/7)",
+                "online": "https://whistleblow.pentavalent.co.id"
+            }
+        }
+    }
+}
