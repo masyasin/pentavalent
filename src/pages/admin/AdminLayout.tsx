@@ -52,8 +52,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
   return (
     <div className="min-h-screen bg-gray-100 flex overflow-hidden">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-[100] w-64 bg-gray-900 transition-transform duration-300 lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="h-full flex flex-col">
+      <aside className={`fixed inset-y-0 left-0 z-[100] bg-gray-900 transition-all duration-300 transform lg:translate-x-0 ${sidebarOpen ? 'w-64 translate-x-0' : 'w-64 lg:w-0 -translate-x-full lg:translate-x-0'
+        } overflow-hidden`}>
+        <div className="w-64 h-full flex flex-col">
           <div className="flex items-center justify-between p-6 border-b border-gray-800">
             <div className="flex items-center gap-3">
               <img src="/logo.png" alt="Penta Valent" className="h-8 w-auto brightness-0 invert" />
@@ -98,7 +99,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
       {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-[90] lg:hidden" onClick={() => setSidebarOpen(false)} />}
 
       {/* Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 relative h-screen">
+      <div className={`flex-1 flex flex-col min-w-0 relative h-screen transition-all duration-300 ${sidebarOpen ? 'lg:pl-64' : 'lg:pl-0'}`}>
         <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 z-[80]">
           <div className="h-20 flex items-center justify-between px-8">
             <div className="flex items-center gap-6">
@@ -192,7 +193,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-8 bg-gray-50/50">
+        <main className={`flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 transition-all duration-300 no-scrollbar`}>
           {children}
         </main>
       </div>

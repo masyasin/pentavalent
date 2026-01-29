@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Search, Edit2, Trash2, Globe, Image as ImageIcon,
-    ChevronRight, X, Save, AlertCircle, ExternalLink
+    ChevronRight, X, Save, AlertCircle, ExternalLink, Sparkles, RefreshCw
 } from 'lucide-react';
 
 interface Partner {
@@ -22,11 +23,12 @@ interface Partner {
 const PartnerManager: React.FC = () => {
     const [partners, setPartners] = useState<Partner[]>([]);
     const [loading, setLoading] = useState(true);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
     const [formData, setFormData] = useState({
         name: '',
-        partner_type: 'principal' as const,
+        partner_type: 'principal' as 'principal' | 'international',
         logo_url: '',
         website: '',
         description_id: '',
@@ -38,6 +40,19 @@ const PartnerManager: React.FC = () => {
     useEffect(() => {
         fetchPartners();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: string) => {
+        if (!sourceText) return;
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText);
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchPartners = async () => {
         try {
@@ -303,7 +318,18 @@ const PartnerManager: React.FC = () => {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Description (EN)</label>
+                                        <div className="flex justify-between items-center px-1">
+                                            <label className="text-xs font-black text-gray-400 uppercase tracking-widest leading-none">Description (EN)</label>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAutoTranslate(formData.description_id, 'description_en')}
+                                                disabled={!!translating}
+                                                className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                            >
+                                                {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                <span className="text-[10px] font-bold uppercase tracking-widest leading-none">Auto Translate</span>
+                                            </button>
+                                        </div>
                                         <RichTextEditor
                                             content={formData.description_en}
                                             onChange={(val) => setFormData({ ...formData, description_en: val })}

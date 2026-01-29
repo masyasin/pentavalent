@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, Save, X,
     Heart, Star, Shield, Zap, Target, Rocket,
-    RefreshCw, CheckCircle2, AlertCircle
+    RefreshCw, CheckCircle2, AlertCircle, Sparkles
 } from 'lucide-react';
 
 interface CorporateValue {
@@ -29,6 +30,7 @@ const ICON_LIST = [
 const ValuesManager: React.FC = () => {
     const [values, setValues] = useState<CorporateValue[]>([]);
     const [loading, setLoading] = useState(true);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingValue, setEditingValue] = useState<CorporateValue | null>(null);
     const [formData, setFormData] = useState<Partial<CorporateValue>>({
@@ -44,6 +46,19 @@ const ValuesManager: React.FC = () => {
     useEffect(() => {
         fetchValues();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: keyof CorporateValue) => {
+        if (!sourceText) return;
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText);
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchValues = async () => {
         try {
@@ -232,7 +247,18 @@ const ValuesManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-1">Title (EN)</label>
+                                    <div className="flex justify-between items-center px-1">
+                                        <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Title (EN)</label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(formData.title_id || '', 'title_en')}
+                                            disabled={!!translating}
+                                            className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                        >
+                                            {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[8px] font-black uppercase tracking-widest leading-none">Auto</span>
+                                        </button>
+                                    </div>
                                     <input
                                         type="text"
                                         required
@@ -255,7 +281,18 @@ const ValuesManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Description (EN)</label>
+                                    <div className="flex justify-between items-center px-1">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Description (EN)</label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(formData.description_id || '', 'description_en')}
+                                            disabled={!!translating}
+                                            className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                        >
+                                            {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[8px] font-black uppercase tracking-widest leading-none">Auto</span>
+                                        </button>
+                                    </div>
                                     <textarea
                                         required
                                         rows={3}

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, FileText, Download,
-    X, Save, Filter, FileUp, Calendar
+    X, Save, Filter, FileUp, Calendar, Sparkles, RefreshCw
 } from 'lucide-react';
 
 interface InvestorDocument {
@@ -31,6 +32,7 @@ const InvestorManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingDoc, setEditingDoc] = useState<InvestorDocument | null>(null);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [formData, setFormData] = useState({
         title_id: '',
         title_en: '',
@@ -44,6 +46,19 @@ const InvestorManager: React.FC = () => {
     useEffect(() => {
         fetchDocuments();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: keyof InvestorDocument) => {
+        if (!sourceText) return;
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText, 'id', 'en');
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchDocuments = async () => {
         try {
@@ -245,13 +260,24 @@ const InvestorManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Title (EN)</label>
+                                    <div className="flex justify-between items-center px-1">
+                                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Title (EN)</label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(formData.title_id || '', 'title_en')}
+                                            disabled={!!translating}
+                                            className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                        >
+                                            {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                        </button>
+                                    </div>
                                     <input
                                         type="text"
                                         required
                                         value={formData.title_en}
                                         onChange={(e) => setFormData({ ...formData, title_en: e.target.value })}
-                                        className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all"
+                                        className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-bold"
                                     />
                                 </div>
                             </div>

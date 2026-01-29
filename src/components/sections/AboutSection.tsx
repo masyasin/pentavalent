@@ -20,21 +20,46 @@ interface CorporateValue {
   icon_name: string;
 }
 
+interface CompanyInfo {
+  tagline_id: string;
+  tagline_en: string;
+  title_text_id: string;
+  title_text_en: string;
+  title_italic_id: string;
+  title_italic_en: string;
+  description_id: string;
+  description_en: string;
+  stats_years_value: string;
+  stats_years_label_id: string;
+  stats_years_label_en: string;
+  stats_public_value: string;
+  stats_public_label_id: string;
+  stats_public_label_en: string;
+  image_url: string;
+  vision_text_id: string;
+  vision_text_en: string;
+  mission_text_id: string;
+  mission_text_en: string;
+}
+
 const AboutSection: React.FC = () => {
   const { t, language } = useLanguage();
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [values, setValues] = useState<CorporateValue[]>([]);
+  const [info, setInfo] = useState<CompanyInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchAboutData = async () => {
     try {
-      const [timelineRes, valuesRes] = await Promise.all([
+      const [timelineRes, valuesRes, infoRes] = await Promise.all([
         supabase.from('company_timeline').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
-        supabase.from('corporate_values').select('*').eq('is_active', true).order('sort_order', { ascending: true })
+        supabase.from('corporate_values').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
+        supabase.from('company_info').select('*').single()
       ]);
 
       if (timelineRes.data) setTimeline(timelineRes.data);
       if (valuesRes.data) setValues(valuesRes.data);
+      if (infoRes.data) setInfo(infoRes.data);
     } catch (error) {
       console.error('Error fetching about data:', error);
     } finally {
@@ -68,32 +93,36 @@ const AboutSection: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-20 items-center mb-32">
           <div className="lg:w-1/2">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
-              {t('about.tagline')}
+              {info ? (language === 'id' ? info.tagline_id : info.tagline_en) : t('about.tagline')}
             </span>
             <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {t('about.title.text')} <br />
-              <span className="italic">{t('about.title.italic')}</span>
+              {info ? (language === 'id' ? info.title_text_id : info.title_text_en) : t('about.title.text')} <br />
+              <span className="italic">{info ? (language === 'id' ? info.title_italic_id : info.title_italic_en) : t('about.title.italic')}</span>
             </h2>
             <p className="text-xl text-gray-500 font-medium leading-relaxed mb-10">
-              {t('about.description')}
+              {info ? (language === 'id' ? info.description_id : info.description_en) : t('about.description')}
             </p>
             <div className="grid grid-cols-2 gap-8 pt-10 border-t border-gray-100">
               <div>
-                <div className="text-4xl font-black text-primary mb-1">55+</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('about.years.impact')}</div>
+                <div className="text-4xl font-black text-primary mb-1">{info?.stats_years_value || '55+'}</div>
+                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                  {info ? (language === 'id' ? info.stats_years_label_id : info.stats_years_label_en) : t('about.years.impact')}
+                </div>
               </div>
               <div>
-                <div className="text-4xl font-black text-primary mb-1">Tbk</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('about.public.listed')}</div>
+                <div className="text-4xl font-black text-primary mb-1">{info?.stats_public_value || 'Tbk'}</div>
+                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                  {info ? (language === 'id' ? info.stats_public_label_id : info.stats_public_label_en) : t('about.public.listed')}
+                </div>
               </div>
             </div>
           </div>
           <div className="lg:w-1/2 relative group">
             <div className="absolute -inset-4 bg-primary/5 rounded-[3rem] blur-2xl group-hover:bg-primary/10 transition-all duration-700"></div>
             <img
-              src="https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&q=80&w=1000"
+              src={info?.image_url || "https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&q=80&w=1000"}
               alt="Corporate Excellence"
-              className="relative rounded-[2.5rem] enterprise-shadow border border-gray-100 grayscale hover:grayscale-0 transition-all duration-1000"
+              className="relative rounded-[2.5rem] enterprise-shadow border border-gray-100 grayscale hover:grayscale-0 transition-all duration-1000 w-full"
             />
             <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-gradient-to-r from-primary to-accent rounded-[3rem] flex items-center justify-center p-8 text-white shadow-4xl group-hover:-translate-y-4 transition-transform duration-700">
               <div className="text-center font-black leading-tight">
@@ -134,7 +163,7 @@ const AboutSection: React.FC = () => {
                   </div>
 
                   <p className="text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
-                    "{t('about.vision.text')}"
+                    "{info ? (language === 'id' ? info.vision_text_id : info.vision_text_en) : t('about.vision.text')}"
                   </p>
                 </div>
 
@@ -169,7 +198,7 @@ const AboutSection: React.FC = () => {
                   </div>
 
                   <p className="text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
-                    "{t('about.mission.text')}"
+                    "{info ? (language === 'id' ? info.mission_text_id : info.mission_text_en) : t('about.mission.text')}"
                   </p>
                 </div>
 

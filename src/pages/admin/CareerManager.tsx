@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Search, Edit2, Trash2, MapPin, Building2,
-    Calendar, Briefcase, ChevronRight, X, Save, AlertCircle
+    Calendar, Briefcase, ChevronRight, X, Save, AlertCircle, Sparkles, RefreshCw
 } from 'lucide-react';
 
 interface Career {
@@ -24,6 +25,7 @@ interface Career {
 const CareerManager: React.FC = () => {
     const [careers, setCareers] = useState<Career[]>([]);
     const [loading, setLoading] = useState(true);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingCareer, setEditingCareer] = useState<Career | null>(null);
     const [formData, setFormData] = useState({
@@ -42,6 +44,19 @@ const CareerManager: React.FC = () => {
     useEffect(() => {
         fetchCareers();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: string) => {
+        if (!sourceText) return;
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText);
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchCareers = async () => {
         try {
@@ -303,7 +318,18 @@ const CareerManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Description (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-xs font-black text-gray-400 uppercase tracking-widest leading-none">Description (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.description_id, 'description_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest leading-none">Auto Translate</span>
+                                                </button>
+                                            </div>
                                             <RichTextEditor
                                                 content={formData.description_en}
                                                 onChange={(val) => setFormData({ ...formData, description_en: val })}
@@ -325,7 +351,18 @@ const CareerManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Requirements (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-xs font-black text-gray-400 uppercase tracking-widest leading-none">Requirements (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.requirements_id, 'requirements_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'requirements_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest leading-none">Auto Translate</span>
+                                                </button>
+                                            </div>
                                             <RichTextEditor
                                                 content={formData.requirements_en}
                                                 onChange={(val) => setFormData({ ...formData, requirements_en: val })}

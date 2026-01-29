@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, Image as ImageIcon, Video,
     Save, X, MoveUp, MoveDown, CheckCircle2, AlertCircle,
-    Link as LinkIcon, Type
+    Link as LinkIcon, Type, Sparkles, RefreshCw
 } from 'lucide-react';
 
 interface HeroSlide {
@@ -29,6 +30,7 @@ const HeroSliderManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingSlide, setEditingSlide] = useState<HeroSlide | null>(null);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [formData, setFormData] = useState<Partial<HeroSlide>>({
         title_id: '',
         title_en: '',
@@ -49,6 +51,20 @@ const HeroSliderManager: React.FC = () => {
     useEffect(() => {
         fetchSlides();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: keyof HeroSlide) => {
+        if (!sourceText) return;
+
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText, 'id', 'en');
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchSlides = async () => {
         try {
@@ -316,7 +332,18 @@ const HeroSliderManager: React.FC = () => {
 
                                     <div className="space-y-6">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-1">Headline (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Headline (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.title_id || '', 'title_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                                </button>
+                                            </div>
                                             <input
                                                 type="text"
                                                 required
@@ -326,7 +353,18 @@ const HeroSliderManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Sub-headline (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Sub-headline (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.subtitle_id || '', 'subtitle_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'subtitle_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                                </button>
+                                            </div>
                                             <textarea
                                                 required
                                                 value={formData.subtitle_en}
@@ -358,12 +396,23 @@ const HeroSliderManager: React.FC = () => {
                                                 onChange={(e) => setFormData({ ...formData, cta_primary_text_id: e.target.value })}
                                                 className="w-full px-4 py-3 bg-white border border-blue-100 rounded-xl font-bold"
                                             />
-                                            <input
-                                                placeholder="Label (EN)"
-                                                value={formData.cta_primary_text_en || ''}
-                                                onChange={(e) => setFormData({ ...formData, cta_primary_text_en: e.target.value })}
-                                                className="w-full px-4 py-3 bg-white border border-blue-100 rounded-xl font-bold"
-                                            />
+                                            <div className="relative">
+                                                <input
+                                                    placeholder="Label (EN)"
+                                                    value={formData.cta_primary_text_en || ''}
+                                                    onChange={(e) => setFormData({ ...formData, cta_primary_text_en: e.target.value })}
+                                                    className="w-full px-4 py-3 bg-white border border-blue-100 rounded-xl font-bold pr-10"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.cta_primary_text_id || '', 'cta_primary_text_en')}
+                                                    disabled={!!translating}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-800 transition-colors"
+                                                    title="Auto Translate"
+                                                >
+                                                    {translating === 'cta_primary_text_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                                </button>
+                                            </div>
                                         </div>
                                         <input
                                             placeholder="Link (URL or #anchor)"
@@ -382,12 +431,23 @@ const HeroSliderManager: React.FC = () => {
                                                 onChange={(e) => setFormData({ ...formData, cta_secondary_text_id: e.target.value })}
                                                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl font-bold"
                                             />
-                                            <input
-                                                placeholder="Label (EN)"
-                                                value={formData.cta_secondary_text_en || ''}
-                                                onChange={(e) => setFormData({ ...formData, cta_secondary_text_en: e.target.value })}
-                                                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl font-bold"
-                                            />
+                                            <div className="relative">
+                                                <input
+                                                    placeholder="Label (EN)"
+                                                    value={formData.cta_secondary_text_en || ''}
+                                                    onChange={(e) => setFormData({ ...formData, cta_secondary_text_en: e.target.value })}
+                                                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl font-bold pr-10"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.cta_secondary_text_id || '', 'cta_secondary_text_en')}
+                                                    disabled={!!translating}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
+                                                    title="Auto Translate"
+                                                >
+                                                    {translating === 'cta_secondary_text_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                                </button>
+                                            </div>
                                         </div>
                                         <input
                                             placeholder="Link (URL or #anchor)"

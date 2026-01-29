@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Save, Globe, Mail, Phone, MapPin,
     Facebook, Twitter, Instagram, Linkedin,
     Youtube, Link as LinkIcon, Image as ImageIcon,
-    CheckCircle2, AlertCircle, RefreshCw, Type
+    CheckCircle2, AlertCircle, RefreshCw, Type, Sparkles
 } from 'lucide-react';
 
 interface SiteSettings {
@@ -31,11 +32,26 @@ const SiteSettingsManager: React.FC = () => {
     const [settings, setSettings] = useState<SiteSettings | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
     useEffect(() => {
         fetchSettings();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: keyof SiteSettings) => {
+        if (!sourceText || !settings) return;
+
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText, 'id', 'en');
+            setSettings({ ...settings, [targetField]: translated });
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchSettings = async () => {
         try {
@@ -342,7 +358,18 @@ const SiteSettingsManager: React.FC = () => {
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-1">Footer Description (EN)</label>
+                            <div className="flex justify-between items-center px-1">
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Footer Description (EN)</label>
+                                <button
+                                    type="button"
+                                    onClick={() => handleAutoTranslate(settings?.footer_text_id || '', 'footer_text_en')}
+                                    disabled={!!translating}
+                                    className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                >
+                                    {translating === 'footer_text_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                </button>
+                            </div>
                             <textarea
                                 value={settings?.footer_text_en}
                                 onChange={(e) => setSettings({ ...settings!, footer_text_en: e.target.value })}

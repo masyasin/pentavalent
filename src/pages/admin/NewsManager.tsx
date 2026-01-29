@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import { Sparkles, RefreshCw } from 'lucide-react';
 
 interface NewsItem {
   id: string;
@@ -21,6 +23,7 @@ interface NewsItem {
 const NewsManager: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [translating, setTranslating] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editingNews, setEditingNews] = useState<NewsItem | null>(null);
   const [formData, setFormData] = useState({
@@ -39,6 +42,19 @@ const NewsManager: React.FC = () => {
   useEffect(() => {
     fetchNews();
   }, []);
+
+  const handleAutoTranslate = async (sourceText: string, targetField: string) => {
+    if (!sourceText) return;
+    try {
+      setTranslating(targetField);
+      const translated = await translateText(sourceText);
+      setFormData(prev => ({ ...prev, [targetField]: translated }));
+    } catch (error) {
+      console.error('Translation failed:', error);
+    } finally {
+      setTranslating(null);
+    }
+  };
 
   const fetchNews = async () => {
     try {
@@ -272,7 +288,18 @@ const NewsManager: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Title (EN)</label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-medium text-gray-700">Title (EN)</label>
+                    <button
+                      type="button"
+                      onClick={() => handleAutoTranslate(formData.title_id, 'title_en')}
+                      disabled={!!translating}
+                      className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                    >
+                      {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Auto</span>
+                    </button>
+                  </div>
                   <input
                     type="text"
                     required
@@ -305,6 +332,39 @@ const NewsManager: React.FC = () => {
                   />
                 </div>
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt (ID)</label>
+                  <textarea
+                    rows={2}
+                    value={formData.excerpt_id}
+                    onChange={(e) => setFormData({ ...formData, excerpt_id: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                    placeholder="Ringkasan berita..."
+                  />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-medium text-gray-700">Excerpt (EN)</label>
+                    <button
+                      type="button"
+                      onClick={() => handleAutoTranslate(formData.excerpt_id, 'excerpt_en')}
+                      disabled={!!translating}
+                      className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                    >
+                      {translating === 'excerpt_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Auto</span>
+                    </button>
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={formData.excerpt_en}
+                    onChange={(e) => setFormData({ ...formData, excerpt_en: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                    placeholder="News excerpt in English..."
+                  />
+                </div>
+              </div>
               <div className="space-y-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Content (ID)</label>
                 <RichTextEditor
@@ -314,7 +374,18 @@ const NewsManager: React.FC = () => {
                 />
               </div>
               <div className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Content (EN)</label>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="block text-sm font-medium text-gray-700">Content (EN)</label>
+                  <button
+                    type="button"
+                    onClick={() => handleAutoTranslate(formData.content_id, 'content_en')}
+                    disabled={!!translating}
+                    className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                  >
+                    {translating === 'content_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Auto Translate</span>
+                  </button>
+                </div>
                 <RichTextEditor
                   content={formData.content_en}
                   onChange={(content) => setFormData({ ...formData, content_en: content })}

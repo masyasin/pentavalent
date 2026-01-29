@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Search, Edit2, Globe, Save, X,
     Settings, Layout, Share2, Tag,
-    CheckCircle2, AlertCircle, RefreshCw
+    CheckCircle2, AlertCircle, RefreshCw, Sparkles
 } from 'lucide-react';
 
 interface SeoSetting {
@@ -34,6 +35,7 @@ const SeoManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingSeo, setEditingSeo] = useState<SeoSetting | null>(null);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [formData, setFormData] = useState<Partial<SeoSetting>>({
         page_slug: 'home',
         title_id: '',
@@ -48,6 +50,20 @@ const SeoManager: React.FC = () => {
     useEffect(() => {
         fetchSeo();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: keyof SeoSetting) => {
+        if (!sourceText) return;
+
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText, 'id', 'en');
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchSeo = async () => {
         try {
@@ -273,7 +289,18 @@ const SeoManager: React.FC = () => {
 
                                     <div className="space-y-6">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Meta Title (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Meta Title (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.title_id || '', 'title_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                                </button>
+                                            </div>
                                             <input
                                                 type="text"
                                                 required
@@ -283,7 +310,18 @@ const SeoManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Description (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Description (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.description_id || '', 'description_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                                </button>
+                                            </div>
                                             <textarea
                                                 required
                                                 value={formData.description_en || ''}
@@ -293,7 +331,18 @@ const SeoManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Keywords (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Keywords (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.keywords_id || '', 'keywords_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'keywords_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                                </button>
+                                            </div>
                                             <input
                                                 type="text"
                                                 value={formData.keywords_en || ''}

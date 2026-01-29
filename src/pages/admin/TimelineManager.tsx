@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, Save, X,
     History, Calendar, MoveUp, MoveDown,
-    RefreshCw, CheckCircle2, AlertCircle
+    RefreshCw, CheckCircle2, AlertCircle, Sparkles
 } from 'lucide-react';
 
 interface TimelineEvent {
@@ -20,6 +21,7 @@ interface TimelineEvent {
 const TimelineManager: React.FC = () => {
     const [events, setEvents] = useState<TimelineEvent[]>([]);
     const [loading, setLoading] = useState(true);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingEvent, setEditingEvent] = useState<TimelineEvent | null>(null);
     const [formData, setFormData] = useState<Partial<TimelineEvent>>({
@@ -35,6 +37,19 @@ const TimelineManager: React.FC = () => {
     useEffect(() => {
         fetchEvents();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: keyof TimelineEvent) => {
+        if (!sourceText) return;
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText);
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchEvents = async () => {
         try {
@@ -252,7 +267,18 @@ const TimelineManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-1">Event Title (EN)</label>
+                                            <div className="flex justify-between items-center px-1">
+                                                <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Event Title (EN)</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAutoTranslate(formData.title_id || '', 'title_en')}
+                                                    disabled={!!translating}
+                                                    className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                                >
+                                                    {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest leading-none">Auto</span>
+                                                </button>
+                                            </div>
                                             <input
                                                 type="text"
                                                 required
@@ -277,7 +303,18 @@ const TimelineManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Narrative (EN)</label>
+                                    <div className="flex justify-between items-center px-1">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Narrative (EN)</label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(formData.description_id || '', 'description_en')}
+                                            disabled={!!translating}
+                                            className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                        >
+                                            {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[8px] font-black uppercase tracking-widest leading-none">Auto</span>
+                                        </button>
+                                    </div>
                                     <textarea
                                         required
                                         rows={4}

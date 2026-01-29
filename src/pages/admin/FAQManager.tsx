@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, X, Save,
     Search, HelpCircle, AlertCircle, RefreshCw,
-    MessageCircle, CheckCircle2, ChevronDown
+    MessageCircle, CheckCircle2, ChevronDown, Sparkles
 } from 'lucide-react';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 
@@ -21,6 +22,7 @@ interface FAQ {
 const FAQManager: React.FC = () => {
     const [faqs, setFaqs] = useState<FAQ[]>([]);
     const [loading, setLoading] = useState(true);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -46,6 +48,19 @@ const FAQManager: React.FC = () => {
     useEffect(() => {
         fetchFaqs();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: string) => {
+        if (!sourceText) return;
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText);
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchFaqs = async () => {
         try {
@@ -303,7 +318,18 @@ const FAQManager: React.FC = () => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Question</label>
+                                        <div className="flex justify-between items-center px-1">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Question</label>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAutoTranslate(formData.question_id || '', 'question_en')}
+                                                disabled={!!translating}
+                                                className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                            >
+                                                {translating === 'question_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                <span className="text-[8px] font-black uppercase tracking-widest leading-none">Auto</span>
+                                            </button>
+                                        </div>
                                         <input
                                             type="text"
                                             required
@@ -315,7 +341,18 @@ const FAQManager: React.FC = () => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Answer</label>
+                                        <div className="flex justify-between items-center px-1">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Answer</label>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAutoTranslate(formData.answer_id || '', 'answer_en')}
+                                                disabled={!!translating}
+                                                className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                            >
+                                                {translating === 'answer_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                <span className="text-[8px] font-black uppercase tracking-widest leading-none">Auto Translate</span>
+                                            </button>
+                                        </div>
                                         <RichTextEditor
                                             content={formData.answer_en || ''}
                                             onChange={(html) => setFormData({ ...formData, answer_en: html })}

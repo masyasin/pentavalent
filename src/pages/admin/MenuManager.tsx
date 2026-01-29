@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, ArrowUp, ArrowDown,
     Link as LinkIcon, ExternalLink, Layout,
-    CheckCircle2, AlertCircle, Save, X, Settings
+    CheckCircle2, AlertCircle, Save, X, Settings, Sparkles, RefreshCw
 } from 'lucide-react';
 
 interface NavMenu {
@@ -22,6 +23,7 @@ const MenuManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingMenu, setEditingMenu] = useState<NavMenu | null>(null);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [locationFilter, setLocationFilter] = useState<'header' | 'footer'>('header');
 
     const [formData, setFormData] = useState({
@@ -37,6 +39,20 @@ const MenuManager: React.FC = () => {
     useEffect(() => {
         fetchMenus();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: keyof NavMenu) => {
+        if (!sourceText) return;
+
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText, 'id', 'en');
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchMenus = async () => {
         try {
@@ -287,7 +303,18 @@ const MenuManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Label (EN)</label>
+                                    <div className="flex justify-between items-center px-1">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Label (EN)</label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(formData.label_id || '', 'label_en')}
+                                            disabled={!!translating}
+                                            className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
+                                        >
+                                            {translating === 'label_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                        </button>
+                                    </div>
                                     <input
                                         type="text"
                                         required

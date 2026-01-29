@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
+import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, Award, Image as ImageIcon,
-    X, Save, FileCheck, ShieldCheck
+    X, Save, FileCheck, ShieldCheck, Sparkles, RefreshCw
 } from 'lucide-react';
 
 interface Certification {
@@ -21,6 +22,7 @@ interface Certification {
 const CertificationManager: React.FC = () => {
     const [certifications, setCertifications] = useState<Certification[]>([]);
     const [loading, setLoading] = useState(true);
+    const [translating, setTranslating] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingCert, setEditingCert] = useState<Certification | null>(null);
     const [formData, setFormData] = useState({
@@ -36,6 +38,19 @@ const CertificationManager: React.FC = () => {
     useEffect(() => {
         fetchCertifications();
     }, []);
+
+    const handleAutoTranslate = async (sourceText: string, targetField: string) => {
+        if (!sourceText) return;
+        try {
+            setTranslating(targetField);
+            const translated = await translateText(sourceText);
+            setFormData(prev => ({ ...prev, [targetField]: translated }));
+        } catch (error) {
+            console.error('Translation failed:', error);
+        } finally {
+            setTranslating(null);
+        }
+    };
 
     const fetchCertifications = async () => {
         try {
@@ -288,7 +303,18 @@ const CertificationManager: React.FC = () => {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Description (EN)</label>
+                                        <div className="flex justify-between items-center px-1">
+                                            <label className="text-xs font-black text-gray-400 uppercase tracking-widest leading-none">Description (EN)</label>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAutoTranslate(formData.description_id, 'description_en')}
+                                                disabled={!!translating}
+                                                className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                            >
+                                                {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                <span className="text-[10px] font-bold uppercase tracking-widest leading-none">Auto</span>
+                                            </button>
+                                        </div>
                                         <RichTextEditor
                                             content={formData.description_en}
                                             onChange={(val) => setFormData({ ...formData, description_en: val })}

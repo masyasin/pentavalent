@@ -57,8 +57,8 @@ const MenuButton = ({
         disabled={disabled}
         title={title}
         className={`p-2 rounded-lg transition-all ${isActive
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
+            ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
+            : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
             } ${disabled ? 'opacity-30 cursor-not-allowed' : ''}`}
     >
         {children}
@@ -97,6 +97,12 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ content, onChange, plac
             onChange(editor.getHTML());
         },
     });
+
+    React.useEffect(() => {
+        if (editor && content !== editor.getHTML()) {
+            editor.commands.setContent(content);
+        }
+    }, [content, editor]);
 
     if (!editor) return null;
 
