@@ -57,12 +57,20 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
-              <div className={`transition-all duration-500 flex-shrink-0 ${!isScrolled ? 'bg-white px-5 py-3 rounded-[1.25rem] shadow-2xl shadow-white/20 border border-white/50 relative overflow-hidden' : 'py-1'}`}>
-                {!isScrolled && <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/10 to-white opacity-100"></div>}
+              <div className={`transition-all duration-700 flex-shrink-0 flex items-center justify-center ${!isScrolled
+                  ? 'bg-white/95 backdrop-blur-xl px-7 py-4 rounded-[1.5rem] shadow-[0_25px_60px_-15px_rgba(255,255,255,0.4),0_10px_30px_-10px_rgba(6,182,212,0.2)] border border-white relative overflow-hidden'
+                  : 'bg-white/0 py-1'
+                }`}>
+                {!isScrolled && (
+                  <>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white via-cyan-50/20 to-white opacity-100"></div>
+                    <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-cyan-200/20 rounded-full blur-2xl animate-pulse"></div>
+                  </>
+                )}
                 <img
                   src="/logo-penta-valent.png"
                   alt="Penta Valent - Healthcare & Beyond"
-                  className={`${isScrolled ? 'h-10' : 'h-12'} w-auto transition-all duration-700 scale-100 group-hover:scale-105 relative z-10`}
+                  className={`${isScrolled ? 'h-9 lg:h-10' : 'h-11 lg:h-12'} w-auto transition-all duration-700 scale-100 group-hover:scale-105 relative z-10 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.02)]`}
                 />
               </div>
             </div>
