@@ -60,7 +60,8 @@ export type AdminModule =
   | 'channels'
   | 'analytics'
   | 'faqs'
-  | 'legal';
+  | 'legal'
+  | 'newsletter';
 
 // Role-based permissions matrix
 const rolePermissions: Record<UserRole, Permission[]> = {
@@ -122,6 +123,7 @@ const moduleAccess: Record<AdminModule, UserRole[]> = {
   analytics: ['super_admin', 'admin', 'viewer'],
   faqs: ['super_admin', 'admin', 'editor'],
   legal: ['super_admin', 'admin', 'editor'],
+  newsletter: ['super_admin', 'admin', 'editor', 'viewer'],
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

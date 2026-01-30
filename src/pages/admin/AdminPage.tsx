@@ -26,6 +26,7 @@ import AnalyticsManager from './AnalyticsManager';
 import LegalDocumentsManager from './LegalDocumentsManager';
 import LoginPage from './LoginPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
+import NewsletterManager from './NewsletterManager';
 
 // Admin Pages Component with Auth Check and Routing
 const AdminContent: React.FC = () => {
@@ -83,6 +84,7 @@ const AdminContent: React.FC = () => {
         <Route path="hero" element={<ProtectedRoute module="hero"><HeroSliderManager /></ProtectedRoute>} />
         <Route path="seo" element={<ProtectedRoute module="seo"><SeoManager /></ProtectedRoute>} />
         <Route path="analytics" element={<ProtectedRoute module="analytics"><AnalyticsManager /></ProtectedRoute>} />
+        <Route path="newsletter" element={<ProtectedRoute module="newsletter"><NewsletterManager /></ProtectedRoute>} />
 
         {/* Company Profile with Sub-routes */}
         <Route path="company/*" element={<ProtectedRoute module="company"><CompanyProfileManager /></ProtectedRoute>} />

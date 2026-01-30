@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import FileUpload from '../../components/admin/FileUpload';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Save, RefreshCw, CheckCircle2, AlertCircle, Type, Image as ImageIcon, Briefcase, Eye, Target, Sparkles, Network, Building2, User as UserIcon } from 'lucide-react';
 import OrganizationManager from '../../components/admin/OrganizationManager';
 import StructureManager from '../../components/admin/StructureManager';
@@ -30,6 +31,7 @@ interface CompanyInfo {
 }
 
 const GeneralInfoManager: React.FC = () => {
+    const { t } = useLanguage();
     const [info, setInfo] = useState<CompanyInfo | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -111,9 +113,9 @@ const GeneralInfoManager: React.FC = () => {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic underline decoration-blue-500 decoration-8 underline-offset-8">General Profile Settings</h2>
-                    <p className="text-gray-500 mt-2">Manage your core narrative, vision, mission, and key metrics</p>
+                <div className="text-left">
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic underline decoration-blue-500 decoration-8 underline-offset-8">{t('admin.company.general.title')}</h2>
+                    <p className="text-gray-500 mt-2">{t('admin.company.general.subtitle')}</p>
                 </div>
                 {activeTab === 'profile' && (
                     <button
@@ -122,7 +124,7 @@ const GeneralInfoManager: React.FC = () => {
                         className="px-8 py-4 bg-blue-600 text-white rounded-3xl font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl shadow-blue-100 disabled:opacity-50 uppercase tracking-widest text-sm"
                     >
                         {saving ? <RefreshCw className="animate-spin" size={20} /> : <Save size={20} />}
-                        Apply Changes
+                        {t('admin.company.general.apply')}
                     </button>
                 )}
             </div>
@@ -134,21 +136,21 @@ const GeneralInfoManager: React.FC = () => {
                     className={`px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'profile' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
                 >
                     <Building2 size={16} />
-                    Company Profile
+                    {t('admin.company.general.tab.profile')}
                 </button>
                 <button
                     onClick={() => setActiveTab('management')}
                     className={`px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'management' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
                 >
                     <UserIcon size={16} />
-                    Data Anggota
+                    {t('admin.company.general.tab.member')}
                 </button>
                 <button
                     onClick={() => setActiveTab('structure')}
                     className={`px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'structure' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
                 >
                     <Network size={16} />
-                    Struktur Visual
+                    {t('admin.company.general.tab.visual')}
                 </button>
             </div>
 
@@ -161,7 +163,7 @@ const GeneralInfoManager: React.FC = () => {
             )}
 
             {activeTab === 'profile' ? (
-                <form onSubmit={handleSubmit} className="space-y-10 selection:bg-blue-100">
+                <form onSubmit={handleSubmit} className="space-y-10 selection:bg-blue-100 text-left">
                     {/* Hero Section */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 bg-white rounded-[3rem] p-10 shadow-sm border border-gray-100 space-y-8">

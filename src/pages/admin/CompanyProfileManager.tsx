@@ -9,22 +9,24 @@ import CertificationManager from './CertificationManager';
 import BranchManager from './BranchManager';
 import PartnerManager from './PartnerManager';
 import StructureManager from '../../components/admin/StructureManager';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Users, History, Heart, Info, Layers, Award, MapPin, Handshake, Network } from 'lucide-react';
 
 const CompanyProfileManager: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { t } = useLanguage();
 
     const tabs = [
-        { id: 'general', label: 'General Info', icon: Info, description: 'Core narrative & vision' },
-        { id: 'structure', label: 'Structure', icon: Network, description: 'Visual Org Chart' },
-        { id: 'management', label: 'Management', icon: Users, description: 'Board of Directors & Leadership' },
-        { id: 'timeline', label: 'History', icon: History, description: 'Corporate Journey & Milestones' },
-        { id: 'values', label: 'Values', icon: Heart, description: 'Core principles & Culture' },
-        { id: 'services', label: 'Business Lines', icon: Layers, description: 'Products & Service categories' },
-        { id: 'certifications', label: 'Quality', icon: Award, description: 'Certifications & Standards' },
-        { id: 'partners', label: 'Partners', icon: Handshake, description: 'Strategic Alliances' },
-        { id: 'branches', label: 'Branches', icon: MapPin, description: 'Office Locations' },
+        { id: 'general', label: t('admin.company.tabs.general'), icon: Info, description: 'Core narrative & vision' },
+        { id: 'structure', label: t('admin.company.tabs.structure'), icon: Network, description: 'Visual Org Chart' },
+        { id: 'management', label: t('admin.company.tabs.management'), icon: Users, description: 'Board of Directors & Leadership' },
+        { id: 'timeline', label: t('admin.company.tabs.history'), icon: History, description: 'Corporate Journey & Milestones' },
+        { id: 'values', label: t('admin.company.tabs.values'), icon: Heart, description: 'Core principles & Culture' },
+        { id: 'services', label: t('admin.company.tabs.services'), icon: Layers, description: 'Products & Service categories' },
+        { id: 'certifications', label: t('admin.company.tabs.quality'), icon: Award, description: 'Certifications & Standards' },
+        { id: 'partners', label: t('admin.company.tabs.partners'), icon: Handshake, description: 'Strategic Alliances' },
+        { id: 'branches', label: t('admin.company.tabs.branches'), icon: MapPin, description: 'Office Locations' },
     ] as const;
 
     // Extract current tab from URL
@@ -35,11 +37,11 @@ const CompanyProfileManager: React.FC = () => {
 
     return (
         <div className="space-y-8 pb-20">
-            <div className="space-y-2 px-1">
+            <div className="space-y-2 px-1 text-left">
                 <h1 className="text-5xl font-black text-gray-900 tracking-tighter uppercase italic leading-none">
-                    Company <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">Profile</span>
+                    Company <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">{t('admin.company.title')}</span>
                 </h1>
-                <p className="text-gray-400 font-black uppercase tracking-[0.3em] text-[10px]">Manage the core identity of Penta Valent</p>
+                <p className="text-gray-400 font-black uppercase tracking-[0.3em] text-[10px]">{t('admin.company.subtitle')}</p>
             </div>
 
             <div className="bg-white p-3 rounded-[3rem] border border-gray-100 shadow-sm flex flex-wrap gap-2">

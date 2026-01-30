@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { LanguageProvider } from '../contexts/LanguageContext';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 import HeroSection from './sections/HeroSection';
@@ -94,7 +93,7 @@ const MainWebsite: React.FC = () => {
     <div className="min-h-screen bg-white w-full relative">
       <Header activeSection={currentSection} onNavigate={handleNavigate} />
 
-      <main className="w-full relative">
+      <main className="w-full">
         <div ref={sectionRefs.home}>
           <HeroSection onNavigate={handleNavigate} />
         </div>
@@ -164,7 +163,7 @@ const AppLayout: React.FC = () => {
   const isCodeOfConductRoute = location.pathname === '/code-of-conduct';
 
   return (
-    <LanguageProvider>
+    <>
       {isAdminRoute ? (
         <AdminPage />
       ) : isFAQRoute ? (
@@ -178,7 +177,7 @@ const AppLayout: React.FC = () => {
       ) : (
         <MainWebsite />
       )}
-    </LanguageProvider>
+    </>
   );
 };
 

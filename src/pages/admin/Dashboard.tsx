@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { useLanguage } from '../../contexts/LanguageContext';
 import {
   LayoutDashboard, Users, Newspaper, Briefcase,
   MessageSquare, FileText, Globe, Award,
@@ -22,6 +23,7 @@ interface Stats {
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [stats, setStats] = useState<Stats>({
     branches: 0,
     partners: 0,
@@ -88,7 +90,7 @@ const Dashboard: React.FC = () => {
   const statCards = [
     {
       id: 'news',
-      label: 'News Articles',
+      label: t('admin.dashboard.stat.news'),
       value: stats.news,
       icon: Newspaper,
       color: 'from-blue-600 to-indigo-600',
@@ -97,7 +99,7 @@ const Dashboard: React.FC = () => {
     },
     {
       id: 'messages',
-      label: 'New Messages',
+      label: t('admin.dashboard.stat.messages'),
       value: stats.messages,
       icon: MessageSquare,
       color: 'from-amber-500 to-orange-600',
@@ -106,7 +108,7 @@ const Dashboard: React.FC = () => {
     },
     {
       id: 'applications',
-      label: 'Job Apps',
+      label: t('admin.dashboard.stat.applications'),
       value: stats.applications,
       icon: FileText,
       color: 'from-emerald-500 to-teal-600',
@@ -115,7 +117,7 @@ const Dashboard: React.FC = () => {
     },
     {
       id: 'careers',
-      label: 'Active Jobs',
+      label: t('admin.dashboard.stat.active_jobs'),
       value: stats.careers,
       icon: Briefcase,
       color: 'from-purple-500 to-fuchsia-600',
@@ -124,7 +126,7 @@ const Dashboard: React.FC = () => {
     },
     {
       id: 'partners',
-      label: 'Partners',
+      label: t('admin.dashboard.stat.partners'),
       value: stats.partners,
       icon: Users,
       color: 'from-rose-500 to-red-600',
@@ -133,7 +135,7 @@ const Dashboard: React.FC = () => {
     },
     {
       id: 'investor',
-      label: 'Investor Docs',
+      label: t('admin.dashboard.stat.investor'),
       value: stats.certs,
       icon: TrendingUp,
       color: 'from-cyan-500 to-sky-600',
@@ -155,27 +157,27 @@ const Dashboard: React.FC = () => {
       {/* Welcome Header */}
       <div className="relative overflow-hidden bg-gray-900 rounded-[3rem] p-10 text-white shadow-2xl">
         <div className="relative z-10 md:flex items-center justify-between">
-          <div className="space-y-4">
+          <div className="space-y-4 text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/10">
               <Clock size={14} className="text-blue-400" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-blue-100">System Overview</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-blue-100">{t('admin.dashboard.system_overview')}</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic uppercase leading-none">
-              Welcome to <br />
-              <span className="text-blue-400">Penta Valent</span> Admin
+              {t('admin.dashboard.welcome')} <br />
+              <span className="text-blue-400">Penta Valent</span>
             </h2>
             <p className="text-gray-400 max-w-md font-medium">
-              Manage your corporate identity, news, careers, and global business operations from one central command.
+              {t('admin.dashboard.subtitle')}
             </p>
           </div>
           <div className="mt-8 md:mt-0 flex gap-4">
             <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/dashboard')}>
               <p className="text-3xl font-black text-blue-400 mb-1">{stats.branches}</p>
-              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Branches</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{t('admin.dashboard.stat.branches')}</p>
             </div>
             <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/company')}>
               <p className="text-3xl font-black text-emerald-400 mb-1">{stats.certs}</p>
-              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Certificates</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{t('admin.dashboard.stat.certs')}</p>
             </div>
           </div>
         </div>
@@ -221,20 +223,20 @@ const Dashboard: React.FC = () => {
               <div className="w-10 h-10 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600">
                 <MessageSquare size={20} />
               </div>
-              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">Customer Inquiries</h3>
+              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">{t('admin.dashboard.recent_messages')}</h3>
             </div>
             <button
               onClick={() => navigate('/admin/messages')}
               className="text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold"
             >
-              View All <ArrowRight size={12} />
+              {t('admin.dashboard.view_all')} <ArrowRight size={12} />
             </button>
           </div>
           <div className="p-4 space-y-1">
             {recentMessages.length === 0 ? (
               <div className="py-20 text-center">
                 <MessageSquare className="mx-auto text-gray-100 mb-4" size={48} />
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No Recent Messages</p>
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_messages')}</p>
               </div>
             ) : (
               recentMessages.map((msg) => (
@@ -272,20 +274,20 @@ const Dashboard: React.FC = () => {
               <div className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
                 <FileText size={20} />
               </div>
-              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">Talent Pipeline</h3>
+              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">{t('admin.dashboard.talent_pipeline')}</h3>
             </div>
             <button
               onClick={() => navigate('/admin/applications')}
               className="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold"
             >
-              Review All <ArrowRight size={12} />
+              {t('admin.dashboard.view_all')} <ArrowRight size={12} />
             </button>
           </div>
           <div className="p-4 space-y-1">
             {recentApplications.length === 0 ? (
               <div className="py-20 text-center">
                 <FileText className="mx-auto text-gray-100 mb-4" size={48} />
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No Open Applications</p>
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_apps')}</p>
               </div>
             ) : (
               recentApplications.map((app) => (
@@ -330,8 +332,8 @@ const Dashboard: React.FC = () => {
             <RefreshCw size={24} />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Identity</p>
-            <p className="text-xs font-bold text-gray-800">Site Settings</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.identity')}</p>
+            <p className="text-xs font-bold text-gray-800">{t('admin.menu.settings')}</p>
           </div>
         </button>
         <button onClick={() => navigate('/admin/hero')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
@@ -339,8 +341,8 @@ const Dashboard: React.FC = () => {
             <LayoutDashboard size={24} />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Media</p>
-            <p className="text-xs font-bold text-gray-800">Banner Slider</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.media')}</p>
+            <p className="text-xs font-bold text-gray-800">{t('admin.menu.hero')}</p>
           </div>
         </button>
         <button onClick={() => navigate('/admin/company')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-indigo-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
@@ -348,7 +350,7 @@ const Dashboard: React.FC = () => {
             <Building2 size={24} />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Profile</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.identity')}</p>
             <p className="text-xs font-bold text-gray-800">Corp Identity</p>
           </div>
         </button>
@@ -357,8 +359,8 @@ const Dashboard: React.FC = () => {
             <Globe size={24} />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Marketing</p>
-            <p className="text-xs font-bold text-gray-800">SEO Settings</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.marketing')}</p>
+            <p className="text-xs font-bold text-gray-800">{t('admin.menu.seo')}</p>
           </div>
         </button>
       </div>

@@ -50,14 +50,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
     { id: 'certification', label: t('nav.certification') },
     { id: 'investor', label: t('nav.investor') },
     { id: 'news', label: t('nav.news') },
-    { id: 'career', label: 'Karir' }, // Added Career menu
+    { id: 'career', label: t('nav.career') }, // Fixed: uses translation key
     { id: 'contact', label: t('nav.contact') },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${isScrolled
           ? 'glass-panel py-3 enterprise-shadow'
           : 'bg-transparent py-4'
           }`}

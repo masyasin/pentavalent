@@ -74,40 +74,40 @@ const MenuButton = ({
 const ToolbarDivider = () => <div className="w-px h-6 bg-gray-200 mx-1" />;
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({ content, onChange, placeholder = 'Content goes here...' }) => {
+    const extensions = React.useMemo(() => [
+        StarterKit.configure({
+            bulletList: { keepMarks: true, keepAttributes: false },
+            orderedList: { keepMarks: true, keepAttributes: false },
+            codeBlock: false,
+        }),
+        Underline,
+        Link.configure({
+            openOnClick: false,
+            HTMLAttributes: {
+                class: 'text-blue-600 underline cursor-pointer',
+            },
+        }),
+        TextAlign.configure({ types: ['heading', 'paragraph'] }),
+        Image.configure({ allowBase64: true }),
+        TextStyle,
+        Color,
+        Highlight.configure({ multicolor: true }),
+        Subscript,
+        Superscript,
+        Typography,
+        Placeholder.configure({ placeholder }),
+        Table.configure({ resizable: true }),
+        TableRow,
+        TableHeader,
+        TableCell,
+        TaskList,
+        TaskItem.configure({ nested: true }),
+        Youtube.configure({ width: 480, height: 320 }),
+        CharacterCount,
+    ], [placeholder]);
+
     const editor = useEditor({
-        extensions: [
-            StarterKit.configure({
-                bulletList: { keepMarks: true, keepAttributes: false },
-                orderedList: { keepMarks: true, keepAttributes: false },
-                codeBlock: false,
-            }),
-            Underline,
-            Link.configure({
-                openOnClick: false,
-                HTMLAttributes: {
-                    class: 'text-blue-600 underline cursor-pointer',
-                },
-            }),
-            TextAlign.configure({ types: ['heading', 'paragraph'] }),
-            Image.configure({ allowBase64: true }),
-            TextStyle,
-            Color,
-            Highlight.configure({ multicolor: true }),
-            Subscript,
-            Superscript,
-            Typography,
-            Placeholder.configure({ placeholder }),
-            Table.configure({ resizable: true }),
-            TableRow,
-            TableHeader,
-            TableCell,
-            TaskList,
-            TaskItem.configure({ nested: true }),
-            Youtube.configure({ width: 480, height: 320 }),
-            CharacterCount,
-            BubbleMenuExtension,
-            FloatingMenuExtension,
-        ],
+        extensions,
         content,
         onUpdate: ({ editor }) => {
             onChange(editor.getHTML());
@@ -323,22 +323,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ content, onChange, plac
 
             {/* Tiptap v3 Declarative Editor */}
             <Tiptap instance={editor}>
-                <Tiptap.BubbleMenu className="flex bg-white shadow-2xl rounded-2xl border border-gray-100 p-1 divide-x divide-gray-100 overflow-hidden transform-gpu">
-                    <div className="flex p-1">
-                        <button onClick={() => editor.chain().focus().toggleBold().run()} className={`p-1.5 rounded-lg ${editor.isActive('bold') ? 'bg-blue-50 text-blue-600' : 'text-gray-500 hover:bg-gray-50'}`}><Bold size={16} /></button>
-                        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={`p-1.5 rounded-lg ${editor.isActive('italic') ? 'bg-blue-50 text-blue-600' : 'text-gray-500 hover:bg-gray-50'}`}><Italic size={16} /></button>
-                        <button onClick={setLink} className={`p-1.5 rounded-lg ${editor.isActive('link') ? 'bg-blue-50 text-blue-600' : 'text-gray-500 hover:bg-gray-50'}`}><LinkIcon size={16} /></button>
-                    </div>
-                </Tiptap.BubbleMenu>
-
-                {/* Floating Menu for quick insert */}
-                <Tiptap.FloatingMenu className="flex bg-white shadow-2xl rounded-2xl border border-gray-100 p-1 divide-x divide-gray-100 overflow-hidden transform-gpu">
-                    <div className="flex p-1">
-                        <button onClick={addImage} className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-blue-600"><ImageIcon size={16} /></button>
-                        <button onClick={insertTable} className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-blue-600"><TableIcon size={16} /></button>
-                        <button onClick={addYoutube} className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-blue-600"><YoutubeIcon size={16} /></button>
-                    </div>
-                </Tiptap.FloatingMenu>
+                {/* 
+                  BubbleMenu and FloatingMenu removed as per user request
+                */}
 
                 <input
                     type="file"
