@@ -69,17 +69,17 @@ const InvestorSection: React.FC = () => {
   };
 
   return (
-    <section id="investors" className="py-32 bg-gray-50 relative overflow-hidden">
+    <section id="investors" className="py-20 md:py-32 bg-gray-50 relative overflow-hidden">
       {/* Dynamic background element */}
       <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-8">
           <div className="max-w-3xl">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {t('investor.tagline')}
             </span>
-            <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-6xl font-black tracking-tighter leading-none mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               {t('investor.title.text')} <br />
               <span className="italic">{t('investor.title.italic')}</span>
             </h2>
@@ -106,7 +106,7 @@ const InvestorSection: React.FC = () => {
             { label: t('investor.stats.mcap'), value: '2.4T', color: 'primary' },
             { label: t('investor.stats.dividen'), value: '4.2%', color: 'primary' }
           ].map((stat, i) => (
-            <div key={i} className="bg-white p-12 rounded-[3rem] enterprise-shadow border border-gray-100 group hover:ring-4 ring-primary/5 transition-all text-center">
+            <div key={i} className="bg-white p-6 sm:p-12 rounded-[2rem] md:rounded-[3rem] enterprise-shadow border border-gray-100 group hover:ring-4 ring-primary/5 transition-all text-center">
               <div className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-4 group-hover:text-primary transition-colors">{stat.label}</div>
               <div className={`text-5xl font-black ${stat.color === 'accent' ? 'text-accent' : 'text-primary'} mb-6 tracking-tighter group-hover:scale-110 transition-transform`}>{stat.value}</div>
               <div className="flex items-center justify-center gap-2 text-accent">
@@ -119,7 +119,7 @@ const InvestorSection: React.FC = () => {
 
         {/* Resources Grid */}
         <div className="grid lg:grid-cols-2 gap-12">
-          <div className="enterprise-gradient rounded-[3.5rem] p-16 md:p-20 text-white relative overflow-hidden group">
+          <div className="enterprise-gradient rounded-[2rem] md:rounded-[3.5rem] p-8 md:p-20 text-white relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
               <svg className="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" /></svg>
             </div>
@@ -139,7 +139,7 @@ const InvestorSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-[3.5rem] p-16 md:p-20 border border-gray-100 enterprise-shadow relative group">
+          <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] p-8 md:p-20 border border-gray-100 enterprise-shadow relative group">
             <div className="flex items-start justify-between mb-12">
               <div className="w-16 h-16 bg-accent/10 text-accent rounded-3xl flex items-center justify-center">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>

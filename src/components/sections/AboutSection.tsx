@@ -88,18 +88,18 @@ const AboutSection: React.FC = () => {
   );
 
   return (
-    <section id="about" className="py-32 bg-white relative overflow-hidden">
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-20 items-center mb-32">
+    <section id="about" className="py-20 md:py-32 bg-white relative overflow-hidden">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center mb-20 md:mb-32">
           <div className="lg:w-1/2">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {info ? (language === 'id' ? info.tagline_id : info.tagline_en) : t('about.tagline')}
             </span>
-            <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="text-2xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-none mb-6 md:mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               {info ? (language === 'id' ? info.title_text_id : info.title_text_en) : t('about.title.text')} <br />
               <span className="italic">{info ? (language === 'id' ? info.title_italic_id : info.title_italic_en) : t('about.title.italic')}</span>
             </h2>
-            <p className="text-xl text-gray-500 font-medium leading-relaxed mb-10">
+            <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed mb-8 md:mb-10">
               {info ? (language === 'id' ? info.description_id : info.description_en) : t('about.description')}
             </p>
             <div className="grid grid-cols-2 gap-8 pt-10 border-t border-gray-100">
@@ -124,10 +124,10 @@ const AboutSection: React.FC = () => {
               alt="Corporate Excellence"
               className="relative rounded-[2.5rem] enterprise-shadow border border-gray-100 grayscale hover:grayscale-0 transition-all duration-1000 w-full"
             />
-            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-gradient-to-r from-primary to-accent rounded-[3rem] flex items-center justify-center p-8 text-white shadow-4xl group-hover:-translate-y-4 transition-transform duration-700">
+            <div className="absolute -bottom-4 -right-4 md:-bottom-10 md:-right-10 w-36 h-36 md:w-48 md:h-48 bg-gradient-to-r from-primary to-accent rounded-[2rem] md:rounded-[3rem] flex items-center justify-center p-6 md:p-8 text-white shadow-4xl group-hover:-translate-y-4 transition-transform duration-700 hover-lift">
               <div className="text-center font-black leading-tight">
-                <div className="text-4xl">#1</div>
-                <div className="text-[10px] uppercase tracking-widest mt-2">{t('network.tagline')}</div>
+                <div className="text-3xl md:text-4xl">#1</div>
+                <div className="text-[8px] md:text-[10px] uppercase tracking-widest mt-2">{t('network.tagline')}</div>
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ const AboutSection: React.FC = () => {
             <div className="group relative h-full">
               <div className="absolute -inset-1 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-[4rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-              <div className="relative h-full bg-white rounded-[4.5rem] p-12 lg:p-20 border border-slate-100 shadow-2xl shadow-slate-200/50 hover:shadow-cyan-500/20 transition-all duration-700 overflow-hidden flex flex-col justify-between">
+              <div className="relative h-full bg-white rounded-[2.5rem] md:rounded-[4.5rem] p-6 sm:p-12 lg:p-20 border border-slate-100 shadow-2xl shadow-slate-200/50 hover:shadow-cyan-500/20 transition-all duration-700 overflow-hidden flex flex-col justify-between">
                 {/* Visual Glow Accent */}
                 <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-50/50 rounded-bl-full -mr-16 -mt-16 blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
 
@@ -156,13 +156,13 @@ const AboutSection: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-2 block">North Star</span>
-                      <h3 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">
+                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
                         {language === 'id' ? 'Visi' : 'Our'} <span className="text-cyan-500 italic">{language === 'id' ? 'Kami' : 'Vision'}</span>
                       </h3>
                     </div>
                   </div>
 
-                  <p className="text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
+                  <p className="text-xl md:text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
                     "{info ? (language === 'id' ? info.vision_text_id : info.vision_text_en) : t('about.vision.text')}"
                   </p>
                 </div>
@@ -178,7 +178,7 @@ const AboutSection: React.FC = () => {
             <div className="group relative h-full">
               <div className="absolute -inset-1 bg-gradient-to-br from-primary/10 to-transparent rounded-[4rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-              <div className="relative h-full bg-white rounded-[4.5rem] p-12 lg:p-20 border border-slate-100 shadow-2xl shadow-slate-200/50 hover:shadow-primary/20 transition-all duration-700 overflow-hidden flex flex-col justify-between">
+              <div className="relative h-full bg-white rounded-[2.5rem] md:rounded-[4.5rem] p-6 sm:p-12 lg:p-20 border border-slate-100 shadow-2xl shadow-slate-200/50 hover:shadow-primary/20 transition-all duration-700 overflow-hidden flex flex-col justify-between">
                 {/* Visual Glow Accent */}
                 <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-bl-full -mr-16 -mt-16 blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
 
@@ -191,13 +191,13 @@ const AboutSection: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-2 block">Daily Drive</span>
-                      <h3 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">
+                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
                         {language === 'id' ? 'Misi' : 'Our'} <span className="text-primary italic">{language === 'id' ? 'Kami' : 'Mission'}</span>
                       </h3>
                     </div>
                   </div>
 
-                  <p className="text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
+                  <p className="text-xl md:text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
                     "{info ? (language === 'id' ? info.mission_text_id : info.mission_text_en) : t('about.mission.text')}"
                   </p>
                 </div>
@@ -221,7 +221,7 @@ const AboutSection: React.FC = () => {
               <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
                 {t('about.values.tagline')}
               </span>
-              <h3 className="text-5xl sm:text-6xl font-black text-slate-900 tracking-tighter leading-none">
+              <h3 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter leading-none">
                 {language === 'id' ? 'Filosofi' : 'Philosophy of'} <span className="text-cyan-500 italic">Penta Valent</span>
               </h3>
             </div>
@@ -235,7 +235,7 @@ const AboutSection: React.FC = () => {
                   {/* Outer Glow */}
                   <div className="absolute -inset-1 bg-gradient-to-br from-cyan-400/20 to-transparent rounded-[4rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                  <div className="relative h-full bg-white rounded-[4rem] p-12 border border-slate-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] hover:shadow-cyan-500/10 transition-all duration-700 overflow-hidden flex flex-col items-center text-center">
+                  <div className="relative h-full bg-white rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-12 border border-slate-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] hover:shadow-cyan-500/10 transition-all duration-700 overflow-hidden flex flex-col items-center text-center">
 
                     {/* Massive Background Indicator */}
                     <div className="absolute -top-10 -right-4 text-[12rem] font-black text-slate-50 select-none pointer-events-none group-hover:text-cyan-50/50 transition-colors duration-700">
@@ -251,11 +251,11 @@ const AboutSection: React.FC = () => {
                       </div>
                     </div>
 
-                    <h4 className="text-3xl font-black text-slate-900 mb-6 tracking-tighter uppercase leading-none group-hover:text-cyan-600 transition-colors">
+                    <h4 className="text-xl md:text-3xl font-black text-slate-900 mb-4 md:mb-6 tracking-tighter uppercase leading-none group-hover:text-cyan-600 transition-colors">
                       {language === 'id' ? value.title_id : value.title_en}
                     </h4>
 
-                    <p className="text-slate-400 font-bold text-sm leading-relaxed group-hover:text-slate-600 transition-colors">
+                    <p className="text-slate-400 font-bold text-xs md:text-sm leading-relaxed group-hover:text-slate-600 transition-colors">
                       {language === 'id' ? value.description_id : value.description_en}
                     </p>
 
@@ -268,22 +268,21 @@ const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Corporate Timeline */}
         <div className="relative">
-          <div className="text-center max-w-2xl mx-auto mb-32">
+          <div className="text-center max-w-2xl mx-auto mb-20 md:mb-32">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {t('about.timeline.tagline')}
             </span>
-            <h3 className="text-4xl sm:text-5xl font-black tracking-tighter bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h3 className="text-3xl md:text-4xl sm:text-5xl font-black tracking-tighter bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               {t('about.timeline.title')}
             </h3>
           </div>
 
           <div className="relative max-w-5xl mx-auto">
             {/* Timeline Line */}
-            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/5 via-primary/20 to-primary/5 -translate-x-1/2 rounded-full hidden md:block"></div>
+            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/10 via-primary/40 to-primary/10 -translate-x-1/2 rounded-full"></div>
 
-            <div className="space-y-32">
+            <div className="space-y-16 md:space-y-32">
               {timeline.map((item, index) => (
                 <div key={item.id} className={`relative flex flex-col md:flex-row items-center gap-12 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                   {/* Anchor Point */}
@@ -292,19 +291,19 @@ const AboutSection: React.FC = () => {
                   </div>
 
                   {/* Content Card */}
-                  <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${index % 2 === 0 ? 'md:pr-20 md:text-right' : 'md:pl-20 md:text-left'}`}>
-                    <div className="group bg-white p-12 rounded-[4rem] border border-gray-100 enterprise-shadow hover:-translate-y-2 transition-all duration-700 relative overflow-hidden">
+                  <div className={`w-full md:w-1/2 md:pl-0 ${index % 2 === 0 ? 'md:pr-20 md:text-right' : 'md:pl-20 md:text-left'} pl-12 sm:pl-16`}>
+                    <div className="group bg-white p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-gray-100 enterprise-shadow hover:-translate-y-2 transition-all duration-700 relative overflow-hidden">
                       <div className="absolute top-0 left-0 w-full h-1 bg-primary transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
 
                       <div className={`inline-block px-6 py-2 bg-primary text-white text-[10px] font-black rounded-full mb-8 tracking-[0.2em] transform group-hover:scale-110 transition-transform`}>
                         {item.year}
                       </div>
 
-                      <h4 className="text-3xl font-black text-primary mb-6 tracking-tighter group-hover:text-accent transition-colors leading-tight">
+                      <h4 className="text-xl md:text-3xl font-black text-primary mb-4 md:mb-6 tracking-tighter group-hover:text-accent transition-colors leading-tight">
                         {language === 'id' ? item.title_id : item.title_en}
                       </h4>
 
-                      <p className="text-lg text-gray-500 font-bold leading-relaxed">
+                      <p className="text-sm md:text-lg text-gray-500 font-bold leading-relaxed">
                         {language === 'id' ? item.description_id : item.description_en}
                       </p>
                     </div>

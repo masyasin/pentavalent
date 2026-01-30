@@ -23,7 +23,7 @@ const PageBanner: React.FC<PageBannerProps> = ({
     const { t } = useLanguage();
 
     return (
-        <div className="relative h-[400px] flex items-center justify-center overflow-hidden">
+        <div className="relative h-[300px] md:h-[400px] flex items-center justify-center overflow-hidden">
             {/* Background Image with Parallax Effect */}
             <div className="absolute inset-0 z-0">
                 <img
@@ -35,7 +35,7 @@ const PageBanner: React.FC<PageBannerProps> = ({
             </div>
 
             {/* Content */}
-            <div className="relative z-10 container mx-auto px-4 text-center text-white">
+            <div className="relative z-10 container mx-auto px-6 text-center text-white">
                 <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">
                     {title}
                 </h1>

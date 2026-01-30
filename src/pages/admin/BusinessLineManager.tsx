@@ -16,7 +16,8 @@ interface BusinessLine {
     title_en: string;
     description_id: string;
     description_en: string;
-    image_url: string;
+    images: string[];
+    image_url: string; // Keep for backward compatibility/thumbnail
     sort_order: number;
     is_active: boolean;
     created_at: string;
@@ -40,7 +41,7 @@ const BusinessLineManager: React.FC = () => {
         title_en: '',
         description_id: '',
         description_en: '',
-        image_url: '',
+        images: [] as string[],
         sort_order: 0,
         is_active: true,
     });
@@ -70,7 +71,14 @@ const BusinessLineManager: React.FC = () => {
                 .order('sort_order', { ascending: true });
 
             if (error) throw error;
-            setLines(data || []);
+
+            // Map data to ensure images array is populated
+            const formattedData = (data || []).map(item => ({
+                ...item,
+                images: item.images || (item.image_url ? [item.image_url] : [])
+            }));
+
+            setLines(formattedData);
         } catch (error) {
             console.error('Error fetching business lines:', error);
         } finally {
@@ -82,7 +90,16 @@ const BusinessLineManager: React.FC = () => {
         e.preventDefault();
         try {
             const slug = formData.slug || formData.title_en.toLowerCase().replace(/\s+/g, '-');
-            const data = { ...formData, slug };
+
+            // Prepare payload
+            // Ensure image_url is set to the first image if available, for backward compatibility
+            const primaryImage = formData.images.length > 0 ? formData.images[0] : null;
+
+            const data = {
+                ...formData,
+                slug,
+                image_url: primaryImage
+            };
 
             if (editingLine) {
                 const { error } = await supabase
@@ -113,7 +130,7 @@ const BusinessLineManager: React.FC = () => {
             title_en: '',
             description_id: '',
             description_en: '',
-            image_url: '',
+            images: [],
             sort_order: 0,
             is_active: true,
         });
@@ -127,7 +144,9 @@ const BusinessLineManager: React.FC = () => {
             title_en: item.title_en,
             description_id: item.description_id || '',
             description_en: item.description_en || '',
-            image_url: item.image_url || '',
+            images: item.images && item.images.length > 0
+                ? item.images
+                : (item.image_url ? [item.image_url] : []),
             sort_order: item.sort_order || 0,
             is_active: item.is_active,
         });
@@ -151,6 +170,21 @@ const BusinessLineManager: React.FC = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleAddImage = (url: string) => {
+        if (!url) return;
+        setFormData(prev => ({
+            ...prev,
+            images: [...prev.images, url]
+        }));
+    };
+
+    const handleRemoveImage = (indexToRemove: number) => {
+        setFormData(prev => ({
+            ...prev,
+            images: prev.images.filter((_, index) => index !== indexToRemove)
+        }));
     };
 
     return (
@@ -178,9 +212,16 @@ const BusinessLineManager: React.FC = () => {
                 ) : (
                     lines.map((item) => (
                         <div key={item.id} className="bg-white rounded-[2rem] p-6 border border-gray-100 hover:border-blue-200 transition-all group shadow-sm flex items-center gap-6">
-                            <div className="w-24 h-24 bg-gray-50 rounded-3xl flex items-center justify-center overflow-hidden border border-gray-50 shrink-0">
-                                {item.image_url ? (
-                                    <img src={item.image_url} alt={item.title_id} className="w-full h-full object-cover" />
+                            <div className="w-24 h-24 bg-gray-50 rounded-3xl flex items-center justify-center overflow-hidden border border-gray-50 shrink-0 relative">
+                                {item.images && item.images.length > 0 ? (
+                                    <>
+                                        <img src={item.images[0]} alt={item.title_id} className="w-full h-full object-cover" />
+                                        {item.images.length > 1 && (
+                                            <div className="absolute bottom-1 right-1 bg-black/50 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                                                +{item.images.length - 1}
+                                            </div>
+                                        )}
+                                    </>
                                 ) : (
                                     <Box className="text-gray-200" size={32} />
                                 )}
@@ -286,7 +327,7 @@ const BusinessLineManager: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-8">
+                            <div className="grid grid-cols-2 gap-8">
                                 <div className="space-y-3">
                                     <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] px-1">URL Slug</label>
                                     <input
@@ -298,15 +339,6 @@ const BusinessLineManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <FileUpload
-                                        onUploadComplete={(url) => setFormData({ ...formData, image_url: url })}
-                                        currentUrl={formData.image_url}
-                                        label="Division Hero Image"
-                                        bucket="images"
-                                        type="image"
-                                    />
-                                </div>
-                                <div className="space-y-3">
                                     <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] px-1">Sort Order</label>
                                     <input
                                         type="number"
@@ -315,6 +347,45 @@ const BusinessLineManager: React.FC = () => {
                                         className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-bold"
                                     />
                                 </div>
+                            </div>
+
+                            {/* Image Gallery Section */}
+                            <div className="space-y-4 pt-4">
+                                <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] px-1">Division Gallery</label>
+                                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                    {formData.images.map((url, index) => (
+                                        <div key={index} className="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 group">
+                                            <img src={url} alt={`Gallery ${index}`} className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveImage(index)}
+                                                    className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors transform hover:scale-110"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                            {index === 0 && (
+                                                <div className="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest shadow-lg">
+                                                    Hero
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+
+                                    <div className="relative aspect-square">
+                                        <FileUpload
+                                            onUploadComplete={handleAddImage}
+                                            label="Add Image"
+                                            bucket="images"
+                                            type="image"
+                                            currentUrl="" // Always reset to allow new uploads
+                                        />
+                                    </div>
+                                </div>
+                                <p className="text-[10px] text-gray-400 font-medium italic">
+                                    * The first image will be used as the main/thumbnail image. Upload multiple images to create a carousel.
+                                </p>
                             </div>
 
                             {/* Description Sections */}

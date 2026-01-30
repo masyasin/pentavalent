@@ -69,7 +69,7 @@ const NetworkSection: React.FC = () => {
   }, [totalSlides]);
 
   return (
-    <section id="network" className="py-24 bg-gray-50 relative overflow-hidden text-slate-900">
+    <section id="network" className="py-16 md:py-24 bg-gray-50 relative overflow-hidden text-slate-900">
       {/* Background Decor */}
       <div className="absolute inset-0 z-0 opacity-40">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-100/50 rounded-full blur-3xl"></div>
@@ -80,7 +80,7 @@ const NetworkSection: React.FC = () => {
         }}></div>
       </div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
 
         {/* Header - Premium & Modern */}
         <div className="text-center max-w-4xl mx-auto mb-20 relative">
@@ -104,7 +104,7 @@ const NetworkSection: React.FC = () => {
           </div>
 
           {/* Main Title with Gradient Animation */}
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 relative">
+          <h2 className="text-2xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 relative">
             <span className="text-slate-900">Penta Valent </span>
             <span className="relative inline-block">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-cyan-400 animate-gradient-x">
@@ -136,7 +136,7 @@ const NetworkSection: React.FC = () => {
             { label: t('network.stats.provinces'), value: '34', icon: '🗺️', color: 'indigo', accent: 'from-indigo-600 to-purple-600' },
             { label: 'On-Time Delivery', value: '99.8%', icon: '⚡', color: 'amber', accent: 'from-amber-500 to-orange-500' }
           ].map((stat, idx) => (
-            <div key={idx} className="group relative bg-white/80 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div key={idx} className="group relative bg-white/80 backdrop-blur-md p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
               {/* Animated Accent Bar */}
               <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${stat.accent} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left`}></div>
 
@@ -157,7 +157,7 @@ const NetworkSection: React.FC = () => {
               </div>
 
               <div className="mt-8 relative z-10">
-                <div className="text-4xl lg:text-5xl font-black text-slate-900 mb-2 tracking-tighter transition-all duration-500 group-hover:text-cyan-600">
+                <div className="text-2xl md:text-3xl lg:text-5xl font-black text-slate-900 mb-2 tracking-tighter transition-all duration-500 group-hover:text-cyan-600">
                   {stat.value}
                 </div>
                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-tight">
@@ -234,12 +234,12 @@ const NetworkSection: React.FC = () => {
                       <div className={`absolute inset-0 rounded-full animate-ping opacity-75 ${branch.type === 'branch' ? 'bg-sky-400' : 'bg-cyan-400'}`}></div>
 
                       {/* Main Dot */}
-                      <div className={`relative rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-300 border-[3px] border-white ${isSelected ? 'scale-150 ring-4 ring-black/5' : 'group-hover:scale-125'} ${branch.type === 'branch' ? 'bg-sky-600 w-4 h-4' : 'bg-cyan-500 w-3.5 h-3.5'}`}></div>
+                      <div className={`relative rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-300 border-[1.5px] md:border-[3px] border-white ${isSelected ? 'scale-150 ring-2 md:ring-4 ring-black/5' : 'group-hover:scale-125'} ${branch.type === 'branch' ? 'bg-sky-600 w-2.5 h-2.5 md:w-4 md:h-4' : 'bg-cyan-500 w-2 h-2 md:w-3.5 md:h-3.5'}`}></div>
 
                       {/* Info Card (Visible on Click) */}
                       {isSelected && (
                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-5 z-50 animate-fadeIn origin-bottom cursor-default" onClick={(e) => e.stopPropagation()}>
-                          <div className="bg-slate-900/95 backdrop-blur-xl text-white p-5 rounded-2xl shadow-2xl shadow-slate-900/50 border border-slate-700/50 w-72 text-left relative transform transition-all">
+                          <div className="bg-slate-900/95 backdrop-blur-xl text-white p-4 md:p-5 rounded-2xl shadow-2xl shadow-slate-900/50 border border-slate-700/50 w-64 md:w-72 text-left relative transform transition-all">
 
                             {/* Header */}
                             <div className="flex items-center justify-between mb-3 border-b border-slate-700/50 pb-3">
@@ -261,8 +261,8 @@ const NetworkSection: React.FC = () => {
                             </div>
 
                             {/* Content */}
-                            <h4 className="text-xl font-bold text-white mb-1 leading-tight">{branch.name}</h4>
-                            <div className="text-sm font-medium text-slate-400 mb-3">{branch.city}, {branch.province}</div>
+                            <h4 className="text-lg md:text-xl font-bold text-white mb-1 leading-tight">{branch.name}</h4>
+                            <div className="text-xs md:text-sm font-medium text-slate-400 mb-3">{branch.city}, {branch.province}</div>
 
                             <div className="flex items-start gap-3 text-xs text-slate-300 bg-slate-800/50 p-3 rounded-lg border border-slate-700/30">
                               <svg className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -281,9 +281,9 @@ const NetworkSection: React.FC = () => {
                 );
               })}
 
-              {/* Map Footer Legend - Floating */}
-              <div className="absolute bottom-6 left-6 z-20">
-                <div className="flex items-center gap-6 bg-white/80 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-slate-200/60 transition-transform hover:scale-105">
+              {/* Map Footer Legend - Responsive Position */}
+              <div className="w-full flex justify-center py-4 md:absolute md:bottom-6 md:left-6 md:w-auto md:py-0 z-20 border-t border-slate-100 md:border-t-0 bg-slate-50/50 md:bg-transparent">
+                <div className="flex items-center gap-3 md:gap-6 bg-white/80 backdrop-blur-md px-4 py-2 md:px-6 md:py-3 rounded-full shadow-lg border border-slate-200/60 transition-transform hover:scale-105 scale-90 md:scale-100 origin-center md:origin-bottom-left">
                   <div className="flex items-center gap-3">
                     <span className="w-3 h-3 rounded-full bg-sky-600 border-2 border-white shadow-md ring-1 ring-sky-100"></span>
                     <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Cabang Utama</span>
@@ -302,8 +302,8 @@ const NetworkSection: React.FC = () => {
           <div className="relative mt-24">
             <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-4 border-b border-slate-200 pb-10">
               <div>
-                <h3 className="text-4xl font-black text-slate-900 mb-3 tracking-tight">{t('map.header')}</h3>
-                <p className="text-slate-500 font-medium">{t('map.subHeader')}</p>
+                <h3 className="text-2xl md:text-4xl font-black text-slate-900 mb-3 tracking-tight">{t('map.header')}</h3>
+                <p className="text-sm md:text-base text-slate-500 font-medium">{t('map.subHeader')}</p>
               </div>
 
               {/* Filter Controls */}
@@ -381,7 +381,7 @@ const NetworkSection: React.FC = () => {
                     {/* Body */}
                     <div className="p-10 flex-grow flex flex-col">
                       <div className="mb-8 flex-grow">
-                        <h4 className="text-3xl font-black text-slate-900 mb-4 tracking-tighter leading-none group-hover:text-blue-600 transition-colors">
+                        <h4 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 tracking-tighter leading-none group-hover:text-blue-600 transition-colors">
                           {branch.name}
                         </h4>
                         <div className="h-1.5 w-12 bg-slate-100 rounded-full mb-6 group-hover:w-full transition-all duration-1000 overflow-hidden">
@@ -482,7 +482,7 @@ const NetworkSection: React.FC = () => {
                       </div>
                     </div>
 
-                    <h2 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tighter leading-tight">
+                    <h2 className="text-3xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tighter leading-tight">
                       {modalBranch.name}
                     </h2>
 
@@ -509,10 +509,10 @@ const NetworkSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mt-12 lg:mt-0">
+                  <div className="mt-12 lg:mt-0 pb-20 md:pb-0 relative z-[60]">
                     <button
                       onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(modalBranch.name + ' ' + modalBranch.city)}`, '_blank')}
-                      className="w-full h-18 py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-blue-900/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group/dir"
+                      className="w-full h-18 py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-blue-900/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group/dir relative z-[60]"
                     >
                       <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
                       Dapatkan Petunjuk Arah

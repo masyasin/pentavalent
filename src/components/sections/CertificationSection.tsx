@@ -79,12 +79,12 @@ const CertificationSection: React.FC = () => {
   };
 
   return (
-    <section id="certifications" className="py-32 bg-white relative overflow-hidden">
+    <section id="certifications" className="py-20 md:py-32 bg-white relative overflow-hidden">
       {/* Decorative background element */}
       <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t from-gray-50 to-transparent pointer-events-none"></div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-20">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div className="lg:w-1/3">
             <span className="inline-block px-5 py-2 bg-accent/5 text-accent rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-accent/10">
               {t('qa.title')}
@@ -119,7 +119,7 @@ const CertificationSection: React.FC = () => {
               ))
             ) : (
               (certifications || []).map((cert) => (
-                <div key={cert.id} className="group p-10 bg-white rounded-[3rem] border border-gray-100 enterprise-shadow hover:ring-4 ring-primary/5 transition-all duration-500">
+                <div key={cert.id} className="group p-6 sm:p-10 bg-white rounded-[2rem] md:rounded-[3rem] border border-gray-100 enterprise-shadow hover:ring-4 ring-primary/5 transition-all duration-500">
                   <div className="flex items-start justify-between mb-8">
                     <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 text-white rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
                       {certIcons[cert.name] || (
@@ -147,7 +147,7 @@ const CertificationSection: React.FC = () => {
         </div>
 
         {/* Global standards footer */}
-        <div className="mt-24 pt-12 border-t border-gray-100 flex flex-wrap justify-center items-center gap-16 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
+        <div className="mt-16 md:mt-24 pt-12 border-t border-gray-100 flex flex-wrap justify-center items-center gap-6 sm:gap-16 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
           {['ISO 9001:2015', 'CDOB (BPOM)', 'CDAKB (KEMENKES)', 'Tbk List Price'].map((standard, i) => (
             <div key={i} className="text-xl font-black text-primary tracking-tighter uppercase">{standard}</div>
           ))}

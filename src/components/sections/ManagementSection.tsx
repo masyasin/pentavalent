@@ -41,11 +41,11 @@ const ManagementSection: React.FC = () => {
   if (loading || management.length === 0) return null;
 
   return (
-    <section id="management" className="py-32 bg-gray-50 relative overflow-hidden">
+    <section id="management" className="py-20 md:py-32 bg-gray-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="text-center mb-24">
           <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
             {t('mgmt.title')}
@@ -59,7 +59,7 @@ const ManagementSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {management.map((person) => (
             <div
               key={person.id}
@@ -90,7 +90,7 @@ const ManagementSection: React.FC = () => {
                 <div className="absolute top-6 right-6 w-10 h-10 border-t-2 border-r-2 border-cyan-500/0 group-hover:border-cyan-500/50 transition-all duration-700 delay-300"></div>
               </div>
 
-              <div className="p-10 text-center relative bg-white">
+              <div className="p-6 sm:p-10 text-center relative bg-white">
                 {/* Dynamic Horizon Line */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 group-hover:w-32 transition-all duration-700 group-hover:shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
 
@@ -118,7 +118,7 @@ const ManagementSection: React.FC = () => {
         </div>
 
         {/* Governance Commitment */}
-        <div className="mt-32 p-12 bg-white rounded-[3.5rem] border border-gray-100 enterprise-shadow text-center relative overflow-hidden group">
+        <div className="mt-20 md:mt-32 p-8 md:p-12 bg-white rounded-[3.5rem] border border-gray-100 enterprise-shadow text-center relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-2 h-full bg-accent"></div>
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left">

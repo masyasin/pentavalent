@@ -126,11 +126,11 @@ const GCGSection: React.FC = () => {
     }
 
     return (
-        <section id="gcg" className="py-32 bg-white relative overflow-hidden">
+        <section id="gcg" className="py-20 md:py-32 bg-white relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
 
-            <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+            <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
                 {/* Header */}
                 <div className="text-center mb-20">
                     <div className="flex items-center justify-center gap-4 mb-6">
@@ -148,7 +148,7 @@ const GCGSection: React.FC = () => {
                     <h2 className="text-4xl sm:text-6xl font-black mb-10 tracking-tighter bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                         Good Corporate Governance
                     </h2>
-                    <p className="text-xl text-gray-500 font-medium max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-lg md:text-xl text-gray-500 font-medium max-w-3xl mx-auto leading-relaxed">
                         {language === 'id'
                             ? 'Kami mematuhi standar tertinggi transparansi dan etika institusional.'
                             : 'We strictly adhere to the highest standards of transparency and institutional ethics.'}
@@ -161,7 +161,7 @@ const GCGSection: React.FC = () => {
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`px-10 py-5 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative group overflow-hidden ${activeTab === tab.id
+                            className={`px-6 py-3 md:px-10 md:py-5 rounded-[2rem] text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative group overflow-hidden ${activeTab === tab.id
                                 ? 'bg-gradient-to-r from-primary to-accent text-white shadow-2xl shadow-primary/20 scale-105'
                                 : 'text-gray-400 hover:text-primary hover:bg-white border border-transparent hover:border-gray-100'
                                 }`}
@@ -182,7 +182,7 @@ const GCGSection: React.FC = () => {
                             {principles.map((principle) => (
                                 <div
                                     key={principle.id}
-                                    className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover-lift group relative overflow-hidden"
+                                    className="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover-lift group relative overflow-hidden"
                                 >
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[5rem] -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
                                     <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-accent/10 text-primary rounded-2xl flex items-center justify-center mb-8 group-hover:from-primary group-hover:to-accent group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20">
@@ -211,7 +211,7 @@ const GCGSection: React.FC = () => {
                                     {(commissioners || []).map((member) => (
                                         <div
                                             key={member.id}
-                                            className="bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover-lift group"
+                                            className="bg-white rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover-lift group"
                                         >
                                             <div className="aspect-square overflow-hidden bg-gray-100">
                                                 <img
@@ -248,7 +248,7 @@ const GCGSection: React.FC = () => {
                                     {(directors || []).map((member) => (
                                         <div
                                             key={member.id}
-                                            className="bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover-lift group"
+                                            className="bg-white rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover-lift group"
                                         >
                                             <div className="aspect-square overflow-hidden bg-gray-100">
                                                 <img
@@ -279,7 +279,7 @@ const GCGSection: React.FC = () => {
                             {(committees || []).map((committee) => (
                                 <div
                                     key={committee.id}
-                                    className="bg-white p-10 rounded-3xl border border-gray-100 shadow-lg hover:shadow-2xl transition-all"
+                                    className="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 shadow-lg hover:shadow-2xl transition-all"
                                 >
                                     <h3 className="text-2xl font-bold text-primary mb-4">
                                         {language === 'id' ? committee.name_id : committee.name_en}
@@ -322,7 +322,7 @@ const GCGSection: React.FC = () => {
                                     href={policy.document_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-500 hover-lift group hover-move-icon"
+                                    className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-500 hover-lift group hover-move-icon"
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="w-12 h-12 bg-primary/5 text-primary rounded-2xl flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-all">

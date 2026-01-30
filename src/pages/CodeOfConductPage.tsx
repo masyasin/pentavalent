@@ -67,10 +67,10 @@ const CodeOfConductPage: React.FC = () => {
                 backgroundImage="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1920&h=400&fit=crop"
             />
 
-            <div className="container mx-auto px-4 py-16">
+            <div className="container mx-auto px-6 py-20">
                 <div className="max-w-4xl mx-auto">
                     {/* Document Info Card */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+                    <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-6 sm:p-12 mb-8">
                         <div className="flex items-center gap-4 mb-6">
                             <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
                                 <FileText size={32} className="text-white" />
@@ -102,7 +102,7 @@ const CodeOfConductPage: React.FC = () => {
                     </div>
 
                     {/* Content */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                    <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-6 md:p-12">
                         <div
                             className="prose prose-lg max-w-none
                                 prose-headings:font-black prose-headings:text-gray-900
@@ -117,7 +117,7 @@ const CodeOfConductPage: React.FC = () => {
                     </div>
 
                     {/* Footer Note */}
-                    <div className="mt-8 p-6 bg-purple-50 border border-purple-100 rounded-2xl">
+                    <div className="mt-8 p-6 bg-purple-50 border border-purple-100 rounded-[2rem]">
                         <div className="flex items-start gap-3">
                             <Mail size={20} className="text-purple-600 mt-1 flex-shrink-0" />
                             <div>

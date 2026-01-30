@@ -175,7 +175,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   return (
-    <footer className="relative bg-[#020617] text-white overflow-hidden pt-12 pb-12">
+    <footer className="relative bg-[#020617] text-white overflow-hidden pt-16 pb-16">
       <div className="absolute bottom-0 left-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-[#1e293b] via-[#0f172a] to-[#020617]"></div>
         <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.8) 1.5px, transparent 1.5px)', backgroundSize: '60px 60px' }}></div>
@@ -207,13 +207,13 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-0 pb-16 border-b border-white/5">
           {/* Column 1: Logo, Social, Counter */}
-          <div className="space-y-8 flex flex-col items-center">
-            <div className="relative group p-2 hover:scale-105 transition-transform duration-300">
+          <div className="space-y-8 flex flex-col items-start">
+            <div className="relative group hover:scale-105 transition-transform duration-300">
               <img src="/logo-penta-valent.png" alt="Penta Valent" className="h-16 w-auto brightness-0 invert" />
             </div>
 
-            <div className="space-y-6 w-full flex flex-col items-center">
-              <div className="flex items-center gap-3 justify-center">
+            <div className="space-y-6 w-full flex flex-col items-start">
+              <div className="flex items-center gap-3 justify-start">
                 {social.map((item) => (
                   <a
                     key={item.name}
@@ -228,30 +228,30 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 ))}
               </div>
 
-              <div className="pt-2 w-full flex justify-center">
+              <div className="pt-2 w-full flex justify-start">
                 <VisitorCounter />
               </div>
             </div>
           </div>
 
           {/* Column 2: Contact Information */}
-          <div className="pt-2 pl-4">
+          <div className="pt-2">
             <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>{t('footer.column.contact')}</h4>
-            <div className="grid grid-cols-1 gap-3">
-              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><MapPin size={16} /></div>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex items-start gap-4 group">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 group-hover:bg-blue-500 group-hover:text-white transition-all"><MapPin size={16} /></div>
                 <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.hq')}</p><p className="text-white text-xs font-medium leading-relaxed">Tanah Abang III No. 12<br />Jakarta, Indonesia</p></div>
               </div>
-              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 shrink-0"><Mail size={16} /></div>
+              <div className="flex items-start gap-4 group">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 shrink-0 group-hover:bg-cyan-500 group-hover:text-white transition-all"><Mail size={16} /></div>
                 <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.digital')}</p><p className="text-white text-xs font-medium">info@pentavalent.co.id</p></div>
               </div>
-              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 shrink-0"><Phone size={16} /></div>
+              <div className="flex items-start gap-4 group">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 shrink-0 group-hover:bg-indigo-500 group-hover:text-white transition-all"><Phone size={16} /></div>
                 <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.ho')}</p><p className="text-white text-xs font-medium">+62 21 350-1010</p></div>
               </div>
-              <div className="group flex items-start gap-4 p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><Clock size={16} /></div>
+              <div className="flex items-start gap-4 group">
+                <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 group-hover:bg-blue-500 group-hover:text-white transition-all"><Clock size={16} /></div>
                 <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.hours')}</p><p className="text-white text-xs font-medium">{t('footer.contact.days')}</p></div>
               </div>
             </div>

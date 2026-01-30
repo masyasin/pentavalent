@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { useAuth, AdminModule } from '../../contexts/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
-  currentPage: string;
-  onNavigate: (page: string) => void;
 }
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavigate }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const { user, logout, canAccessModule } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Extract current page ID from URL (e.g. /admin/news -> news)
+  // Assumes structure is /admin/:pageId
+  const currentPath = location.pathname.split('/')[2] || 'dashboard';
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -67,8 +72,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
             {accessibleMenuItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => onNavigate(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${currentPage === item.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                onClick={() => navigate(`/admin/${item.id}`)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${currentPath === item.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
                   }`}
               >
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,7 +110,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
               <h1 className="text-2xl font-black text-gray-900 tracking-tighter italic">
-                {currentPage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                {currentPath.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </h1>
             </div>
 
@@ -144,12 +149,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            onNavigate('profile');
+                            navigate('/admin/profile');
                             setShowUserMenu(false);
                           }}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${currentPage === 'profile' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${currentPath === 'profile' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
                         >
-                          <div className={`p-2 rounded-xl ${currentPage === 'profile' ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                          <div className={`p-2 rounded-xl ${currentPath === 'profile' ? 'bg-blue-100' : 'bg-gray-100'}`}>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                           </div>
                           My Profile
@@ -157,12 +162,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            onNavigate('change_password');
+                            navigate('/admin/change_password');
                             setShowUserMenu(false);
                           }}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${currentPage === 'change_password' ? 'bg-orange-50 text-orange-600' : 'text-gray-600 hover:bg-gray-50'}`}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${currentPath === 'change_password' ? 'bg-orange-50 text-orange-600' : 'text-gray-600 hover:bg-gray-50'}`}
                         >
-                          <div className={`p-2 rounded-xl ${currentPage === 'change_password' ? 'bg-orange-100' : 'bg-gray-100'}`}>
+                          <div className={`p-2 rounded-xl ${currentPath === 'change_password' ? 'bg-orange-100' : 'bg-gray-100'}`}>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
                           </div>
                           Security & Privacy
@@ -191,8 +196,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, onNavi
           </div>
         </header>
 
-        <main className={`flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 transition-all duration-300 no-scrollbar`}>
-          {children}
+        <main className={`flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 transition-all duration-300 no-scrollbar flex flex-col`}>
+          <div className="flex-1">
+            {children}
+          </div>
+
+          <footer className="mt-8 py-6 text-center">
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-300">
+              &copy; 2026 PT PENTA VALENT TBK
+            </p>
+          </footer>
         </main>
       </div>
     </div>

@@ -136,7 +136,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
                                 </p>
                                 <p className="text-[9px] text-gray-400 mt-1 uppercase font-medium">
                                     {type === 'image' ? 'JPG, PNG, WebP up to 5MB' :
-                                        type === 'video' ? 'MP4, WebM up to 20MB' :
+                                        type === 'video' ? 'MP4, WebM up to 100MB' :
                                             'PDF, DOCX up to 10MB'}
                                 </p>
                             </div>

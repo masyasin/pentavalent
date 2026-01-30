@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import FileUpload from '../../components/admin/FileUpload';
-import { Save, RefreshCw, CheckCircle2, AlertCircle, Type, Image as ImageIcon, Briefcase, Eye, Target, Sparkles } from 'lucide-react';
+import { Save, RefreshCw, CheckCircle2, AlertCircle, Type, Image as ImageIcon, Briefcase, Eye, Target, Sparkles, Network, Building2, User as UserIcon } from 'lucide-react';
+import OrganizationManager from '../../components/admin/OrganizationManager';
+import StructureManager from '../../components/admin/StructureManager';
 
 interface CompanyInfo {
     id: string;
@@ -33,6 +35,7 @@ const GeneralInfoManager: React.FC = () => {
     const [saving, setSaving] = useState(false);
     const [translating, setTranslating] = useState<string | null>(null);
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+    const [activeTab, setActiveTab] = useState<'profile' | 'management' | 'structure'>('profile');
 
     useEffect(() => {
         fetchInfo();
@@ -112,13 +115,40 @@ const GeneralInfoManager: React.FC = () => {
                     <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic underline decoration-blue-500 decoration-8 underline-offset-8">General Profile Settings</h2>
                     <p className="text-gray-500 mt-2">Manage your core narrative, vision, mission, and key metrics</p>
                 </div>
+                {activeTab === 'profile' && (
+                    <button
+                        onClick={handleSubmit}
+                        disabled={saving}
+                        className="px-8 py-4 bg-blue-600 text-white rounded-3xl font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl shadow-blue-100 disabled:opacity-50 uppercase tracking-widest text-sm"
+                    >
+                        {saving ? <RefreshCw className="animate-spin" size={20} /> : <Save size={20} />}
+                        Apply Changes
+                    </button>
+                )}
+            </div>
+
+            {/* Tab Navigation */}
+            <div className="flex p-1 bg-white rounded-2xl border border-gray-100 w-fit">
                 <button
-                    onClick={handleSubmit}
-                    disabled={saving}
-                    className="px-8 py-4 bg-blue-600 text-white rounded-3xl font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl shadow-blue-100 disabled:opacity-50 uppercase tracking-widest text-sm"
+                    onClick={() => setActiveTab('profile')}
+                    className={`px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'profile' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
                 >
-                    {saving ? <RefreshCw className="animate-spin" size={20} /> : <Save size={20} />}
-                    Apply Changes
+                    <Building2 size={16} />
+                    Company Profile
+                </button>
+                <button
+                    onClick={() => setActiveTab('management')}
+                    className={`px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'management' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
+                >
+                    <UserIcon size={16} />
+                    Data Anggota
+                </button>
+                <button
+                    onClick={() => setActiveTab('structure')}
+                    className={`px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'structure' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
+                >
+                    <Network size={16} />
+                    Struktur Visual
                 </button>
             </div>
 
@@ -130,249 +160,251 @@ const GeneralInfoManager: React.FC = () => {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-10 selection:bg-blue-100">
-                {/* Hero Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 bg-white rounded-[3rem] p-10 shadow-sm border border-gray-100 space-y-8">
-                        <div className="flex items-center gap-4 pb-6 border-b border-gray-50">
-                            <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
-                                <Type size={24} />
-                            </div>
-                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">Main Narrative</h3>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-8">
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Tagline (ID)</label>
-                                <input
-                                    type="text"
-                                    value={info?.tagline_id}
-                                    onChange={(e) => setInfo({ ...info!, tagline_id: e.target.value })}
-                                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-bold text-sm"
-                                />
-                            </div>
-                            <div className="space-y-3">
-                                <div className="flex justify-between items-center px-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Tagline (EN)</label>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAutoTranslate(info?.tagline_id || '', 'tagline_en')}
-                                        disabled={!!translating}
-                                        className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
-                                    >
-                                        {translating === 'tagline_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                        <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
-                                    </button>
+            {activeTab === 'profile' ? (
+                <form onSubmit={handleSubmit} className="space-y-10 selection:bg-blue-100">
+                    {/* Hero Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-2 bg-white rounded-[3rem] p-10 shadow-sm border border-gray-100 space-y-8">
+                            <div className="flex items-center gap-4 pb-6 border-b border-gray-50">
+                                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+                                    <Type size={24} />
                                 </div>
-                                <input
-                                    type="text"
-                                    value={info?.tagline_en}
-                                    onChange={(e) => setInfo({ ...info!, tagline_en: e.target.value })}
-                                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-bold text-sm"
-                                />
+                                <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">Main Narrative</h3>
                             </div>
-                        </div>
 
-                        <div className="grid grid-cols-2 gap-8 pt-4">
-                            <div className="space-y-6">
+                            <div className="grid grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] px-2 italic">Title Prefix (ID)</label>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Tagline (ID)</label>
                                     <input
                                         type="text"
-                                        value={info?.title_text_id}
-                                        onChange={(e) => setInfo({ ...info!, title_text_id: e.target.value })}
-                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
+                                        value={info?.tagline_id}
+                                        onChange={(e) => setInfo({ ...info!, tagline_id: e.target.value })}
+                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-bold text-sm"
                                     />
                                 </div>
-                                <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] px-2 italic">Title Italic (ID)</label>
-                                    <input
-                                        type="text"
-                                        value={info?.title_italic_id}
-                                        onChange={(e) => setInfo({ ...info!, title_italic_id: e.target.value })}
-                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
-                                    />
-                                </div>
-                            </div>
-                            <div className="space-y-6">
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center px-2">
-                                        <label className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] italic">Title Prefix (EN)</label>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Tagline (EN)</label>
                                         <button
                                             type="button"
-                                            onClick={() => handleAutoTranslate(info?.title_text_id || '', 'title_text_en')}
+                                            onClick={() => handleAutoTranslate(info?.tagline_id || '', 'tagline_en')}
                                             disabled={!!translating}
                                             className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
                                         >
-                                            {translating === 'title_text_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            {translating === 'tagline_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
                                             <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
                                         </button>
                                     </div>
                                     <input
                                         type="text"
-                                        value={info?.title_text_en}
-                                        onChange={(e) => setInfo({ ...info!, title_text_en: e.target.value })}
-                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
+                                        value={info?.tagline_en}
+                                        onChange={(e) => setInfo({ ...info!, tagline_en: e.target.value })}
+                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-bold text-sm"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-8 pt-4">
+                                <div className="space-y-6">
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] px-2 italic">Title Prefix (ID)</label>
+                                        <input
+                                            type="text"
+                                            value={info?.title_text_id}
+                                            onChange={(e) => setInfo({ ...info!, title_text_id: e.target.value })}
+                                            className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] px-2 italic">Title Italic (ID)</label>
+                                        <input
+                                            type="text"
+                                            value={info?.title_italic_id}
+                                            onChange={(e) => setInfo({ ...info!, title_italic_id: e.target.value })}
+                                            className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-6">
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center px-2">
+                                            <label className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] italic">Title Prefix (EN)</label>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAutoTranslate(info?.title_text_id || '', 'title_text_en')}
+                                                disabled={!!translating}
+                                                className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                            >
+                                                {translating === 'title_text_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
+                                            </button>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={info?.title_text_en}
+                                            onChange={(e) => setInfo({ ...info!, title_text_en: e.target.value })}
+                                            className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center px-2">
+                                            <label className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] italic">Title Italic (EN)</label>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAutoTranslate(info?.title_italic_id || '', 'title_italic_en')}
+                                                disabled={!!translating}
+                                                className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                            >
+                                                {translating === 'title_italic_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                                <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
+                                            </button>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={info?.title_italic_en}
+                                            onChange={(e) => setInfo({ ...info!, title_italic_en: e.target.value })}
+                                            className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6 pt-4 border-t border-gray-50">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Description (ID)</label>
+                                    <textarea
+                                        value={info?.description_id}
+                                        onChange={(e) => setInfo({ ...info!, description_id: e.target.value })}
+                                        rows={4}
+                                        className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2rem] transition-all font-medium text-base leading-relaxed"
                                     />
                                 </div>
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center px-2">
-                                        <label className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] italic">Title Italic (EN)</label>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Description (EN)</label>
                                         <button
                                             type="button"
-                                            onClick={() => handleAutoTranslate(info?.title_italic_id || '', 'title_italic_en')}
+                                            onClick={() => handleAutoTranslate(info?.description_id || '', 'description_en')}
                                             disabled={!!translating}
                                             className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
                                         >
-                                            {translating === 'title_italic_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
                                             <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
                                         </button>
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={info?.title_italic_en}
-                                        onChange={(e) => setInfo({ ...info!, title_italic_en: e.target.value })}
-                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-3xl transition-all font-black text-lg italic"
+                                    <textarea
+                                        value={info?.description_en}
+                                        onChange={(e) => setInfo({ ...info!, description_en: e.target.value })}
+                                        rows={4}
+                                        className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2rem] transition-all font-medium text-base leading-relaxed"
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="space-y-6 pt-4 border-t border-gray-50">
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Description (ID)</label>
-                                <textarea
-                                    value={info?.description_id}
-                                    onChange={(e) => setInfo({ ...info!, description_id: e.target.value })}
-                                    rows={4}
-                                    className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2rem] transition-all font-medium text-base leading-relaxed"
+                        <div className="space-y-8">
+                            {/* Featured Image */}
+                            <div className="bg-white rounded-[3rem] p-10 shadow-sm border border-gray-100 space-y-6">
+                                <div className="flex items-center gap-4 pb-4 border-b border-gray-50">
+                                    <div className="w-10 h-10 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
+                                        <ImageIcon size={20} />
+                                    </div>
+                                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight italic">Corporate Visual</h3>
+                                </div>
+                                <FileUpload
+                                    onUploadComplete={(url) => setInfo({ ...info!, image_url: url })}
+                                    currentUrl={info?.image_url || ''}
+                                    label="Featured Corporate Image"
+                                    bucket="images"
+                                    type="image"
                                 />
                             </div>
-                            <div className="space-y-3">
-                                <div className="flex justify-between items-center px-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Description (EN)</label>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAutoTranslate(info?.description_id || '', 'description_en')}
-                                        disabled={!!translating}
-                                        className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
-                                    >
-                                        {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                        <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
-                                    </button>
-                                </div>
-                                <textarea
-                                    value={info?.description_en}
-                                    onChange={(e) => setInfo({ ...info!, description_en: e.target.value })}
-                                    rows={4}
-                                    className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2rem] transition-all font-medium text-base leading-relaxed"
-                                />
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="space-y-8">
-                        {/* Featured Image */}
-                        <div className="bg-white rounded-[3rem] p-10 shadow-sm border border-gray-100 space-y-6">
-                            <div className="flex items-center gap-4 pb-4 border-b border-gray-50">
-                                <div className="w-10 h-10 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
-                                    <ImageIcon size={20} />
-                                </div>
-                                <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight italic">Corporate Visual</h3>
-                            </div>
-                            <FileUpload
-                                onUploadComplete={(url) => setInfo({ ...info!, image_url: url })}
-                                currentUrl={info?.image_url || ''}
-                                label="Featured Corporate Image"
-                                bucket="images"
-                                type="image"
-                            />
-                        </div>
-
-                        {/* Statistics */}
-                        <div className="bg-slate-900 rounded-[3rem] p-10 shadow-2xl space-y-8">
-                            <div className="flex items-center gap-4 pb-4 border-b border-slate-800">
-                                <div className="w-10 h-10 bg-slate-800 rounded-2xl flex items-center justify-center text-blue-400">
-                                    <Briefcase size={20} />
-                                </div>
-                                <h3 className="text-lg font-black text-white uppercase tracking-tight italic">Key Statistics</h3>
-                            </div>
-
-                            <div className="space-y-6">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Year Stat</label>
-                                        <input
-                                            type="text"
-                                            value={info?.stats_years_value}
-                                            onChange={(e) => setInfo({ ...info!, stats_years_value: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-800 border-none rounded-xl text-white font-black text-xl italic"
-                                        />
+                            {/* Statistics */}
+                            <div className="bg-slate-900 rounded-[3rem] p-10 shadow-2xl space-y-8">
+                                <div className="flex items-center gap-4 pb-4 border-b border-slate-800">
+                                    <div className="w-10 h-10 bg-slate-800 rounded-2xl flex items-center justify-center text-blue-400">
+                                        <Briefcase size={20} />
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Public Stat</label>
-                                        <input
-                                            type="text"
-                                            value={info?.stats_public_value}
-                                            onChange={(e) => setInfo({ ...info!, stats_public_value: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-800 border-none rounded-xl text-white font-black text-xl italic"
-                                        />
-                                    </div>
+                                    <h3 className="text-lg font-black text-white uppercase tracking-tight italic">Key Statistics</h3>
                                 </div>
-                                <div className="space-y-4 pt-4 border-t border-slate-800">
+
+                                <div className="space-y-6">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Year Stat</label>
                                             <input
                                                 type="text"
-                                                value={info?.stats_years_label_id}
-                                                onChange={(e) => setInfo({ ...info!, stats_years_label_id: e.target.value })}
-                                                className="w-full px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-400 text-[10px] font-black uppercase tracking-tighter"
-                                                placeholder="Label ID"
+                                                value={info?.stats_years_value}
+                                                onChange={(e) => setInfo({ ...info!, stats_years_value: e.target.value })}
+                                                className="w-full px-4 py-3 bg-slate-800 border-none rounded-xl text-white font-black text-xl italic"
                                             />
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="text"
-                                                    value={info?.stats_years_label_en}
-                                                    onChange={(e) => setInfo({ ...info!, stats_years_label_en: e.target.value })}
-                                                    className="flex-1 px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-500 text-[10px] font-bold uppercase tracking-tighter"
-                                                    placeholder="Label EN"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleAutoTranslate(info?.stats_years_label_id || '', 'stats_years_label_en')}
-                                                    disabled={!!translating}
-                                                    className="text-blue-400 hover:text-blue-300 transition-colors"
-                                                    title="Auto Translate"
-                                                >
-                                                    {translating === 'stats_years_label_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                                                </button>
-                                            </div>
                                         </div>
                                         <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Public Stat</label>
                                             <input
                                                 type="text"
-                                                value={info?.stats_public_label_id}
-                                                onChange={(e) => setInfo({ ...info!, stats_public_label_id: e.target.value })}
-                                                className="w-full px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-400 text-[10px] font-black uppercase tracking-tighter"
-                                                placeholder="Label ID"
+                                                value={info?.stats_public_value}
+                                                onChange={(e) => setInfo({ ...info!, stats_public_value: e.target.value })}
+                                                className="w-full px-4 py-3 bg-slate-800 border-none rounded-xl text-white font-black text-xl italic"
                                             />
-                                            <div className="flex items-center gap-2">
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4 pt-4 border-t border-slate-800">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
                                                 <input
                                                     type="text"
-                                                    value={info?.stats_public_label_en}
-                                                    onChange={(e) => setInfo({ ...info!, stats_public_label_en: e.target.value })}
-                                                    className="flex-1 px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-500 text-[10px] font-bold uppercase tracking-tighter"
-                                                    placeholder="Label EN"
+                                                    value={info?.stats_years_label_id}
+                                                    onChange={(e) => setInfo({ ...info!, stats_years_label_id: e.target.value })}
+                                                    className="w-full px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-400 text-[10px] font-black uppercase tracking-tighter"
+                                                    placeholder="Label ID"
                                                 />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleAutoTranslate(info?.stats_public_label_id || '', 'stats_public_label_en')}
-                                                    disabled={!!translating}
-                                                    className="text-blue-400 hover:text-blue-300 transition-colors"
-                                                    title="Auto Translate"
-                                                >
-                                                    {translating === 'stats_public_label_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                                                </button>
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={info?.stats_years_label_en}
+                                                        onChange={(e) => setInfo({ ...info!, stats_years_label_en: e.target.value })}
+                                                        className="flex-1 px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-500 text-[10px] font-bold uppercase tracking-tighter"
+                                                        placeholder="Label EN"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleAutoTranslate(info?.stats_years_label_id || '', 'stats_years_label_en')}
+                                                        disabled={!!translating}
+                                                        className="text-blue-400 hover:text-blue-300 transition-colors"
+                                                        title="Auto Translate"
+                                                    >
+                                                        {translating === 'stats_years_label_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <input
+                                                    type="text"
+                                                    value={info?.stats_public_label_id}
+                                                    onChange={(e) => setInfo({ ...info!, stats_public_label_id: e.target.value })}
+                                                    className="w-full px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-400 text-[10px] font-black uppercase tracking-tighter"
+                                                    placeholder="Label ID"
+                                                />
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={info?.stats_public_label_en}
+                                                        onChange={(e) => setInfo({ ...info!, stats_public_label_en: e.target.value })}
+                                                        className="flex-1 px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-500 text-[10px] font-bold uppercase tracking-tighter"
+                                                        placeholder="Label EN"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleAutoTranslate(info?.stats_public_label_id || '', 'stats_public_label_en')}
+                                                        disabled={!!translating}
+                                                        className="text-blue-400 hover:text-blue-300 transition-colors"
+                                                        title="Auto Translate"
+                                                    >
+                                                        {translating === 'stats_public_label_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -380,105 +412,109 @@ const GeneralInfoManager: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Vision & Mission */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                    {/* Vision Container */}
-                    <div className="bg-white rounded-[4rem] p-12 shadow-xl border border-cyan-50 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-50/50 rounded-bl-full -mr-10 -mt-10 blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
+                    {/* Vision & Mission */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        {/* Vision Container */}
+                        <div className="bg-white rounded-[4rem] p-12 shadow-xl border border-cyan-50 relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-50/50 rounded-bl-full -mr-10 -mt-10 blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
 
-                        <div className="flex items-center gap-6 mb-12 relative z-10">
-                            <div className="w-16 h-16 bg-cyan-500 rounded-3xl flex items-center justify-center text-white shadow-lg shadow-cyan-200 group-hover:rotate-12 transition-transform">
-                                <Eye size={28} />
+                            <div className="flex items-center gap-6 mb-12 relative z-10">
+                                <div className="w-16 h-16 bg-cyan-500 rounded-3xl flex items-center justify-center text-white shadow-lg shadow-cyan-200 group-hover:rotate-12 transition-transform">
+                                    <Eye size={28} />
+                                </div>
+                                <div>
+                                    <h4 className="text-2xl font-black text-slate-900 italic tracking-tighter">Corporate Vision</h4>
+                                    <p className="text-cyan-500 text-[10px] font-black uppercase tracking-widest mt-1">Strategic North Star</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 className="text-2xl font-black text-slate-900 italic tracking-tighter">Corporate Vision</h4>
-                                <p className="text-cyan-500 text-[10px] font-black uppercase tracking-widest mt-1">Strategic North Star</p>
+
+                            <div className="space-y-8 relative z-10">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 italic">Vision Statement (ID)</label>
+                                    <textarea
+                                        value={info?.vision_text_id}
+                                        onChange={(e) => setInfo({ ...info!, vision_text_id: e.target.value })}
+                                        rows={4}
+                                        className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-cyan-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-700 leading-snug shadow-inner"
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center px-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Vision Statement (EN)</label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(info?.vision_text_id || '', 'vision_text_en')}
+                                            disabled={!!translating}
+                                            className="text-cyan-500 hover:text-cyan-700 transition-colors flex items-center gap-1 group"
+                                        >
+                                            {translating === 'vision_text_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
+                                        </button>
+                                    </div>
+                                    <textarea
+                                        value={info?.vision_text_en}
+                                        onChange={(e) => setInfo({ ...info!, vision_text_en: e.target.value })}
+                                        rows={4}
+                                        className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-cyan-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-400 focus:text-slate-700 leading-snug shadow-inner"
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="space-y-8 relative z-10">
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 italic">Vision Statement (ID)</label>
-                                <textarea
-                                    value={info?.vision_text_id}
-                                    onChange={(e) => setInfo({ ...info!, vision_text_id: e.target.value })}
-                                    rows={4}
-                                    className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-cyan-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-700 leading-snug shadow-inner"
-                                />
-                            </div>
-                            <div className="space-y-3">
-                                <div className="flex justify-between items-center px-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Vision Statement (EN)</label>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAutoTranslate(info?.vision_text_id || '', 'vision_text_en')}
-                                        disabled={!!translating}
-                                        className="text-cyan-500 hover:text-cyan-700 transition-colors flex items-center gap-1 group"
-                                    >
-                                        {translating === 'vision_text_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                        <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
-                                    </button>
+                        {/* Mission Container */}
+                        <div className="bg-white rounded-[4rem] p-12 shadow-xl border border-blue-50 relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-bl-full -mr-10 -mt-10 blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
+
+                            <div className="flex items-center gap-6 mb-12 relative z-10">
+                                <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center text-white shadow-lg shadow-blue-200 group-hover:-rotate-12 transition-transform">
+                                    <Target size={28} />
                                 </div>
-                                <textarea
-                                    value={info?.vision_text_en}
-                                    onChange={(e) => setInfo({ ...info!, vision_text_en: e.target.value })}
-                                    rows={4}
-                                    className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-cyan-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-400 focus:text-slate-700 leading-snug shadow-inner"
-                                />
+                                <div>
+                                    <h4 className="text-2xl font-black text-slate-900 italic tracking-tighter">Corporate Mission</h4>
+                                    <p className="text-blue-600 text-[10px] font-black uppercase tracking-widest mt-1">Tactical Commitment</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-8 relative z-10">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 italic">Mission Statement (ID)</label>
+                                    <textarea
+                                        value={info?.mission_text_id}
+                                        onChange={(e) => setInfo({ ...info!, mission_text_id: e.target.value })}
+                                        rows={4}
+                                        className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-700 leading-snug shadow-inner"
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center px-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Mission Statement (EN)</label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(info?.mission_text_id || '', 'mission_text_en')}
+                                            disabled={!!translating}
+                                            className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
+                                        >
+                                            {translating === 'mission_text_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
+                                        </button>
+                                    </div>
+                                    <textarea
+                                        value={info?.mission_text_en}
+                                        onChange={(e) => setInfo({ ...info!, mission_text_en: e.target.value })}
+                                        rows={4}
+                                        className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-400 focus:text-slate-700 leading-snug shadow-inner"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    {/* Mission Container */}
-                    <div className="bg-white rounded-[4rem] p-12 shadow-xl border border-blue-50 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-bl-full -mr-10 -mt-10 blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
-
-                        <div className="flex items-center gap-6 mb-12 relative z-10">
-                            <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center text-white shadow-lg shadow-blue-200 group-hover:-rotate-12 transition-transform">
-                                <Target size={28} />
-                            </div>
-                            <div>
-                                <h4 className="text-2xl font-black text-slate-900 italic tracking-tighter">Corporate Mission</h4>
-                                <p className="text-blue-600 text-[10px] font-black uppercase tracking-widest mt-1">Tactical Commitment</p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-8 relative z-10">
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 italic">Mission Statement (ID)</label>
-                                <textarea
-                                    value={info?.mission_text_id}
-                                    onChange={(e) => setInfo({ ...info!, mission_text_id: e.target.value })}
-                                    rows={4}
-                                    className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-700 leading-snug shadow-inner"
-                                />
-                            </div>
-                            <div className="space-y-3">
-                                <div className="flex justify-between items-center px-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Mission Statement (EN)</label>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAutoTranslate(info?.mission_text_id || '', 'mission_text_en')}
-                                        disabled={!!translating}
-                                        className="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-1 group"
-                                    >
-                                        {translating === 'mission_text_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                        <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
-                                    </button>
-                                </div>
-                                <textarea
-                                    value={info?.mission_text_en}
-                                    onChange={(e) => setInfo({ ...info!, mission_text_en: e.target.value })}
-                                    rows={4}
-                                    className="w-full px-8 py-6 bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2.5rem] transition-all font-black text-xl italic text-slate-400 focus:text-slate-700 leading-snug shadow-inner"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+                </form>
+            ) : activeTab === 'management' ? (
+                <OrganizationManager />
+            ) : (
+                <StructureManager />
+            )}
         </div>
     );
 };

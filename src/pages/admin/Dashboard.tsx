@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import {
   LayoutDashboard, Users, Newspaper, Briefcase,
@@ -19,11 +20,8 @@ interface Stats {
   certs: number;
 }
 
-interface DashboardProps {
-  onNavigate: (page: string) => void;
-}
-
-const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
+const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<Stats>({
     branches: 0,
     partners: 0,
@@ -171,11 +169,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             </p>
           </div>
           <div className="mt-8 md:mt-0 flex gap-4">
-            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => onNavigate('dashboard')}>
+            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/dashboard')}>
               <p className="text-3xl font-black text-blue-400 mb-1">{stats.branches}</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Branches</p>
             </div>
-            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => onNavigate('company')}>
+            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/company')}>
               <p className="text-3xl font-black text-emerald-400 mb-1">{stats.certs}</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Certificates</p>
             </div>
@@ -191,7 +189,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         {statCards.map((stat) => (
           <button
             key={stat.id}
-            onClick={() => onNavigate(stat.id)}
+            onClick={() => navigate(`/admin/${stat.id}`)}
             className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500 text-left relative overflow-hidden active:scale-95"
           >
             <div className="flex flex-col h-full justify-between items-start space-y-4">
@@ -226,7 +224,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
               <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">Customer Inquiries</h3>
             </div>
             <button
-              onClick={() => onNavigate('messages')}
+              onClick={() => navigate('/admin/messages')}
               className="text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold"
             >
               View All <ArrowRight size={12} />
@@ -242,7 +240,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
               recentMessages.map((msg) => (
                 <button
                   key={msg.id}
-                  onClick={() => onNavigate('messages')}
+                  onClick={() => navigate('/admin/messages')}
                   className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group"
                 >
                   <div className="flex gap-4">
@@ -277,7 +275,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
               <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">Talent Pipeline</h3>
             </div>
             <button
-              onClick={() => onNavigate('applications')}
+              onClick={() => navigate('/admin/applications')}
               className="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold"
             >
               Review All <ArrowRight size={12} />
@@ -293,7 +291,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
               recentApplications.map((app) => (
                 <button
                   key={app.id}
-                  onClick={() => onNavigate('applications')}
+                  onClick={() => navigate('/admin/applications')}
                   className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group"
                 >
                   <div className="flex gap-4">
@@ -312,9 +310,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                     </div>
                   </div>
                   <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest h-fit ${app.status === 'pending' ? 'bg-amber-100 text-amber-700' :
-                      app.status === 'reviewed' ? 'bg-blue-100 text-blue-700' :
-                        app.status === 'accepted' ? 'bg-emerald-100 text-emerald-700' :
-                          'bg-rose-100 text-rose-700'
+                    app.status === 'reviewed' ? 'bg-blue-100 text-blue-700' :
+                      app.status === 'accepted' ? 'bg-emerald-100 text-emerald-700' :
+                        'bg-rose-100 text-rose-700'
                     }`}>
                     {app.status}
                   </span>
@@ -327,7 +325,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
       {/* Bottom Quick Links */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-        <button onClick={() => onNavigate('settings')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
+        <button onClick={() => navigate('/admin/settings')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
           <div className="w-12 h-12 bg-blue-50 rounded-[1.25rem] flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
             <RefreshCw size={24} />
           </div>
@@ -336,7 +334,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <p className="text-xs font-bold text-gray-800">Site Settings</p>
           </div>
         </button>
-        <button onClick={() => onNavigate('hero')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
+        <button onClick={() => navigate('/admin/hero')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
           <div className="w-12 h-12 bg-rose-50 rounded-[1.25rem] flex items-center justify-center text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner">
             <LayoutDashboard size={24} />
           </div>
@@ -345,7 +343,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <p className="text-xs font-bold text-gray-800">Banner Slider</p>
           </div>
         </button>
-        <button onClick={() => onNavigate('company')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-indigo-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
+        <button onClick={() => navigate('/admin/company')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-indigo-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
           <div className="w-12 h-12 bg-indigo-50 rounded-[1.25rem] flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-inner">
             <Building2 size={24} />
           </div>
@@ -354,7 +352,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <p className="text-xs font-bold text-gray-800">Corp Identity</p>
           </div>
         </button>
-        <button onClick={() => onNavigate('seo')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
+        <button onClick={() => navigate('/admin/seo')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
           <div className="w-12 h-12 bg-emerald-50 rounded-[1.25rem] flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
             <Globe size={24} />
           </div>

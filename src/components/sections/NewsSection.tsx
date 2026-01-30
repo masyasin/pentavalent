@@ -102,17 +102,17 @@ const NewsSection: React.FC = () => {
   ];
 
   return (
-    <section id="news" className="py-32 bg-white relative overflow-hidden">
+    <section id="news" className="py-20 md:py-32 bg-white relative overflow-hidden">
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/[0.01] pointer-events-none"></div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-8">
           <div className="max-w-3xl">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {t('news.tagline')}
             </span>
-            <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-6xl font-black tracking-tighter leading-none mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               {t('news.title.text')} <br />
               <span className="italic">{t('news.title.italic')}</span>
             </h2>
@@ -166,7 +166,7 @@ const NewsSection: React.FC = () => {
                   <div key={item.id} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-6">
                     <article
                       onClick={() => setSelectedNews(item)}
-                      className="group bg-white rounded-[3.5rem] h-full overflow-hidden border border-gray-100 enterprise-shadow hover:-translate-y-4 transition-all duration-700 cursor-pointer relative"
+                      className="group bg-white rounded-[2rem] md:rounded-[3.5rem] h-full overflow-hidden border border-gray-100 enterprise-shadow hover:-translate-y-4 transition-all duration-700 cursor-pointer relative"
                     >
                       <div className="relative aspect-[16/10] overflow-hidden">
                         <img
@@ -181,7 +181,7 @@ const NewsSection: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="p-10 flex flex-col h-[calc(100%-16/10)]">
+                      <div className="p-6 md:p-10 flex flex-col h-[calc(100%-16/10)]">
                         <div className="flex items-center gap-3 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">
                           <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -226,7 +226,7 @@ const NewsSection: React.FC = () => {
             onClick={() => setSelectedNews(null)}
           >
             <div
-              className="bg-white rounded-[4rem] max-w-6xl w-full enterprise-shadow relative animate-in fade-in zoom-in duration-700 overflow-hidden"
+              className="bg-white rounded-[2rem] md:rounded-[4rem] max-w-6xl w-full enterprise-shadow relative animate-in fade-in zoom-in duration-700 overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="grid lg:grid-cols-12 max-h-[90vh] lg:max-h-none overflow-y-auto lg:overflow-visible">
@@ -257,7 +257,7 @@ const NewsSection: React.FC = () => {
                 </div>
 
                 {/* Right Column: Content */}
-                <div className="lg:col-span-7 p-10 sm:p-16 lg:p-24 bg-white relative">
+                <div className="lg:col-span-7 p-6 md:p-16 lg:p-24 bg-white relative">
                   <button
                     onClick={() => setSelectedNews(null)}
                     className="absolute top-12 right-12 w-14 h-14 bg-gray-50 hover:bg-primary transition-all rounded-2xl hidden lg:flex items-center justify-center text-primary hover:text-white group/close"
@@ -266,7 +266,7 @@ const NewsSection: React.FC = () => {
                   </button>
 
                   <div className="max-w-2xl">
-                    <h2 className="text-4xl lg:text-5xl font-black text-primary mb-12 tracking-tighter leading-[1.1]">
+                    <h2 className="text-3xl lg:text-5xl font-black text-primary mb-12 tracking-tighter leading-[1.1]">
                       {language === 'id' ? selectedNews.title_id : selectedNews.title_en}
                     </h2>
 

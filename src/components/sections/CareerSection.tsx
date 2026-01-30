@@ -113,21 +113,21 @@ const CareerSection: React.FC = () => {
   });
 
   return (
-    <section id="careers" className="py-40 bg-white relative overflow-hidden">
+    <section id="careers" className="py-20 md:py-40 bg-white relative overflow-hidden">
       {/* Talent Ecosystem Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-slate-50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-50/50 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
       </div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         {/* Career Intelligence Header */}
         <div className="flex flex-col lg:flex-row items-end justify-between gap-12 mb-32">
           <div className="max-w-3xl">
             <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
               {t('career.future.title')}
             </span>
-            <h2 className="text-6xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+            <h2 className="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
               {language === 'id' ? (
                 <>Bangun <span className="text-cyan-500 italic">Masa Depan</span> <br /> Kesehatan Bersama Kami</>
               ) : (
@@ -137,12 +137,12 @@ const CareerSection: React.FC = () => {
           </div>
           <div className="flex items-center gap-8 pb-4">
             <div className="text-right">
-              <div className="text-4xl font-black text-slate-900 leading-none">500+</div>
+              <div className="text-2xl md:text-4xl font-black text-slate-900 leading-none">500+</div>
               <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Global Professionals</div>
             </div>
             <div className="w-px h-12 bg-slate-100"></div>
             <div className="text-right">
-              <div className="text-4xl font-black text-cyan-500 leading-none">34</div>
+              <div className="text-2xl md:text-4xl font-black text-cyan-500 leading-none">34</div>
               <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Strategic Hubs</div>
             </div>
           </div>
@@ -194,7 +194,7 @@ const CareerSection: React.FC = () => {
               filteredCareers.map((career) => (
                 <div
                   key={career.id}
-                  className="group relative bg-white border border-slate-100 rounded-[3rem] p-10 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] transition-all duration-700 flex flex-col md:flex-row md:items-center justify-between gap-8 overflow-hidden"
+                  className="group relative bg-white border border-slate-100 rounded-[2rem] md:rounded-[3rem] p-6 sm:p-10 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] transition-all duration-700 flex flex-col md:flex-row md:items-center justify-between gap-8 overflow-hidden"
                 >
                   {/* Hover Accent */}
                   <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -248,19 +248,19 @@ const CareerSection: React.FC = () => {
         {selectedCareer && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onClick={() => { setSelectedCareer(null); setShowApplicationForm(false); }}></div>
-            <div className="relative w-full max-w-4xl bg-white rounded-[4rem] shadow-2xl overflow-hidden animate-fade-in-up">
+            <div className="relative w-full max-w-4xl bg-white rounded-[2rem] md:rounded-[4rem] shadow-2xl overflow-hidden animate-fade-in-up">
               {!showApplicationForm ? (
-                <div className="p-16">
+                <div className="p-6 sm:p-16">
                   <div className="flex justify-between items-start mb-12">
                     <div>
                       <div className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-4">Position Details</div>
-                      <h3 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">{selectedCareer.title}</h3>
+                      <h3 className="text-3xl lg:text-5xl font-black text-slate-900 tracking-tighter leading-none">{selectedCareer.title}</h3>
                     </div>
                     <button onClick={() => setSelectedCareer(null)} className="p-4 bg-slate-50 rounded-full hover:bg-slate-100 transition-all">
                       <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-16 mb-16">
+                  <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-16">
                     <div className="space-y-6">
                       <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-3">
                         <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
@@ -285,7 +285,7 @@ const CareerSection: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <div className="p-16">
+                <div className="p-6 sm:p-16">
                   <h3 className="text-3xl font-black text-slate-900 mb-2 tracking-tighter">Submit Application</h3>
                   <p className="text-slate-400 text-sm font-bold mb-10">Mendaftarkan posisi untuk {selectedCareer.title}</p>
 

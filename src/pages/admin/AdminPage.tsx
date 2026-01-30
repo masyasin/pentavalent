@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { AuthProvider, useAuth } from '../../contexts/AuthContext';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth, AdminModule } from '../../contexts/AuthContext';
 import { LanguageProvider } from '../../contexts/LanguageContext';
 import AdminLayout from './AdminLayout';
 import Dashboard from './Dashboard';
@@ -26,11 +27,11 @@ import LegalDocumentsManager from './LegalDocumentsManager';
 import LoginPage from './LoginPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 
-// Main Admin Content with Auth Check
+// Admin Pages Component with Auth Check and Routing
 const AdminContent: React.FC = () => {
   const { isAuthenticated, isLoading, canAccessModule } = useAuth();
-  const [currentPage, setCurrentPage] = useState('dashboard');
   const [authView, setAuthView] = useState<'login' | 'forgot'>('login');
+  const location = useLocation();
 
   // Show loading state
   if (isLoading) {
@@ -55,10 +56,9 @@ const AdminContent: React.FC = () => {
     return <LoginPage onForgotPassword={() => setAuthView('forgot')} />;
   }
 
-  // Render admin pages based on current page and permissions
-  const renderPage = () => {
-    // Check if user can access the current page
-    if (!canAccessModule(currentPage as any) && currentPage !== 'profile' && currentPage !== 'change_password') {
+  // Access Control Wrapper
+  const ProtectedRoute = ({ module, children }: { module?: AdminModule, children: React.ReactNode }) => {
+    if (module && !canAccessModule(module)) {
       return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
           <svg className="w-16 h-16 mx-auto text-red-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,52 +69,40 @@ const AdminContent: React.FC = () => {
         </div>
       );
     }
-
-    switch (currentPage) {
-      case 'dashboard':
-        return <Dashboard onNavigate={setCurrentPage} />;
-      case 'news':
-        return <NewsManager />;
-      case 'messages':
-        return <MessagesManager />;
-      case 'careers':
-        return <CareerManager />;
-      case 'investor':
-        return <InvestorManager />;
-      case 'hero':
-        return <HeroSliderManager />;
-      case 'seo':
-        return <SeoManager />;
-      case 'analytics':
-        return <AnalyticsManager />;
-      case 'company':
-        return <CompanyProfileManager />;
-      case 'settings':
-        return <SiteSettingsManager />;
-      case 'profile':
-        return <ProfilePage />;
-      case 'users':
-        return <UserManager />;
-      case 'menus':
-        return <MenuManager />;
-      case 'applications':
-        return <ApplicationsManager />;
-      case 'channels':
-        return <ChannelsManager />;
-      case 'faqs':
-        return <FAQManager />;
-      case 'legal':
-        return <LegalDocumentsManager />;
-      case 'change_password':
-        return <ProfilePage />; // Already handled in ProfilePage
-      default:
-        return <Dashboard onNavigate={setCurrentPage} />;
-    }
+    return <>{children}</>;
   };
 
   return (
-    <AdminLayout currentPage={currentPage} onNavigate={setCurrentPage}>
-      {renderPage()}
+    <AdminLayout>
+      <Routes>
+        <Route path="dashboard" element={<ProtectedRoute module="dashboard"><Dashboard /></ProtectedRoute>} />
+        <Route path="news" element={<ProtectedRoute module="news"><NewsManager /></ProtectedRoute>} />
+        <Route path="messages" element={<ProtectedRoute module="messages"><MessagesManager /></ProtectedRoute>} />
+        <Route path="careers" element={<ProtectedRoute module="careers"><CareerManager /></ProtectedRoute>} />
+        <Route path="investor" element={<ProtectedRoute module="investor"><InvestorManager /></ProtectedRoute>} />
+        <Route path="hero" element={<ProtectedRoute module="hero"><HeroSliderManager /></ProtectedRoute>} />
+        <Route path="seo" element={<ProtectedRoute module="seo"><SeoManager /></ProtectedRoute>} />
+        <Route path="analytics" element={<ProtectedRoute module="analytics"><AnalyticsManager /></ProtectedRoute>} />
+
+        {/* Company Profile with Sub-routes */}
+        <Route path="company/*" element={<ProtectedRoute module="company"><CompanyProfileManager /></ProtectedRoute>} />
+
+        <Route path="settings" element={<ProtectedRoute module="settings"><SiteSettingsManager /></ProtectedRoute>} />
+        <Route path="users" element={<ProtectedRoute module="users"><UserManager /></ProtectedRoute>} />
+        <Route path="menus" element={<ProtectedRoute module="menus"><MenuManager /></ProtectedRoute>} />
+        <Route path="applications" element={<ProtectedRoute module="applications"><ApplicationsManager /></ProtectedRoute>} />
+        <Route path="channels" element={<ProtectedRoute module="channels"><ChannelsManager /></ProtectedRoute>} />
+        <Route path="faqs" element={<ProtectedRoute module="faqs"><FAQManager /></ProtectedRoute>} />
+        <Route path="legal" element={<ProtectedRoute module="legal"><LegalDocumentsManager /></ProtectedRoute>} />
+
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="change_password" element={<ProfilePage />} />
+
+        {/* Default Redirect from /admin to /admin/dashboard */}
+        <Route path="/" element={<Navigate to="dashboard" replace />} />
+        {/* Catch all for admin routes */}
+        <Route path="*" element={<Navigate to="dashboard" replace />} />
+      </Routes>
     </AdminLayout>
   );
 };
@@ -124,7 +112,16 @@ const AdminPage: React.FC = () => {
   return (
     <AuthProvider>
       <LanguageProvider>
-        <AdminContent />
+        <Routes>
+          {/* We need to match the parent path structure. App renders this at /admin/* */}
+          {/* If AdminPage is rendered, location starts with /admin. */}
+          {/* We can use relative paths if we set the basename or use Route nesting correctly. */}
+          {/* However, since this component is rendered manually by AppLayout, we should assume the Routes here need to handle the path suffix. */}
+          {/* But wait, if we use <Routes> here, and the URL is /admin/dashboard, 'dashboard' path matching might fail if the Router context doesn't know /admin is the base. */}
+          {/* To be safe, we route /* here and let the internal Routes handle it relative to where we are? No, Routes matches from root if not in another Route. */}
+          {/* So we must use /admin/* prefix for paths. */}
+          <Route path="/admin/*" element={<AdminContent />} />
+        </Routes>
       </LanguageProvider>
     </AuthProvider>
   );

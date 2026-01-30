@@ -15,6 +15,21 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  // Autocomplete Data
+  const searchItems = [
+    { type: 'Section', label: t('nav.about'), id: 'about', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { type: 'Section', label: t('nav.business'), id: 'business', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+    { type: 'Section', label: t('nav.network'), id: 'network', icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { type: 'Section', label: t('nav.career'), id: 'career', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+    { type: 'Section', label: t('nav.contact'), id: 'contact', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+    { type: 'Info', label: t('nav.investor'), id: 'investor', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { type: 'Info', label: t('nav.news'), id: 'news', icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z' },
+  ];
+
+  const filteredResults = searchQuery
+    ? searchItems.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
+    : [];
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -47,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           : 'bg-transparent py-4'
           }`}
       >
-        <div className="w-full px-6 lg:px-8 mx-auto">
+        <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="flex items-center justify-between relative z-10 h-full gap-2 xl:gap-4">
             {/* Logo Column - Flexible but compact */}
             <div className="flex-1 flex items-center justify-start min-w-0">
@@ -161,14 +176,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               </nav>
             </div>
             <div className="p-8 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm">
-              <div className="flex items-center justify-center gap-4">
+              <div className="flex items-center justify-center gap-3">
                 {['id', 'en'].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`flex-1 py-4 rounded-2xl text-[11px] font-extrabold uppercase tracking-widest transition-all ${language === lang ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'bg-white text-gray-600 border border-gray-100'}`}
+                    className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 ${language === lang ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`}
                   >
-                    {lang === 'id' ? 'Bahasa Indonesia' : 'English Global'}
+                    {lang === 'id' ? 'Indonesia' : 'English'}
                   </button>
                 ))}
               </div>
@@ -177,50 +192,74 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
         </div>
       </div>
 
-      {/* Global Search Overlay */}
-      <div className={`fixed inset-0 z-[200] transition-all duration-500 ${isSearchOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
-        <div className="absolute inset-0 bg-primary/20 backdrop-blur-2xl" onClick={() => setIsSearchOpen(false)}></div>
+      {/* Search Modal Spotlight */}
+      <div className={`fixed inset-0 z-[200] transition-all duration-300 ${isSearchOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setIsSearchOpen(false)}></div>
 
-        <div className={`absolute inset-x-0 top-0 bg-white shadow-2xl transition-all duration-500 ease-out transform ${isSearchOpen ? 'translate-y-0' : '-translate-y-full'}`}>
-          <div className="max-w-4xl mx-auto px-6 py-12 md:py-20 flex flex-col items-center">
-            <div className="w-full flex justify-end mb-8 md:mb-12">
-              <button
-                onClick={() => setIsSearchOpen(false)}
-                className="w-12 h-12 flex items-center justify-center bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
-              >
-                <X size={24} strokeWidth={3} />
-              </button>
-            </div>
+        {/* Modal */}
+        <div className={`absolute top-[15%] left-1/2 -translate-x-1/2 w-[90%] max-w-2xl bg-white rounded-3xl shadow-2xl border border-white/20 overflow-hidden transition-all duration-300 ${isSearchOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-4 scale-95 opacity-0'}`}>
+          {/* Search Input Area */}
+          <div className="relative border-b border-slate-100 p-6 flex items-center gap-4">
+            <Search className="flex-shrink-0 text-slate-400" size={24} />
+            <input
+              type="text"
+              autoFocus={isSearchOpen}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={language === 'id' ? "Cari halaman, layanan, atau informasi..." : "Search for pages, services, or information..."}
+              className="w-full text-xl font-bold bg-transparent border-none outline-none text-slate-900 placeholder:text-slate-300 h-full"
+            />
+            <button onClick={() => setIsSearchOpen(false)} className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:bg-slate-100 transition-colors">
+              <X size={18} />
+            </button>
+          </div>
 
-            <div className="w-full relative group">
-              <div className="absolute inset-y-0 left-8 flex items-center pointer-events-none transition-colors group-focus-within:text-primary text-gray-400">
-                <Search size={32} strokeWidth={2.5} />
+          {/* Results or Suggestions */}
+          <div className="max-h-[60vh] overflow-y-auto p-4 bg-slate-50/50">
+            {searchQuery ? (
+              filteredResults.length > 0 ? (
+                <div className="space-y-2">
+                  <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 py-2">Results</h5>
+                  {filteredResults.map(item => (
+                    <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-cyan-200 hover:shadow-lg hover:shadow-cyan-500/10 transition-all text-left group">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} /></svg>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900 group-hover:text-cyan-600 transition-colors">{item.label}</h4>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">{item.type}</p>
+                      </div>
+                      <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-12 text-center text-slate-400">
+                  <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
+                  <p className="font-bold">No results found for "{searchQuery}"</p>
+                </div>
+              )
+            ) : (
+              <div className="space-y-4">
+                <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4">Suggested</h5>
+                {/* Static quick links */}
+                <div className="grid grid-cols-2 gap-3 px-2">
+                  {[
+                    { label: t('nav.business'), id: 'business', color: 'text-blue-500' },
+                    { label: t('nav.network'), id: 'network', color: 'text-cyan-500' },
+                    { label: t('nav.career'), id: 'career', color: 'text-purple-500' },
+                    { label: t('nav.investor'), id: 'investor', color: 'text-orange-500' },
+                  ].map(item => (
+                    <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-md transition-all text-left">
+                      <span className={`text-[10px] font-black uppercase tracking-widest ${item.color}`}>{item.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-              <input
-                type="text"
-                autoFocus={isSearchOpen}
-                placeholder="Pencarian Semua Konten..."
-                className="w-full pl-24 pr-12 py-8 md:py-10 bg-gray-50 border-2 border-gray-100 rounded-[2rem] text-2xl md:text-4xl font-black text-gray-900 placeholder:text-gray-300 focus:ring-0 focus:border-primary/20 transition-all outline-none italic tracking-tighter"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    // Logic for search execution
-                    console.log('Searching for:', searchQuery);
-                    // maybe navigate to search results
-                    setIsSearchOpen(false);
-                  }
-                }}
-              />
-            </div>
-
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <span className="text-xs font-black text-gray-400 uppercase tracking-widest mr-2 py-2">Suggested:</span>
-              <button onClick={() => setSearchQuery('Bisnis')} className="px-5 py-2 bg-gray-50 hover:bg-primary/10 hover:text-primary text-gray-600 rounded-full text-xs font-bold transition-all border border-gray-100">Bisnis</button>
-              <button onClick={() => setSearchQuery('Karir')} className="px-5 py-2 bg-gray-50 hover:bg-primary/10 hover:text-primary text-gray-600 rounded-full text-xs font-bold transition-all border border-gray-100">Karir</button>
-              <button onClick={() => setSearchQuery('Layanan')} className="px-5 py-2 bg-gray-50 hover:bg-primary/10 hover:text-primary text-gray-600 rounded-full text-xs font-bold transition-all border border-gray-100">Layanan</button>
-              <button onClick={() => setSearchQuery('Investor')} className="px-5 py-2 bg-gray-50 hover:bg-primary/10 hover:text-primary text-gray-600 rounded-full text-xs font-bold transition-all border border-gray-100">Investor</button>
-            </div>
+            )}
           </div>
         </div>
       </div>

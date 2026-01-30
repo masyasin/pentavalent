@@ -89,7 +89,7 @@ const FAQPage: React.FC = () => {
                 }}
             />
 
-            <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <main className="max-w-4xl mx-auto px-6 md:px-8 py-20">
                 {/* Search Bar */}
                 <div className="relative mb-12">
                     <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
@@ -98,7 +98,7 @@ const FAQPage: React.FC = () => {
                     <input
                         type="text"
                         placeholder={language === 'id' ? 'Cari pertanyaan...' : 'Search questions...'}
-                        className="w-full pl-16 pr-6 py-6 bg-white border-2 border-gray-100 rounded-3xl text-lg font-bold shadow-xl shadow-gray-100/50 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 transition-all outline-none"
+                        className="w-full pl-16 pr-6 py-4 md:py-6 bg-white border-2 border-gray-100 rounded-[2rem] text-lg font-bold shadow-xl shadow-gray-100/50 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 transition-all outline-none"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -144,12 +144,12 @@ const FAQPage: React.FC = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
-                                    className={`bg-white border rounded-2xl overflow-hidden transition-all duration-300 ${openFaqId === faq.id ? 'border-blue-200 shadow-xl shadow-blue-50 ring-4 ring-blue-50' : 'border-gray-100 hover:border-gray-200'
+                                    className={`bg-white border rounded-[2rem] overflow-hidden transition-all duration-300 ${openFaqId === faq.id ? 'border-blue-200 shadow-xl shadow-blue-50 ring-4 ring-blue-50' : 'border-gray-100 hover:border-gray-200'
                                         }`}
                                 >
                                     <button
                                         onClick={() => toggleFaq(faq.id)}
-                                        className="w-full px-8 py-6 flex items-center justify-between gap-6 text-left"
+                                        className="w-full px-6 md:px-8 py-4 md:py-6 flex items-center justify-between gap-6 text-left"
                                     >
                                         <h3 className={`text-lg font-bold transition-colors ${openFaqId === faq.id ? 'text-blue-700' : 'text-gray-900'
                                             }`}>
@@ -166,7 +166,7 @@ const FAQPage: React.FC = () => {
                                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                                         className="overflow-hidden"
                                     >
-                                        <div className="px-8 pb-8 pt-2">
+                                        <div className="px-6 md:px-8 pb-8 pt-2">
                                             <div
                                                 className="prose prose-blue max-w-none text-gray-600 leading-relaxed"
                                                 dangerouslySetInnerHTML={{
@@ -182,7 +182,7 @@ const FAQPage: React.FC = () => {
                 </div>
 
                 {/* Contact CTA */}
-                <div className="mt-20 bg-blue-600 rounded-[2.5rem] p-12 text-center text-white relative overflow-hidden">
+                <div className="mt-16 md:mt-20 bg-blue-600 rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-12 text-center text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 

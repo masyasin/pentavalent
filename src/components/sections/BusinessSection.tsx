@@ -53,19 +53,19 @@ const BusinessSection: React.FC = () => {
   if (loading || businessLines.length === 0) return null;
 
   return (
-    <section id="business" className="py-40 bg-white relative overflow-hidden">
+    <section id="business" className="py-20 md:py-40 bg-white relative overflow-hidden">
       {/* Dynamic Background Accents */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[1000px] h-[1000px] bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         {/* Header Section */}
         <div className="relative flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-12">
           <div className="lg:max-w-2xl relative z-10">
             <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-8 shadow-xl shadow-slate-900/10">
               {t('business.tagline')}
             </span>
-            <h2 className="text-5xl sm:text-7xl font-black tracking-tighter leading-[0.9] mb-10 text-slate-900">
+            <h2 className="text-2xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-8 md:mb-10 text-slate-900">
               {t('business.title.text')} <br />
               <span className="text-cyan-500 italic">{t('business.title.italic')}</span>
             </h2>
@@ -113,22 +113,22 @@ const BusinessSection: React.FC = () => {
           </div>
 
           {/* Futuristic Tab Switcher */}
-          <div className="flex flex-wrap lg:flex-nowrap bg-slate-50 p-2 rounded-[2.5rem] border border-slate-100 shadow-inner group/tabs relative z-10 w-full lg:w-auto">
+          <div className="flex flex-col lg:flex-row bg-slate-50 p-2 rounded-[2rem] border border-slate-100 shadow-inner group/tabs relative z-10 w-full lg:w-auto gap-2 lg:gap-0">
             {businessLines.map((line, index) => (
               <button
                 key={line.id}
                 onClick={() => setActiveTab(index)}
-                className={`relative flex-1 px-10 py-5 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.25em] transition-all duration-700 flex items-center justify-center gap-3 whitespace-nowrap overflow-hidden ${activeTab === index
+                className={`relative flex-1 px-6 py-4 lg:px-10 lg:py-5 rounded-[1.5rem] lg:rounded-[2rem] text-[10px] lg:text-[11px] font-black uppercase tracking-wider transition-all duration-700 flex items-center justify-center gap-3 ${activeTab === index
                   ? 'text-white'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
               >
                 {activeTab === index && (
-                  <div className="absolute inset-0 bg-slate-900 animate-in fade-in zoom-in duration-500"></div>
+                  <div className="absolute inset-0 bg-slate-900 animate-in fade-in zoom-in duration-500 rounded-[1.5rem] lg:rounded-[2rem]"></div>
                 )}
-                <span className="relative z-10">{language === 'id' ? line.title_id : line.title_en}</span>
+                <span className="relative z-10 text-center">{language === 'id' ? line.title_id : line.title_en}</span>
                 {activeTab === index && (
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 relative z-10 animate-pulse"></div>
+                  <div className="hidden lg:block w-1.5 h-1.5 rounded-full bg-cyan-400 relative z-10 animate-pulse"></div>
                 )}
               </button>
             ))}
@@ -136,8 +136,8 @@ const BusinessSection: React.FC = () => {
         </div>
 
         {/* Main Display Card */}
-        <div className="bg-white rounded-[4rem] overflow-hidden border border-slate-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.06)] group/main">
-          <div className="grid lg:grid-cols-12 min-h-[650px]">
+        <div className="bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-slate-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.06)] group/main">
+          <div className="grid lg:grid-cols-12 min-h-[500px] lg:min-h-[650px]">
             {/* Left: Interactive Visuals */}
             <div className="lg:col-span-5 relative h-[400px] lg:h-auto overflow-hidden">
               <div className="embla h-full w-full" ref={emblaRef}>
@@ -166,7 +166,7 @@ const BusinessSection: React.FC = () => {
                   <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
                   <span className="text-[10px] font-black text-white uppercase tracking-widest">{t('business.division')}</span>
                 </div>
-                <h3 className="text-4xl font-black text-white leading-tight tracking-tighter">
+                <h3 className="text-2xl md:text-4xl font-black text-white leading-tight tracking-tighter">
                   {t('business.integrity')} <br />
                   <span className="opacity-60">{t('business.transaction')}</span>
                 </h3>
@@ -184,17 +184,17 @@ const BusinessSection: React.FC = () => {
             </div>
 
             {/* Right: Content & Intelligence */}
-            <div className="lg:col-span-7 p-12 lg:p-24 flex flex-col justify-center bg-white relative">
+            <div className="lg:col-span-7 p-6 md:p-12 lg:p-24 flex flex-col justify-center bg-white relative">
               {/* Subtle background letter */}
               <div className="absolute top-0 right-0 text-[20rem] font-black text-slate-50 leading-none select-none pointer-events-none opacity-50">
                 {String.fromCharCode(65 + activeTab)}
               </div>
 
               <div className="relative z-10">
-                <h3 className="text-5xl lg:text-6xl font-black text-slate-900 mb-10 tracking-tighter leading-none">
+                <h3 className="text-2xl md:text-4xl lg:text-6xl font-black text-slate-900 mb-6 md:mb-10 tracking-tighter leading-none">
                   {language === 'id' ? businessLines[activeTab].title_id : businessLines[activeTab].title_en}
                 </h3>
-                <p className="text-xl text-slate-500 font-medium leading-relaxed mb-16 max-w-xl">
+                <p className="text-base md:text-xl text-slate-500 font-medium leading-relaxed mb-12 md:mb-16 max-w-xl">
                   {language === 'id' ? businessLines[activeTab].description_id : businessLines[activeTab].description_en}
                 </p>
 
@@ -228,7 +228,7 @@ const BusinessSection: React.FC = () => {
                     { label: 'Partners', value: '70+ Principals' }
                   ]).map((stat, index) => (
                     <div key={index} className="group/stat">
-                      <div className="text-4xl font-black text-slate-900 mb-2 group-hover/stat:text-cyan-500 transition-colors tracking-tighter">
+                      <div className="text-2xl md:text-4xl font-black text-slate-900 mb-2 group-hover/stat:text-cyan-500 transition-colors tracking-tighter">
                         {stat.value}
                       </div>
                       <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] group-hover/stat:text-slate-600 transition-colors">
@@ -243,7 +243,7 @@ const BusinessSection: React.FC = () => {
         </div>
 
         {/* Strategic Advantage Cards - Fully Reimagined */}
-        <div className="grid lg:grid-cols-3 gap-10 mt-32">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-10 mt-20 md:mt-32">
           {[
             {
               title: t('business.advantage.cert.title'),
@@ -267,7 +267,7 @@ const BusinessSection: React.FC = () => {
               bg: 'bg-indigo-50'
             }
           ].map((item, i) => (
-            <div key={i} className="group relative bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 overflow-hidden">
+            <div key={i} className="group relative bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 overflow-hidden">
               {/* Background Accent */}
               <div className={`absolute top-0 right-0 w-32 h-32 ${item.bg} rounded-bl-[8rem] transform transition-transform duration-700 group-hover:scale-150 group-hover:bg-slate-900 group-hover:opacity-5 opacity-50`}></div>
 
@@ -275,11 +275,11 @@ const BusinessSection: React.FC = () => {
                 {item.icon}
               </div>
 
-              <h4 className="text-3xl font-black text-slate-900 mb-6 tracking-tighter group-hover:text-cyan-600 transition-colors">
+              <h4 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 md:mb-6 tracking-tighter group-hover:text-cyan-600 transition-colors">
                 {item.title}
               </h4>
 
-              <p className="text-lg text-slate-500 font-medium leading-relaxed group-hover:text-slate-600 transition-colors">
+              <p className="text-sm md:text-lg text-slate-500 font-medium leading-relaxed group-hover:text-slate-600 transition-colors">
                 {item.desc}
               </p>
 

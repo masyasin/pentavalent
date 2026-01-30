@@ -149,14 +149,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               </div>
 
               {/* Content */}
-              <div className="relative h-full flex items-center pt-24 z-10">
-                <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 w-full">
+              <div className="relative h-full flex items-center pt-20 md:pt-24 z-10">
+                <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 w-full">
                   <div className="max-w-3xl">
                     {/* Decorative Top Line - Show ONLY if content exists */}
                     {((language === 'id' ? slide.title_id : slide.title_en) || (language === 'id' ? slide.subtitle_id : slide.subtitle_en) || (language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en)) && (
-                      <div className="flex items-center gap-4 mb-10 animate-slide-in">
-                        <div className="h-[2px] w-12 bg-accent shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
-                        <span className="text-[10px] sm:text-[11px] font-black text-accent uppercase tracking-[0.4em]">Enterprise Logistics Intelligence</span>
+                      <div className="flex items-center gap-4 mb-8 md:mb-10 animate-slide-in">
+                        <div className="h-[2px] w-8 md:w-12 bg-accent shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+                        <span className="text-[9px] sm:text-[11px] font-black text-accent uppercase tracking-[0.4em]">Enterprise Logistics Intelligence</span>
                       </div>
                     )}
 
@@ -164,7 +164,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     {(language === 'id' ? slide.title_id : slide.title_en) && (
                       <div className="relative group">
                         <div className={`absolute -left-4 top-0 w-2 h-full bg-accent transition-all duration-700 ${selectedIndex === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}></div>
-                        <h1 className={`text-5xl sm:text-6xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] text-white transition-all duration-1000 ${selectedIndex === index ? 'animate-title-pop' : 'opacity-0'}`}>
+                        <h1 className={`text-3xl sm:text-5xl lg:text-7xl xl:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] text-white transition-all duration-1000 ${selectedIndex === index ? 'animate-title-pop' : 'opacity-0'}`}>
                           {language === 'id' ? slide.title_id : slide.title_en}
                         </h1>
                       </div>
@@ -172,32 +172,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
 
                     {/* Subtitle - Conditional */}
                     {(language === 'id' ? slide.subtitle_id : slide.subtitle_en) && (
-                      <p className="text-xl sm:text-2xl mb-6 max-w-2xl font-medium leading-relaxed animate-slide-in [animation-delay:200ms] text-white/90">
+                      <p className="text-base sm:text-xl md:text-2xl mb-6 max-w-2xl font-medium leading-relaxed animate-slide-in [animation-delay:200ms] text-white/90">
                         {language === 'id' ? slide.subtitle_id : slide.subtitle_en}
                       </p>
                     )}
 
                     {/* Separator - Conditional based on title/subtitle existence */}
                     {((language === 'id' ? slide.title_id : slide.title_en) || (language === 'id' ? slide.subtitle_id : slide.subtitle_en)) && (
-                      <div className="flex items-center gap-4 mb-12 animate-fade-in [animation-delay:300ms]">
-                        <div className="h-px w-12 bg-accent/50"></div>
-                        <span className="text-xs sm:text-sm font-black text-white/60 uppercase tracking-[0.6em] italic">Healthcare & Beyond</span>
+                      <div className="flex items-center gap-4 mb-8 md:mb-12 animate-fade-in [animation-delay:300ms]">
+                        <div className="h-px w-8 md:w-12 bg-accent/50"></div>
+                        <span className="text-[10px] sm:text-sm font-black text-white/60 uppercase tracking-[0.6em] italic">Healthcare & Beyond</span>
                       </div>
                     )}
 
                     {/* Buttons - Always Show if text is defined */}
                     {(language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en) && (
-                      <div className="flex flex-wrap gap-6 animate-slide-in [animation-delay:400ms]">
+                      <div className="flex flex-wrap gap-4 md:gap-6 animate-slide-in [animation-delay:400ms]">
                         <button
                           onClick={() => onNavigate(slide.cta_primary_link.replace('#', ''))}
-                          className="px-10 py-5 bg-accent text-white font-black rounded-2xl hover:opacity-90 transition-all duration-500 shadow-2xl flex items-center gap-3 group"
+                          className="px-6 py-4 sm:px-10 sm:py-5 bg-accent text-white font-black rounded-2xl hover:opacity-90 transition-all duration-500 shadow-2xl flex items-center gap-3 group text-sm sm:text-base"
                         >
                           {language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en}
                           <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                         </button>
                         <button
                           onClick={() => onNavigate(slide.cta_secondary_link.replace('#', ''))}
-                          className="px-10 py-5 bg-white/10 backdrop-blur-xl text-white border border-white/20 font-black rounded-2xl hover:bg-white/20 transition-all duration-500"
+                          className="px-6 py-4 sm:px-10 sm:py-5 bg-white/10 backdrop-blur-xl text-white border border-white/20 font-black rounded-2xl hover:bg-white/20 transition-all duration-500 text-sm sm:text-base"
                         >
                           {language === 'id' ? slide.cta_secondary_text_id : slide.cta_secondary_text_en}
                         </button>

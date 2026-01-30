@@ -84,7 +84,7 @@ const ContactSection: React.FC = () => {
   ];
 
   return (
-    <section id="contact" className="py-32 bg-slate-50 relative overflow-hidden">
+    <section id="contact" className="py-20 md:py-32 bg-slate-50 relative overflow-hidden">
       {/* Tactical Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:40px_40px] opacity-40"></div>
@@ -92,12 +92,12 @@ const ContactSection: React.FC = () => {
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-200/40 rounded-full blur-[100px] animate-float-slow"></div>
       </div>
 
-      <div className="max-w-[1700px] mx-auto px-8 md:px-12 lg:px-16 relative z-10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="mb-24">
           <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
             {t('contact.tagline')}
           </span>
-          <h2 className="text-6xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+          <h2 className="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
             {language === 'id' ? 'Hubungkan' : 'Connect'} <span className="text-cyan-500 italic">{language === 'id' ? 'Visi Anda' : 'Your Vision'}</span>
           </h2>
         </div>
@@ -105,7 +105,7 @@ const ContactSection: React.FC = () => {
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Neural Communication Form */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-[4rem] p-12 md:p-16 border border-slate-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] relative overflow-hidden group">
+            <div className="bg-white rounded-[2rem] md:rounded-[4rem] p-6 sm:p-12 md:p-16 border border-slate-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] relative overflow-hidden group">
               <div className="relative z-10">
                 <h3 className="text-3xl font-black text-slate-900 mb-12 tracking-tighter">{t('contact.cta.subtitle')}</h3>
 
