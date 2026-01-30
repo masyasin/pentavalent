@@ -127,12 +127,12 @@ const NewsSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {t('news.tagline')}
             </span>
-            <h2 className="text-2xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
-              {t('news.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('news.title.italic')}</span>
+            <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
+              {t('news.title')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('news.subtitle')}</span>
             </h2>
-            <p className="text-xl text-gray-500 font-medium leading-relaxed">
-              {t('news.description')}
+            <p className="text-fluid-body text-gray-500 max-w-3xl">
+              {t('news.desc')}
             </p>
           </div>
           <div className="hidden sm:flex flex-col sm:flex-row items-start sm:items-center gap-6">
@@ -184,7 +184,7 @@ const NewsSection: React.FC = () => {
                   <div key={item.id} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-6">
                     <article
                       onClick={() => navigate(`/news/${item.slug}`)}
-                      className="group relative bg-white rounded-[3rem] md:rounded-[4rem] h-full overflow-hidden border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_70px_rgba(6,182,212,0.15)] hover:-translate-y-5 transition-all duration-700 cursor-pointer"
+                      className="group bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-gray-100 shadow-xl transition-all duration-700 hover:-translate-y-4 enterprise-shadow touch-active active:scale-[0.98]"
                     >
                       {/* Interactive Top Shine */}
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-10 pointer-events-none bg-gradient-to-tr from-transparent via-white/20 to-transparent"></div>

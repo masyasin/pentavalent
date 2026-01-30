@@ -95,11 +95,11 @@ const BusinessSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-8 shadow-xl shadow-primary/5">
               {t('business.tagline')}
             </span>
-            <h2 className="text-2xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 mb-8 md:mb-10 text-slate-900">
+            <h2 className="text-fluid-h1 py-2 mb-8 md:mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
               {t('business.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('business.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('business.title.italic')}</span>
             </h2>
-            <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed max-w-xl">
+            <p className="text-fluid-body text-slate-500 max-w-xl">
               {t('business.description')}
             </p>
           </div>
@@ -148,10 +148,11 @@ const BusinessSection: React.FC = () => {
               <button
                 key={line.id}
                 onClick={() => setActiveTab(index)}
-                className={`relative flex-1 px-4 py-3 md:px-10 md:py-5 rounded-xl md:rounded-[2rem] text-[10px] md:text-[11px] font-black uppercase tracking-wider transition-all duration-700 flex items-center justify-center gap-2 md:gap-3 ${activeTab === index
+                className={`relative flex-1 px-4 py-3 md:px-10 md:py-5 rounded-xl md:rounded-[2rem] text-[10px] md:text-[11px] font-black uppercase tracking-wider transition-all duration-700 flex items-center justify-center gap-2 md:gap-3 touch-active ${activeTab === index
                   ? 'text-white'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
+                aria-label={`Switch to ${language === 'id' ? line.title_id : line.title_en} division`}
               >
                 {activeTab === index && (
                   <div className="absolute inset-0 wow-button-gradient animate-in fade-in zoom-in duration-500 rounded-xl md:rounded-[2rem]"></div>
@@ -165,8 +166,8 @@ const BusinessSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Display Card */}
-        <div className="bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-slate-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.06)] group/main">
+        {/* Main Display Card - Enterprise App Shell Architecture */}
+        <div className="bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-slate-100 shadow-4xl group/main">
           <div className="grid lg:grid-cols-12 min-h-[500px] lg:min-h-[650px]">
             {/* Left: Interactive Visuals */}
             <div className="lg:col-span-5 relative h-[400px] lg:h-auto overflow-hidden">

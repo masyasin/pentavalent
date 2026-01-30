@@ -126,8 +126,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 </button>
 
                 <button
-                  className={`xl:hidden p-3 rounded-full transition-all duration-500 ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
+                  className={`xl:hidden p-3 rounded-full transition-all duration-500 touch-active ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  aria-label="Toggle Menu"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M8 18h12"} />
@@ -166,9 +167,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                       onNavigate(item.id);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-base font-bold transition-all ${activeSection === item.id ? 'bg-cyan-50 text-cyan-600' : 'text-gray-600 hover:bg-gray-50 hover:text-cyan-600'}`}
+                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-base font-bold transition-all touch-active ${activeSection === item.id ? 'bg-cyan-50 text-cyan-600 border-l-4 border-cyan-500' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
-                    {item.label}
+                    <div className="flex items-center justify-between">
+                      <span>{item.label}</span>
+                      <svg className="w-4 h-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+                    </div>
                   </button>
                 ))}
               </nav>

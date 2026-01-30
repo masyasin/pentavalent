@@ -45,11 +45,17 @@
     --input: 205 40% 90%;
     --ring: 202 85% 62%;
 
-    --radius: 1.5rem;
+    --radius: 1rem;
+    --mobile-section-radius: 2rem;
 
-    --medical-blue: 202 85% 62%;
-    --medical-green: 190 70% 70%;
-    --medical-deep: 215 50% 30%;
+    /* Institutional Gradient Palette */
+    --inst-blue: 221 83% 53%;
+    --inst-cyan: 188 86% 53%;
+    --inst-emerald: 160 84% 39%;
+    --inst-gradient: linear-gradient(135deg, hsl(var(--inst-blue)), hsl(var(--inst-cyan)));
+
+    /* System Interaction Colors */
+    --touch-feedback: rgba(37, 99, 235, 0.1);
   }
 }
 
@@ -113,7 +119,23 @@
 /* --- Professional Design Utilities --- */
 
 .section-padding {
-  @apply py-12 sm:py-24;
+  @apply py-16 sm:py-24;
+}
+
+/* Fluid Typography for Mobile-Native scaling */
+.text-fluid-h1 {
+  @apply text-3xl sm:text-5xl lg:text-7xl xl:text-8xl font-black tracking-tighter;
+}
+
+.text-fluid-body {
+  @apply text-base md:text-lg lg:text-xl font-medium leading-relaxed;
+}
+
+/* Haptic-Feedback Visuals */
+.touch-active:active {
+  background-color: var(--touch-feedback);
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 .text-gradient {

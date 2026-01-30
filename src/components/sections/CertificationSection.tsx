@@ -90,11 +90,11 @@ const CertificationSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-accent/5 text-accent rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-accent/10">
               {t('qa.title')}
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-10 text-slate-900">
+            <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900">
               {t('qa.subtitle')?.split(' ')[0]} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-4">{t('qa.subtitle')?.split(' ').slice(1).join(' ')}</span>
             </h2>
-            <p className="text-xl text-gray-500 font-medium leading-relaxed mb-10">
+            <p className="text-fluid-body text-gray-500 mb-10">
               {t('qa.desc')}
             </p>
             <div className="space-y-6">
@@ -143,7 +143,7 @@ const CertificationSection: React.FC = () => {
                       {cert.name}
                     </h3>
 
-                    <p className="text-sm text-slate-600 font-medium leading-relaxed mb-6">
+                    <p className="text-fluid-body text-slate-600 mb-6">
                       {language === 'id' ? cert.description_id : cert.description_en}
                     </p>
 

@@ -95,11 +95,11 @@ const AboutSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {info ? (language === 'id' ? info.tagline_id : info.tagline_en) : t('about.tagline')}
             </span>
-            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 mb-6 md:mb-10 text-slate-900">
+            <h2 className="text-fluid-h1 py-2 mb-6 md:mb-10 text-slate-900">
               {info ? (language === 'id' ? info.title_text_id : info.title_text_en) : t('about.title.text')} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic md:px-6 inline-block">{info ? (language === 'id' ? info.title_italic_id : info.title_italic_en) : t('about.title.italic')}</span>
             </h2>
-            <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed mb-8 md:mb-10">
+            <p className="text-fluid-body text-gray-500 mb-8 md:mb-10">
               {info ? (language === 'id' ? info.description_id : info.description_en) : t('about.description')}
             </p>
             <div className="grid grid-cols-2 gap-8 pt-10 border-t border-gray-100">
@@ -187,7 +187,7 @@ const AboutSection: React.FC = () => {
 
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 perspective-1000">
                   {/* Vision Card - Ultra Premium */}
-                  <div className="group relative transform-gpu hover:scale-[1.02] transition-all duration-700 ease-out">
+                  <div className="group relative transform-gpu hover:scale-[1.02] transition-all duration-700 ease-out active:scale-[0.98]">
                     {/* Animated Glow Border */}
                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 rounded-[3.5rem] opacity-0 group-hover:opacity-100 blur-xl transition-all duration-700 animate-gradient-xy"></div>
 
@@ -255,7 +255,7 @@ const AboutSection: React.FC = () => {
                   </div>
 
                   {/* Mission Card - Ultra Premium */}
-                  <div className="group relative transform-gpu hover:scale-[1.02] transition-all duration-700 ease-out">
+                  <div className="group relative transform-gpu hover:scale-[1.02] transition-all duration-700 ease-out active:scale-[0.98]">
                     {/* Animated Glow Border */}
                     <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 via-cyan-500 to-emerald-600 rounded-[3.5rem] opacity-0 group-hover:opacity-100 blur-xl transition-all duration-700 animate-gradient-xy"></div>
 
@@ -466,7 +466,7 @@ const AboutSection: React.FC = () => {
                     return (
                       <div
                         key={value.id}
-                        className="group relative transform-gpu hover:scale-105 transition-all duration-500 ease-out"
+                        className="group relative transform-gpu hover:scale-105 transition-all duration-500 ease-out active:scale-[0.98]"
                       >
                         {/* Animated Glow Border */}
                         <div className={`absolute -inset-1 bg-gradient-to-r ${colors.border} rounded-[3rem] opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500 animate-gradient-x`}></div>
@@ -494,9 +494,9 @@ const AboutSection: React.FC = () => {
                           <div className="relative z-10 flex flex-col items-center text-center h-full">
                             {/* Premium Icon */}
                             <div className="mb-10 mt-8 relative">
-                              <div className={`absolute inset-0 bg-gradient-to-br ${colors.iconGlow} rounded-[2rem] blur-xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500`}></div>
-                              <div className={`relative w-24 h-24 bg-gradient-to-br ${colors.iconBg} rounded-[2rem] flex items-center justify-center shadow-2xl ${colors.iconShadow} group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/10`}>
-                                <div className="absolute inset-0 bg-white/10 rounded-[2rem] backdrop-blur-sm"></div>
+                              <div className={`absolute inset-0 bg-gradient-to-br ${colors.iconGlow} rounded-[2.5rem] blur-xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500`}></div>
+                              <div className="relative w-24 h-24 bg-gradient-to-br from-slate-800/90 via-slate-900/90 to-slate-950/90 backdrop-blur-xl rounded-[2.5rem] p-10 md:p-12 border border-white/10 overflow-hidden shadow-2xl">
+                                <div className="absolute inset-0 bg-white/10 rounded-[2.5rem] backdrop-blur-sm"></div>
                                 <div className="relative z-10 text-white scale-125">
                                   {getIcon(value.icon_name)}
                                 </div>

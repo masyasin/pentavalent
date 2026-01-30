@@ -60,11 +60,11 @@ const PartnersSection: React.FC = () => {
           <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] mb-6 border border-primary/10">
             {t('partners.tagline')}
           </span>
-          <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
+          <h2 className="text-fluid-h1 py-2 mb-8 text-slate-900">
             {t('partners.title.text')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('partners.title.italic')}</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('partners.title.italic')}</span>
           </h2>
-          <p className="text-xl text-gray-500 font-medium leading-relaxed uppercase-none">
+          <p className="text-fluid-body text-gray-500">
             {t('partners.description')}
           </p>
         </div>
@@ -103,8 +103,9 @@ const PartnersSection: React.FC = () => {
             {filteredPartners.map((partner, index) => (
               <div
                 key={partner.id}
-                className="bg-white rounded-[2rem] p-10 flex items-center justify-center hover:shadow-4xl hover:-translate-y-2 transition-all duration-500 cursor-pointer group border border-gray-100 enterprise-shadow relative overflow-hidden"
+                className="bg-white rounded-[2rem] p-10 flex items-center justify-center hover:shadow-4xl hover:-translate-y-2 transition-all duration-500 cursor-pointer group border border-gray-100 enterprise-shadow relative overflow-hidden touch-active active:scale-[0.98]"
                 onClick={() => partner.website && window.open(partner.website, '_blank')}
+                aria-label={`Visit ${partner.name} website`}
               >
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className={`w-20 h-20 ${partnerColors[index % partnerColors.length]} rounded-3xl flex items-center justify-center text-white font-black text-2xl group-hover:scale-110 group-hover:wow-button-gradient transition-all shadow-lg`}>
@@ -200,9 +201,12 @@ const PartnersSection: React.FC = () => {
               <p className="text-blue-100/60 mb-12 max-w-2xl text-xl leading-relaxed font-medium">
                 {t('partners.cta.description')}
               </p>
-              <button className="px-14 py-6 wow-button-gradient text-white font-black rounded-[2rem] hover:shadow-cyan-500/20 hover:scale-105 transition-all duration-500 shadow-2xl flex items-center gap-4 group text-lg hover-move-icon">
+              <button
+                className="px-14 py-6 wow-button-gradient text-white font-black rounded-[2rem] hover:shadow-cyan-500/20 hover:scale-105 transition-all duration-500 shadow-2xl flex items-center gap-4 group text-lg hover-move-icon touch-active"
+                aria-label={t('partners.cta.button')}
+              >
                 {t('partners.cta.button')}
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                <svg className="w-6 h-6 rotate-animation" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </button>
             </div>
           </div>

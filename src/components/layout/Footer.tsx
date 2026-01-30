@@ -237,22 +237,33 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Column 2: Contact Information */}
           <div className="pt-2">
             <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>{t('footer.column.contact')}</h4>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="flex items-start gap-4 group">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center wow-text-primary shrink-0 group-hover:wow-button-gradient group-hover:text-white transition-all"><MapPin size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.hq')}</p><p className="text-white text-xs font-medium leading-relaxed">Tanah Abang III No. 12<br />Jakarta, Indonesia</p></div>
-              </div>
-              <div className="flex items-start gap-4 group">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center wow-text-primary shrink-0 group-hover:wow-button-gradient group-hover:text-white transition-all"><Mail size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.digital')}</p><p className="text-white text-xs font-medium">info@pentavalent.co.id</p></div>
-              </div>
-              <div className="flex items-start gap-4 group">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center wow-text-primary shrink-0 group-hover:wow-button-gradient group-hover:text-white transition-all"><Phone size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.ho')}</p><p className="text-white text-xs font-medium">+62 21 350-1010</p></div>
-              </div>
-              <div className="flex items-start gap-4 group">
-                <div className="mt-1 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center wow-text-primary shrink-0 group-hover:wow-button-gradient group-hover:text-white transition-all"><Clock size={16} /></div>
-                <div><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{t('footer.contact.hours')}</p><p className="text-white text-xs font-medium">{t('footer.contact.days')}</p></div>
+            <div className="space-y-6 pt-2">
+              <a href="tel:+622158061XX" className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
+                  <Phone size={18} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.ho')}</span>
+                  <span className="text-white font-bold group-hover/link:text-accent transition-colors">+62 21 580 61XX</span>
+                </div>
+              </a>
+              <a href="mailto:info@pentavalent.co.id" className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
+                  <Mail size={18} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.digital')}</span>
+                  <span className="text-white font-bold group-hover/link:text-accent transition-colors">info@pentavalent.co.id</span>
+                </div>
+              </a>
+              <div className="flex items-start gap-4 group/link p-2">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-accent">
+                  <MapPin size={18} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.hq')}</span>
+                  <span className="text-white/80 text-xs font-semibold">Tanah Abang III No. 12, Jakarta</span>
+                </div>
               </div>
             </div>
           </div>
@@ -289,8 +300,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <a href="/code-of-conduct" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">{t('footer.code_conduct')}</a>
           </div>
         </div>
-      </div>
-    </footer>
+      </div >
+    </footer >
   );
 };
 

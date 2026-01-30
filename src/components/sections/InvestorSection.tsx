@@ -79,11 +79,11 @@ const InvestorSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {t('investor.tagline')}
             </span>
-            <h2 className="text-3xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
+            <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
               {t('investor.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('investor.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('investor.title.italic')}</span>
             </h2>
-            <p className="text-xl text-gray-500 font-medium leading-relaxed">
+            <p className="text-fluid-body text-gray-500 max-w-3xl">
               {t('investor.description')}
             </p>
           </div>

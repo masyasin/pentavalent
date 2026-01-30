@@ -50,11 +50,11 @@ const ManagementSection: React.FC = () => {
           <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
             {t('mgmt.title')}
           </span>
-          <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-10 text-slate-900">
+          <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900">
             {t('mgmt.visionary')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('mgmt.governance')}</span>
           </h2>
-          <p className="text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
+          <p className="text-fluid-body text-gray-500 max-w-3xl mx-auto">
             {t('mgmt.desc')}
           </p>
         </div>
@@ -63,7 +63,7 @@ const ManagementSection: React.FC = () => {
           {management.map((person) => (
             <div
               key={person.id}
-              className="group bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-gray-100 enterprise-shadow transition-all duration-700 hover:-translate-y-4 wow-border-glow relative"
+              className="group bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-gray-100 enterprise-shadow transition-all duration-700 hover:-translate-y-4 wow-border-glow relative touch-active active:scale-[0.98]"
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 group/img">
                 {/* Background Floating Decor */}

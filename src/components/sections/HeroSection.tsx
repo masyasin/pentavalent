@@ -156,7 +156,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     {(language === 'id' ? slide.title_id : slide.title_en) && (
                       <div className="relative group">
                         <div className={`absolute -left-4 top-0 w-2 h-full bg-accent transition-all duration-700 ${selectedIndex === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}></div>
-                        <h1 className={`text-3xl sm:text-5xl lg:text-7xl xl:text-8xl font-black mb-4 md:mb-8 tracking-tighter leading-[0.95] md:leading-[0.9] text-white transition-all duration-1000 ${selectedIndex === index ? 'animate-title-pop' : 'opacity-0'}`}>
+                        <h1 className={`text-fluid-h1 mb-4 md:mb-8 text-white transition-all duration-1000 ${selectedIndex === index ? 'animate-title-pop' : 'opacity-0'}`}>
                           {language === 'id' ? slide.title_id : slide.title_en}
                         </h1>
                       </div>
@@ -179,20 +179,25 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
 
                     {/* Buttons - Always Show if text is defined */}
                     {(language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en) && (
-                      <div className="flex flex-wrap gap-4 md:gap-6 animate-slide-in [animation-delay:400ms]">
+                      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-12 animate-slide-in [animation-delay:400ms]">
                         <button
                           onClick={() => onNavigate(slide.cta_primary_link.replace('#', ''))}
-                          className="px-6 py-4 sm:px-10 sm:py-5 wow-button-gradient font-black rounded-2xl flex items-center gap-3 group text-sm sm:text-base"
+                          className="w-full sm:w-auto px-10 py-5 wow-button-gradient text-white font-black rounded-full hover:shadow-cyan-500/20 hover:scale-105 transition-all duration-700 shadow-2xl flex items-center justify-center gap-3 group/btn touch-active"
+                          aria-label={language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en}
                         >
                           {language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en}
-                          <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                          <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                         </button>
-                        <button
-                          onClick={() => onNavigate(slide.cta_secondary_link.replace('#', ''))}
-                          className="px-6 py-4 sm:px-10 sm:py-5 bg-white/10 backdrop-blur-xl text-white border border-white/20 font-black rounded-2xl hover:bg-white/20 transition-all duration-500 text-sm sm:text-base"
-                        >
-                          {language === 'id' ? slide.cta_secondary_text_id : slide.cta_secondary_text_en}
-                        </button>
+                        {slide.cta_secondary_link && (
+                          <button
+                            onClick={() => onNavigate(slide.cta_secondary_link.replace('#', ''))}
+                            className="w-full sm:w-auto px-10 py-5 bg-white/10 backdrop-blur-md border border-white/20 text-white font-black rounded-full hover:bg-white/20 transition-all duration-500 flex items-center justify-center gap-3 touch-active"
+                            aria-label={language === 'id' ? slide.cta_secondary_text_id : slide.cta_secondary_text_en}
+                          >
+                            {language === 'id' ? slide.cta_secondary_text_id : slide.cta_secondary_text_en}
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 12l2 2 4-4" /></svg>
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>

@@ -151,14 +151,12 @@ const GCGSection: React.FC = () => {
                         {language === 'id' ? 'TATA KELOLA PERUSAHAAN' : 'CORPORATE GOVERNANCE'}
                     </span>
 
-                    <h2 className="text-4xl md:text-7xl font-black mb-10 tracking-tighter text-slate-900">
-                        Good <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 italic px-2">Corporate</span> Governance
+                    <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-emerald-500 pl-6 md:pl-10">
+                        {t('gcg.title.text')} <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('gcg.title.italic')}</span>
                     </h2>
-
-                    <p className="text-lg md:text-2xl text-slate-500 font-medium max-w-4xl mx-auto leading-relaxed">
-                        {language === 'id'
-                            ? 'Kami berkomitmen untuk menerapkan prinsip tata kelola perusahaan yang baik guna memastikan keberlanjutan dan kepercayaan jangka panjang.'
-                            : 'We are committed to implementing good corporate governance principles to ensure long-term sustainability and trust.'}
+                    <p className="text-fluid-body text-gray-500 max-w-3xl">
+                        {t('gcg.desc')}
                     </p>
                 </div>
 
