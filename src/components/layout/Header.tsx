@@ -165,7 +165,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                       onNavigate(item.id);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`w-full text-left px-5 py-4 rounded-2xl text-lg font-bold transition-all ${activeSection === item.id ? 'bg-cyan-50/50 wow-text-primary' : 'text-gray-600 hover:bg-gray-50 hover:wow-text-primary'}`}
+                    className={`w-full text-left px-5 py-4 rounded-2xl text-lg font-bold transition-all ${activeSection === item.id ? 'bg-cyan-50 text-cyan-600' : 'text-gray-600 hover:bg-gray-50 hover:text-cyan-600'}`}
                   >
                     {item.label}
                   </button>
