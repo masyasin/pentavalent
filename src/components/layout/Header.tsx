@@ -90,8 +90,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
                   className={`px-3 lg:px-5 py-2 rounded-full text-[11px] lg:text-[13px] font-black uppercase tracking-wider transition-all duration-300 relative group whitespace-nowrap ${activeSection === item.id
-                    ? (isScrolled ? 'bg-gradient-to-r from-[#0052D4] to-[#4364F7] text-white shadow-lg shadow-blue-500/30' : 'text-white bg-white/20')
-                    : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-50' : 'text-white/80 hover:text-white hover:bg-white/10')
+                    ? (isScrolled ? 'bg-gradient-to-r from-[#0052D4] to-[#4364F7] text-white shadow-lg shadow-blue-500/30' : 'text-white bg-white/10 ring-1 ring-white/20')
+                    : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-50' : 'text-white/80 hover:text-white hover:bg-white/5')
                     }`}
                 >
                   <span className="relative z-10">{item.label}</span>
