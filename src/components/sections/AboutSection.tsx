@@ -88,16 +88,16 @@ const AboutSection: React.FC = () => {
   );
 
   return (
-    <section id="about" className="py-20 md:py-32 bg-white relative overflow-hidden">
+    <section id="about" className="py-16 md:py-32 bg-white relative overflow-hidden">
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center mb-20 md:mb-32">
           <div className="lg:w-1/2">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {info ? (language === 'id' ? info.tagline_id : info.tagline_en) : t('about.tagline')}
             </span>
-            <h2 className="text-2xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 mb-6 md:mb-10 text-slate-900">
+            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 mb-6 md:mb-10 text-slate-900">
               {info ? (language === 'id' ? info.title_text_id : info.title_text_en) : t('about.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{info ? (language === 'id' ? info.title_italic_id : info.title_italic_en) : t('about.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic md:px-6 inline-block">{info ? (language === 'id' ? info.title_italic_id : info.title_italic_en) : t('about.title.italic')}</span>
             </h2>
             <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed mb-8 md:mb-10">
               {info ? (language === 'id' ? info.description_id : info.description_en) : t('about.description')}
@@ -136,7 +136,7 @@ const AboutSection: React.FC = () => {
         {/* Strategic Pillars: Vision & Mission - Next-Gen Premium Design */}
         <div className="mb-12 relative">
           {/* Contained Background with Rounded Corners */}
-          <div className="relative mx-auto max-w-[1600px] rounded-[4rem] overflow-hidden shadow-2xl">
+          <div className="relative mx-auto max-w-[1600px] rounded-3xl md:rounded-[4rem] overflow-hidden shadow-2xl">
             {/* Advanced Animated Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e27] via-[#0f1729] to-[#0a0e27]">
               {/* Animated Mesh Gradient */}
@@ -173,7 +173,7 @@ const AboutSection: React.FC = () => {
                     <span className="text-xs font-bold text-cyan-400">2024</span>
                   </div>
 
-                  <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
+                  <h3 className="text-4xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
                     <span className="inline-block hover:scale-105 transition-transform duration-300">{language === 'id' ? 'Fondasi' : 'Our'}</span>{' '}
                     <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic animate-gradient-x hover:scale-105 transition-transform duration-300 pr-2">Strategic</span>
                   </h3>
@@ -240,7 +240,7 @@ const AboutSection: React.FC = () => {
                         </div>
 
                         {/* Content */}
-                        <p className="text-2xl md:text-3xl text-blue-100/70 font-semibold leading-relaxed mb-12 italic group-hover:text-blue-100/90 transition-colors duration-500">
+                        <p className="text-xl md:text-3xl text-blue-100/70 font-semibold leading-relaxed mb-12 italic group-hover:text-blue-100/90 transition-colors duration-500">
                           "{info ? (language === 'id' ? info.vision_text_id : info.vision_text_en) : t('about.vision.text')}"
                         </p>
 
@@ -307,7 +307,7 @@ const AboutSection: React.FC = () => {
                         </div>
 
                         {/* Content */}
-                        <p className="text-2xl md:text-3xl text-emerald-100/70 font-semibold leading-relaxed mb-12 italic group-hover:text-emerald-100/90 transition-colors duration-500">
+                        <p className="text-xl md:text-3xl text-emerald-100/70 font-semibold leading-relaxed mb-12 italic group-hover:text-emerald-100/90 transition-colors duration-500">
                           "{info ? (language === 'id' ? info.mission_text_id : info.mission_text_en) : t('about.mission.text')}"
                         </p>
 
@@ -330,7 +330,7 @@ const AboutSection: React.FC = () => {
         {/* Core Values Section: Ultra Premium Redesign */}
         <div className="mb-12 relative">
           {/* Contained Background with Rounded Corners */}
-          <div className="relative mx-auto max-w-[1600px] rounded-[4rem] overflow-hidden shadow-2xl">
+          <div className="relative mx-auto max-w-[1600px] rounded-3xl md:rounded-[4rem] overflow-hidden shadow-2xl">
             {/* Advanced Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e27] via-[#0f1729] to-[#0a0e27]">
               {/* Animated Mesh Gradient */}
@@ -362,7 +362,7 @@ const AboutSection: React.FC = () => {
                     <span className="text-xs font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-white/80 transition-colors">{t('about.values.tagline')}</span>
                   </div>
 
-                  <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
+                  <h3 className="text-4xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
                     <span className="inline-block hover:scale-105 transition-transform duration-300">{language === 'id' ? 'Filosofi' : 'Philosophy of'}</span>{' '}
                     <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic animate-gradient-x hover:scale-105 transition-transform duration-300 pr-2">Penta Valent</span>
                   </h3>
@@ -546,7 +546,7 @@ const AboutSection: React.FC = () => {
         {/* Strategic Timeline: Ultra Premium Redesign */}
         <div className="mb-12 relative">
           {/* Contained Background with Rounded Corners */}
-          <div className="relative mx-auto max-w-[1600px] rounded-[4rem] overflow-hidden shadow-2xl">
+          <div className="relative mx-auto max-w-[1600px] rounded-3xl md:rounded-[4rem] overflow-hidden shadow-2xl">
             {/* Advanced Animated Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e27] via-[#0f1729] to-[#0a0e27]">
               {/* Animated Mesh Gradient */}
@@ -578,7 +578,7 @@ const AboutSection: React.FC = () => {
                     <span className="text-xs font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-white/80 transition-colors">{t('about.timeline.tagline')}</span>
                   </div>
 
-                  <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
+                  <h3 className="text-4xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
                     {language === 'id' ? (
                       <>
                         <span className="inline-block hover:scale-105 transition-transform duration-300">Evolusi</span>{' '}
@@ -634,7 +634,7 @@ const AboutSection: React.FC = () => {
                           </div>
 
                           {/* Content Card */}
-                          <div className={`flex-1 pl-24 md:pl-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'} ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                          <div className={`flex-1 pl-12 md:pl-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'} ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
                             <div className="relative group/card">
                               {/* Year Badge */}
                               <div className={`inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r ${colors.badge} rounded-2xl mb-6 shadow-2xl ${colors.glow} group-hover/card:scale-110 transition-all duration-500`}>

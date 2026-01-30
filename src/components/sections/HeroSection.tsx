@@ -103,7 +103,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
   }
 
   return (
-    <section className="relative h-screen min-h-[700px] overflow-hidden bg-[#0a1128]">
+    <section className="relative h-[85vh] md:h-screen min-h-[600px] md:min-h-[700px] overflow-hidden bg-[#0a1128]">
       <div className="overflow-hidden h-full" ref={emblaRef}>
         <div className="flex h-full">
           {slides.map((slide, index) => (
@@ -141,7 +141,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               </div>
 
               {/* Content */}
-              <div className="relative h-full flex items-center pt-20 md:pt-24 z-10">
+              <div className="relative h-full flex items-center pt-12 md:pt-24 z-10">
                 <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 w-full">
                   <div className="max-w-3xl">
                     {/* Decorative Top Line - Show ONLY if content exists */}
@@ -156,7 +156,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     {(language === 'id' ? slide.title_id : slide.title_en) && (
                       <div className="relative group">
                         <div className={`absolute -left-4 top-0 w-2 h-full bg-accent transition-all duration-700 ${selectedIndex === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}></div>
-                        <h1 className={`text-3xl sm:text-5xl lg:text-7xl xl:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] text-white transition-all duration-1000 ${selectedIndex === index ? 'animate-title-pop' : 'opacity-0'}`}>
+                        <h1 className={`text-3xl sm:text-5xl lg:text-7xl xl:text-8xl font-black mb-4 md:mb-8 tracking-tighter leading-[0.95] md:leading-[0.9] text-white transition-all duration-1000 ${selectedIndex === index ? 'animate-title-pop' : 'opacity-0'}`}>
                           {language === 'id' ? slide.title_id : slide.title_en}
                         </h1>
                       </div>

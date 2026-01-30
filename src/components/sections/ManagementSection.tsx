@@ -41,7 +41,7 @@ const ManagementSection: React.FC = () => {
   if (loading || management.length === 0) return null;
 
   return (
-    <section id="management" className="py-20 md:py-32 bg-gray-50 relative overflow-hidden">
+    <section id="management" className="py-16 md:py-32 bg-gray-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
 
@@ -63,7 +63,7 @@ const ManagementSection: React.FC = () => {
           {management.map((person) => (
             <div
               key={person.id}
-              className="group bg-white rounded-[3rem] overflow-hidden border border-gray-100 enterprise-shadow transition-all duration-700 hover:-translate-y-4 wow-border-glow relative"
+              className="group bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-gray-100 enterprise-shadow transition-all duration-700 hover:-translate-y-4 wow-border-glow relative"
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 group/img">
                 {/* Background Floating Decor */}

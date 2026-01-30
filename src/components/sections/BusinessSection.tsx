@@ -83,7 +83,7 @@ const BusinessSection: React.FC = () => {
   if (loading || businessLines.length === 0) return null;
 
   return (
-    <section id="business" className="py-20 md:py-40 bg-white relative overflow-hidden">
+    <section id="business" className="py-16 md:py-40 bg-white relative overflow-hidden">
       {/* Dynamic Background Accents */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[1000px] h-[1000px] bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
@@ -99,7 +99,7 @@ const BusinessSection: React.FC = () => {
               {t('business.title.text')} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('business.title.italic')}</span>
             </h2>
-            <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-xl">
+            <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed max-w-xl">
               {t('business.description')}
             </p>
           </div>
@@ -143,22 +143,22 @@ const BusinessSection: React.FC = () => {
           </div>
 
           {/* Futuristic Tab Switcher */}
-          <div className="flex flex-col lg:flex-row bg-slate-50 p-2 rounded-[2rem] border border-slate-100 shadow-inner group/tabs relative z-10 w-full lg:w-auto gap-2 lg:gap-0">
+          <div className="flex flex-col lg:flex-row bg-slate-50 p-1.5 md:p-2 rounded-2xl md:rounded-[2rem] border border-slate-100 shadow-inner group/tabs relative z-10 w-full lg:w-auto gap-1.5 md:gap-0">
             {businessLines.map((line, index) => (
               <button
                 key={line.id}
                 onClick={() => setActiveTab(index)}
-                className={`relative flex-1 px-6 py-4 lg:px-10 lg:py-5 rounded-[1.5rem] lg:rounded-[2rem] text-[10px] lg:text-[11px] font-black uppercase tracking-wider transition-all duration-700 flex items-center justify-center gap-3 ${activeTab === index
+                className={`relative flex-1 px-4 py-3 md:px-10 md:py-5 rounded-xl md:rounded-[2rem] text-[10px] md:text-[11px] font-black uppercase tracking-wider transition-all duration-700 flex items-center justify-center gap-2 md:gap-3 ${activeTab === index
                   ? 'text-white'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
               >
                 {activeTab === index && (
-                  <div className="absolute inset-0 wow-button-gradient animate-in fade-in zoom-in duration-500 rounded-[1.5rem] lg:rounded-[2rem]"></div>
+                  <div className="absolute inset-0 wow-button-gradient animate-in fade-in zoom-in duration-500 rounded-xl md:rounded-[2rem]"></div>
                 )}
                 <span className="relative z-10 text-center">{language === 'id' ? line.title_id : line.title_en}</span>
                 {activeTab === index && (
-                  <div className="hidden lg:block w-1.5 h-1.5 rounded-full bg-accent relative z-10 animate-pulse"></div>
+                  <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-accent relative z-10 animate-pulse"></div>
                 )}
               </button>
             ))}

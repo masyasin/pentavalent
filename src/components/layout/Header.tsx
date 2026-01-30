@@ -67,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             {/* Logo Column - Flexible but compact */}
             <div className="flex-1 flex items-center justify-start min-w-0">
               <div
-                className="cursor-pointer group flex-shrink-0 ml-12"
+                className="cursor-pointer group flex-shrink-0"
                 onClick={() => {
                   onNavigate('hero');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   <img
                     src="/logo-icon.png"
                     alt="Penta Valent"
-                    className={`${isScrolled ? 'h-12 lg:h-14' : 'h-14 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
+                    className={`${isScrolled ? 'h-10 lg:h-14' : 'h-12 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
                   />
                 </div>
               </div>
@@ -151,14 +151,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
         <div className="absolute inset-0 bg-primary/20 backdrop-blur-md" onClick={() => setIsMobileMenuOpen(false)}></div>
         <div className={`absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white shadow-4xl transition-transform duration-500 ease-out transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex flex-col h-full">
-            <div className="p-8 flex items-center justify-between border-b border-gray-100">
-              <img src="/logo-icon.png" alt="Penta Valent - Healthcare & Beyond" className="h-10 w-auto" />
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-3 bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-2xl transition-all">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+            <div className="p-6 flex items-center justify-between border-b border-gray-100">
+              <img src="/logo-icon.png" alt="Penta Valent - Healthcare & Beyond" className="h-8 w-auto" />
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2.5 bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-2xl transition-all">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto py-8">
-              <nav className="space-y-2 px-8">
+            <div className="flex-1 overflow-y-auto py-6">
+              <nav className="space-y-1.5 px-6">
                 {navItems.map((item) => (
                   <button
                     key={item.id}
@@ -166,14 +166,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                       onNavigate(item.id);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`w-full text-left px-5 py-4 rounded-2xl text-lg font-bold transition-all ${activeSection === item.id ? 'bg-cyan-50 text-cyan-600' : 'text-gray-600 hover:bg-gray-50 hover:text-cyan-600'}`}
+                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-base font-bold transition-all ${activeSection === item.id ? 'bg-cyan-50 text-cyan-600' : 'text-gray-600 hover:bg-gray-50 hover:text-cyan-600'}`}
                   >
                     {item.label}
                   </button>
                 ))}
               </nav>
             </div>
-            <div className="p-8 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm">
+            <div className="p-6 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm">
               <div className="flex items-center justify-center gap-3">
                 {['id', 'en'].map((lang) => (
                   <button
