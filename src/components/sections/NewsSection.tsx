@@ -154,11 +154,11 @@ const NewsSection: React.FC = () => {
           </div>
         ) : (
           <div className="relative group/slider">
-            {/* Premium Side Navigation Buttons */}
+            {/* Premium Side Navigation Buttons - Tablet & Desktop Only */}
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}
-              className={`absolute -left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-[1.5rem] flex items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollPrev
+              className={`hidden md:flex absolute -left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-[1.5rem] items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollPrev
                 ? 'bg-white/90 border-slate-200 text-slate-600 shadow-2xl hover:bg-white hover:border-cyan-400 hover:text-cyan-600 hover:-translate-x-2'
                 : 'bg-slate-50/50 border-slate-100 text-slate-300 cursor-not-allowed opacity-0'
                 }`}
@@ -169,7 +169,7 @@ const NewsSection: React.FC = () => {
             <button
               onClick={scrollNext}
               disabled={!canScrollNext}
-              className={`absolute -right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-[1.5rem] flex items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollNext
+              className={`hidden md:flex absolute -right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-[1.5rem] items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollNext
                 ? 'bg-white/90 border-slate-200 text-slate-600 shadow-2xl hover:bg-white hover:border-cyan-400 hover:text-cyan-600 hover:translate-x-2'
                 : 'bg-slate-50/50 border-slate-100 text-slate-300 cursor-not-allowed opacity-0'
                 }`}
@@ -211,14 +211,14 @@ const NewsSection: React.FC = () => {
                         <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                       </div>
 
-                      <div className="p-10 md:p-14 flex flex-col h-[calc(100%-16/11)] relative">
+                      <div className="p-8 md:p-14 flex flex-col h-[calc(100%-16/11)] relative">
                         {/* Date with Accent */}
                         <div className="flex items-center gap-4 mb-8">
                           <div className="w-10 h-px bg-slate-200 group-hover:w-16 group-hover:bg-cyan-500 transition-all duration-700"></div>
                           <span className="text-[10px] font-black text-slate-400 group-hover:text-slate-900 uppercase tracking-[0.25em] transition-colors">{formatDate(item.published_at)}</span>
                         </div>
 
-                        <h3 className="text-2xl md:text-3xl font-black text-slate-900 group-hover:text-blue-600 transition-all duration-500 leading-tight tracking-tight line-clamp-2 min-h-[4rem] mb-6">
+                        <h3 className="text-xl md:text-3xl font-black text-slate-900 group-hover:text-blue-600 transition-all duration-500 leading-tight tracking-tight line-clamp-2 min-h-[3rem] md:min-h-[4rem] mb-4 md:mb-6">
                           {language === 'id' ? item.title_id : item.title_en}
                         </h3>
 

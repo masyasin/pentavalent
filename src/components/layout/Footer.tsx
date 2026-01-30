@@ -144,11 +144,11 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Live Traffic */}
         <div className="flex flex-col items-center gap-2">
           <div className="relative">
-            <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
-              <Users size={14} className="wow-text-primary group-hover:scale-110 transition-transform" />
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+              <Users size={18} className="wow-text-primary group-hover:scale-110 transition-transform" />
             </div>
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#020617]"></span>
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#020617]"></span>
           </div>
           <div className="text-center">
             <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] leading-none mb-1">Traffic Live</p>
@@ -160,8 +160,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         {/* Total Audit */}
         <div className="flex flex-col items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
-            <Eye size={14} className="wow-text-primary group-hover:scale-110 transition-transform" />
+          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+            <Eye size={18} className="wow-text-primary group-hover:scale-110 transition-transform" />
           </div>
           <div className="text-center">
             <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] leading-none mb-1">Total Audit</p>
@@ -218,10 +218,10 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   <a
                     key={item.name}
                     href={item.link}
-                    className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:wow-button-gradient hover:border-transparent hover:-translate-y-1 transition-all duration-300"
+                    className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:wow-button-gradient hover:border-transparent hover:-translate-y-1 touch-active active:scale-[0.95] transition-all duration-300"
                     aria-label={item.name}
                   >
-                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
                       <path d={item.icon} />
                     </svg>
                   </a>
@@ -239,8 +239,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>{t('footer.column.contact')}</h4>
             <div className="space-y-6 pt-2">
               <a href="tel:+622158061XX" className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
-                  <Phone size={18} />
+                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
+                  <Phone size={20} />
                 </div>
                 <div>
                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.ho')}</span>
@@ -248,8 +248,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </div>
               </a>
               <a href="mailto:info@pentavalent.co.id" className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
-                  <Mail size={18} />
+                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
+                  <Mail size={20} />
                 </div>
                 <div>
                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.digital')}</span>
@@ -257,8 +257,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </div>
               </a>
               <div className="flex items-start gap-4 group/link p-2">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-accent">
-                  <MapPin size={18} />
+                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent">
+                  <MapPin size={20} />
                 </div>
                 <div>
                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.hq')}</span>

@@ -140,22 +140,34 @@ const ContactSection: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('contact.form.identity')}</label>
-                    <input required type="text" placeholder={t('contact.form.name_placeholder')} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/10 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300" />
+                  <div className="space-y-2.5">
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                      {t('contact.form.identity')}
+                    </label>
+                    <input required type="text" placeholder={t('contact.form.name_placeholder')} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-cyan-500/5 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300 shadow-sm" />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('contact.form.corporate_email')}</label>
-                    <input required type="email" placeholder={t('contact.form.email_placeholder')} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/10 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300" />
+                  <div className="space-y-2.5">
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                      {t('contact.form.corporate_email')}
+                    </label>
+                    <input required type="email" placeholder={t('contact.form.email_placeholder')} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-blue-500/5 focus:bg-white focus:border-blue-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300 shadow-sm" />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('contact.form.phone_label')}</label>
-                    <input type="tel" placeholder={t('contact.form.phone_placeholder')} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/10 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300" />
+                  <div className="space-y-2.5">
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                      {t('contact.form.phone_label')}
+                    </label>
+                    <input type="tel" placeholder={t('contact.form.phone_placeholder')} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-indigo-500/5 focus:bg-white focus:border-indigo-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300 shadow-sm" />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('contact.form.consultation_type')}</label>
+                  <div className="space-y-2.5">
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      {t('contact.form.consultation_type')}
+                    </label>
                     <div className="relative">
-                      <select value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/10 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 appearance-none transition-all cursor-pointer">
+                      <select value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-emerald-500/5 focus:bg-white focus:border-emerald-500/30 outline-none font-bold text-slate-900 appearance-none transition-all cursor-pointer shadow-sm">
                         <option value="">{t('contact.form.category_placeholder')}</option>
                         <option value="partnership">{t('contact.form.partnership')}</option>
                         <option value="investor">{t('contact.form.investor')}</option>
@@ -166,33 +178,38 @@ const ContactSection: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="md:col-span-2 space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('contact.form.intelligence')}</label>
-                    <textarea required rows={4} placeholder={t('contact.form.message_placeholder')} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/10 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 resize-none transition-all placeholder:text-slate-300"></textarea>
+                  <div className="md:col-span-2 space-y-2.5">
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                      {t('contact.form.intelligence')}
+                    </label>
+                    <textarea required rows={4} placeholder={t('contact.form.message_placeholder')} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-slate-500/5 focus:bg-white focus:border-slate-500/30 outline-none font-bold text-slate-900 resize-none transition-all placeholder:text-slate-300 shadow-sm"></textarea>
                   </div>
 
-                  {/* Math Captcha */}
-                  <div className="md:col-span-2 flex items-center gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-100 shadow-inner">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-cyan-500">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                  {/* Optimized Math Captcha Portfolio */}
+                  <div className="md:col-span-2 flex flex-col sm:flex-row items-center gap-6 bg-slate-50 p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-inner group/captcha">
+                    <div className="flex items-center gap-5">
+                      <div className="w-14 w-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-cyan-500 shadow-sm group-hover/captcha:scale-110 transition-transform duration-500">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('contact.form.bot_protection')}</span>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5">{t('contact.form.bot_protection')}</span>
                         <div className="flex items-center gap-3">
-                          <span className="bg-white px-4 py-2 rounded-xl font-black text-lg tracking-widest wow-text-primary border border-slate-100 shadow-sm">{captcha.q}</span>
-                          <span className="text-slate-400 font-black">=</span>
+                          <span className="bg-white px-5 py-3 rounded-xl font-black text-xl tracking-tighter wow-text-primary border border-slate-200 shadow-sm min-w-[100px] text-center">{captcha.q}</span>
+                          <span className="text-slate-300 font-black text-2xl">=</span>
                         </div>
                       </div>
                     </div>
-                    <input
-                      required
-                      type="number"
-                      placeholder="?"
-                      value={userCaptcha}
-                      onChange={(e) => setUserCaptcha(e.target.value)}
-                      className="w-24 px-6 py-5 bg-white border border-slate-200 rounded-2xl focus:ring-4 ring-primary/5 outline-none font-black text-slate-900 transition-all text-center text-xl shadow-sm"
-                    />
+                    <div className="flex-1 w-full relative">
+                      <input
+                        required
+                        type="number"
+                        placeholder="?"
+                        value={userCaptcha}
+                        onChange={(e) => setUserCaptcha(e.target.value)}
+                        className="w-full px-8 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-8 focus:ring-primary/5 focus:border-primary/30 outline-none font-black text-slate-900 transition-all text-center sm:text-left text-2xl shadow-sm h-[64px]"
+                      />
+                    </div>
                   </div>
 
                   {submitError && (
@@ -205,9 +222,12 @@ const ContactSection: React.FC = () => {
                     <button
                       disabled={submitting}
                       type="submit"
-                      className="group/btn relative w-full overflow-hidden rounded-2xl wow-button-gradient py-6 text-[10px] font-black uppercase tracking-[0.4em] text-white shadow-2xl disabled:opacity-50"
+                      className="group/btn relative w-full overflow-hidden rounded-2xl wow-button-gradient py-6 text-[10px] font-black uppercase tracking-[0.4em] text-white shadow-2xl disabled:opacity-50 touch-active active:scale-[0.98] transition-all"
                     >
-                      <span className="relative z-10">{submitting ? t('contact.form.submitting') : t('contact.form.submit')}</span>
+                      <span className="relative z-10 flex items-center justify-center gap-3">
+                        {submitting ? t('contact.form.submitting') : t('contact.form.submit')}
+                        {!submitting && <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7-7 7" /></svg>}
+                      </span>
                     </button>
                   </div>
                 </form>

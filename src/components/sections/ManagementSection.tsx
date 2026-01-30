@@ -126,10 +126,10 @@ const ManagementSection: React.FC = () => {
               <p className="text-gray-400 font-bold text-sm">We strictly adhere to the highest standards of transparency and institutional ethics.</p>
             </div>
             <div className="flex gap-4">
-              <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-primary/20 group-hover:text-cyan-500 transition-colors">
+              <div className="w-16 h-16 bg-gray-50 border border-slate-100 rounded-2xl flex items-center justify-center text-primary/40 group-hover:text-cyan-500 transition-colors shadow-sm">
                 <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" /></svg>
               </div>
-              <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-primary/20 group-hover:text-cyan-500 transition-colors">
+              <div className="w-16 h-16 bg-gray-50 border border-slate-100 rounded-2xl flex items-center justify-center text-primary/40 group-hover:text-cyan-500 transition-colors shadow-sm">
                 <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" /></svg>
               </div>
             </div>

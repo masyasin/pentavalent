@@ -273,39 +273,40 @@ const NewsDetail: React.FC = () => {
         <div className="min-h-screen bg-background font-sans text-foreground">
             <Header onNavigate={handleNavigate} activeSection="news" />
 
-            <section className="relative h-[50vh] md:h-[65vh] w-full overflow-hidden bg-slate-900">
-                <div className="absolute inset-0 z-0 embla" ref={emblaRef}>
+            <section className="relative h-[60dvh] w-full overflow-hidden bg-slate-900 border-b border-white/5">
+                <div className="absolute inset-0 z-0 embla h-full" ref={emblaRef}>
                     <div className="flex h-full">
                         {heroImages.map((img, idx) => (
                             <div key={idx} className="flex-[0_0_100%] h-full relative">
                                 <img
                                     src={img}
                                     alt={`Hero ${idx}`}
-                                    className="w-full h-full object-cover opacity-40"
+                                    className="w-full h-full object-cover opacity-50 transition-all duration-700"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/20 to-slate-950"></div>
+                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-slate-950 z-10"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/50 via-transparent to-slate-950/50 z-10"></div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
                     <div className="max-w-6xl mx-auto px-6 text-center text-white space-y-6 animate-in fade-in zoom-in duration-1000 slide-in-from-bottom-10">
                         <div className="inline-flex items-center gap-3 px-5 py-2 bg-primary/20 backdrop-blur-xl border border-primary/30 rounded-full mb-2">
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                             </span>
-                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-primary-foreground">
+                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white">
                                 {article.category.replace('_', ' ')}
                             </span>
                         </div>
 
                         <div className="relative">
-                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-[1.2] max-w-4xl mx-auto text-white italic px-4 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                            <h1 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] max-w-4xl mx-auto text-white italic px-4 drop-shadow-2xl">
                                 {language === 'id' ? article.title_id : article.title_en}
                             </h1>
-                            <div className="w-12 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_15px_rgba(var(--primary),0.5)] opacity-80"></div>
+                            <div className="w-16 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.8)]"></div>
                         </div>
 
                         <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[10px] md:text-xs font-black uppercase tracking-[0.2em] opacity-90">
@@ -315,7 +316,7 @@ const NewsDetail: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/10">
                                 <User size={14} className="text-primary" />
-                                Pentavalent Intelligence
+                                <span className="text-white/80">Pentavalent Intelligence</span>
                             </div>
                         </div>
                     </div>
@@ -353,11 +354,11 @@ const NewsDetail: React.FC = () => {
                                         <Share2 size={18} className="text-primary" />
                                         Share Article
                                     </h4>
-                                    <div className="flex items-center gap-3">
-                                        <button onClick={() => shareToSocial('facebook')} className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><Facebook size={18} /></button>
-                                        <button onClick={() => shareToSocial('twitter')} className="w-10 h-10 rounded-full bg-sky-50 text-sky-500 flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all"><Twitter size={18} /></button>
-                                        <button onClick={() => shareToSocial('linkedin')} className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all"><Linkedin size={18} /></button>
-                                        <button onClick={copyToClipboard} className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all"><Link2 size={18} /></button>
+                                    <div className="flex items-center gap-4">
+                                        <button onClick={() => shareToSocial('facebook')} className="w-11 h-11 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all touch-active active:scale-90"><Facebook size={20} /></button>
+                                        <button onClick={() => shareToSocial('twitter')} className="w-11 h-11 rounded-full bg-sky-50 text-sky-500 flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all touch-active active:scale-90"><Twitter size={20} /></button>
+                                        <button onClick={() => shareToSocial('linkedin')} className="w-11 h-11 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all touch-active active:scale-90"><Linkedin size={20} /></button>
+                                        <button onClick={copyToClipboard} className="w-11 h-11 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all touch-active active:scale-90"><Link2 size={20} /></button>
                                     </div>
                                 </div>
                             </div>
@@ -426,17 +427,22 @@ const NewsDetail: React.FC = () => {
                                             </div>
                                             <textarea placeholder="Your Message" rows={4} value={commentData.message} onChange={(e) => setCommentData({ ...commentData, message: e.target.value })} className="w-full bg-white/10 border-white/10 rounded-2xl px-6 py-4 text-sm focus:bg-white/20 focus:ring-2 focus:ring-primary/50 transition-all outline-none resize-none" required />
 
-                                            <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10 w-fit">
-                                                <div className="flex items-center gap-3">
-                                                    <span className="text-sm font-bold text-white/60">Solve:</span>
-                                                    <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg font-black text-sm tracking-widest">{captcha.q}</span>
-                                                    <span className="text-sm font-black text-white/60">=</span>
+                                            <div className="flex flex-col sm:flex-row items-center gap-6 bg-white/5 p-6 rounded-[2rem] border border-white/10 group/captcha">
+                                                <div className="flex items-center gap-5">
+                                                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-primary group-hover/captcha:scale-110 transition-transform">
+                                                        <span className="text-xs font-black uppercase">Solve</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="bg-primary/20 text-primary px-5 py-3 rounded-xl font-black text-xl tracking-tighter border border-primary/10 shadow-xl">{captcha.q}</span>
+                                                        <span className="text-xl font-black text-white/40">=</span>
+                                                    </div>
                                                 </div>
-                                                <input type="number" placeholder="?" value={userCaptcha} onChange={(e) => setUserCaptcha(e.target.value)} className="w-20 bg-white/10 border-white/10 rounded-xl px-4 py-2 text-sm focus:bg-white/20 focus:ring-2 focus:ring-primary/50 transition-all outline-none" required />
+                                                <input type="number" placeholder="?" value={userCaptcha} onChange={(e) => setUserCaptcha(e.target.value)} className="w-full sm:w-24 bg-white/10 border-2 border-white/10 rounded-2xl px-6 py-4 text-xl font-black text-white focus:bg-white/20 focus:border-primary transition-all outline-none text-center h-[64px]" required />
                                             </div>
 
-                                            <button type="submit" disabled={submittingComment} className="w-full md:w-auto px-10 py-4 wow-button-gradient text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-primary/20 disabled:opacity-50">
-                                                {submittingComment ? 'Sending...' : 'Post Comment'}
+                                            <button type="submit" disabled={submittingComment} className="w-full py-5 wow-button-gradient text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-2xl disabled:opacity-50 touch-active active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                                                {submittingComment ? 'Transmitting...' : 'Post Intelligence'}
+                                                {!submittingComment && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
                                             </button>
                                         </form>
                                     </div>

@@ -122,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   className={`p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
                   aria-label="Search"
                 >
-                  <Search size={18} strokeWidth={2.5} />
+                  <Search size={22} strokeWidth={2.5} />
                 </button>
 
                 <button
@@ -154,8 +154,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           <div className="flex flex-col h-full">
             <div className="p-6 flex items-center justify-between border-b border-gray-100">
               <img src="/logo-icon.png" alt="Penta Valent - Healthcare & Beyond" className="h-8 w-auto" />
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2.5 bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-2xl transition-all">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-3 bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-2xl transition-all touch-active active:scale-95">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             <div className="flex-1 overflow-y-auto py-6">

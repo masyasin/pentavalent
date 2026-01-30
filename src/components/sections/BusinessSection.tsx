@@ -83,19 +83,19 @@ const BusinessSection: React.FC = () => {
   if (loading || businessLines.length === 0) return null;
 
   return (
-    <section id="business" className="py-16 md:py-40 bg-white relative overflow-hidden">
+    <section id="business" className="py-20 md:py-40 bg-white relative overflow-hidden">
       {/* Dynamic Background Accents */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[1000px] h-[1000px] bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         {/* Header Section */}
-        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-12">
+        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between mb-16 md:mb-24 gap-12">
           <div className="lg:max-w-2xl relative z-10">
-            <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-8 shadow-xl shadow-primary/5">
+            <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-6 md:mb-8 shadow-xl shadow-primary/5">
               {t('business.tagline')}
             </span>
-            <h2 className="text-fluid-h1 py-2 mb-8 md:mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
+            <h2 className="text-fluid-h1 py-2 mb-6 md:mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
               {t('business.title.text')} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('business.title.italic')}</span>
             </h2>
@@ -170,7 +170,7 @@ const BusinessSection: React.FC = () => {
         <div className="bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-slate-100 shadow-4xl group/main">
           <div className="grid lg:grid-cols-12 min-h-[500px] lg:min-h-[650px]">
             {/* Left: Interactive Visuals */}
-            <div className="lg:col-span-5 relative h-[400px] lg:h-auto overflow-hidden">
+            <div className="lg:col-span-5 relative h-[350px] md:h-[450px] lg:h-auto overflow-hidden">
               <div className="embla h-full w-full" ref={emblaRef}>
                 <div className="embla__container h-full w-full">
                   {((businessLines[activeTab].images && businessLines[activeTab].images.length > 0)
@@ -266,7 +266,7 @@ const BusinessSection: React.FC = () => {
             </div>
 
             {/* Right: Content & Intelligence */}
-            <div className="lg:col-span-7 p-6 md:p-12 lg:p-24 flex flex-col justify-center bg-white relative">
+            <div className="lg:col-span-7 p-8 md:p-12 lg:p-24 flex flex-col justify-center bg-white relative">
               {/* Subtle background letter */}
               <div className="absolute top-0 right-0 text-[20rem] font-black text-slate-50 leading-none select-none pointer-events-none opacity-50">
                 {String.fromCharCode(65 + activeTab)}
@@ -281,39 +281,39 @@ const BusinessSection: React.FC = () => {
                 </p>
 
                 {/* Features Grid */}
-                <div className="grid sm:grid-cols-2 gap-10 mb-20">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 mb-12 md:mb-20">
                   {(businessLines[activeTab].features || [
                     'National Logistics Network',
                     'Cold Chain Management',
                     'AI-Driven Inventory',
                     'Regulatory Compliance'
                   ]).map((feature, index) => (
-                    <div key={index} className="flex items-center gap-5">
-                      <div className="w-12 h-12 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center flex-shrink-0 text-cyan-500 shadow-lg shadow-cyan-500/10">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div key={index} className="flex items-center gap-4 md:gap-5">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center flex-shrink-0 text-cyan-500 shadow-lg shadow-cyan-500/10 scale-90 md:scale-100">
+                        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
                       <div>
                         <span className="text-slate-900 font-black text-sm tracking-tight block">{feature}</span>
-                        <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1 block">{t('business.feature.certified')}</span>
+                        <span className="text-[9px] md:text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1 block">{t('business.feature.certified')}</span>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Executive Stats Dashboard */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-12 pt-16 border-t border-slate-100">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 pt-10 md:pt-16 border-t border-slate-100">
                   {(businessLines[activeTab].stats || [
                     { label: 'Market Reach', value: '34 Branches' },
                     { label: 'Experience', value: '55+ Years' },
                     { label: 'Partners', value: '70+ Principals' }
                   ]).map((stat, index) => (
                     <div key={index}>
-                      <div className="text-2xl md:text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-600 to-blue-600 bg-clip-text text-transparent mb-2 inline-block tracking-tighter">
+                      <div className="text-xl md:text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-600 to-blue-600 bg-clip-text text-transparent mb-1 md:mb-2 inline-block tracking-tighter">
                         {stat.value}
                       </div>
-                      <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+                      <div className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
                         {stat.label}
                       </div>
                     </div>

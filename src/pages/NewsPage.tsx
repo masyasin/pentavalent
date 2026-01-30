@@ -160,21 +160,22 @@ const NewsPage: React.FC = () => {
             <Header activeSection="news" onNavigate={handleNavigate} />
 
             {/* Premium Banner Slider */}
-            <section className="relative h-[65vh] md:h-[75vh] w-full overflow-hidden bg-slate-950">
-                <div className="absolute inset-0 z-0 embla" ref={emblaRef}>
+            <section className="relative h-[70dvh] w-full overflow-hidden bg-slate-950">
+                <div className="absolute inset-0 z-0 embla h-full" ref={emblaRef}>
                     <div className="flex h-full">
                         {banners.map((banner, idx) => (
                             <div key={banner.id} className="flex-[0_0_100%] h-full relative group">
                                 <img
                                     src={banner.image_url}
                                     alt={banner.title_en}
-                                    className="w-full h-full object-cover opacity-60 transition-transform duration-[10000ms] ease-linear group-active:scale-110"
-                                    style={{ transform: currentSlide === idx ? 'scale(1.1)' : 'scale(1)' }}
+                                    className="w-full h-full object-cover opacity-60 transition-all duration-[10000ms] ease-linear overflow-hidden"
+                                    style={{ transform: currentSlide === idx ? 'scale(1.15)' : 'scale(1)' }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/20 to-slate-950"></div>
+                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-slate-950 z-10"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/60 z-10"></div>
 
-                                <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
-                                    <div className={`max-w-6xl mx-auto text-center space-y-6 transition-all duration-1000 transform ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center z-20 px-6">
+                                    <div className={`max-w-6xl mx-auto text-center space-y-6 transition-all duration-1000 transform ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
                                         <div className="inline-flex items-center gap-3 px-5 py-2 bg-primary/20 backdrop-blur-xl border border-primary/30 rounded-full mb-2 mx-auto">
                                             <span className="relative flex h-2 w-2">
                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -186,13 +187,13 @@ const NewsPage: React.FC = () => {
                                         </div>
 
                                         <div className="relative">
-                                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-[1.2] max-w-4xl mx-auto text-white italic px-4 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                                            <h1 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] max-w-4xl mx-auto text-white italic px-4 drop-shadow-2xl">
                                                 {language === 'id' ? banner.title_id : banner.title_en}
                                             </h1>
-                                            <div className="w-12 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_15px_rgba(var(--primary),0.5)] opacity-80"></div>
+                                            <div className="w-16 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.8)]"></div>
                                         </div>
 
-                                        <p className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed font-medium italic drop-shadow-sm">
+                                        <p className="text-base md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed font-medium italic">
                                             {language === 'id' ? banner.subtitle_id : banner.subtitle_en}
                                         </p>
                                     </div>
@@ -203,24 +204,27 @@ const NewsPage: React.FC = () => {
                 </div>
 
                 {/* Slider Navigation Dots */}
-                <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3">
-                    {banners.map((_, idx) => (
-                        <button
-                            key={idx}
-                            onClick={() => emblaApi?.scrollTo(idx)}
-                            className={`transition-all duration-500 rounded-full ${currentSlide === idx ? 'w-12 h-2 bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.8)]' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
-                        />
-                    ))}
+                <div className="absolute bottom-8 left-0 right-0 z-30 pointer-events-none">
+                    <div className="max-w-7xl mx-auto px-6 flex justify-center items-center gap-4 pointer-events-auto">
+                        {banners.map((_, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => emblaApi?.scrollTo(idx)}
+                                className={`transition-all duration-500 rounded-full ${currentSlide === idx ? 'w-10 h-2 bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.8)]' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
+                                aria-label={`Go to banner ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
                 </div>
 
-                {/* Side Navigation Buttons */}
-                <div className="absolute inset-y-0 left-6 flex items-center z-10">
-                    <button onClick={() => emblaApi?.scrollPrev()} className="w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all group">
+                {/* Desktop-only Side Navigation */}
+                <div className="hidden md:flex absolute inset-y-0 left-8 items-center z-30">
+                    <button onClick={() => emblaApi?.scrollPrev()} className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all group touch-active">
                         <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
                     </button>
                 </div>
-                <div className="absolute inset-y-0 right-6 flex items-center z-10">
-                    <button onClick={() => emblaApi?.scrollNext()} className="w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all group">
+                <div className="hidden md:flex absolute inset-y-0 right-8 items-center z-30">
+                    <button onClick={() => emblaApi?.scrollNext()} className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all group touch-active">
                         <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                 </div>
@@ -287,8 +291,8 @@ const NewsPage: React.FC = () => {
                                     setCurrentPage(1);
                                 }}
                                 className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative flex items-center gap-2 group ${selectedCategory === cat.id
-                                        ? 'bg-blue-600 text-white shadow-[0_15px_30px_rgba(37,99,235,0.25)] scale-105'
-                                        : 'bg-slate-50 text-slate-400 hover:bg-white hover:text-blue-600 border border-slate-100/50 hover:border-blue-200 hover:shadow-lg'
+                                    ? 'bg-blue-600 text-white shadow-[0_15px_30px_rgba(37,99,235,0.25)] scale-105'
+                                    : 'bg-slate-50 text-slate-400 hover:bg-white hover:text-blue-600 border border-slate-100/50 hover:border-blue-200 hover:shadow-lg'
                                     }`}
                             >
                                 {selectedCategory === cat.id && (

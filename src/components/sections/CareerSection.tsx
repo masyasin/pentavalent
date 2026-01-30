@@ -310,42 +310,57 @@ const CareerSection: React.FC = () => {
                 ) : (
                   <form onSubmit={handleApply} className="space-y-8">
                     <div className="grid md:grid-cols-2 gap-8">
-                      <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('career.form.name')}</label>
-                        <input required type="text" value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/5 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all" />
+                      <div className="space-y-2.5">
+                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                          {t('career.form.name')}
+                        </label>
+                        <input required type="text" value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-cyan-500/5 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm" />
                       </div>
-                      <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('career.form.email')}</label>
-                        <input required type="email" placeholder="example@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/5 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all" />
+                      <div className="space-y-2.5">
+                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                          {t('career.form.email')}
+                        </label>
+                        <input required type="email" placeholder="example@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-blue-500/5 focus:bg-white focus:border-blue-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm" />
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('career.form.phone')}</label>
-                      <input required type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/5 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all" />
+                    <div className="space-y-2.5">
+                      <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                        {t('career.form.phone')}
+                      </label>
+                      <input required type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-indigo-500/5 focus:bg-white focus:border-indigo-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm" />
                     </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('career.form.cover_letter')}</label>
-                      <textarea rows={4} value={formData.coverLetter} onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/5 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all resize-none"></textarea>
+                    <div className="space-y-2.5">
+                      <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                        {t('career.form.cover_letter')}
+                      </label>
+                      <textarea rows={4} value={formData.coverLetter} onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-slate-500/5 focus:bg-white focus:border-slate-500/30 outline-none font-bold text-slate-900 transition-all resize-none shadow-sm"></textarea>
                     </div>
 
-                    <div className="flex items-center gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-100 shadow-inner">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center wow-icon-gradient">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-50 p-6 md:p-8 rounded-[2.5rem] border border-slate-100 shadow-inner group/captcha">
+                      <div className="flex items-center gap-5">
+                        <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-cyan-500 shadow-sm group-hover/captcha:scale-110 transition-transform duration-500">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('career.form.verification')}</span>
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5">{t('career.form.verification')}</span>
                           <div className="flex items-center gap-3">
-                            <span className="bg-white px-4 py-1 rounded-lg font-black text-sm tracking-widest wow-icon-gradient border border-slate-200">{captcha.q}</span>
-                            <span className="text-slate-400 font-black">=</span>
+                            <span className="bg-white px-5 py-3 rounded-xl font-black text-xl tracking-tighter wow-text-primary border border-slate-200 shadow-sm min-w-[100px] text-center">{captcha.q}</span>
+                            <span className="text-slate-300 font-black text-2xl">=</span>
                           </div>
                         </div>
                       </div>
-                      <input required type="number" placeholder="?" value={userCaptcha} onChange={(e) => setUserCaptcha(e.target.value)} className="w-20 px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 ring-primary/5 outline-none font-black text-slate-900 transition-all text-center" />
+                      <div className="flex-1 w-full relative">
+                        <input required type="number" placeholder="?" value={userCaptcha} onChange={(e) => setUserCaptcha(e.target.value)} className="w-full px-8 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-8 focus:ring-primary/5 focus:border-primary/30 outline-none font-black text-slate-900 transition-all text-center sm:text-left text-2xl shadow-sm h-[64px]" />
+                      </div>
                     </div>
 
-                    <button disabled={submitting} type="submit" className="w-full py-6 wow-button-gradient text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl disabled:opacity-50">
+                    <button disabled={submitting} type="submit" className="w-full py-6 wow-button-gradient text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] shadow-2xl disabled:opacity-50 touch-active active:scale-[0.98] transition-all flex items-center justify-center gap-3">
                       {submitting ? t('career.form.submitting') : t('career.apply')}
+                      {!submitting && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7-7 7" /></svg>}
                     </button>
                   </form>
                 )}
