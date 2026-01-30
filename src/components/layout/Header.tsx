@@ -89,15 +89,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-2 lg:px-3 py-2 rounded-full text-[12px] lg:text-[14px] font-black uppercase tracking-wider transition-all duration-500 relative group whitespace-nowrap ${activeSection === item.id
-                    ? (isScrolled ? 'text-primary' : 'text-white bg-white/20')
-                    : (isScrolled ? 'text-slate-900 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
+                  className={`px-3 lg:px-5 py-2 rounded-full text-[11px] lg:text-[13px] font-black uppercase tracking-wider transition-all duration-300 relative group whitespace-nowrap ${activeSection === item.id
+                    ? (isScrolled ? 'bg-gradient-to-r from-[#0052D4] to-[#4364F7] text-white shadow-lg shadow-blue-500/30' : 'text-white bg-white/20')
+                    : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-50' : 'text-white/80 hover:text-white hover:bg-white/10')
                     }`}
                 >
                   <span className="relative z-10">{item.label}</span>
-                  {activeSection === item.id && isScrolled && (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 rounded-full animate-fade-in"></div>
-                  )}
                 </button>
               ))}
             </nav>

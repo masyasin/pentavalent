@@ -26,7 +26,7 @@ const ScrollToTop: React.FC = () => {
     return (
         <button
             onClick={scrollToTop}
-            className={`fixed bottom-40 right-8 z-[90] w-14 h-14 bg-white wow-text-primary rounded-2xl shadow-2xl border border-gray-100 flex items-center justify-center transition-all duration-500 hover:wow-button-gradient hover:text-white hover:-translate-y-2 group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
+            className={`fixed bottom-40 right-8 z-[90] w-14 h-14 bg-white text-cyan-500 rounded-2xl shadow-2xl border border-gray-100 flex items-center justify-center transition-all duration-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white hover:-translate-y-2 group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
                 }`}
         >
             <div className="relative">

@@ -243,7 +243,7 @@ const ContactSection: React.FC = () => {
                 </div>
                 <h4 className="text-3xl font-black text-white mb-2 tracking-tighter">{t('contact.fast_response')}</h4>
                 <p className="text-white/60 text-sm font-bold mb-8">{language === 'id' ? 'Terhubung dengan tim dukungan eksekutif kami.' : 'Connect with our executive support team.'}</p>
-                <div className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
+                <div className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl group-hover:bg-[#128C7E] group-hover:text-white transition-all">
                   {t('contact.sidebar.whatsapp')}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7-7 7" /></svg>
                 </div>

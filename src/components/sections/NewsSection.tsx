@@ -155,7 +155,7 @@ const NewsSection: React.FC = () => {
               onClick={scrollPrev}
               disabled={!canScrollPrev}
               className={`absolute -left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-20 w-16 h-16 rounded-full flex items-center justify-center transition-all backdrop-blur-md border ${canScrollPrev
-                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:wow-button-gradient hover:text-white hover:-translate-x-2 border-transparent'
+                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:bg-cyan-500 hover:text-white hover:-translate-x-2 border-transparent'
                 : 'bg-gray-50/50 border-gray-100 text-gray-300 cursor-not-allowed'
                 }`}
             >
@@ -166,7 +166,7 @@ const NewsSection: React.FC = () => {
               onClick={scrollNext}
               disabled={!canScrollNext}
               className={`absolute -right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-20 w-16 h-16 rounded-full flex items-center justify-center transition-all backdrop-blur-md border ${canScrollNext
-                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:wow-button-gradient hover:text-white hover:translate-x-2 border-transparent'
+                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:bg-cyan-500 hover:text-white hover:translate-x-2 border-transparent'
                 : 'bg-gray-50/50 border-gray-100 text-gray-300 cursor-not-allowed'
                 }`}
             >
