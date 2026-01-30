@@ -134,18 +134,18 @@ const GCGSection: React.FC = () => {
                 {/* Header */}
                 <div className="text-center mb-20">
                     <div className="flex items-center justify-center gap-4 mb-6">
-                        <div className="w-16 h-16 bg-primary/5 text-primary rounded-3xl flex items-center justify-center">
+                        <div className="w-16 h-16 bg-primary/5 wow-icon-gradient rounded-3xl flex items-center justify-center">
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                         </div>
-                        <div className="w-16 h-16 bg-accent/5 text-accent rounded-3xl flex items-center justify-center">
+                        <div className="w-16 h-16 bg-primary/5 wow-icon-gradient rounded-3xl flex items-center justify-center">
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
                     </div>
-                    <h2 className="text-4xl sm:text-6xl font-black mb-10 tracking-tighter bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    <h2 className="text-4xl sm:text-6xl font-black mb-10 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-4">
                         Good Corporate Governance
                     </h2>
                     <p className="text-lg md:text-xl text-gray-500 font-medium max-w-3xl mx-auto leading-relaxed">
@@ -162,14 +162,11 @@ const GCGSection: React.FC = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`px-6 py-3 md:px-10 md:py-5 rounded-[2rem] text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative group overflow-hidden ${activeTab === tab.id
-                                ? 'bg-gradient-to-r from-primary to-accent text-white shadow-2xl shadow-primary/20 scale-105'
+                                ? 'wow-button-gradient'
                                 : 'text-gray-400 hover:text-primary hover:bg-white border border-transparent hover:border-gray-100'
                                 }`}
                         >
                             <span className="relative z-10">{tab.label}</span>
-                            {activeTab === tab.id && (
-                                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            )}
                         </button>
                     ))}
                 </div>
@@ -185,10 +182,10 @@ const GCGSection: React.FC = () => {
                                     className="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover-lift group relative overflow-hidden"
                                 >
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[5rem] -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
-                                    <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-accent/10 text-primary rounded-2xl flex items-center justify-center mb-8 group-hover:from-primary group-hover:to-accent group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20">
+                                    <div className="w-16 h-16 bg-primary/5 text-cyan-500 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-lg group-hover:shadow-cyan-500/20">
                                         {iconMap[principle.icon_name] || iconMap['shield-check']}
                                     </div>
-                                    <h3 className="text-2xl font-black text-primary mb-4 tracking-tight">
+                                    <h3 className="text-2xl font-black text-primary mb-4 tracking-tight group-hover:text-cyan-500 inline-block transition-colors">
                                         {language === 'id' ? principle.title_id : principle.title_en}
                                     </h3>
                                     <p className="text-gray-500 leading-relaxed font-medium">
@@ -221,8 +218,8 @@ const GCGSection: React.FC = () => {
                                                 />
                                             </div>
                                             <div className="p-6">
-                                                <h4 className="text-lg font-bold text-primary mb-2">{member.name}</h4>
-                                                <p className="text-sm text-accent font-semibold mb-3">
+                                                <h4 className="text-lg font-bold text-primary group-hover:text-cyan-500 inline-block transition-colors mb-2">{member.name}</h4>
+                                                <p className="text-sm wow-text-primary font-semibold mb-3">
                                                     {language === 'id' ? member.position_id : member.position_en}
                                                 </p>
                                                 {member.commissioner_type === 'independent' && (
@@ -258,8 +255,8 @@ const GCGSection: React.FC = () => {
                                                 />
                                             </div>
                                             <div className="p-6">
-                                                <h4 className="text-lg font-bold text-primary mb-2">{member.name}</h4>
-                                                <p className="text-sm text-accent font-semibold mb-3">
+                                                <h4 className="text-lg font-bold text-primary group-hover:wow-text-primary inline-block transition-colors mb-2">{member.name}</h4>
+                                                <p className="text-sm wow-text-primary font-semibold mb-3">
                                                     {language === 'id' ? member.position_id : member.position_en}
                                                 </p>
                                                 <p className="text-sm text-gray-600 line-clamp-3">
@@ -281,7 +278,7 @@ const GCGSection: React.FC = () => {
                                     key={committee.id}
                                     className="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 shadow-lg hover:shadow-2xl transition-all"
                                 >
-                                    <h3 className="text-2xl font-bold text-primary mb-4">
+                                    <h3 className="text-2xl font-bold text-primary group-hover:wow-text-primary inline-block transition-colors mb-4">
                                         {language === 'id' ? committee.name_id : committee.name_en}
                                     </h3>
                                     <p className="text-gray-600 mb-6 leading-relaxed">
@@ -292,7 +289,7 @@ const GCGSection: React.FC = () => {
                                             <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">
                                                 {language === 'id' ? 'Ketua' : 'Chairman'}
                                             </span>
-                                            <p className="text-lg font-bold text-primary mt-1">{committee.chairman_name}</p>
+                                            <p className="text-lg font-bold wow-text-primary mt-1">{committee.chairman_name}</p>
                                         </div>
                                         <div>
                                             <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">
@@ -325,7 +322,7 @@ const GCGSection: React.FC = () => {
                                     className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-500 hover-lift group hover-move-icon"
                                 >
                                     <div className="flex items-start justify-between mb-4">
-                                        <div className="w-12 h-12 bg-primary/5 text-primary rounded-2xl flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-all">
+                                        <div className="w-12 h-12 bg-primary/5 text-cyan-500 rounded-2xl flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all">
                                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
@@ -334,13 +331,13 @@ const GCGSection: React.FC = () => {
                                             {policy.category.replace('_', ' ')}
                                         </span>
                                     </div>
-                                    <h3 className="text-lg font-bold text-primary mb-3 group-hover:text-accent transition-colors">
+                                    <h3 className="text-lg font-bold text-primary group-hover:wow-text-primary inline-block transition-colors mb-3">
                                         {language === 'id' ? policy.title_id : policy.title_en}
                                     </h3>
                                     <p className="text-sm text-gray-600 line-clamp-3 mb-4">
                                         {language === 'id' ? policy.description_id : policy.description_en}
                                     </p>
-                                    <div className="flex items-center gap-2 text-accent font-bold text-sm">
+                                    <div className="flex items-center gap-2 text-cyan-500 font-bold text-sm">
                                         <span>{language === 'id' ? 'Unduh Dokumen' : 'Download Document'}</span>
                                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

@@ -36,7 +36,7 @@ const PageBanner: React.FC<PageBannerProps> = ({
 
             {/* Content */}
             <div className="relative z-10 container mx-auto px-6 text-center text-white">
-                <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">
+                <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic px-4">
                     {title}
                 </h1>
                 {subtitle && (

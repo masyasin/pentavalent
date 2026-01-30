@@ -106,12 +106,12 @@ const NetworkSection: React.FC = () => {
           {/* Main Title with Gradient Animation */}
           <h2 className="text-2xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 relative">
             <span className="text-slate-900">Penta Valent </span>
-            <span className="relative inline-block">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-cyan-400 animate-gradient-x">
+            <span className="relative inline-block px-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic">
                 {language === 'id' ? 'Network' : 'Network'}
               </span>
               {/* Underline Decoration */}
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-cyan-400 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
+              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform"></div>
             </span>
           </h2>
 
@@ -138,7 +138,7 @@ const NetworkSection: React.FC = () => {
           ].map((stat, idx) => (
             <div key={idx} className="group relative bg-white/80 backdrop-blur-md p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
               {/* Animated Accent Bar */}
-              <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${stat.accent} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left`}></div>
+              <div className={`absolute top-0 left-0 w-full h-1.5 wow-button-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left`}></div>
 
               <div className="flex items-start justify-between relative z-10">
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-50 text-2xl group-hover:scale-110 transition-all duration-500 shadow-inner border border-slate-100 group-hover:bg-gradient-to-br ${stat.accent} group-hover:text-white`}>
@@ -157,7 +157,7 @@ const NetworkSection: React.FC = () => {
               </div>
 
               <div className="mt-8 relative z-10">
-                <div className="text-2xl md:text-3xl lg:text-5xl font-black text-slate-900 mb-2 tracking-tighter transition-all duration-500 group-hover:text-cyan-600">
+                <div className="text-2xl md:text-3xl lg:text-5xl font-black text-slate-900 mb-2 tracking-tighter transition-all duration-500 group-hover:text-cyan-500 inline-block">
                   {stat.value}
                 </div>
                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-tight">
@@ -234,7 +234,7 @@ const NetworkSection: React.FC = () => {
                       <div className={`absolute inset-0 rounded-full animate-ping opacity-75 ${branch.type === 'branch' ? 'bg-sky-400' : 'bg-cyan-400'}`}></div>
 
                       {/* Main Dot */}
-                      <div className={`relative rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-300 border-[1.5px] md:border-[3px] border-white ${isSelected ? 'scale-150 ring-2 md:ring-4 ring-black/5' : 'group-hover:scale-125'} ${branch.type === 'branch' ? 'bg-sky-600 w-2.5 h-2.5 md:w-4 md:h-4' : 'bg-cyan-500 w-2 h-2 md:w-3.5 md:h-3.5'}`}></div>
+                      <div className={`relative rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-300 border-[1.5px] md:border-[3px] border-white ${isSelected ? 'scale-150 ring-2 md:ring-4 ring-black/5' : 'group-hover:scale-125'} wow-button-gradient ${branch.type === 'branch' ? 'w-2.5 h-2.5 md:w-4 md:h-4' : 'w-2 h-2 md:w-3.5 md:h-3.5'}`}></div>
 
                       {/* Info Card (Visible on Click) */}
                       {isSelected && (
@@ -285,12 +285,12 @@ const NetworkSection: React.FC = () => {
               <div className="w-full flex justify-center py-4 md:absolute md:bottom-6 md:left-6 md:w-auto md:py-0 z-20 border-t border-slate-100 md:border-t-0 bg-slate-50/50 md:bg-transparent">
                 <div className="flex items-center gap-3 md:gap-6 bg-white/80 backdrop-blur-md px-4 py-2 md:px-6 md:py-3 rounded-full shadow-lg border border-slate-200/60 transition-transform hover:scale-105 scale-90 md:scale-100 origin-center md:origin-bottom-left">
                   <div className="flex items-center gap-3">
-                    <span className="w-3 h-3 rounded-full bg-sky-600 border-2 border-white shadow-md ring-1 ring-sky-100"></span>
+                    <span className="w-3 h-3 rounded-full wow-button-gradient border-2 border-white shadow-md ring-1 ring-sky-100"></span>
                     <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Cabang Utama</span>
                   </div>
                   <div className="w-px h-6 bg-slate-300"></div>
                   <div className="flex items-center gap-3">
-                    <span className="w-3 h-3 rounded-full bg-cyan-500 border-2 border-white shadow-md ring-1 ring-cyan-100"></span>
+                    <span className="w-3 h-3 rounded-full wow-button-gradient border-2 border-white shadow-md ring-1 ring-cyan-100"></span>
                     <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Depo Logistik</span>
                   </div>
                 </div>
@@ -381,7 +381,7 @@ const NetworkSection: React.FC = () => {
                     {/* Body */}
                     <div className="p-10 flex-grow flex flex-col">
                       <div className="mb-8 flex-grow">
-                        <h4 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 tracking-tighter leading-none group-hover:text-blue-600 transition-colors">
+                        <h4 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 tracking-tighter leading-none group-hover:text-cyan-500 inline-block transition-colors">
                           {branch.name}
                         </h4>
                         <div className="h-1.5 w-12 bg-slate-100 rounded-full mb-6 group-hover:w-full transition-all duration-1000 overflow-hidden">
@@ -398,7 +398,7 @@ const NetworkSection: React.FC = () => {
                       {/* Action */}
                       <button
                         onClick={() => setModalBranch(branch)}
-                        className={`w-full h-16 rounded-[1.5rem] bg-slate-50 text-slate-900 text-xs font-black uppercase tracking-[0.2em] border border-slate-100 hover:bg-slate-900 hover:text-white transition-all duration-500 flex items-center justify-center gap-4 group/btn overflow-hidden relative`}
+                        className={`w-full h-16 rounded-[1.5rem] bg-slate-50 text-slate-900 text-xs font-black uppercase tracking-[0.2em] border border-slate-100 hover:wow-button-gradient hover:text-white transition-all duration-500 flex items-center justify-center gap-4 group/btn overflow-hidden relative`}
                       >
                         <span className="relative z-10">Lihat Peta</span>
                         <div className="w-8 h-8 rounded-xl bg-slate-200 group-hover/btn:bg-white/20 flex items-center justify-center transition-colors relative z-10">
@@ -474,7 +474,7 @@ const NetworkSection: React.FC = () => {
 
                   <div>
                     <div className="flex items-center gap-3 mb-8">
-                      <div className="px-4 py-2 bg-blue-600 rounded-xl text-[10px] font-black text-white uppercase tracking-[0.2em] shadow-lg shadow-blue-500/20">
+                      <div className="px-4 py-2 wow-button-gradient rounded-xl text-[10px] font-black text-white uppercase tracking-[0.2em] shadow-lg shadow-blue-500/20">
                         {modalBranch.type}
                       </div>
                       <div className="px-4 py-2 bg-slate-100 rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
@@ -488,7 +488,7 @@ const NetworkSection: React.FC = () => {
 
                     <div className="space-y-8 mt-12">
                       <div className="flex gap-6 group">
-                        <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
+                        <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:wow-button-gradient group-hover:text-white transition-all duration-500">
                           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </div>
                         <div>
@@ -498,7 +498,7 @@ const NetworkSection: React.FC = () => {
                       </div>
 
                       <div className="flex gap-6 group">
-                        <div className="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-500">
+                        <div className="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center flex-shrink-0 group-hover:wow-button-gradient group-hover:text-white transition-all duration-500">
                           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                         </div>
                         <div>
@@ -512,7 +512,7 @@ const NetworkSection: React.FC = () => {
                   <div className="mt-12 lg:mt-0 pb-20 md:pb-0 relative z-[60]">
                     <button
                       onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(modalBranch.name + ' ' + modalBranch.city)}`, '_blank')}
-                      className="w-full h-18 py-6 bg-primary text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-primary/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group/dir relative z-[60]"
+                      className="w-full h-18 py-6 wow-button-gradient text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-primary/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group/dir relative z-[60]"
                     >
                       <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
                       Dapatkan Petunjuk Arah

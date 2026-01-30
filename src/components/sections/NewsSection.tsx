@@ -123,18 +123,21 @@ const NewsSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {t('news.tagline')}
             </span>
-            <h2 className="text-2xl sm:text-6xl font-black tracking-tighter leading-none mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
               {t('news.title.text')} <br />
-              <span className="italic">{t('news.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('news.title.italic')}</span>
             </h2>
             <p className="text-xl text-gray-500 font-medium leading-relaxed">
               {t('news.description')}
             </p>
           </div>
           <div className="hidden sm:flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            <button className="flex items-center gap-4 px-10 py-5 bg-gradient-to-r from-primary to-accent text-white font-black rounded-2xl hover:opacity-90 transition-all uppercase tracking-widest text-[10px] enterprise-shadow group hover-move-icon">
-              {t('news.archive')}
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            <button
+              onClick={() => navigate('/news')}
+              className="px-10 py-5 wow-button-gradient text-white font-black rounded-2xl flex items-center gap-3 group shadow-2xl shadow-primary/20"
+            >
+              {t('news.cta')}
+              <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </button>
           </div>
         </div>
@@ -152,7 +155,7 @@ const NewsSection: React.FC = () => {
               onClick={scrollPrev}
               disabled={!canScrollPrev}
               className={`absolute -left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-20 w-16 h-16 rounded-full flex items-center justify-center transition-all backdrop-blur-md border ${canScrollPrev
-                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:bg-primary hover:text-white hover:-translate-x-2'
+                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:wow-button-gradient hover:text-white hover:-translate-x-2 border-transparent'
                 : 'bg-gray-50/50 border-gray-100 text-gray-300 cursor-not-allowed'
                 }`}
             >
@@ -163,7 +166,7 @@ const NewsSection: React.FC = () => {
               onClick={scrollNext}
               disabled={!canScrollNext}
               className={`absolute -right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-20 w-16 h-16 rounded-full flex items-center justify-center transition-all backdrop-blur-md border ${canScrollNext
-                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:bg-primary hover:text-white hover:translate-x-2'
+                ? 'bg-white/90 border-gray-200 text-primary shadow-2xl hover:wow-button-gradient hover:text-white hover:translate-x-2 border-transparent'
                 : 'bg-gray-50/50 border-gray-100 text-gray-300 cursor-not-allowed'
                 }`}
             >
@@ -194,7 +197,7 @@ const NewsSection: React.FC = () => {
 
                       <div className="p-6 md:p-10 flex flex-col h-[calc(100%-16/10)]">
                         <div className="flex items-center gap-3 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">
-                          <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 wow-text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                           {formatDate(item.published_at)}
@@ -204,7 +207,7 @@ const NewsSection: React.FC = () => {
                           <span className={`inline-block px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${categoryColors[item.category] || categoryColors.default}`}>
                             {categoryLabels[item.category] || item.category}
                           </span>
-                          <h3 className="text-2xl font-black text-primary group-hover:text-accent transition-colors leading-tight tracking-tighter line-clamp-2 min-h-[3.5rem]">
+                          <h3 className="text-2xl font-bold text-gray-800 group-hover:wow-text-primary transition-colors duration-300 leading-tight tracking-tight line-clamp-2 min-h-[3.5rem]">
                             {language === 'id' ? item.title_id : item.title_en}
                           </h3>
                         </div>
@@ -215,8 +218,8 @@ const NewsSection: React.FC = () => {
                         />
 
                         <div className="pt-8 border-t border-gray-50 flex items-center justify-between mt-auto">
-                          <span className="text-[10px] font-black text-primary uppercase tracking-widest group-hover:text-accent transition-colors">{t('news.readmore')}</span>
-                          <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-primary group-hover:bg-accent group-hover:text-white transition-all transform group-hover:translate-x-2">
+                          <span className="text-[10px] font-black text-cyan-500 uppercase tracking-widest group-hover:text-cyan-600 inline-block transition-colors">{t('news.readmore')}</span>
+                          <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-white transition-all transform group-hover:translate-x-2">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                           </div>
                         </div>
@@ -231,7 +234,10 @@ const NewsSection: React.FC = () => {
 
         {/* Mobile View All */}
         <div className="lg:hidden text-center mt-12">
-          <button className="w-full py-5 bg-primary text-white font-black rounded-2xl shadow-xl uppercase tracking-widest text-[10px]">
+          <button
+            onClick={() => navigate('/news')}
+            className="w-full py-5 wow-button-gradient text-white font-black rounded-2xl shadow-xl uppercase tracking-widest text-[10px]"
+          >
             {t('news.discovery')}
           </button>
         </div>

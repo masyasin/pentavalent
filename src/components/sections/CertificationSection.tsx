@@ -89,9 +89,9 @@ const CertificationSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-accent/5 text-accent rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-accent/10">
               {t('qa.title')}
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-10 text-slate-900">
               {t('qa.subtitle')?.split(' ')[0]} <br />
-              <span className="italic">{t('qa.subtitle')?.split(' ').slice(1).join(' ')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-4">{t('qa.subtitle')?.split(' ').slice(1).join(' ')}</span>
             </h2>
             <p className="text-xl text-gray-500 font-medium leading-relaxed mb-10">
               {t('qa.desc')}
@@ -106,7 +106,7 @@ const CertificationSection: React.FC = () => {
                   <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-inner">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                   </div>
-                  <span className="text-lg font-black text-primary uppercase tracking-tight">{item}</span>
+                  <span className="text-lg font-black wow-text-primary inline-block uppercase tracking-tight">{item}</span>
                 </div>
               ))}
             </div>
@@ -128,7 +128,7 @@ const CertificationSection: React.FC = () => {
                     </div>
                     <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em] bg-accent/10 px-4 py-1.5 rounded-full">Active</span>
                   </div>
-                  <h3 className="text-2xl font-black text-primary mb-4 tracking-tight leading-tight group-hover:text-accent transition-colors">
+                  <h3 className="text-2xl font-black text-primary mb-4 tracking-tight leading-tight group-hover:wow-text-primary inline-block transition-colors">
                     {cert.name}
                   </h3>
                   <p className="text-gray-500 font-medium leading-relaxed mb-8">
@@ -136,7 +136,7 @@ const CertificationSection: React.FC = () => {
                   </p>
                   <div className="pt-6 border-t border-gray-50 flex items-center justify-between">
                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Registration ID: <br /> <span className="text-primary mt-1 block tracking-normal">{cert.certificate_number || `TR-00${cert.id.slice(0, 4)}`}</span></span>
-                    <button className="text-primary hover:text-accent transition-colors">
+                    <button className="wow-text-primary hover:wow-icon-gradient transition-colors">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
                     </button>
                   </div>
@@ -149,7 +149,7 @@ const CertificationSection: React.FC = () => {
         {/* Global standards footer */}
         <div className="mt-16 md:mt-24 pt-12 border-t border-gray-100 flex flex-wrap justify-center items-center gap-6 sm:gap-16 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
           {['ISO 9001:2015', 'CDOB (BPOM)', 'CDAKB (KEMENKES)', 'Tbk List Price'].map((standard, i) => (
-            <div key={i} className="text-xl font-black text-primary tracking-tighter uppercase">{standard}</div>
+            <div key={i} className="text-xl font-black wow-text-primary inline-block tracking-tighter uppercase">{standard}</div>
           ))}
         </div>
       </div>

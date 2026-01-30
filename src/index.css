@@ -29,9 +29,14 @@
     --muted: 210 30% 96%;
     --muted-foreground: 215 30% 65%;
 
-    --accent: 190 70% 75%;
-    /* Pastel Cyan accent */
-    --accent-foreground: 215 50% 30%;
+    --accent: 199 89% 48%;
+    /* #0ea5e9 */
+    --accent-foreground: 210 40% 98%;
+    /* Brand WOW Gradient Colors */
+    --wow-blue: #2563eb;
+    --wow-cyan: #06b6d4;
+    --wow-emerald: #10b981;
+    --wow-gradient: linear-gradient(135deg, var(--wow-blue), var(--wow-cyan), var(--wow-emerald));
 
     --destructive: 0 84% 75%;
     --destructive-foreground: 0 0% 100%;
@@ -110,6 +115,26 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.wow-title-gradient {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block;
+}
+
+.wow-button-gradient {
+  @apply bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 text-white shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-105 active:scale-95 transition-all duration-300;
+}
+
+.wow-icon-gradient {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400;
+}
+
+.wow-text-primary {
+  @apply text-cyan-500;
+}
+
+.wow-border-glow {
+  @apply hover:border-cyan-400/50 hover:shadow-[0_0_30px_-5px_#22d3ee4d] transition-all duration-500;
 }
 
 .card-hover {

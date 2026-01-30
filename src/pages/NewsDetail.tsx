@@ -302,7 +302,7 @@ const NewsDetail: React.FC = () => {
                         </div>
 
                         <div className="relative">
-                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.2] max-w-4xl mx-auto text-white drop-shadow-lg">
+                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-[1.2] max-w-4xl mx-auto text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic px-4 drop-shadow-sm">
                                 {language === 'id' ? article.title_id : article.title_en}
                             </h1>
                             <div className="w-12 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_15px_rgba(var(--primary),0.5)] opacity-80"></div>
@@ -435,7 +435,7 @@ const NewsDetail: React.FC = () => {
                                                 <input type="number" placeholder="?" value={userCaptcha} onChange={(e) => setUserCaptcha(e.target.value)} className="w-20 bg-white/10 border-white/10 rounded-xl px-4 py-2 text-sm focus:bg-white/20 focus:ring-2 focus:ring-primary/50 transition-all outline-none" required />
                                             </div>
 
-                                            <button type="submit" disabled={submittingComment} className="w-full md:w-auto px-10 py-4 bg-primary text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:bg-white hover:text-primary transition-all shadow-lg shadow-primary/20 disabled:opacity-50">
+                                            <button type="submit" disabled={submittingComment} className="w-full md:w-auto px-10 py-4 wow-button-gradient text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-primary/20 disabled:opacity-50">
                                                 {submittingComment ? 'Sending...' : 'Post Comment'}
                                             </button>
                                         </form>
@@ -479,7 +479,7 @@ const NewsDetail: React.FC = () => {
                                 {subscribed ? <div className="bg-white/20 p-4 rounded-xl text-center font-bold animate-in fade-in">Thank you for subscribing!</div>
                                     : <form onSubmit={handleSubscribe} className="space-y-4">
                                         <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full px-5 py-4 bg-white/10 border border-white/20 rounded-xl placeholder:text-white/50 text-white font-bold outline-none focus:bg-white/20 transition-all" />
-                                        <button type="submit" className="w-full py-4 bg-white text-primary font-black uppercase tracking-widest text-xs rounded-xl hover:bg-white/90 transition-all shadow-xl">Subscribe Now</button>
+                                        <button type="submit" className="w-full py-4 wow-button-gradient text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-xl">Subscribe Now</button>
                                     </form>}
                             </div>
                         </div>

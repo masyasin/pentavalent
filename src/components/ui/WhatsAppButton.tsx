@@ -15,7 +15,7 @@ const WhatsAppButton: React.FC = () => {
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+        className="relative flex items-center justify-center w-14 h-14 wow-button-gradient rounded-full shadow-lg hover:shadow-cyan-500/40 transition-all duration-300 group"
         aria-label="Contact via WhatsApp"
       >
         <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@ const WhatsAppButton: React.FC = () => {
         </svg>
 
         {/* Pulse animation */}
-        <span className="absolute w-full h-full rounded-full bg-green-500 animate-ping opacity-30"></span>
+        <span className="absolute w-full h-full rounded-full wow-button-gradient animate-ping opacity-30"></span>
 
         {/* Tooltip */}
         <span className={`absolute right-16 whitespace-nowrap bg-gray-900 text-white text-sm px-3 py-2 rounded-lg transition-all duration-300 ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2 pointer-events-none'}`}>

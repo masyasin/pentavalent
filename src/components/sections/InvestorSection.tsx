@@ -79,21 +79,21 @@ const InvestorSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {t('investor.tagline')}
             </span>
-            <h2 className="text-3xl sm:text-6xl font-black tracking-tighter leading-none mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
               {t('investor.title.text')} <br />
-              <span className="italic">{t('investor.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('investor.title.italic')}</span>
             </h2>
             <p className="text-xl text-gray-500 font-medium leading-relaxed">
               {t('investor.description')}
             </p>
           </div>
 
-          <div className="glass-panel p-8 rounded-[2.5rem] enterprise-shadow border-white/60 flex items-center gap-8 group hover:bg-primary transition-all duration-500">
-            <div className="w-16 h-16 rounded-3xl bg-accent flex items-center justify-center text-white shadow-xl shadow-accent/20 group-hover:bg-white group-hover:text-primary transition-all">
+          <div className="glass-panel p-8 rounded-[2.5rem] enterprise-shadow border-white/60 flex items-center gap-8 group hover:wow-border-glow transition-all duration-500">
+            <div className="w-16 h-16 rounded-3xl wow-button-gradient flex items-center justify-center text-white shadow-xl shadow-cyan-500/20 group-hover:scale-110 transition-all">
               <svg className="w-8 h-8 font-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
             </div>
             <div>
-              <div className="text-3xl font-black text-primary group-hover:text-white transition-colors leading-none mb-1">PENT</div>
+              <div className="text-3xl font-black wow-text-primary inline-block transition-colors leading-none mb-1">PENT</div>
               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-white/60 transition-colors">{t('investor.ticker.label')}</div>
             </div>
           </div>
@@ -106,10 +106,10 @@ const InvestorSection: React.FC = () => {
             { label: t('investor.stats.mcap'), value: '2.4T', color: 'primary' },
             { label: t('investor.stats.dividen'), value: '4.2%', color: 'primary' }
           ].map((stat, i) => (
-            <div key={i} className="bg-white p-6 sm:p-12 rounded-[2rem] md:rounded-[3rem] enterprise-shadow border border-gray-100 group hover:ring-4 ring-primary/5 transition-all text-center">
-              <div className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-4 group-hover:text-primary transition-colors">{stat.label}</div>
-              <div className={`text-5xl font-black ${stat.color === 'accent' ? 'text-accent' : 'text-primary'} mb-6 tracking-tighter group-hover:scale-110 transition-transform`}>{stat.value}</div>
-              <div className="flex items-center justify-center gap-2 text-accent">
+            <div key={i} className="bg-white p-6 sm:p-12 rounded-[2rem] md:rounded-[3rem] enterprise-shadow border border-gray-100 group wow-border-glow transition-all text-center">
+              <div className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-4 group-hover:wow-text-primary transition-colors">{stat.label}</div>
+              <div className={`text-5xl font-black wow-text-primary inline-block mb-6 tracking-tighter group-hover:scale-110 transition-transform`}>{stat.value}</div>
+              <div className="flex items-center justify-center gap-2 wow-text-primary">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                 <span className="text-xs font-black uppercase tracking-widest">{t('investor.stats.growth')}</span>
               </div>
@@ -131,7 +131,7 @@ const InvestorSection: React.FC = () => {
               {['Annual Report 2024', 'Quarterly Presentation Q3', 'Consolidated Financials'].map((item, i) => (
                 <button key={i} className="w-full flex items-center justify-between p-6 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/5 transition-all group">
                   <span className="font-bold tracking-tight">{item}</span>
-                  <div className="w-10 h-10 bg-white text-primary rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 bg-white group-hover:text-cyan-500 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5m0 0l5-5m-5 5V3" /></svg>
                   </div>
                 </button>
@@ -141,15 +141,15 @@ const InvestorSection: React.FC = () => {
 
           <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] p-8 md:p-20 border border-gray-100 enterprise-shadow relative group">
             <div className="flex items-start justify-between mb-12">
-              <div className="w-16 h-16 bg-accent/10 text-accent rounded-3xl flex items-center justify-center">
+              <div className="w-16 h-16 wow-button-gradient text-white rounded-3xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
               </div>
               <div className="text-right">
                 <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">{t('investor.calendar.upcoming')}</div>
-                <div className="text-lg font-black text-primary">AGMS FY2024</div>
+                <div className="text-lg font-black wow-text-primary">AGMS FY2024</div>
               </div>
             </div>
-            <h3 className="text-4xl font-black mb-8 tracking-tighter leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{t('investor.calendar.title')}</h3>
+            <h3 className="text-4xl font-black mb-8 tracking-tighter leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-4">{t('investor.calendar.title')}</h3>
             <div className="space-y-8">
               {[
                 { date: 'MAR 15', label: 'FY2024 Financial Results Release', type: 'Earnings' },
@@ -158,12 +158,12 @@ const InvestorSection: React.FC = () => {
               ].map((event, i) => (
                 <div key={i} className="flex items-center gap-8 group cursor-pointer">
                   <div className="text-center w-20">
-                    <div className="text-sm font-black text-accent uppercase tracking-widest">{event.date.split(' ')[0]}</div>
-                    <div className="text-2xl font-black text-primary">{event.date.split(' ')[1]}</div>
+                    <div className="text-sm font-black wow-text-primary uppercase tracking-widest">{event.date.split(' ')[0]}</div>
+                    <div className="text-2xl font-black text-slate-900 group-hover:wow-text-primary inline-block transition-colors">{event.date.split(' ')[1]}</div>
                   </div>
                   <div className="flex-1 pb-8 border-b border-gray-50 group-last:border-0">
-                    <div className="text-sm font-black text-gray-400 uppercase tracking-widest mb-1 group-hover:text-accent transition-colors">{event.type}</div>
-                    <div className="text-lg font-bold text-primary group-hover:translate-x-2 transition-transform duration-300">{event.label}</div>
+                    <div className="text-sm font-black text-gray-400 uppercase tracking-widest mb-1 group-hover:wow-text-primary transition-colors">{event.type}</div>
+                    <div className="text-lg font-bold text-slate-900 group-hover:wow-text-primary inline-block group-hover:translate-x-2 transition-all duration-300">{event.label}</div>
                   </div>
                 </div>
               ))}

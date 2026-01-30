@@ -95,9 +95,9 @@ const AboutSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {info ? (language === 'id' ? info.tagline_id : info.tagline_en) : t('about.tagline')}
             </span>
-            <h2 className="text-2xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-none mb-6 md:mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="text-2xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 mb-6 md:mb-10 text-slate-900">
               {info ? (language === 'id' ? info.title_text_id : info.title_text_en) : t('about.title.text')} <br />
-              <span className="italic">{info ? (language === 'id' ? info.title_italic_id : info.title_italic_en) : t('about.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{info ? (language === 'id' ? info.title_italic_id : info.title_italic_en) : t('about.title.italic')}</span>
             </h2>
             <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed mb-8 md:mb-10">
               {info ? (language === 'id' ? info.description_id : info.description_en) : t('about.description')}
@@ -136,7 +136,7 @@ const AboutSection: React.FC = () => {
         {/* Strategic Pillars: Vision & Mission - Redesigned for Maximum Impact */}
         <div className="mb-48 relative">
           {/* Background Decorative Element */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/[0.01] rounded-[10rem] blur-3xl pointer-events-none"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gradient-to-b from-slate-50/0 via-slate-100/50 to-slate-50/0 rounded-[10rem] blur-3xl pointer-events-none"></div>
 
           <div className="grid lg:grid-cols-2 gap-10 relative z-10">
             {/* Vision Pillar */}
@@ -156,8 +156,8 @@ const AboutSection: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-2 block">North Star</span>
-                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
-                        {language === 'id' ? 'Visi' : 'Our'} <span className="text-cyan-500 italic">{language === 'id' ? 'Kami' : 'Vision'}</span>
+                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-[1.1] py-2">
+                        {language === 'id' ? 'Visi' : 'Our'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{language === 'id' ? 'Kami' : 'Vision'}</span>
                       </h3>
                     </div>
                   </div>
@@ -191,8 +191,8 @@ const AboutSection: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-2 block">Daily Drive</span>
-                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
-                        {language === 'id' ? 'Misi' : 'Our'} <span className="text-primary italic">{language === 'id' ? 'Kami' : 'Mission'}</span>
+                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-[1.1] py-2">
+                        {language === 'id' ? 'Misi' : 'Our'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{language === 'id' ? 'Kami' : 'Mission'}</span>
                       </h3>
                     </div>
                   </div>
@@ -213,16 +213,19 @@ const AboutSection: React.FC = () => {
 
         {/* Core Values Section: Redesigned for Architectural Impact */}
         <div className="mb-48 relative">
-          {/* Subtle Background Pattern */}
-          <div className="absolute inset-0 bg-slate-50/50 rounded-[6rem] -rotate-1 pointer-events-none border border-slate-100/50"></div>
+          {/* Deep Background Pattern */}
+          <div className="absolute inset-0 bg-slate-900 rounded-[6rem] -rotate-1 pointer-events-none overflow-hidden">
+            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]"></div>
+          </div>
 
-          <div className="relative z-10 px-6 sm:px-12">
+          <div className="relative z-10 px-6 sm:px-12 py-24 md:py-32">
             <div className="text-center max-w-3xl mx-auto mb-32">
-              <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
+              <span className="inline-block px-5 py-2 bg-white/10 text-cyan-400 rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 border border-white/10 backdrop-blur-md">
                 {t('about.values.tagline')}
               </span>
-              <h3 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter leading-none">
-                {language === 'id' ? 'Filosofi' : 'Philosophy of'} <span className="text-cyan-500 italic">Penta Valent</span>
+              <h3 className="text-3xl md:text-5xl lg:text-7xl font-black text-white tracking-tighter leading-[1.1] py-2">
+                {language === 'id' ? 'Filosofi' : 'Philosophy of'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">Penta Valent</span>
               </h3>
             </div>
 
@@ -230,37 +233,34 @@ const AboutSection: React.FC = () => {
               {values.map((value, idx) => (
                 <div
                   key={value.id}
-                  className="group relative h-full"
+                  className="group relative h-full wow-border-glow border border-white/10 rounded-[3rem]"
                 >
                   {/* Outer Glow */}
-                  <div className="absolute -inset-1 bg-gradient-to-br from-cyan-400/20 to-transparent rounded-[4rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-cyan-400/20 to-transparent rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                  <div className="relative h-full bg-white rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-12 border border-slate-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] hover:shadow-cyan-500/10 transition-all duration-700 overflow-hidden flex flex-col items-center text-center">
+                  <div className="relative h-full bg-white/5 backdrop-blur-xl rounded-[3rem] p-10 border border-white/10 overflow-hidden group flex flex-col items-center text-center">
+                    {/* Visual Accent */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-400/10 to-transparent rounded-bl-[5rem] -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
 
                     {/* Massive Background Indicator */}
-                    <div className="absolute -top-10 -right-4 text-[12rem] font-black text-slate-50 select-none pointer-events-none group-hover:text-cyan-50/50 transition-colors duration-700">
+                    <div className="absolute -top-10 -right-4 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none group-hover:text-cyan-400/5 transition-colors duration-700 leading-none">
                       {String(idx + 1).padStart(2, '0')}
                     </div>
 
                     {/* Icon Strategy */}
-                    <div className="w-24 h-24 bg-white border border-slate-100 rounded-[2.5rem] flex items-center justify-center text-cyan-500 shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative mb-12">
-                      {/* Holographic Reflection */}
-                      <div className="absolute inset-2 bg-gradient-to-br from-cyan-50 to-transparent rounded-[2rem] opacity-50"></div>
+                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center wow-text-primary shadow-lg group-hover:scale-110 transition-transform duration-500 mb-12">
                       <div className="relative z-10 scale-125">
                         {getIcon(value.icon_name)}
                       </div>
                     </div>
 
-                    <h4 className="text-xl md:text-3xl font-black text-slate-900 mb-4 md:mb-6 tracking-tighter uppercase leading-none group-hover:text-cyan-600 transition-colors">
+                    <h4 className="text-xl md:text-2xl font-black text-white mb-4 md:mb-6 tracking-tighter uppercase leading-tight group-hover:text-cyan-400 transition-colors">
                       {language === 'id' ? value.title_id : value.title_en}
                     </h4>
 
-                    <p className="text-slate-400 font-bold text-xs md:text-sm leading-relaxed group-hover:text-slate-600 transition-colors">
+                    <p className="text-blue-100/40 font-bold text-xs md:text-sm leading-relaxed group-hover:text-blue-100/70 transition-colors">
                       {language === 'id' ? value.description_id : value.description_en}
                     </p>
-
-                    {/* Animated Baseline */}
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent group-hover:w-full transition-all duration-700"></div>
                   </div>
                 </div>
               ))}
@@ -268,51 +268,116 @@ const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="relative">
-          <div className="text-center max-w-2xl mx-auto mb-20 md:mb-32">
-            <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
-              {t('about.timeline.tagline')}
-            </span>
-            <h3 className="text-3xl md:text-4xl sm:text-5xl font-black tracking-tighter bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {t('about.timeline.title')}
-            </h3>
+        {/* Strategic Timeline: Redesigned for Immersive Storytelling */}
+        <div className="relative mt-32 md:mt-48 -mx-6 md:-mx-12 lg:-mx-16 px-6 md:px-12 lg:px-16 py-32 bg-[#051129] overflow-hidden rounded-[4rem] md:rounded-[6rem]">
+          {/* Background Ambient Effects */}
+          <div className="absolute top-0 left-0 w-full h-full">
+            <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
+            <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
           </div>
 
-          <div className="relative max-w-5xl mx-auto">
-            {/* Timeline Line */}
-            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/10 via-primary/40 to-primary/10 -translate-x-1/2 rounded-full"></div>
+          <div className="relative z-10">
+            <div className="text-center max-w-3xl mx-auto mb-24 md:mb-32">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 mb-8 transform hover:scale-105 transition-transform cursor-default">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                </span>
+                <span className="text-[10px] font-black text-white/70 uppercase tracking-[0.3em]">
+                  {t('about.timeline.tagline')}
+                </span>
+              </div>
+              <h3 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter leading-[1.1] mb-8 py-2">
+                {language === 'id' ? (
+                  <>Evolusi <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic px-4">Strategis</span></>
+                ) : (
+                  <>Strategic <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic px-4">Evolution</span></>
+                )}
+              </h3>
+              <p className="text-blue-100/50 text-lg font-medium leading-relaxed">
+                {language === 'id'
+                  ? 'Perjalanan transformatif kami dalam mendefinisikan ulang standar distribusi farmasi di Indonesia.'
+                  : 'Our transformative journey in redefining pharmaceutical distribution standards in Indonesia.'}
+              </p>
+            </div>
 
-            <div className="space-y-16 md:space-y-32">
-              {timeline.map((item, index) => (
-                <div key={item.id} className={`relative flex flex-col md:flex-row items-center gap-12 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                  {/* Anchor Point */}
-                  <div className="absolute left-6 md:left-1/2 w-12 h-12 bg-white rounded-full border-4 border-primary z-20 -translate-x-1/2 flex items-center justify-center enterprise-shadow">
-                    <div className="w-4 h-4 bg-accent rounded-full animate-pulse shadow-[0_0_15px_rgba(6,182,212,0.5)]"></div>
-                  </div>
+            <div className="relative max-w-[1400px] mx-auto">
+              {/* Central Energy Line */}
+              <div className="absolute left-[30px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-500/50 to-transparent -translate-x-1/2 rounded-full hidden md:block">
+                {/* Traveling Glow Point */}
+                <div className="absolute top-0 left-[-2px] w-[5px] h-[100px] bg-gradient-to-b from-transparent via-cyan-400 to-transparent animate-infinite-scroll"></div>
+              </div>
 
-                  {/* Content Card */}
-                  <div className={`w-full md:w-1/2 md:pl-0 ${index % 2 === 0 ? 'md:pr-20 md:text-right' : 'md:pl-20 md:text-left'} pl-12 sm:pl-16`}>
-                    <div className="group bg-white p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-gray-100 enterprise-shadow hover:-translate-y-2 transition-all duration-700 relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-primary transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
+              {/* Mobile Line */}
+              <div className="absolute left-[30px] top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/30 via-cyan-500/50 to-transparent md:hidden"></div>
 
-                      <div className={`inline-block px-6 py-2 bg-primary text-white text-[10px] font-black rounded-full mb-8 tracking-[0.2em] transform group-hover:scale-110 transition-transform`}>
+              <div className="space-y-12 md:space-y-20">
+                {timeline.map((item, index) => (
+                  <div key={item.id} className={`group relative flex flex-col md:flex-row items-start md:items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+
+                    {/* Year Descriptor - Side Panel */}
+                    <div className={`hidden md:flex w-full md:w-1/2 items-center ${index % 2 === 0 ? 'justify-start pl-20' : 'justify-end pr-20'}`}>
+                      <div className="text-[12rem] font-black leading-none text-white/[0.03] select-none group-hover:text-blue-500/10 transition-colors duration-700">
                         {item.year}
                       </div>
+                    </div>
 
-                      <h4 className="text-xl md:text-3xl font-black text-primary mb-4 md:mb-6 tracking-tighter group-hover:text-accent transition-colors leading-tight">
-                        {language === 'id' ? item.title_id : item.title_en}
-                      </h4>
+                    {/* Timeline Node */}
+                    <div className="absolute left-[30px] md:left-1/2 w-14 h-14 bg-[#051129] rounded-2xl border-2 border-white/10 z-20 -translate-x-1/2 flex items-center justify-center group-hover:border-cyan-500/50 transition-all duration-500 group-hover:scale-110">
+                      <div className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 via-cyan-400 to-cyan-500 shadow-[0_0_20px_rgba(34,211,238,0.5)] group-hover:scale-125 transition-transform"></div>
 
-                      <p className="text-sm md:text-lg text-gray-500 font-bold leading-relaxed">
-                        {language === 'id' ? item.description_id : item.description_en}
-                      </p>
+                      {/* Connection Branch */}
+                      <div className={`hidden md:block absolute top-1/2 w-20 h-px bg-gradient-to-r ${index % 2 === 0 ? 'right-full from-transparent to-blue-500/20' : 'left-full from-blue-500/20 to-transparent'} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
+                    </div>
+
+                    {/* Dynamic Card */}
+                    <div className={`w-full md:w-1/2 pl-20 md:pl-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}>
+                      <div className="relative p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl hover:bg-white/[0.07] transition-all duration-700 group/card overflow-hidden">
+                        {/* Interactive Corner Accent */}
+                        <div className={`absolute top-0 ${index % 2 === 0 ? 'right-0' : 'left-0'} w-32 h-32 bg-gradient-to-br from-cyan-400/10 to-transparent blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity`}></div>
+
+                        {/* Mobile Year Tag */}
+                        <div className="flex md:hidden items-center gap-3 mb-6">
+                          <span className="px-4 py-1.5 bg-blue-600 rounded-lg text-xs font-black text-white italic tracking-tighter shadow-lg shadow-blue-900/40">
+                            {item.year}
+                          </span>
+                        </div>
+
+                        <div className={`inline-flex md:hidden items-center gap-2 mb-4 text-[10px] font-black text-blue-400 uppercase tracking-widest ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
+                          <div className="w-8 h-px bg-blue-500/30"></div>
+                          Strategic Milestone
+                        </div>
+
+                        <h4 className={`text-2xl md:text-3xl font-black text-white mb-6 tracking-tighter leading-tight group-hover/card:text-cyan-400 transition-colors ${index % 2 === 0 ? 'md:text-right' : ''}`}>
+                          {language === 'id' ? item.title_id : item.title_en}
+                        </h4>
+
+                        <p className={`text-sm md:text-lg text-blue-100/60 font-medium leading-relaxed ${index % 2 === 0 ? 'md:text-right ml-auto' : ''} max-w-lg`}>
+                          {language === 'id' ? item.description_id : item.description_en}
+                        </p>
+
+                        {/* Hidden Decorative Index */}
+                        <div className={`absolute bottom-8 ${index % 2 === 0 ? 'left-8' : 'right-8'} text-[4rem] font-black text-white/[0.02] italic leading-none`}>
+                          #{String(index + 1).padStart(2, '0')}
+                        </div>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
 
-                  {/* Spacing for layout consistency */}
-                  <div className="hidden md:block w-1/2"></div>
+            {/* Final CTA / Quote */}
+            <div className="mt-32 text-center">
+              <div className="inline-block p-1 rounded-3xl bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400">
+                <div className="px-12 py-10 rounded-[1.5rem] bg-[#051129] text-center">
+                  <p className="text-xl md:text-2xl font-black text-white italic mb-2">
+                    {language === 'id' ? '"Membangun masa depan kesehatan Indonesia."' : '"Shaping the future of healthcare in Indonesia."'}
+                  </p>
+                  <p className="text-cyan-400 text-xs font-black uppercase tracking-[0.4em]">Integrated Logistics Excellence</p>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>

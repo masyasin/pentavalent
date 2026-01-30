@@ -137,15 +137,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                   )}
                 </div>
                 {/* Optimized Overlay for maximum clarity */}
-                <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/40 via-transparent to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent"></div>
-
-                {/* Cinematic Light Streak */}
-                <div className="absolute bottom-[20%] -left-1/4 w-[150%] h-[1px] bg-gradient-to-r from-transparent via-accent/40 to-transparent blur-[100px] rotate-[-5deg] animate-pulse"></div>
-                <div className="absolute bottom-[18%] -left-1/4 w-[150%] h-[2px] bg-gradient-to-r from-transparent via-accent/20 to-transparent blur-[20px] rotate-[-5deg]"></div>
-
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>
+                {/* Clean slider - No shadows/overlays */}\n
               </div>
 
               {/* Content */}
@@ -190,7 +182,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                       <div className="flex flex-wrap gap-4 md:gap-6 animate-slide-in [animation-delay:400ms]">
                         <button
                           onClick={() => onNavigate(slide.cta_primary_link.replace('#', ''))}
-                          className="px-6 py-4 sm:px-10 sm:py-5 bg-accent text-white font-black rounded-2xl hover:opacity-90 transition-all duration-500 shadow-2xl flex items-center gap-3 group text-sm sm:text-base"
+                          className="px-6 py-4 sm:px-10 sm:py-5 wow-button-gradient font-black rounded-2xl flex items-center gap-3 group text-sm sm:text-base"
                         >
                           {language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en}
                           <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>

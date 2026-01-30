@@ -111,8 +111,8 @@ const FAQPage: React.FC = () => {
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
                             className={`px-6 py-3 rounded-full text-sm font-bold transition-all ${activeCategory === cat.id
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 scale-105'
-                                : 'bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                                ? 'wow-button-gradient'
+                                : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
                                 }`}
                         >
                             {cat.label}
@@ -200,7 +200,7 @@ const FAQPage: React.FC = () => {
                         </p>
                         <a
                             href="mailto:info@pentavalent.co.id"
-                            className="px-10 py-4 bg-white text-blue-700 font-bold rounded-xl hover:bg-blue-50 hover:scale-105 transition-all shadow-xl shadow-blue-900/20"
+                            className="px-10 py-4 wow-button-gradient font-bold rounded-xl"
                         >
                             {language === 'id' ? 'Hubungi Kami' : 'Contact Us'}
                         </a>

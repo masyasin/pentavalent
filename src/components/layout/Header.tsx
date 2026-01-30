@@ -89,14 +89,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-2 lg:px-3 py-2 rounded-full text-[12px] lg:text-[14px] font-bold uppercase tracking-wider transition-all duration-500 relative group whitespace-nowrap ${activeSection === item.id
+                  className={`px-2 lg:px-3 py-2 rounded-full text-[12px] lg:text-[14px] font-black uppercase tracking-wider transition-all duration-500 relative group whitespace-nowrap ${activeSection === item.id
                     ? (isScrolled ? 'text-primary' : 'text-white bg-white/20')
-                    : (isScrolled ? 'text-slate-600 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
+                    : (isScrolled ? 'text-slate-900 hover:text-primary' : 'text-white/80 hover:text-white hover:bg-white/10')
                     }`}
                 >
                   <span className="relative z-10">{item.label}</span>
                   {activeSection === item.id && isScrolled && (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-primary rounded-full animate-fade-in"></div>
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 rounded-full animate-fade-in"></div>
                   )}
                 </button>
               ))}
@@ -110,7 +110,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${language === lang
-                      ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                      ? 'bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 text-white shadow-lg shadow-cyan-500/20'
                       : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
                       }`}
                   >
@@ -143,7 +143,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
 
         {/* Scroll Progress Bar */}
         <div
-          className="absolute bottom-0 left-0 h-[3px] bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all duration-150 ease-out z-20"
+          className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-150 ease-out z-20"
           style={{ width: `${scrollProgress}%` }}
         ></div>
       </header>
@@ -168,7 +168,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                       onNavigate(item.id);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`w-full text-left px-5 py-4 rounded-2xl text-lg font-bold transition-all ${activeSection === item.id ? 'bg-primary/5 text-primary' : 'text-gray-600 hover:bg-gray-50 hover:text-primary'}`}
+                    className={`w-full text-left px-5 py-4 rounded-2xl text-lg font-bold transition-all ${activeSection === item.id ? 'bg-cyan-50/50 wow-text-primary' : 'text-gray-600 hover:bg-gray-50 hover:wow-text-primary'}`}
                   >
                     {item.label}
                   </button>
@@ -181,7 +181,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 ${language === lang ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`}
+                    className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 ${language === lang ? 'wow-button-gradient text-white shadow-lg shadow-cyan-500/20 scale-[1.02]' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`}
                   >
                     {lang === 'id' ? 'Indonesia' : 'English'}
                   </button>
@@ -223,11 +223,11 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 py-2">Results</h5>
                   {filteredResults.map(item => (
                     <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-cyan-200 hover:shadow-lg hover:shadow-cyan-500/10 transition-all text-left group">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center group-hover:wow-button-gradient group-hover:text-white transition-colors">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} /></svg>
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-slate-900 group-hover:text-cyan-600 transition-colors">{item.label}</h4>
+                        <h4 className="text-sm font-bold text-slate-900 group-hover:wow-icon-gradient inline-block transition-colors">{item.label}</h4>
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">{item.type}</p>
                       </div>
                       <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">

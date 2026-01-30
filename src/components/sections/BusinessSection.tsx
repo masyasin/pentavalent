@@ -65,9 +65,9 @@ const BusinessSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-8 shadow-xl shadow-primary/5">
               {t('business.tagline')}
             </span>
-            <h2 className="text-2xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-8 md:mb-10 text-slate-900">
+            <h2 className="text-2xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] py-2 mb-8 md:mb-10 text-slate-900">
               {t('business.title.text')} <br />
-              <span className="text-cyan-500 italic">{t('business.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('business.title.italic')}</span>
             </h2>
             <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-xl">
               {t('business.description')}
@@ -124,7 +124,7 @@ const BusinessSection: React.FC = () => {
                   }`}
               >
                 {activeTab === index && (
-                  <div className="absolute inset-0 bg-primary animate-in fade-in zoom-in duration-500 rounded-[1.5rem] lg:rounded-[2rem]"></div>
+                  <div className="absolute inset-0 wow-button-gradient animate-in fade-in zoom-in duration-500 rounded-[1.5rem] lg:rounded-[2rem]"></div>
                 )}
                 <span className="relative z-10 text-center">{language === 'id' ? line.title_id : line.title_en}</span>
                 {activeTab === index && (
@@ -207,7 +207,7 @@ const BusinessSection: React.FC = () => {
                     'Regulatory Compliance'
                   ]).map((feature, index) => (
                     <div key={index} className="flex items-center gap-5 group/feat">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 transition-all group-hover/feat:bg-cyan-500 group-hover/feat:text-white group-hover/feat:shadow-xl group-hover/feat:shadow-cyan-500/20 group-hover/feat:-translate-y-1">
+                      <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 transition-all group-hover/feat:bg-cyan-50 group-hover/feat:text-cyan-500 group-hover/feat:shadow-xl group-hover/feat:shadow-cyan-500/20 group-hover/feat:-translate-y-1">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                         </svg>
@@ -228,7 +228,7 @@ const BusinessSection: React.FC = () => {
                     { label: 'Partners', value: '70+ Principals' }
                   ]).map((stat, index) => (
                     <div key={index} className="group/stat">
-                      <div className="text-2xl md:text-4xl font-black text-slate-900 mb-2 group-hover/stat:text-cyan-500 transition-colors tracking-tighter">
+                      <div className="text-2xl md:text-4xl font-black text-slate-900 mb-2 group-hover/stat:text-cyan-500 inline-block transition-colors tracking-tighter">
                         {stat.value}
                       </div>
                       <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] group-hover/stat:text-slate-600 transition-colors">
@@ -275,7 +275,7 @@ const BusinessSection: React.FC = () => {
                 {item.icon}
               </div>
 
-              <h4 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 md:mb-6 tracking-tighter group-hover:text-cyan-600 transition-colors">
+              <h4 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 md:mb-6 tracking-tighter group-hover:text-cyan-500 inline-block transition-colors">
                 {item.title}
               </h4>
 

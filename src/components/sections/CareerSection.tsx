@@ -143,10 +143,11 @@ const CareerSection: React.FC = () => {
 
   return (
     <>
-      <section id="careers" className="py-20 md:py-40 bg-white relative overflow-hidden">
+      <section id="careers" className="py-20 md:py-40 bg-slate-50/30 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-slate-50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-50/50 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-blue-500/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-cyan-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>
+          <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         </div>
 
         <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
@@ -155,11 +156,11 @@ const CareerSection: React.FC = () => {
               <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-primary/5">
                 {t('career.future.title')}
               </span>
-              <h2 className="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+              <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
                 {language === 'id' ? (
-                  <>Bangun <span className="text-cyan-500 italic">Masa Depan</span> <br /> Kesehatan Bersama Kami</>
+                  <>Bangun <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">Masa Depan</span> <br /> Kesehatan Bersama Kami</>
                 ) : (
-                  <>Build the <span className="text-cyan-500 italic">Future of Healthcare</span> <br /> With Us</>
+                  <>Build the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">Future of Healthcare</span> <br /> With Us</>
                 )}
               </h2>
             </div>
@@ -170,7 +171,7 @@ const CareerSection: React.FC = () => {
               </div>
               <div className="w-px h-12 bg-slate-100"></div>
               <div className="text-right">
-                <div className="text-2xl md:text-4xl font-black text-cyan-500 leading-none">34</div>
+                <div className="text-2xl md:text-4xl font-black wow-text-primary leading-none">34</div>
                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Strategic Hubs</div>
               </div>
             </div>
@@ -191,7 +192,7 @@ const CareerSection: React.FC = () => {
                         }`}
                     >
                       {t(btn.key)}
-                      <div className={`w-1.5 h-1.5 rounded-full ${selectedCategory === btn.id ? 'bg-cyan-400' : 'bg-slate-200 group-hover:bg-slate-400'} transition-colors`}></div>
+                      <div className={`w-1.5 h-1.5 rounded-full ${selectedCategory === btn.id ? 'wow-button-gradient' : 'bg-slate-200 group-hover:bg-slate-400'} transition-colors`}></div>
                     </button>
                   ))}
                 </div>
@@ -204,7 +205,7 @@ const CareerSection: React.FC = () => {
                 </p>
                 <button
                   onClick={handleGeneralApply}
-                  className="w-full py-4 bg-accent/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-primary transition-all"
+                  className="w-full py-4 bg-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-primary transition-all backdrop-blur-md border border-white/20"
                 >
                   {t('career.talent_scout.button')}
                 </button>
@@ -227,14 +228,14 @@ const CareerSection: React.FC = () => {
                     <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div className="relative z-10 space-y-4">
                       <div className="flex items-center gap-4">
-                        <span className="text-[10px] font-black text-cyan-600 uppercase tracking-widest bg-cyan-50 px-3 py-1 rounded-lg">
+                        <span className="text-[10px] font-black wow-text-primary uppercase tracking-widest bg-cyan-50 px-3 py-1 rounded-lg">
                           {career.department}
                         </span>
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                           {career.location}
                         </span>
                       </div>
-                      <h3 className="text-3xl font-black text-slate-900 group-hover:text-cyan-600 transition-colors tracking-tighter">
+                      <h3 className="text-3xl font-black text-slate-900 group-hover:wow-text-primary inline-block transition-colors tracking-tighter">
                         {career.title}
                       </h3>
                       <p className="text-slate-400 text-sm font-bold line-clamp-1 max-w-xl">
@@ -243,7 +244,7 @@ const CareerSection: React.FC = () => {
                     </div>
                     <div className="relative z-10 flex gap-4">
                       <button onClick={() => setSelectedCareer(career)} className="px-8 py-4 bg-slate-50 text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 transition-all">{t('career.detail')}</button>
-                      <button onClick={() => { setSelectedCareer(career); setShowApplicationForm(true); }} className="px-8 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-accent hover:shadow-xl hover:shadow-cyan-500/20 transition-all">{t('career.apply_now')}</button>
+                      <button onClick={() => { setSelectedCareer(career); setShowApplicationForm(true); }} className="px-8 py-4 wow-button-gradient text-white rounded-2xl text-[10px] font-black uppercase tracking-widest">{t('career.apply_now')}</button>
                     </div>
                   </div>
                 ))
@@ -270,7 +271,7 @@ const CareerSection: React.FC = () => {
               <div className="p-6 sm:p-16 pt-10 sm:pt-20">
                 <div className="flex justify-between items-start mb-12">
                   <div>
-                    <div className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-4">{t('career.modal.position_details')}</div>
+                    <div className="text-[10px] font-black wow-text-primary uppercase tracking-[0.4em] mb-4">{t('career.modal.position_details')}</div>
                     <h3 className="text-3xl lg:text-5xl font-black text-slate-900 tracking-tighter leading-none">{selectedCareer.title}</h3>
                   </div>
                   <button onClick={() => setSelectedCareer(null)} className="p-4 bg-slate-50 rounded-full hover:bg-slate-100 transition-all">
@@ -279,7 +280,7 @@ const CareerSection: React.FC = () => {
                 </div>
                 <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-16">
                   <div className="space-y-6">
-                    <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-3"><div className="w-2 h-2 bg-cyan-500 rounded-full"></div>{t('career.modal.description')}</h4>
+                    <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-3"><div className="w-2 h-2 wow-button-gradient rounded-full"></div>{t('career.modal.description')}</h4>
                     <p className="text-slate-500 font-bold leading-loose text-sm whitespace-pre-line">{language === 'id' ? selectedCareer.description_id : selectedCareer.description_en}</p>
                   </div>
                   <div className="space-y-6">
@@ -287,7 +288,7 @@ const CareerSection: React.FC = () => {
                     <p className="text-slate-500 font-bold leading-loose text-sm whitespace-pre-line">{language === 'id' ? selectedCareer.requirements_id : selectedCareer.requirements_en}</p>
                   </div>
                 </div>
-                <button onClick={() => setShowApplicationForm(true)} className="w-full py-6 bg-primary text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl hover:bg-accent transition-all">{t('career.modal.continue')}</button>
+                <button onClick={() => setShowApplicationForm(true)} className="w-full py-6 wow-button-gradient text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl">{t('career.modal.continue')}</button>
               </div>
             ) : (
               <div className="p-6 sm:p-16 pt-10 sm:pt-20">
@@ -302,7 +303,7 @@ const CareerSection: React.FC = () => {
                 </div>
                 {submitSuccess ? (
                   <div className="py-20 text-center space-y-6">
-                    <div className="w-20 h-20 bg-cyan-500 text-white rounded-full flex items-center justify-center mx-auto shadow-2xl animate-bounce"><svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" /></svg></div>
+                    <div className="w-20 h-20 wow-button-gradient text-white rounded-full flex items-center justify-center mx-auto shadow-2xl animate-bounce"><svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" /></svg></div>
                     <h4 className="text-3xl font-black text-slate-900 tracking-tighter">{t('career.form.success_title')}</h4>
                     <p className="text-slate-400 font-bold">{t('career.form.success_desc')}</p>
                   </div>
@@ -329,13 +330,13 @@ const CareerSection: React.FC = () => {
 
                     <div className="flex items-center gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-100 shadow-inner">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center wow-icon-gradient">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                         </div>
                         <div className="flex flex-col">
                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('career.form.verification')}</span>
                           <div className="flex items-center gap-3">
-                            <span className="bg-white px-4 py-1 rounded-lg font-black text-sm tracking-widest text-primary border border-slate-200">{captcha.q}</span>
+                            <span className="bg-white px-4 py-1 rounded-lg font-black text-sm tracking-widest wow-icon-gradient border border-slate-200">{captcha.q}</span>
                             <span className="text-slate-400 font-black">=</span>
                           </div>
                         </div>
@@ -343,7 +344,7 @@ const CareerSection: React.FC = () => {
                       <input required type="number" placeholder="?" value={userCaptcha} onChange={(e) => setUserCaptcha(e.target.value)} className="w-20 px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 ring-primary/5 outline-none font-black text-slate-900 transition-all text-center" />
                     </div>
 
-                    <button disabled={submitting} type="submit" className="w-full py-6 bg-primary text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl hover:bg-accent transition-all disabled:opacity-50">
+                    <button disabled={submitting} type="submit" className="w-full py-6 wow-button-gradient text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl disabled:opacity-50">
                       {submitting ? t('career.form.submitting') : t('career.apply')}
                     </button>
                   </form>

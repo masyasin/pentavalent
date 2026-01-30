@@ -60,9 +60,9 @@ const PartnersSection: React.FC = () => {
           <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] mb-6 border border-primary/10">
             {t('partners.tagline')}
           </span>
-          <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-none mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
             {t('partners.title.text')} <br />
-            <span className="italic">{t('partners.title.italic')}</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('partners.title.italic')}</span>
           </h2>
           <p className="text-xl text-gray-500 font-medium leading-relaxed uppercase-none">
             {t('partners.description')}
@@ -81,8 +81,8 @@ const PartnersSection: React.FC = () => {
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
                 className={`px-4 sm:px-8 py-2 sm:py-3 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 ${activeFilter === filter.id
-                  ? 'bg-white text-primary shadow-xl ring-1 ring-gray-200'
-                  : 'text-gray-400 hover:text-primary'
+                  ? 'wow-button-gradient text-white shadow-xl'
+                  : 'bg-white text-gray-400 hover:bg-gray-50 hover:text-slate-600'
                   }`}
               >
                 {filter.label}
@@ -107,11 +107,11 @@ const PartnersSection: React.FC = () => {
                 onClick={() => partner.website && window.open(partner.website, '_blank')}
               >
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className={`w-20 h-20 ${partnerColors[index % partnerColors.length]} rounded-3xl flex items-center justify-center text-white font-black text-2xl group-hover:scale-110 transition-transform shadow-lg`}>
+                <div className={`w-20 h-20 ${partnerColors[index % partnerColors.length]} rounded-3xl flex items-center justify-center text-white font-black text-2xl group-hover:scale-110 group-hover:wow-button-gradient transition-all shadow-lg`}>
                   {getPartnerInitials(partner.name)}
                 </div>
                 <div className="absolute bottom-4 left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{partner.name}</span>
+                  <span className="text-[9px] font-black wow-text-primary uppercase tracking-[0.2em]">{partner.name}</span>
                 </div>
               </div>
             ))}
@@ -125,9 +125,9 @@ const PartnersSection: React.FC = () => {
             { value: '20+', label: t('partners.stats.international'), color: 'accent' },
             { value: '10K+', label: t('partners.stats.skus'), color: 'primary' }
           ].map((stat, i) => (
-            <div key={i} className={`text-center p-6 sm:p-12 bg-white rounded-[2rem] md:rounded-[3rem] border border-gray-100 enterprise-shadow group hover:bg-${stat.color} transition-all duration-500`}>
-              <div className={`text-3xl sm:text-5xl font-black text-${stat.color} mb-4 group-hover:text-white transition-colors`}>{stat.value}</div>
-              <div className="text-xs font-black text-gray-400 uppercase tracking-widest group-hover:text-white/70 transition-colors">{stat.label}</div>
+            <div key={i} className={`text-center p-6 sm:p-12 bg-white rounded-[2rem] md:rounded-[3rem] border border-gray-100 enterprise-shadow group wow-border-glow transition-all duration-500 hover:-translate-y-2`}>
+              <div className={`text-3xl sm:text-5xl font-black wow-text-primary inline-block mb-4 transition-colors`}>{stat.value}</div>
+              <div className="text-xs font-black text-gray-400 uppercase tracking-widest group-hover:text-slate-600 transition-colors">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -150,7 +150,7 @@ const PartnersSection: React.FC = () => {
               <p className="text-blue-100/60 mb-12 max-w-2xl text-xl leading-relaxed font-medium">
                 {t('partners.cta.description')}
               </p>
-              <button className="px-14 py-6 bg-gradient-to-r from-primary to-accent text-white font-black rounded-[2rem] hover:shadow-accent/20 hover:scale-105 transition-all duration-500 shadow-2xl flex items-center gap-4 group text-lg hover-move-icon">
+              <button className="px-14 py-6 wow-button-gradient text-white font-black rounded-[2rem] hover:shadow-cyan-500/20 hover:scale-105 transition-all duration-500 shadow-2xl flex items-center gap-4 group text-lg hover-move-icon">
                 {t('partners.cta.button')}
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </button>
