@@ -94,7 +94,7 @@ const ContactSection: React.FC = () => {
 
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="mb-24">
-          <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
+          <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-primary/5">
             {t('contact.tagline')}
           </span>
           <h2 className="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
@@ -156,10 +156,10 @@ const ContactSection: React.FC = () => {
                     <button
                       disabled={submitting}
                       type="submit"
-                      className="group/btn relative w-full overflow-hidden rounded-2xl bg-slate-900 py-6 text-[10px] font-black uppercase tracking-[0.4em] text-white shadow-2xl transition-all hover:bg-cyan-600 disabled:opacity-50"
+                      className="group/btn relative w-full overflow-hidden rounded-2xl bg-primary py-6 text-[10px] font-black uppercase tracking-[0.4em] text-white shadow-2xl transition-all hover:bg-primary/90 disabled:opacity-50"
                     >
                       <span className="relative z-10">{submitting ? 'Transmitting Data...' : 'Kirim Intelligence Report'}</span>
-                      <div className="absolute inset-x-0 bottom-0 h-1 bg-cyan-400 transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></div>
+                      <div className="absolute inset-x-0 bottom-0 h-1 bg-accent transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></div>
                     </button>
                   </div>
                 </form>

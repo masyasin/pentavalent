@@ -124,7 +124,7 @@ const CareerSection: React.FC = () => {
         {/* Career Intelligence Header */}
         <div className="flex flex-col lg:flex-row items-end justify-between gap-12 mb-32">
           <div className="max-w-3xl">
-            <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-slate-900/10">
+            <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-primary/5">
               {t('career.future.title')}
             </span>
             <h2 className="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-none">
@@ -160,7 +160,7 @@ const CareerSection: React.FC = () => {
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     className={`group flex items-center justify-between px-6 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${selectedCategory === cat
-                      ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20 translate-x-2'
+                      ? 'bg-primary text-white shadow-xl shadow-primary/20 translate-x-2'
                       : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'
                       }`}
                   >
@@ -171,12 +171,12 @@ const CareerSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-8 bg-slate-900 rounded-[2.5rem] text-white space-y-6">
+            <div className="p-8 bg-primary rounded-[2.5rem] text-white space-y-6">
               <h5 className="text-xl font-black tracking-tighter">Talent Scout</h5>
-              <p className="text-slate-400 text-xs font-bold leading-relaxed">
+              <p className="text-white/80 text-xs font-bold leading-relaxed">
                 Tidak menemukan posisi yang cocok? Kirim resume anda ke bank talenta kami.
               </p>
-              <button className="w-full py-4 bg-cyan-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all">
+              <button className="w-full py-4 bg-accent/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-primary transition-all">
                 Submit CV General
               </button>
             </div>
@@ -225,7 +225,7 @@ const CareerSection: React.FC = () => {
                     </button>
                     <button
                       onClick={() => { setSelectedCareer(career); setShowApplicationForm(true); }}
-                      className="px-8 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-cyan-600 hover:shadow-xl hover:shadow-cyan-500/20 transition-all"
+                      className="px-8 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-accent hover:shadow-xl hover:shadow-cyan-500/20 transition-all"
                     >
                       Apply Now
                     </button>
@@ -280,7 +280,7 @@ const CareerSection: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <button onClick={() => setShowApplicationForm(true)} className="w-full py-6 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl hover:bg-cyan-500 transition-all">
+                  <button onClick={() => setShowApplicationForm(true)} className="w-full py-6 bg-primary text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl hover:bg-accent transition-all">
                     Lanjutkan Pendaftaran
                   </button>
                 </div>
@@ -313,7 +313,7 @@ const CareerSection: React.FC = () => {
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Cover Letter / Pesan Singkat</label>
                         <textarea rows={4} value={formData.coverLetter} onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })} className="w-full px-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 ring-cyan-500/5 focus:bg-white focus:border-cyan-500/30 outline-none font-bold text-slate-900 transition-all resize-none"></textarea>
                       </div>
-                      <button disabled={submitting} type="submit" className="w-full py-6 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl hover:bg-cyan-500 transition-all disabled:opacity-50">
+                      <button disabled={submitting} type="submit" className="w-full py-6 bg-primary text-white rounded-2xl text-xs font-black uppercase tracking-[0.4em] shadow-2xl hover:bg-accent transition-all disabled:opacity-50">
                         {submitting ? 'Sedang Mengirim...' : 'Submit Application'}
                       </button>
                     </form>

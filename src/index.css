@@ -6,43 +6,45 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98.5%;
-    --foreground: 222 84% 5%;
+    /* Image-Inspired Soft Palette: Airy, Pastel, and Calm */
+    --background: 206 100% 97%;
+    /* Very light blue wash background */
+    --foreground: 215 50% 30%;
+    /* Soft deep blue text */
 
     --card: 0 0% 100%;
-    --card-foreground: 222 84% 5%;
+    --card-foreground: 215 50% 30%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 5%;
+    --popover-foreground: 215 50% 30%;
 
-    /* Enterprise Palette: Deep Corporate Blue & Precision Green */
-    --primary: 221 83% 18%;
-    /* Darker, more authoritative blue */
-    --primary-foreground: 210 40% 98%;
+    --primary: 202 85% 62%;
+    /* Main soft sky blue */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 200 70% 92%;
+    /* Light blue secondary elements */
+    --secondary-foreground: 205 60% 40%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 210 30% 96%;
+    --muted-foreground: 215 30% 65%;
 
-    --accent: 189 94% 43%;
-    /* Pentavalent Light Blue (Cyan) from Logo */
-    --accent-foreground: 210 40% 98%;
+    --accent: 190 70% 75%;
+    /* Pastel Cyan accent */
+    --accent-foreground: 215 50% 30%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 75%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 221 83% 18%;
+    --border: 205 40% 90%;
+    --input: 205 40% 90%;
+    --ring: 202 85% 62%;
 
-    --radius: 1.25rem;
-    /* Larger, modern radius */
+    --radius: 1.5rem;
 
-    --medical-blue: 221 83% 24%;
-    --medical-green: 189 94% 43%;
-    --medical-deep: 222 84% 5%;
+    --medical-blue: 202 85% 62%;
+    --medical-green: 190 70% 70%;
+    --medical-deep: 215 50% 30%;
   }
 }
 

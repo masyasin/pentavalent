@@ -62,7 +62,7 @@ const BusinessSection: React.FC = () => {
         {/* Header Section */}
         <div className="relative flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-12">
           <div className="lg:max-w-2xl relative z-10">
-            <span className="inline-block px-5 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-8 shadow-xl shadow-slate-900/10">
+            <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-8 shadow-xl shadow-primary/5">
               {t('business.tagline')}
             </span>
             <h2 className="text-2xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-8 md:mb-10 text-slate-900">
@@ -124,11 +124,11 @@ const BusinessSection: React.FC = () => {
                   }`}
               >
                 {activeTab === index && (
-                  <div className="absolute inset-0 bg-slate-900 animate-in fade-in zoom-in duration-500 rounded-[1.5rem] lg:rounded-[2rem]"></div>
+                  <div className="absolute inset-0 bg-primary animate-in fade-in zoom-in duration-500 rounded-[1.5rem] lg:rounded-[2rem]"></div>
                 )}
                 <span className="relative z-10 text-center">{language === 'id' ? line.title_id : line.title_en}</span>
                 {activeTab === index && (
-                  <div className="hidden lg:block w-1.5 h-1.5 rounded-full bg-cyan-400 relative z-10 animate-pulse"></div>
+                  <div className="hidden lg:block w-1.5 h-1.5 rounded-full bg-accent relative z-10 animate-pulse"></div>
                 )}
               </button>
             ))}

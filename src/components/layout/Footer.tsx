@@ -175,9 +175,9 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   return (
-    <footer className="relative bg-[#020617] text-white overflow-hidden pt-16 pb-16">
+    <footer className="relative bg-foreground text-white overflow-hidden pt-16 pb-16">
       <div className="absolute bottom-0 left-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1e293b] via-[#0f172a] to-[#020617]"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-medical-deep via-foreground to-medical-deep"></div>
         <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.8) 1.5px, transparent 1.5px)', backgroundSize: '60px 60px' }}></div>
         <div className="absolute bottom-0 left-0 w-full h-[700px] bg-gradient-to-t from-blue-600/20 via-purple-600/10 to-transparent blur-3xl mix-blend-screen"></div>
         <div className="absolute bottom-0 left-0 w-full items-end flex opacity-50 scale-110 origin-bottom mix-blend-luminosity">
