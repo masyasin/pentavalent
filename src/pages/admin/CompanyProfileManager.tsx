@@ -48,7 +48,7 @@ const CompanyProfileManager: React.FC = () => {
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
-                        onClick={() => navigate(tab.id)}
+                        onClick={() => navigate(`/admin/company/${tab.id}`)}
                         className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] transition-all font-black uppercase text-[10px] tracking-widest ${activeTab === tab.id
                             ? 'bg-blue-600 text-white shadow-2xl shadow-blue-200 -translate-y-1'
                             : 'text-gray-400 hover:text-gray-700 hover:bg-gray-50'

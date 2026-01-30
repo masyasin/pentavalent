@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                     key={lang}
                     onClick={() => setLanguage(lang as 'id' | 'en')}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${language === lang
-                      ? 'bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 text-white shadow-lg shadow-cyan-500/20'
+                      ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/10'
                       : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
                       }`}
                   >
@@ -143,10 +143,11 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-150 ease-out z-20"
           style={{ width: `${scrollProgress}%` }}
         ></div>
-      </header>
+      </header >
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-[110] transition-all duration-500 ${isMobileMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+      < div className={`fixed inset-0 z-[110] transition-all duration-500 ${isMobileMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'}`
+      }>
         <div className="absolute inset-0 bg-primary/20 backdrop-blur-md" onClick={() => setIsMobileMenuOpen(false)}></div>
         <div className={`absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white shadow-4xl transition-transform duration-500 ease-out transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex flex-col h-full">
@@ -187,17 +188,17 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Search Modal Spotlight */}
-      <div className={`fixed inset-0 z-[200] transition-all duration-300 ${isSearchOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+      < div className={`fixed inset-0 z-[200] transition-all duration-300 ${isSearchOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
         {/* Backdrop */}
-        <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setIsSearchOpen(false)}></div>
+        < div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setIsSearchOpen(false)}></div >
 
         {/* Modal */}
-        <div className={`absolute top-[15%] left-1/2 -translate-x-1/2 w-[90%] max-w-2xl bg-white rounded-3xl shadow-2xl border border-white/20 overflow-hidden transition-all duration-300 ${isSearchOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-4 scale-95 opacity-0'}`}>
+        < div className={`absolute top-[15%] left-1/2 -translate-x-1/2 w-[90%] max-w-2xl bg-white rounded-3xl shadow-2xl border border-white/20 overflow-hidden transition-all duration-300 ${isSearchOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-4 scale-95 opacity-0'}`}>
           {/* Search Input Area */}
-          <div className="relative border-b border-slate-100 p-6 flex items-center gap-4">
+          < div className="relative border-b border-slate-100 p-6 flex items-center gap-4" >
             <Search className="flex-shrink-0 text-slate-400" size={24} />
             <input
               type="text"
@@ -210,56 +211,57 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             <button onClick={() => setIsSearchOpen(false)} className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:bg-slate-100 transition-colors">
               <X size={18} />
             </button>
-          </div>
+          </div >
 
           {/* Results or Suggestions */}
-          <div className="max-h-[60vh] overflow-y-auto p-4 bg-slate-50/50">
-            {searchQuery ? (
-              filteredResults.length > 0 ? (
-                <div className="space-y-2">
-                  <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 py-2">Results</h5>
-                  {filteredResults.map(item => (
-                    <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-cyan-200 hover:shadow-lg hover:shadow-cyan-500/10 transition-all text-left group">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center group-hover:wow-button-gradient group-hover:text-white transition-colors">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} /></svg>
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-slate-900 group-hover:wow-icon-gradient inline-block transition-colors">{item.label}</h4>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">{item.type}</p>
-                      </div>
-                      <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                        <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                      </div>
-                    </button>
-                  ))}
-                </div>
+          < div className="max-h-[60vh] overflow-y-auto p-4 bg-slate-50/50" >
+            {
+              searchQuery ? (
+                filteredResults.length > 0 ? (
+                  <div className="space-y-2">
+                    <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 py-2">Results</h5>
+                    {filteredResults.map(item => (
+                      <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-cyan-200 hover:shadow-lg hover:shadow-cyan-500/10 transition-all text-left group">
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center group-hover:wow-button-gradient group-hover:text-white transition-colors">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} /></svg>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-900 group-hover:wow-icon-gradient inline-block transition-colors">{item.label}</h4>
+                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">{item.type}</p>
+                        </div>
+                        <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                          <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="py-12 text-center text-slate-400">
+                    <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
+                    <p className="font-bold">No results found for "{searchQuery}"</p>
+                  </div>
+                )
               ) : (
-                <div className="py-12 text-center text-slate-400">
-                  <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                  <p className="font-bold">No results found for "{searchQuery}"</p>
+                <div className="space-y-4">
+                  <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4">Suggested</h5>
+                  {/* Static quick links */}
+                  <div className="grid grid-cols-2 gap-3 px-2">
+                    {[
+                      { label: t('nav.business'), id: 'business', color: 'text-blue-500' },
+                      { label: t('nav.network'), id: 'network', color: 'text-cyan-500' },
+                      { label: t('nav.career'), id: 'career', color: 'text-purple-500' },
+                      { label: t('nav.investor'), id: 'investor', color: 'text-orange-500' },
+                    ].map(item => (
+                      <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-md transition-all text-left">
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${item.color}`}>{item.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )
-            ) : (
-              <div className="space-y-4">
-                <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4">Suggested</h5>
-                {/* Static quick links */}
-                <div className="grid grid-cols-2 gap-3 px-2">
-                  {[
-                    { label: t('nav.business'), id: 'business', color: 'text-blue-500' },
-                    { label: t('nav.network'), id: 'network', color: 'text-cyan-500' },
-                    { label: t('nav.career'), id: 'career', color: 'text-purple-500' },
-                    { label: t('nav.investor'), id: 'investor', color: 'text-orange-500' },
-                  ].map(item => (
-                    <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-md transition-all text-left">
-                      <span className={`text-[10px] font-black uppercase tracking-widest ${item.color}`}>{item.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+              )}
+          </div >
+        </div >
+      </div >
     </>
   );
 };

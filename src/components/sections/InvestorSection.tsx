@@ -131,7 +131,7 @@ const InvestorSection: React.FC = () => {
               {['Annual Report 2024', 'Quarterly Presentation Q3', 'Consolidated Financials'].map((item, i) => (
                 <button key={i} className="w-full flex items-center justify-between p-6 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/5 transition-all group">
                   <span className="font-bold tracking-tight">{item}</span>
-                  <div className="w-10 h-10 bg-white group-hover:text-cyan-500 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110">
+                  <div className="w-10 h-10 bg-white text-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:bg-cyan-500 group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5m0 0l5-5m-5 5V3" /></svg>
                   </div>
                 </button>

@@ -79,9 +79,10 @@ const CertificationSection: React.FC = () => {
   };
 
   return (
-    <section id="certifications" className="py-20 md:py-32 bg-white relative overflow-hidden">
-      {/* Decorative background element */}
-      <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t from-gray-50 to-transparent pointer-events-none"></div>
+    <section id="certifications" className="py-24 md:py-32 bg-gradient-to-br from-slate-50 via-white to-cyan-50/30 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-cyan-100/30 to-blue-100/30 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-100/20 to-purple-100/20 rounded-full blur-3xl"></div>
 
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
@@ -118,39 +119,77 @@ const CertificationSection: React.FC = () => {
                 <div key={i} className="h-64 bg-gray-50 rounded-[2.5rem] animate-pulse"></div>
               ))
             ) : (
-              (certifications || []).map((cert) => (
-                <div key={cert.id} className="group p-6 sm:p-10 bg-white rounded-[2rem] md:rounded-[3rem] border border-gray-100 enterprise-shadow hover:ring-4 ring-primary/5 transition-all duration-500">
-                  <div className="flex items-start justify-between mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 text-white rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                      {certIcons[cert.name] || (
-                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                      )}
+              (certifications || []).map((cert, idx) => (
+                <div
+                  key={cert.id}
+                  className="group relative p-8 sm:p-10 bg-white/80 backdrop-blur-sm rounded-[2.5rem] border border-slate-200/60 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
+                  style={{ animationDelay: `${idx * 100}ms` }}
+                >
+                  {/* Animated top accent line */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left rounded-t-[2.5rem]"></div>
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                        {certIcons[cert.name] || (
+                          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        )}
+                      </div>
+                      <span className="text-[9px] font-black text-cyan-600 uppercase tracking-[0.25em] bg-cyan-50 px-3 py-1.5 rounded-full border border-cyan-100">Active</span>
                     </div>
-                    <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em] bg-accent/10 px-4 py-1.5 rounded-full">Active</span>
+
+                    <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3 tracking-tight leading-tight group-hover:text-cyan-600 transition-colors">
+                      {cert.name}
+                    </h3>
+
+                    <p className="text-sm text-slate-600 font-medium leading-relaxed mb-6">
+                      {language === 'id' ? cert.description_id : cert.description_en}
+                    </p>
+
+                    <div className="pt-5 border-t border-slate-100 flex items-center justify-between">
+                      <div>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Registration ID:</span>
+                        <span className="text-sm font-black text-cyan-600 tracking-wide">{cert.certificate_number || `ISO-0MS-2024-XYZ`}</span>
+                      </div>
+                      <button className="w-10 h-10 rounded-xl bg-slate-50 hover:bg-cyan-500 text-slate-400 hover:text-white flex items-center justify-center transition-all duration-300 group/btn">
+                        <svg className="w-5 h-5 group-hover/btn:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+                      </button>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-black text-primary mb-4 tracking-tight leading-tight group-hover:wow-text-primary inline-block transition-colors">
-                    {cert.name}
-                  </h3>
-                  <p className="text-gray-500 font-medium leading-relaxed mb-8">
-                    {language === 'id' ? cert.description_id : cert.description_en}
-                  </p>
-                  <div className="pt-6 border-t border-gray-50 flex items-center justify-between">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Registration ID: <br /> <span className="text-primary mt-1 block tracking-normal">{cert.certificate_number || `TR-00${cert.id.slice(0, 4)}`}</span></span>
-                    <button className="wow-text-primary hover:wow-icon-gradient transition-colors">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
-                    </button>
-                  </div>
+
+                  {/* Floating decoration */}
+                  <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 </div>
               ))
             )}
           </div>
         </div>
 
-        {/* Global standards footer */}
-        <div className="mt-16 md:mt-24 pt-12 border-t border-gray-100 flex flex-wrap justify-center items-center gap-6 sm:gap-16 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
-          {['ISO 9001:2015', 'CDOB (BPOM)', 'CDAKB (KEMENKES)', 'Tbk List Price'].map((standard, i) => (
-            <div key={i} className="text-xl font-black wow-text-primary inline-block tracking-tighter uppercase">{standard}</div>
-          ))}
+        {/* Premium Global Standards Footer */}
+        <div className="mt-20 md:mt-28 pt-12 border-t border-slate-200/60">
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 lg:gap-12">
+            {['ISO 9001:2015', 'CDOB (BPOM)', 'CDAKB (KEMENKES)', 'GDP Certified'].map((standard, i) => (
+              <div
+                key={i}
+                className="group relative px-6 py-3 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-cyan-200 transition-all duration-500 cursor-default overflow-hidden"
+              >
+                {/* Subtle gradient background on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-50 to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                <div className="relative z-10 flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-cyan-500 opacity-40 group-hover:opacity-100 transition-opacity"></div>
+                  <span className="text-xs md:text-sm font-black text-slate-500 group-hover:text-slate-900 uppercase tracking-[0.15em] transition-colors whitespace-nowrap">
+                    {standard}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-center mt-10 text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] opacity-60">
+            Penta Valent Global Quality Standards & Compliance
+          </p>
         </div>
       </div>
     </section>

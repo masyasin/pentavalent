@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
 const WhatsAppButton: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
   const [isHovered, setIsHovered] = useState(false);
   const phoneNumber = '6281234567890'; // Replace with actual WhatsApp number
   const message = encodeURIComponent('Halo, saya ingin bertanya tentang layanan PT. Penta Valent Tbk');
@@ -10,7 +14,21 @@ const WhatsAppButton: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-24 right-8 z-40">
+    <div className="fixed bottom-10 right-8 z-40 flex flex-col items-center gap-2 group/container">
+      {/* Close Button - Visible on hover or always on mobile if needed, but for now we'll make it appear on group hover or always visible to be safe/discoverable */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsVisible(false);
+        }}
+        className="absolute -top-8 right-0 w-6 h-6 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center shadow-sm hover:bg-red-500 hover:text-white transition-colors z-50 opacity-0 group-hover/container:opacity-100 lg:opacity-0 lg:group-hover/container:opacity-100 touch-visible"
+        aria-label="Close WhatsApp Button"
+      >
+        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
       <button
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -31,7 +49,7 @@ const WhatsAppButton: React.FC = () => {
           <span className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 border-8 border-transparent border-l-gray-900"></span>
         </span>
       </button>
-    </div >
+    </div>
   );
 };
 

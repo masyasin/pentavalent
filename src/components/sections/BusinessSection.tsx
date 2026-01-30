@@ -20,7 +20,10 @@ const BusinessSection: React.FC = () => {
   const { language, t } = useLanguage();
   const [businessLines, setBusinessLines] = useState<BusinessLine[]>([]);
   const [activeTab, setActiveTab] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState('');
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
   useEffect(() => {
@@ -30,6 +33,33 @@ const BusinessSection: React.FC = () => {
   useEffect(() => {
     if (emblaApi) emblaApi.reInit();
   }, [activeTab, emblaApi, businessLines]);
+
+  // Auto-play slider effect
+  useEffect(() => {
+    const currentImages = (businessLines[activeTab]?.images && businessLines[activeTab].images.length > 0)
+      ? businessLines[activeTab].images
+      : [businessLines[activeTab]?.image_url || ''];
+
+    if (currentImages.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % currentImages.length);
+    }, 4000); // Change image every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [activeTab, businessLines]);
+
+  // Reset current slide when tab changes
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [activeTab]);
+
+  // Scroll embla to current slide
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.scrollTo(currentSlide);
+    }
+  }, [currentSlide, emblaApi]);
 
   const fetchBusinessData = async () => {
     try {
@@ -146,13 +176,24 @@ const BusinessSection: React.FC = () => {
                     ? businessLines[activeTab].images
                     : [businessLines[activeTab].image_url || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200']
                   ).map((img, idx) => (
-                    <div key={idx} className="embla__slide relative h-full w-full flex-none">
+                    <div key={idx} className="embla__slide relative h-full w-full flex-none cursor-pointer group/image" onClick={() => {
+                      setLightboxImage(img);
+                      setLightboxOpen(true);
+                    }}>
                       <img
                         src={img}
                         alt={`${businessLines[activeTab].title_en} ${idx + 1}`}
                         className="w-full h-full object-cover transition-all duration-[4000ms] group-hover/main:scale-110 contrast-[1.05]"
                       />
                       <div className="absolute inset-0 bg-slate-900/30 mix-blend-multiply transition-opacity group-hover/main:opacity-40"></div>
+                      {/* Click indicator */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity bg-black/20">
+                        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white flex items-center justify-center">
+                          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -172,15 +213,55 @@ const BusinessSection: React.FC = () => {
                 </h3>
               </div>
 
-              {/* Slider Progress Indicators */}
-              <div className="absolute top-12 right-12 flex gap-2">
+              {/* Slider Progress Indicators - Clickable */}
+              <div className="absolute top-12 right-12 flex gap-2 z-20">
                 {((businessLines[activeTab].images && businessLines[activeTab].images.length > 0)
                   ? businessLines[activeTab].images
                   : [businessLines[activeTab].image_url || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200']
                 ).map((_, i) => (
-                  <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === 0 ? 'w-8 bg-cyan-500' : 'w-2 bg-white/30'}`}></div>
+                  <button
+                    key={i}
+                    onClick={() => setCurrentSlide(i)}
+                    className={`h-1 rounded-full transition-all duration-500 hover:bg-cyan-400 cursor-pointer ${i === currentSlide ? 'w-8 bg-cyan-500' : 'w-2 bg-white/30 hover:w-4'}`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
                 ))}
               </div>
+
+              {/* Navigation Arrows */}
+              {((businessLines[activeTab].images && businessLines[activeTab].images.length > 1) ||
+                (!businessLines[activeTab].images && businessLines[activeTab].image_url)) && (
+                  <>
+                    <button
+                      onClick={() => setCurrentSlide((prev) => {
+                        const totalSlides = (businessLines[activeTab].images && businessLines[activeTab].images.length > 0)
+                          ? businessLines[activeTab].images.length
+                          : 1;
+                        return prev === 0 ? totalSlides - 1 : prev - 1;
+                      })}
+                      className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all z-20 group"
+                      aria-label="Previous slide"
+                    >
+                      <svg className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => setCurrentSlide((prev) => {
+                        const totalSlides = (businessLines[activeTab].images && businessLines[activeTab].images.length > 0)
+                          ? businessLines[activeTab].images.length
+                          : 1;
+                        return (prev + 1) % totalSlides;
+                      })}
+                      className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all z-20 group"
+                      aria-label="Next slide"
+                    >
+                      <svg className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </>
+                )}
             </div>
 
             {/* Right: Content & Intelligence */}
@@ -206,8 +287,8 @@ const BusinessSection: React.FC = () => {
                     'AI-Driven Inventory',
                     'Regulatory Compliance'
                   ]).map((feature, index) => (
-                    <div key={index} className="flex items-center gap-5 group/feat">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0 transition-all group-hover/feat:bg-cyan-50 group-hover/feat:text-cyan-500 group-hover/feat:shadow-xl group-hover/feat:shadow-cyan-500/20 group-hover/feat:-translate-y-1">
+                    <div key={index} className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center flex-shrink-0 text-cyan-500 shadow-lg shadow-cyan-500/10">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                         </svg>
@@ -227,11 +308,11 @@ const BusinessSection: React.FC = () => {
                     { label: 'Experience', value: '55+ Years' },
                     { label: 'Partners', value: '70+ Principals' }
                   ]).map((stat, index) => (
-                    <div key={index} className="group/stat">
-                      <div className="text-2xl md:text-4xl font-black text-slate-900 mb-2 group-hover/stat:text-cyan-500 inline-block transition-colors tracking-tighter">
+                    <div key={index}>
+                      <div className="text-2xl md:text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-600 to-blue-600 bg-clip-text text-transparent mb-2 inline-block tracking-tighter">
                         {stat.value}
                       </div>
-                      <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] group-hover/stat:text-slate-600 transition-colors">
+                      <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
                         {stat.label}
                       </div>
                     </div>
@@ -289,6 +370,42 @@ const BusinessSection: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-sm animate-in fade-in duration-300"
+          onClick={() => setLightboxOpen(false)}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setLightboxOpen(false)}
+            className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all z-10 group"
+            aria-label="Close lightbox"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Image Container */}
+          <div
+            className="relative max-w-[90vw] max-h-[90vh] animate-in zoom-in duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightboxImage}
+              alt="Full size view"
+              className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl"
+            />
+          </div>
+
+          {/* Instructions */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm font-medium">
+            Click anywhere to close
+          </div>
+        </div>
+      )}
     </section >
   );
 };

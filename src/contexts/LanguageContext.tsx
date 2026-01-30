@@ -128,6 +128,7 @@ const translations: Translations = {
   'news.archive': { id: 'Penemuan Arsip', en: 'Archive Discovery' },
   'news.discovery': { id: 'Arsip Penemuan', en: 'Discovery Archive' },
   'news.readmore': { id: 'Baca Selengkapnya', en: 'Read Disclosure' },
+  'news.cta': { id: 'Lihat Semua Berita', en: 'View All News' },
   'news.source': { id: 'Sumber Internal', en: 'Source Internal' },
   'news.comm': { id: 'Komunikasi Korporat', en: 'Corporate Communications' },
   'news.share': { id: 'Bagikan Pengungkapan', en: 'Share Disclosure' },

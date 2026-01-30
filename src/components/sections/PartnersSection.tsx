@@ -118,16 +118,66 @@ const PartnersSection: React.FC = () => {
           </div>
         )}
 
-        {/* Partner Stats */}
-        <div className="mt-16 md:mt-24 grid md:grid-cols-3 gap-8 md:gap-12">
+        {/* Partner Stats - Redesigned for Premium Look */}
+        <div className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 px-2">
           {[
-            { value: '50+', label: t('partners.stats.national'), color: 'primary' },
-            { value: '20+', label: t('partners.stats.international'), color: 'accent' },
-            { value: '10K+', label: t('partners.stats.skus'), color: 'primary' }
+            {
+              value: '50+',
+              label: t('partners.stats.national'),
+              icon: (
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-5 10h1m4 0h1m-5-4h1m4 0h1" />
+                </svg>
+              ),
+              color: 'from-blue-600 to-indigo-600',
+              accent: 'blue'
+            },
+            {
+              value: '20+',
+              label: t('partners.stats.international'),
+              icon: (
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ),
+              color: 'from-cyan-500 to-blue-500',
+              accent: 'cyan'
+            },
+            {
+              value: '10K+',
+              label: t('partners.stats.skus'),
+              icon: (
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              ),
+              color: 'from-indigo-600 to-purple-600',
+              accent: 'indigo'
+            }
           ].map((stat, i) => (
-            <div key={i} className={`text-center p-6 sm:p-12 bg-white rounded-[2rem] md:rounded-[3rem] border border-gray-100 enterprise-shadow group wow-border-glow transition-all duration-500 hover:-translate-y-2`}>
-              <div className={`text-3xl sm:text-5xl font-black wow-text-primary inline-block mb-4 transition-colors`}>{stat.value}</div>
-              <div className="text-xs font-black text-gray-400 uppercase tracking-widest group-hover:text-slate-600 transition-colors">{stat.label}</div>
+            <div key={i} className="group relative bg-white rounded-[2.5rem] md:rounded-[3.5rem] p-10 md:p-14 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 overflow-hidden flex flex-col items-center text-center">
+              {/* Subtle top accent line */}
+              <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-700`}></div>
+
+              {/* Animated Background Decor */}
+              <div className={`absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-[0.03] rounded-full blur-3xl transition-opacity duration-700`}></div>
+
+              {/* Icon Holder */}
+              <div className="relative mb-8 p-6 rounded-3xl bg-slate-50 group-hover:bg-white group-hover:scale-110 transition-all duration-700 border border-slate-50 group-hover:border-slate-100 shadow-inner group-hover:shadow-lg">
+                <div className="group-hover:rotate-6 transition-transform duration-700">
+                  {stat.icon}
+                </div>
+              </div>
+
+              {/* Value with dynamic color */}
+              <div className={`text-4xl md:text-6xl font-black mb-3 text-slate-900 group-hover:bg-gradient-to-br ${stat.color} group-hover:bg-clip-text group-hover:text-transparent transition-all duration-700 tracking-tighter`}>
+                {stat.value}
+              </div>
+
+              {/* Label */}
+              <div className="text-[10px] md:text-xs font-black text-slate-400 group-hover:text-slate-600 uppercase tracking-[0.25em] transition-colors leading-relaxed">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>

@@ -1,0 +1,419 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
+import { Search, Filter, Calendar, ArrowRight, ChevronLeft, ChevronRight, Newspaper } from 'lucide-react';
+
+interface NewsItem {
+    id: string;
+    title_id: string;
+    title_en: string;
+    slug: string;
+    excerpt_id: string;
+    excerpt_en: string;
+    featured_image: string;
+    category: string;
+    published_at: string;
+}
+
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
+
+interface BannerItem {
+    id: string;
+    title_id: string;
+    title_en: string;
+    subtitle_id: string;
+    subtitle_en: string;
+    image_url: string;
+}
+
+const NewsPage: React.FC = () => {
+    const { t, language } = useLanguage();
+    const navigate = useNavigate();
+    const [news, setNews] = useState<NewsItem[]>([]);
+    const [banners, setBanners] = useState<BannerItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9;
+
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 6000, stopOnInteraction: false })]);
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    useEffect(() => {
+        if (!emblaApi) return;
+        emblaApi.on('select', () => setCurrentSlide(emblaApi.selectedScrollSnap()));
+    }, [emblaApi]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        fetchNews();
+        fetchBanners();
+    }, []);
+
+    const fetchBanners = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('news_banners')
+                .select('*')
+                .eq('is_active', true)
+                .order('sort_order', { ascending: true });
+
+            if (error) {
+                console.warn('news_banners table not found or empty, using fallbacks');
+                setBanners([
+                    {
+                        id: '1',
+                        title_id: 'Inovasi Distribusi Kesehatan Melalui Teknologi AI',
+                        title_en: 'Healthcare Distribution Innovation Through AI Technology',
+                        subtitle_id: 'Meningkatkan efisiensi rantai pasok farmasi di seluruh penjuru Nusantara.',
+                        subtitle_en: 'Enhancing pharmaceutical supply chain efficiency across the archipelago.',
+                        image_url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2070'
+                    },
+                    {
+                        id: '2',
+                        title_id: 'Ekspansi Jaringan Nasional: 34 Cabang Utama',
+                        title_en: 'National Network Expansion: 34 Main Branches',
+                        subtitle_id: 'Memastikan ketersediaan produk kesehatan menjangkau setiap provinsi.',
+                        subtitle_en: 'Ensuring health product availability reaches every province.',
+                        image_url: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=2070'
+                    }
+                ]);
+            } else {
+                setBanners(data || []);
+            }
+        } catch (e) {
+            console.error('Error fetching banners:', e);
+        }
+    };
+
+    const fetchNews = async () => {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('is_published', true)
+                .order('published_at', { ascending: false });
+
+            if (error) throw error;
+            setNews(data || []);
+        } catch (error) {
+            console.error('Error fetching news:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const categories = [
+        { id: 'all', label: language === 'id' ? 'Semua' : 'All' },
+        { id: 'corporate', label: t('news.cat.corporate') },
+        { id: 'press_release', label: t('news.cat.press_release') },
+        { id: 'investor', label: t('news.cat.investor') },
+        { id: 'partnership', label: t('news.cat.partnership') },
+        { id: 'expansion', label: t('news.cat.expansion') },
+        { id: 'award', label: t('news.cat.award') },
+    ];
+
+    const filteredNews = news.filter(item => {
+        const matchesSearch = (language === 'id' ? item.title_id : item.title_en)
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
+
+    const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
+    const paginatedNews = filteredNews.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const formatDate = (dateString: string) => {
+        return new Date(dateString).toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    };
+
+    const categoryColors: { [key: string]: string } = {
+        'award': 'bg-accent/10 text-accent',
+        'expansion': 'bg-primary/10 text-primary',
+        'investor': 'bg-accent/10 text-accent',
+        'partnership': 'bg-primary/10 text-primary',
+        'press_release': 'bg-blue-500/10 text-blue-600',
+        'corporate': 'bg-indigo-500/10 text-indigo-600',
+        'default': 'bg-secondary text-muted-foreground',
+    };
+
+    const handleNavigate = (section: string) => {
+        navigate(`/#${section}`);
+    };
+
+    return (
+        <div className="min-h-screen bg-white">
+            <Header activeSection="news" onNavigate={handleNavigate} />
+
+            {/* Premium Banner Slider */}
+            <section className="relative h-[65vh] md:h-[75vh] w-full overflow-hidden bg-slate-950">
+                <div className="absolute inset-0 z-0 embla" ref={emblaRef}>
+                    <div className="flex h-full">
+                        {banners.map((banner, idx) => (
+                            <div key={banner.id} className="flex-[0_0_100%] h-full relative group">
+                                <img
+                                    src={banner.image_url}
+                                    alt={banner.title_en}
+                                    className="w-full h-full object-cover opacity-60 transition-transform duration-[10000ms] ease-linear group-active:scale-110"
+                                    style={{ transform: currentSlide === idx ? 'scale(1.1)' : 'scale(1)' }}
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/20 to-slate-950"></div>
+
+                                <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
+                                    <div className={`max-w-6xl mx-auto text-center space-y-6 transition-all duration-1000 transform ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                                        <div className="inline-flex items-center gap-3 px-5 py-2 bg-primary/20 backdrop-blur-xl border border-primary/30 rounded-full mb-2 mx-auto">
+                                            <span className="relative flex h-2 w-2">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                                            </span>
+                                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-cyan-400">
+                                                {idx + 1}/{banners.length} CORPORATE INTELLIGENCE
+                                            </span>
+                                        </div>
+
+                                        <div className="relative">
+                                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-[1.2] max-w-4xl mx-auto text-white italic px-4 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                                                {language === 'id' ? banner.title_id : banner.title_en}
+                                            </h1>
+                                            <div className="w-12 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_15px_rgba(var(--primary),0.5)] opacity-80"></div>
+                                        </div>
+
+                                        <p className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed font-medium italic drop-shadow-sm">
+                                            {language === 'id' ? banner.subtitle_id : banner.subtitle_en}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Slider Navigation Dots */}
+                <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3">
+                    {banners.map((_, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => emblaApi?.scrollTo(idx)}
+                            className={`transition-all duration-500 rounded-full ${currentSlide === idx ? 'w-12 h-2 bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.8)]' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
+                        />
+                    ))}
+                </div>
+
+                {/* Side Navigation Buttons */}
+                <div className="absolute inset-y-0 left-6 flex items-center z-10">
+                    <button onClick={() => emblaApi?.scrollPrev()} className="w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all group">
+                        <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+                    </button>
+                </div>
+                <div className="absolute inset-y-0 right-6 flex items-center z-10">
+                    <button onClick={() => emblaApi?.scrollNext()} className="w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all group">
+                        <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                </div>
+            </section>
+
+            {/* Main Content */}
+            <main className="max-w-7xl mx-auto px-6 py-20">
+                {/* Modern Search & Filter Interface */}
+                <div className="max-w-4xl mx-auto mb-20 space-y-10">
+                    {/* High-Impact Search Bar */}
+                    <div className="relative group/search">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-[2.5rem] blur opacity-20 group-focus-within/search:opacity-40 transition duration-1000"></div>
+                        <div className="relative bg-white border border-slate-100 rounded-[2.2rem] shadow-[0_20px_40px_rgba(0,0,0,0.04)] flex items-center p-2 group-focus-within/search:border-blue-500/30 transition-all">
+                            <div className="pl-8 pr-4">
+                                <Search className="w-6 h-6 text-slate-400 group-focus-within/search:text-blue-600 transition-colors" />
+                            </div>
+                            <input
+                                type="text"
+                                placeholder={language === 'id' ? 'Cari berita, pengumuman, atau laporan...' : 'Search news, announcements, or reports...'}
+                                value={searchTerm}
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                                className="w-full py-6 pr-8 bg-transparent text-lg font-bold text-slate-900 placeholder:text-slate-300 outline-none"
+                            />
+
+                            {/* Autocomplete Suggestions */}
+                            {searchTerm.length >= 2 && news.filter(n => (language === 'id' ? n.title_id : n.title_en).toLowerCase().includes(searchTerm.toLowerCase())).length > 0 && (
+                                <div className="absolute top-full left-0 right-0 mt-4 bg-white/80 backdrop-blur-2xl border border-white/20 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.15)] overflow-hidden z-50 animate-in fade-in slide-in-from-top-4 duration-500">
+                                    <div className="p-4 border-b border-slate-100 bg-slate-50/50">
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Suggestions</span>
+                                    </div>
+                                    <div className="max-h-[300px] overflow-y-auto">
+                                        {news
+                                            .filter(n => (language === 'id' ? n.title_id : n.title_en).toLowerCase().includes(searchTerm.toLowerCase()))
+                                            .slice(0, 5)
+                                            .map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    onClick={() => navigate(`/news/${item.slug}`)}
+                                                    className="px-8 py-5 hover:bg-blue-50 cursor-pointer transition-all border-b border-slate-50 last:border-0 flex items-center justify-between group/item"
+                                                >
+                                                    <span className="font-bold text-slate-700 group-hover/item:text-blue-600 transition-colors line-clamp-1 flex-1">
+                                                        {language === 'id' ? item.title_id : item.title_en}
+                                                    </span>
+                                                    <ArrowRight size={14} className="text-slate-300 group-hover/item:text-blue-600 transform group-hover/item:translate-x-1 transition-all" />
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Category Filter Pills - High-end arrangement */}
+                    <div className="flex flex-wrap items-center justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat.id}
+                                onClick={() => {
+                                    setSelectedCategory(cat.id);
+                                    setCurrentPage(1);
+                                }}
+                                className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative flex items-center gap-2 group ${selectedCategory === cat.id
+                                        ? 'bg-blue-600 text-white shadow-[0_15px_30px_rgba(37,99,235,0.25)] scale-105'
+                                        : 'bg-slate-50 text-slate-400 hover:bg-white hover:text-blue-600 border border-slate-100/50 hover:border-blue-200 hover:shadow-lg'
+                                    }`}
+                            >
+                                {selectedCategory === cat.id && (
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
+                                )}
+                                <span className="relative z-10">{cat.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {loading ? (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        {[...Array(6)].map((_, i) => (
+                            <div key={i} className="bg-slate-50 rounded-[3rem] h-[500px] animate-pulse"></div>
+                        ))}
+                    </div>
+                ) : paginatedNews.length > 0 ? (
+                    <>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
+                            {paginatedNews.map((item, index) => (
+                                <article
+                                    key={item.id}
+                                    onClick={() => navigate(`/news/${item.slug}`)}
+                                    className="group relative bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_70px_rgba(6,182,212,0.12)] hover:-translate-y-4 transition-all duration-700 cursor-pointer"
+                                >
+                                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left z-20"></div>
+
+                                    <div className="relative aspect-[16/11] overflow-hidden">
+                                        <img
+                                            src={item.featured_image || 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop'}
+                                            alt={language === 'id' ? item.title_id : item.title_en}
+                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        />
+                                        <div className="absolute top-6 left-6 z-10">
+                                            <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] backdrop-blur-md border border-white/20 shadow-lg ${categoryColors[item.category] || categoryColors.default}`}>
+                                                {item.category.replace('_', ' ')}
+                                            </span>
+                                        </div>
+                                        <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                    </div>
+
+                                    <div className="p-10 flex flex-col h-full relative">
+                                        <div className="flex items-center gap-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">
+                                            <div className="w-8 h-px bg-slate-200 group-hover:w-12 group-hover:bg-blue-600 transition-all duration-500"></div>
+                                            {formatDate(item.published_at)}
+                                        </div>
+
+                                        <h3 className="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors duration-500 leading-tight mb-4 line-clamp-2 min-h-[3rem]">
+                                            {language === 'id' ? item.title_id : item.title_en}
+                                        </h3>
+
+                                        <div
+                                            className="text-slate-500 text-sm leading-relaxed font-medium line-clamp-2 mb-10 opacity-70 group-hover:opacity-100 transition-opacity"
+                                            dangerouslySetInnerHTML={{ __html: (language === 'id' ? item.excerpt_id : item.excerpt_en) || '' }}
+                                        />
+
+                                        <div className="pt-8 border-t border-slate-50 flex items-center justify-between mt-auto">
+                                            <div className="flex items-center gap-2 group/link">
+                                                <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t('news.readmore')}</span>
+                                                <div className="relative flex h-2 w-2">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                                                </div>
+                                            </div>
+
+                                            <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-inner group-hover:rotate-6">
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex justify-center items-center gap-4 mt-20">
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all disabled:opacity-30"
+                                >
+                                    <ChevronLeft className="w-5 h-5" />
+                                </button>
+
+                                {[...Array(totalPages)].map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setCurrentPage(i + 1)}
+                                        className={`w-12 h-12 rounded-2xl font-black text-xs transition-all ${currentPage === i + 1
+                                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                                            : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                                            }`}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                ))}
+
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all disabled:opacity-30"
+                                >
+                                    <ChevronRight className="w-5 h-5" />
+                                </button>
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-100">
+                        <Newspaper className="w-16 h-16 text-slate-200 mx-auto mb-6" />
+                        <h3 className="text-xl font-black text-slate-900 mb-2">
+                            {language === 'id' ? 'Tidak ada berita ditemukan' : 'No news found'}
+                        </h3>
+                        <p className="text-slate-500">
+                            {language === 'id' ? 'Coba gunakan kata kunci atau kategori yang berbeda.' : 'Try using different keywords or categories.'}
+                        </p>
+                    </div>
+                )}
+            </main>
+
+            <Footer onNavigate={handleNavigate} />
+        </div>
+    );
+};
+
+export default NewsPage;

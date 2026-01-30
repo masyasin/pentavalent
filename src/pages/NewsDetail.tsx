@@ -302,7 +302,7 @@ const NewsDetail: React.FC = () => {
                         </div>
 
                         <div className="relative">
-                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-[1.2] max-w-4xl mx-auto text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic px-4 drop-shadow-sm">
+                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-[1.2] max-w-4xl mx-auto text-white italic px-4 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                                 {language === 'id' ? article.title_id : article.title_en}
                             </h1>
                             <div className="w-12 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_15px_rgba(var(--primary),0.5)] opacity-80"></div>
@@ -470,17 +470,62 @@ const NewsDetail: React.FC = () => {
                                 </div>
                             </div>
                         )}
-                        <div className="bg-primary p-8 rounded-[2.5rem] text-white relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                        <div className="group relative bg-slate-900 p-10 md:p-12 rounded-[3rem] text-white overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.2)]">
+                            {/* Premium Background Elements */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/30 transition-colors duration-700"></div>
+                            <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/4"></div>
+                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6-fourth.png')]"></div>
+
                             <div className="relative z-10">
-                                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-6"><Mail className="text-white" size={24} /></div>
-                                <h3 className="text-2xl font-black tracking-tighter mb-2">Subscribe Intelligence</h3>
-                                <p className="text-white/80 text-sm font-medium mb-8 leading-relaxed">Get exclusive insights and updates delivered directly to your inbox.</p>
-                                {subscribed ? <div className="bg-white/20 p-4 rounded-xl text-center font-bold animate-in fade-in">Thank you for subscribing!</div>
-                                    : <form onSubmit={handleSubscribe} className="space-y-4">
-                                        <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full px-5 py-4 bg-white/10 border border-white/20 rounded-xl placeholder:text-white/50 text-white font-bold outline-none focus:bg-white/20 transition-all" />
-                                        <button type="submit" className="w-full py-4 wow-button-gradient text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-xl">Subscribe Now</button>
-                                    </form>}
+                                <div className="w-16 h-16 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[1.5rem] flex items-center justify-center mb-10 shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700">
+                                    <Mail className="text-cyan-400" size={32} strokeWidth={2.5} />
+                                </div>
+
+                                <h3 className="text-3xl font-black tracking-tighter mb-4 leading-tight">
+                                    Subscribe <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 italic">Intelligence</span>
+                                </h3>
+
+                                <p className="text-white/60 text-sm font-medium mb-10 leading-relaxed max-w-xs">
+                                    Get exclusive corporate insights and strategic updates delivered directly to your inbox.
+                                </p>
+
+                                {subscribed ? (
+                                    <div className="bg-emerald-500/20 border border-emerald-500/30 p-6 rounded-2xl text-center font-black text-emerald-400 animate-in zoom-in duration-500 flex flex-col items-center gap-2">
+                                        <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center mb-2">
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                                        </div>
+                                        TRANSMISSION SECURED
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleSubscribe} className="space-y-6">
+                                        <div className="relative group/input">
+                                            <input
+                                                type="email"
+                                                placeholder="Enter your corporate email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                required
+                                                className="w-full px-7 py-5 bg-white/5 border border-white/10 rounded-[1.5rem] placeholder:text-white/30 text-white font-bold outline-none focus:bg-white/10 focus:border-cyan-500/50 transition-all backdrop-blur-md"
+                                            />
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-focus-within/input:opacity-100 transition-opacity">
+                                                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            className="w-full py-5 wow-button-gradient text-white font-black uppercase tracking-[0.25em] text-[10px] rounded-[1.5rem] shadow-[0_15px_30px_rgba(6,182,212,0.3)] hover:shadow-[0_20px_40px_rgba(6,182,212,0.5)] transform hover:-translate-y-1 active:scale-[0.98] transition-all duration-500 flex items-center justify-center gap-3"
+                                        >
+                                            SUBSCRIBE NOW
+                                            <ArrowRight size={16} strokeWidth={3} />
+                                        </button>
+
+                                        <p className="text-[9px] text-white/30 text-center font-bold tracking-widest uppercase">
+                                            SECURES CHANNEL • NO SPAM
+                                        </p>
+                                    </form>
+                                )}
                             </div>
                         </div>
                     </aside>

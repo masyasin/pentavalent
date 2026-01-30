@@ -133,254 +133,560 @@ const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Strategic Pillars: Vision & Mission - Redesigned for Maximum Impact */}
-        <div className="mb-48 relative">
-          {/* Background Decorative Element */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gradient-to-b from-slate-50/0 via-slate-100/50 to-slate-50/0 rounded-[10rem] blur-3xl pointer-events-none"></div>
+        {/* Strategic Pillars: Vision & Mission - Next-Gen Premium Design */}
+        <div className="mb-12 relative">
+          {/* Contained Background with Rounded Corners */}
+          <div className="relative mx-auto max-w-[1600px] rounded-[4rem] overflow-hidden shadow-2xl">
+            {/* Advanced Animated Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e27] via-[#0f1729] to-[#0a0e27]">
+              {/* Animated Mesh Gradient */}
+              <div className="absolute inset-0 opacity-30">
+                <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-blue-600/30 rounded-full mix-blend-multiply filter blur-[120px] animate-blob"></div>
+                <div className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-cyan-500/30 rounded-full mix-blend-multiply filter blur-[120px] animate-blob animation-delay-2000"></div>
+                <div className="absolute bottom-0 left-1/3 w-[800px] h-[800px] bg-purple-600/20 rounded-full mix-blend-multiply filter blur-[120px] animate-blob animation-delay-4000"></div>
+              </div>
 
-          <div className="grid lg:grid-cols-2 gap-10 relative z-10">
-            {/* Vision Pillar */}
-            <div className="group relative h-full">
-              <div className="absolute -inset-1 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-[4rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              {/* Grid Pattern */}
+              <div className="absolute inset-0 opacity-[0.03]" style={{
+                backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                backgroundSize: '50px 50px'
+              }}></div>
 
-              <div className="relative h-full bg-white rounded-[2.5rem] md:rounded-[4.5rem] p-6 sm:p-12 lg:p-20 border border-slate-100 shadow-2xl shadow-slate-200/50 hover:shadow-cyan-500/20 transition-all duration-700 overflow-hidden flex flex-col justify-between">
-                {/* Visual Glow Accent */}
-                <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-50/50 rounded-bl-full -mr-16 -mt-16 blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
+              {/* Radial Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-[#0a0e27]/80"></div>
+            </div>
 
-                <div>
-                  <div className="flex items-center gap-6 mb-16">
-                    <div className="w-24 h-24 bg-white border border-cyan-100 rounded-[2rem] flex items-center justify-center text-cyan-600 shadow-xl shadow-cyan-500/5 group-hover:rotate-[10deg] group-hover:scale-110 transition-all duration-500 relative">
-                      {/* Glass Reflection */}
-                      <div className="absolute inset-0 bg-white/40 backdrop-blur-sm rounded-[2rem]"></div>
-                      <svg className="w-10 h-10 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-2 block">North Star</span>
-                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-[1.1] py-2">
-                        {language === 'id' ? 'Visi' : 'Our'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{language === 'id' ? 'Kami' : 'Vision'}</span>
-                      </h3>
-                    </div>
+            {/* Border Glow Effect */}
+            <div className="absolute inset-0 rounded-[4rem] border border-white/10"></div>
+
+            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40">
+              <div className="max-w-[1400px] mx-auto">
+                {/* Premium Section Header */}
+                <div className="text-center mb-24 px-4">
+                  <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/[0.03] backdrop-blur-xl rounded-full border border-white/10 mb-8 group hover:bg-white/[0.05] transition-all duration-300">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-gradient-to-r from-cyan-400 to-blue-500"></span>
+                    </span>
+                    <span className="text-xs font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-white/80 transition-colors">Strategic Foundation</span>
+                    <div className="h-4 w-px bg-white/10"></div>
+                    <span className="text-xs font-bold text-cyan-400">2024</span>
                   </div>
 
-                  <p className="text-xl md:text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
-                    "{info ? (language === 'id' ? info.vision_text_id : info.vision_text_en) : t('about.vision.text')}"
+                  <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
+                    <span className="inline-block hover:scale-105 transition-transform duration-300">{language === 'id' ? 'Fondasi' : 'Our'}</span>{' '}
+                    <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic animate-gradient-x hover:scale-105 transition-transform duration-300 pr-2">Strategic</span>
+                  </h3>
+
+                  <p className="text-lg text-blue-100/50 font-medium max-w-2xl mx-auto px-4">
+                    {language === 'id'
+                      ? 'Komitmen kami terhadap keunggulan dan inovasi berkelanjutan'
+                      : 'Our commitment to excellence and sustainable innovation'}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-4 pt-10 border-t border-slate-50">
-                  <div className="h-[2px] w-20 bg-gradient-to-r from-cyan-500 to-transparent"></div>
-                  <span className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em]">Future Trajectory</span>
-                </div>
-              </div>
-            </div>
+                <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 perspective-1000">
+                  {/* Vision Card - Ultra Premium */}
+                  <div className="group relative transform-gpu hover:scale-[1.02] transition-all duration-700 ease-out">
+                    {/* Animated Glow Border */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 rounded-[3.5rem] opacity-0 group-hover:opacity-100 blur-xl transition-all duration-700 animate-gradient-xy"></div>
 
-            {/* Mission Pillar */}
-            <div className="group relative h-full">
-              <div className="absolute -inset-1 bg-gradient-to-br from-primary/10 to-transparent rounded-[4rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-              <div className="relative h-full bg-white rounded-[2.5rem] md:rounded-[4.5rem] p-6 sm:p-12 lg:p-20 border border-slate-100 shadow-2xl shadow-slate-200/50 hover:shadow-primary/20 transition-all duration-700 overflow-hidden flex flex-col justify-between">
-                {/* Visual Glow Accent */}
-                <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-bl-full -mr-16 -mt-16 blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
-
-                <div>
-                  <div className="flex items-center gap-6 mb-16">
-                    <div className="w-24 h-24 bg-white border border-blue-100 rounded-[2rem] flex items-center justify-center text-primary shadow-xl shadow-primary/5 group-hover:rotate-[-10deg] group-hover:scale-110 transition-all duration-500 relative">
-                      {/* Glass Reflection */}
-                      <div className="absolute inset-0 bg-white/40 backdrop-blur-sm rounded-[2rem]"></div>
-                      <svg className="w-10 h-10 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-2 block">Daily Drive</span>
-                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-[1.1] py-2">
-                        {language === 'id' ? 'Misi' : 'Our'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{language === 'id' ? 'Kami' : 'Mission'}</span>
-                      </h3>
-                    </div>
-                  </div>
-
-                  <p className="text-xl md:text-3xl font-black text-slate-400 group-hover:text-slate-800 leading-[1.1] transition-colors duration-500 mb-8 italic">
-                    "{info ? (language === 'id' ? info.mission_text_id : info.mission_text_en) : t('about.mission.text')}"
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-4 pt-10 border-t border-slate-50">
-                  <div className="h-[2px] w-20 bg-gradient-to-r from-primary to-transparent"></div>
-                  <span className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em]">Active commitment</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Core Values Section: Redesigned for Architectural Impact */}
-        <div className="mb-48 relative">
-          {/* Deep Background Pattern */}
-          <div className="absolute inset-0 bg-slate-900 rounded-[6rem] -rotate-1 pointer-events-none overflow-hidden">
-            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]"></div>
-          </div>
-
-          <div className="relative z-10 px-6 sm:px-12 py-24 md:py-32">
-            <div className="text-center max-w-3xl mx-auto mb-32">
-              <span className="inline-block px-5 py-2 bg-white/10 text-cyan-400 rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 border border-white/10 backdrop-blur-md">
-                {t('about.values.tagline')}
-              </span>
-              <h3 className="text-3xl md:text-5xl lg:text-7xl font-black text-white tracking-tighter leading-[1.1] py-2">
-                {language === 'id' ? 'Filosofi' : 'Philosophy of'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">Penta Valent</span>
-              </h3>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {values.map((value, idx) => (
-                <div
-                  key={value.id}
-                  className="group relative h-full wow-border-glow border border-white/10 rounded-[3rem]"
-                >
-                  {/* Outer Glow */}
-                  <div className="absolute -inset-1 bg-gradient-to-br from-cyan-400/20 to-transparent rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-                  <div className="relative h-full bg-white/5 backdrop-blur-xl rounded-[3rem] p-10 border border-white/10 overflow-hidden group flex flex-col items-center text-center">
-                    {/* Visual Accent */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-400/10 to-transparent rounded-bl-[5rem] -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
-
-                    {/* Massive Background Indicator */}
-                    <div className="absolute -top-10 -right-4 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none group-hover:text-cyan-400/5 transition-colors duration-700 leading-none">
-                      {String(idx + 1).padStart(2, '0')}
-                    </div>
-
-                    {/* Icon Strategy */}
-                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center wow-text-primary shadow-lg group-hover:scale-110 transition-transform duration-500 mb-12">
-                      <div className="relative z-10 scale-125">
-                        {getIcon(value.icon_name)}
+                    {/* Main Card */}
+                    <div className="relative h-full bg-gradient-to-br from-slate-800/95 via-slate-900/95 to-slate-950/95 backdrop-blur-2xl rounded-[3rem] p-12 md:p-16 border border-white/10 overflow-hidden shadow-2xl">
+                      {/* Animated Background Elements */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] transform group-hover:scale-150 transition-transform duration-1000"></div>
+                        <div className="absolute bottom-0 left-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-[80px]"></div>
                       </div>
-                    </div>
 
-                    <h4 className="text-xl md:text-2xl font-black text-white mb-4 md:mb-6 tracking-tighter uppercase leading-tight group-hover:text-cyan-400 transition-colors">
-                      {language === 'id' ? value.title_id : value.title_en}
-                    </h4>
+                      {/* Geometric Decorations */}
+                      <div className="absolute top-8 right-8 w-32 h-32 border border-blue-500/10 rounded-3xl rotate-12 group-hover:rotate-45 transition-transform duration-700"></div>
+                      <div className="absolute bottom-8 left-8 w-24 h-24 border border-cyan-500/10 rounded-2xl -rotate-12 group-hover:-rotate-45 transition-transform duration-700"></div>
 
-                    <p className="text-blue-100/40 font-bold text-xs md:text-sm leading-relaxed group-hover:text-blue-100/70 transition-colors">
-                      {language === 'id' ? value.description_id : value.description_en}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+                      {/* Floating Particles */}
+                      <div className="absolute top-16 right-20 w-2 h-2 bg-blue-400/60 rounded-full animate-float" style={{ animationDelay: '0s' }}></div>
+                      <div className="absolute top-32 right-40 w-1.5 h-1.5 bg-cyan-400/40 rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
+                      <div className="absolute bottom-24 left-24 w-2 h-2 bg-blue-300/50 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+                      <div className="absolute bottom-40 left-40 w-1 h-1 bg-cyan-300/30 rounded-full animate-float" style={{ animationDelay: '1.5s' }}></div>
 
-        {/* Strategic Timeline: Redesigned for Immersive Storytelling */}
-        <div className="relative mt-32 md:mt-48 -mx-6 md:-mx-12 lg:-mx-16 px-6 md:px-12 lg:px-16 py-32 bg-[#051129] overflow-hidden rounded-[4rem] md:rounded-[6rem]">
-          {/* Background Ambient Effects */}
-          <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
-            <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
-          </div>
-
-          <div className="relative z-10">
-            <div className="text-center max-w-3xl mx-auto mb-24 md:mb-32">
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 mb-8 transform hover:scale-105 transition-transform cursor-default">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-                </span>
-                <span className="text-[10px] font-black text-white/70 uppercase tracking-[0.3em]">
-                  {t('about.timeline.tagline')}
-                </span>
-              </div>
-              <h3 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter leading-[1.1] mb-8 py-2">
-                {language === 'id' ? (
-                  <>Evolusi <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic px-4">Strategis</span></>
-                ) : (
-                  <>Strategic <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic px-4">Evolution</span></>
-                )}
-              </h3>
-              <p className="text-blue-100/50 text-lg font-medium leading-relaxed">
-                {language === 'id'
-                  ? 'Perjalanan transformatif kami dalam mendefinisikan ulang standar distribusi farmasi di Indonesia.'
-                  : 'Our transformative journey in redefining pharmaceutical distribution standards in Indonesia.'}
-              </p>
-            </div>
-
-            <div className="relative max-w-[1400px] mx-auto">
-              {/* Central Energy Line */}
-              <div className="absolute left-[30px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-500/50 to-transparent -translate-x-1/2 rounded-full hidden md:block">
-                {/* Traveling Glow Point */}
-                <div className="absolute top-0 left-[-2px] w-[5px] h-[100px] bg-gradient-to-b from-transparent via-cyan-400 to-transparent animate-infinite-scroll"></div>
-              </div>
-
-              {/* Mobile Line */}
-              <div className="absolute left-[30px] top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/30 via-cyan-500/50 to-transparent md:hidden"></div>
-
-              <div className="space-y-12 md:space-y-20">
-                {timeline.map((item, index) => (
-                  <div key={item.id} className={`group relative flex flex-col md:flex-row items-start md:items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-
-                    {/* Year Descriptor - Side Panel */}
-                    <div className={`hidden md:flex w-full md:w-1/2 items-center ${index % 2 === 0 ? 'justify-start pl-20' : 'justify-end pr-20'}`}>
-                      <div className="text-[12rem] font-black leading-none text-white/[0.03] select-none group-hover:text-blue-500/10 transition-colors duration-700">
-                        {item.year}
-                      </div>
-                    </div>
-
-                    {/* Timeline Node */}
-                    <div className="absolute left-[30px] md:left-1/2 w-14 h-14 bg-[#051129] rounded-2xl border-2 border-white/10 z-20 -translate-x-1/2 flex items-center justify-center group-hover:border-cyan-500/50 transition-all duration-500 group-hover:scale-110">
-                      <div className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 via-cyan-400 to-cyan-500 shadow-[0_0_20px_rgba(34,211,238,0.5)] group-hover:scale-125 transition-transform"></div>
-
-                      {/* Connection Branch */}
-                      <div className={`hidden md:block absolute top-1/2 w-20 h-px bg-gradient-to-r ${index % 2 === 0 ? 'right-full from-transparent to-blue-500/20' : 'left-full from-blue-500/20 to-transparent'} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
-                    </div>
-
-                    {/* Dynamic Card */}
-                    <div className={`w-full md:w-1/2 pl-20 md:pl-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}>
-                      <div className="relative p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl hover:bg-white/[0.07] transition-all duration-700 group/card overflow-hidden">
-                        {/* Interactive Corner Accent */}
-                        <div className={`absolute top-0 ${index % 2 === 0 ? 'right-0' : 'left-0'} w-32 h-32 bg-gradient-to-br from-cyan-400/10 to-transparent blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity`}></div>
-
-                        {/* Mobile Year Tag */}
-                        <div className="flex md:hidden items-center gap-3 mb-6">
-                          <span className="px-4 py-1.5 bg-blue-600 rounded-lg text-xs font-black text-white italic tracking-tighter shadow-lg shadow-blue-900/40">
-                            {item.year}
-                          </span>
+                      <div className="relative z-10">
+                        {/* Premium Icon */}
+                        <div className="mb-14 relative inline-block">
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500"></div>
+                          <div className="relative w-32 h-32 bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-500 rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-blue-500/50 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 border border-white/10">
+                            <div className="absolute inset-0 bg-white/10 rounded-[2.5rem] backdrop-blur-sm"></div>
+                            <svg className="w-14 h-14 text-white drop-shadow-2xl relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                          </div>
                         </div>
 
-                        <div className={`inline-flex md:hidden items-center gap-2 mb-4 text-[10px] font-black text-blue-400 uppercase tracking-widest ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
-                          <div className="w-8 h-px bg-blue-500/30"></div>
-                          Strategic Milestone
+                        {/* Label & Title */}
+                        <div className="mb-8">
+                          <div className="inline-flex items-center gap-2 px-5 py-2 bg-blue-500/10 border border-blue-400/20 rounded-full mb-6 backdrop-blur-sm">
+                            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                            <span className="text-xs font-black text-blue-300 uppercase tracking-[0.3em]">Vision</span>
+                          </div>
+
+                          <h4 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-cyan-400 transition-all duration-500">
+                            {language === 'id' ? 'Visi Kami' : 'Our Vision'}
+                          </h4>
+
+                          <div className="flex items-center gap-3">
+                            <div className="h-1.5 w-24 bg-gradient-to-r from-blue-500 via-cyan-500 to-transparent rounded-full"></div>
+                            <div className="h-1 w-16 bg-gradient-to-r from-cyan-500/50 to-transparent rounded-full"></div>
+                          </div>
                         </div>
 
-                        <h4 className={`text-2xl md:text-3xl font-black text-white mb-6 tracking-tighter leading-tight group-hover/card:text-cyan-400 transition-colors ${index % 2 === 0 ? 'md:text-right' : ''}`}>
-                          {language === 'id' ? item.title_id : item.title_en}
-                        </h4>
-
-                        <p className={`text-sm md:text-lg text-blue-100/60 font-medium leading-relaxed ${index % 2 === 0 ? 'md:text-right ml-auto' : ''} max-w-lg`}>
-                          {language === 'id' ? item.description_id : item.description_en}
+                        {/* Content */}
+                        <p className="text-2xl md:text-3xl text-blue-100/70 font-semibold leading-relaxed mb-12 italic group-hover:text-blue-100/90 transition-colors duration-500">
+                          "{info ? (language === 'id' ? info.vision_text_id : info.vision_text_en) : t('about.vision.text')}"
                         </p>
 
-                        {/* Hidden Decorative Index */}
-                        <div className={`absolute bottom-8 ${index % 2 === 0 ? 'left-8' : 'right-8'} text-[4rem] font-black text-white/[0.02] italic leading-none`}>
-                          #{String(index + 1).padStart(2, '0')}
+                        {/* Footer */}
+                        <div className="flex items-center gap-4 pt-10 border-t border-white/5">
+                          <div className="flex-1 h-px bg-gradient-to-r from-blue-500/30 via-cyan-500/30 to-transparent"></div>
+                          <span className="text-[10px] font-black text-blue-300/40 uppercase tracking-[0.4em]">Global Standard</span>
+                          <div className="flex-1 h-px bg-gradient-to-l from-blue-500/30 via-cyan-500/30 to-transparent"></div>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Final CTA / Quote */}
-            <div className="mt-32 text-center">
-              <div className="inline-block p-1 rounded-3xl bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400">
-                <div className="px-12 py-10 rounded-[1.5rem] bg-[#051129] text-center">
-                  <p className="text-xl md:text-2xl font-black text-white italic mb-2">
-                    {language === 'id' ? '"Membangun masa depan kesehatan Indonesia."' : '"Shaping the future of healthcare in Indonesia."'}
-                  </p>
-                  <p className="text-cyan-400 text-xs font-black uppercase tracking-[0.4em]">Integrated Logistics Excellence</p>
+                  {/* Mission Card - Ultra Premium */}
+                  <div className="group relative transform-gpu hover:scale-[1.02] transition-all duration-700 ease-out">
+                    {/* Animated Glow Border */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 via-cyan-500 to-emerald-600 rounded-[3.5rem] opacity-0 group-hover:opacity-100 blur-xl transition-all duration-700 animate-gradient-xy"></div>
+
+                    {/* Main Card */}
+                    <div className="relative h-full bg-gradient-to-br from-slate-800/95 via-slate-900/95 to-slate-950/95 backdrop-blur-2xl rounded-[3rem] p-12 md:p-16 border border-white/10 overflow-hidden shadow-2xl">
+                      {/* Animated Background Elements */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] transform group-hover:scale-150 transition-transform duration-1000"></div>
+                        <div className="absolute bottom-0 left-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-[80px]"></div>
+                      </div>
+
+                      {/* Geometric Decorations */}
+                      <div className="absolute top-8 left-8 w-32 h-32 border border-emerald-500/10 rounded-3xl -rotate-12 group-hover:-rotate-45 transition-transform duration-700"></div>
+                      <div className="absolute bottom-8 right-8 w-24 h-24 border border-cyan-500/10 rounded-2xl rotate-12 group-hover:rotate-45 transition-transform duration-700"></div>
+
+                      {/* Floating Particles */}
+                      <div className="absolute top-16 left-20 w-2 h-2 bg-emerald-400/60 rounded-full animate-float" style={{ animationDelay: '0.5s' }}></div>
+                      <div className="absolute top-32 left-40 w-1.5 h-1.5 bg-cyan-400/40 rounded-full animate-float" style={{ animationDelay: '1.5s' }}></div>
+                      <div className="absolute bottom-24 right-24 w-2 h-2 bg-emerald-300/50 rounded-full animate-float" style={{ animationDelay: '2.5s' }}></div>
+                      <div className="absolute bottom-40 right-40 w-1 h-1 bg-cyan-300/30 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+
+                      <div className="relative z-10">
+                        {/* Premium Icon */}
+                        <div className="mb-14 relative inline-block">
+                          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500"></div>
+                          <div className="relative w-32 h-32 bg-gradient-to-br from-emerald-500 via-emerald-600 to-cyan-500 rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-emerald-500/50 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500 border border-white/10">
+                            <div className="absolute inset-0 bg-white/10 rounded-[2.5rem] backdrop-blur-sm"></div>
+                            <svg className="w-14 h-14 text-white drop-shadow-2xl relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        {/* Label & Title */}
+                        <div className="mb-8">
+                          <div className="inline-flex items-center gap-2 px-5 py-2 bg-emerald-500/10 border border-emerald-400/20 rounded-full mb-6 backdrop-blur-sm">
+                            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                            <span className="text-xs font-black text-emerald-300 uppercase tracking-[0.3em]">Mission</span>
+                          </div>
+
+                          <h4 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all duration-500">
+                            {language === 'id' ? 'Misi Kami' : 'Our Mission'}
+                          </h4>
+
+                          <div className="flex items-center gap-3">
+                            <div className="h-1.5 w-24 bg-gradient-to-r from-emerald-500 via-cyan-500 to-transparent rounded-full"></div>
+                            <div className="h-1 w-16 bg-gradient-to-r from-cyan-500/50 to-transparent rounded-full"></div>
+                          </div>
+                        </div>
+
+                        {/* Content */}
+                        <p className="text-2xl md:text-3xl text-emerald-100/70 font-semibold leading-relaxed mb-12 italic group-hover:text-emerald-100/90 transition-colors duration-500">
+                          "{info ? (language === 'id' ? info.mission_text_id : info.mission_text_en) : t('about.mission.text')}"
+                        </p>
+
+                        {/* Footer */}
+                        <div className="flex items-center gap-4 pt-10 border-t border-white/5">
+                          <div className="flex-1 h-px bg-gradient-to-r from-emerald-500/30 via-cyan-500/30 to-transparent"></div>
+                          <span className="text-[10px] font-black text-emerald-300/40 uppercase tracking-[0.4em]">Sustainable Excellence</span>
+                          <div className="flex-1 h-px bg-gradient-to-l from-emerald-500/30 via-cyan-500/30 to-transparent"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+
+        {/* Core Values Section: Ultra Premium Redesign */}
+        <div className="mb-12 relative">
+          {/* Contained Background with Rounded Corners */}
+          <div className="relative mx-auto max-w-[1600px] rounded-[4rem] overflow-hidden shadow-2xl">
+            {/* Advanced Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e27] via-[#0f1729] to-[#0a0e27]">
+              {/* Animated Mesh Gradient */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-600/40 rounded-full mix-blend-multiply filter blur-[100px] animate-blob"></div>
+                <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-blue-500/40 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-2000"></div>
+                <div className="absolute bottom-1/4 left-1/2 w-[600px] h-[600px] bg-purple-600/30 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-4000"></div>
+              </div>
+
+              {/* Grid Pattern */}
+              <div className="absolute inset-0 opacity-[0.02]" style={{
+                backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                backgroundSize: '60px 60px'
+              }}></div>
+            </div>
+
+            {/* Border Glow Effect */}
+            <div className="absolute inset-0 rounded-[4rem] border border-white/10"></div>
+
+            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40">
+              <div className="max-w-[1600px] mx-auto">
+                {/* Premium Header */}
+                <div className="text-center max-w-4xl mx-auto mb-24 px-4">
+                  <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/[0.03] backdrop-blur-xl rounded-full border border-white/10 mb-8 group hover:bg-white/[0.05] transition-all duration-300">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-gradient-to-r from-cyan-400 to-blue-500"></span>
+                    </span>
+                    <span className="text-xs font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-white/80 transition-colors">{t('about.values.tagline')}</span>
+                  </div>
+
+                  <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
+                    <span className="inline-block hover:scale-105 transition-transform duration-300">{language === 'id' ? 'Filosofi' : 'Philosophy of'}</span>{' '}
+                    <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic animate-gradient-x hover:scale-105 transition-transform duration-300 pr-2">Penta Valent</span>
+                  </h3>
+
+                  <p className="text-lg text-blue-100/50 font-medium px-4">
+                    {language === 'id'
+                      ? 'Nilai-nilai inti yang membentuk identitas dan budaya perusahaan kami'
+                      : 'Core values that shape our corporate identity and culture'}
+                  </p>
+                </div>
+
+                {/* Values Grid */}
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+                  {values.map((value, idx) => {
+                    // Define color schemes for each card
+                    const colorSchemes = [
+                      {
+                        // Card 1: Cyan-Blue
+                        border: 'from-cyan-600 via-blue-500 to-cyan-600',
+                        bgHover: 'bg-cyan-500/10',
+                        bgHover2: 'bg-blue-500/10',
+                        geometric: 'border-cyan-500/10',
+                        badge: 'from-cyan-500/20 to-blue-500/20',
+                        badgeText: 'text-cyan-400',
+                        particle1: 'bg-cyan-400/50',
+                        particle2: 'bg-blue-400/40',
+                        iconGlow: 'from-cyan-500 to-blue-500',
+                        iconBg: 'from-cyan-500 via-blue-500 to-blue-600',
+                        iconShadow: 'shadow-cyan-500/30',
+                        titleHover: 'group-hover:from-cyan-400 group-hover:to-blue-400',
+                        divider: 'from-cyan-500 to-blue-500',
+                        divider2: 'from-blue-500/50',
+                        footerDot1: 'bg-cyan-400',
+                        footerDot2: 'bg-blue-400',
+                        footerText: 'text-cyan-400/40'
+                      },
+                      {
+                        // Card 2: Purple-Pink
+                        border: 'from-purple-600 via-pink-500 to-purple-600',
+                        bgHover: 'bg-purple-500/10',
+                        bgHover2: 'bg-pink-500/10',
+                        geometric: 'border-purple-500/10',
+                        badge: 'from-purple-500/20 to-pink-500/20',
+                        badgeText: 'text-purple-400',
+                        particle1: 'bg-purple-400/50',
+                        particle2: 'bg-pink-400/40',
+                        iconGlow: 'from-purple-500 to-pink-500',
+                        iconBg: 'from-purple-500 via-pink-500 to-pink-600',
+                        iconShadow: 'shadow-purple-500/30',
+                        titleHover: 'group-hover:from-purple-400 group-hover:to-pink-400',
+                        divider: 'from-purple-500 to-pink-500',
+                        divider2: 'from-pink-500/50',
+                        footerDot1: 'bg-purple-400',
+                        footerDot2: 'bg-pink-400',
+                        footerText: 'text-purple-400/40'
+                      },
+                      {
+                        // Card 3: Emerald-Teal
+                        border: 'from-emerald-600 via-teal-500 to-emerald-600',
+                        bgHover: 'bg-emerald-500/10',
+                        bgHover2: 'bg-teal-500/10',
+                        geometric: 'border-emerald-500/10',
+                        badge: 'from-emerald-500/20 to-teal-500/20',
+                        badgeText: 'text-emerald-400',
+                        particle1: 'bg-emerald-400/50',
+                        particle2: 'bg-teal-400/40',
+                        iconGlow: 'from-emerald-500 to-teal-500',
+                        iconBg: 'from-emerald-500 via-teal-500 to-teal-600',
+                        iconShadow: 'shadow-emerald-500/30',
+                        titleHover: 'group-hover:from-emerald-400 group-hover:to-teal-400',
+                        divider: 'from-emerald-500 to-teal-500',
+                        divider2: 'from-teal-500/50',
+                        footerDot1: 'bg-emerald-400',
+                        footerDot2: 'bg-teal-400',
+                        footerText: 'text-emerald-400/40'
+                      },
+                      {
+                        // Card 4: Orange-Amber
+                        border: 'from-orange-600 via-amber-500 to-orange-600',
+                        bgHover: 'bg-orange-500/10',
+                        bgHover2: 'bg-amber-500/10',
+                        geometric: 'border-orange-500/10',
+                        badge: 'from-orange-500/20 to-amber-500/20',
+                        badgeText: 'text-orange-400',
+                        particle1: 'bg-orange-400/50',
+                        particle2: 'bg-amber-400/40',
+                        iconGlow: 'from-orange-500 to-amber-500',
+                        iconBg: 'from-orange-500 via-amber-500 to-amber-600',
+                        iconShadow: 'shadow-orange-500/30',
+                        titleHover: 'group-hover:from-orange-400 group-hover:to-amber-400',
+                        divider: 'from-orange-500 to-amber-500',
+                        divider2: 'from-amber-500/50',
+                        footerDot1: 'bg-orange-400',
+                        footerDot2: 'bg-amber-400',
+                        footerText: 'text-orange-400/40'
+                      }
+                    ];
+
+                    const colors = colorSchemes[idx % 4];
+
+                    return (
+                      <div
+                        key={value.id}
+                        className="group relative transform-gpu hover:scale-105 transition-all duration-500 ease-out"
+                      >
+                        {/* Animated Glow Border */}
+                        <div className={`absolute -inset-1 bg-gradient-to-r ${colors.border} rounded-[3rem] opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500 animate-gradient-x`}></div>
+
+                        {/* Main Card */}
+                        <div className="relative h-full bg-gradient-to-br from-slate-800/90 via-slate-900/90 to-slate-950/90 backdrop-blur-xl rounded-[2.5rem] p-10 md:p-12 border border-white/10 overflow-hidden shadow-2xl">
+                          {/* Background Effects */}
+                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                            <div className={`absolute top-0 right-0 w-48 h-48 ${colors.bgHover} rounded-full blur-[60px] transform group-hover:scale-150 transition-transform duration-1000`}></div>
+                            <div className={`absolute bottom-0 left-0 w-32 h-32 ${colors.bgHover2} rounded-full blur-[50px]`}></div>
+                          </div>
+
+                          {/* Geometric Decoration */}
+                          <div className={`absolute top-6 right-6 w-20 h-20 border ${colors.geometric} rounded-2xl rotate-12 group-hover:rotate-45 transition-transform duration-700`}></div>
+
+                          {/* Number Badge */}
+                          <div className={`absolute top-8 left-8 w-12 h-12 bg-gradient-to-br ${colors.badge} backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform duration-500`}>
+                            <span className={`text-xl font-black ${colors.badgeText}`}>{String(idx + 1).padStart(2, '0')}</span>
+                          </div>
+
+                          {/* Floating Particles */}
+                          <div className={`absolute top-20 right-12 w-1.5 h-1.5 ${colors.particle1} rounded-full animate-float`} style={{ animationDelay: `${idx * 0.5}s` }}></div>
+                          <div className={`absolute bottom-16 left-12 w-1 h-1 ${colors.particle2} rounded-full animate-float`} style={{ animationDelay: `${idx * 0.5 + 1}s` }}></div>
+
+                          <div className="relative z-10 flex flex-col items-center text-center h-full">
+                            {/* Premium Icon */}
+                            <div className="mb-10 mt-8 relative">
+                              <div className={`absolute inset-0 bg-gradient-to-br ${colors.iconGlow} rounded-[2rem] blur-xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500`}></div>
+                              <div className={`relative w-24 h-24 bg-gradient-to-br ${colors.iconBg} rounded-[2rem] flex items-center justify-center shadow-2xl ${colors.iconShadow} group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/10`}>
+                                <div className="absolute inset-0 bg-white/10 rounded-[2rem] backdrop-blur-sm"></div>
+                                <div className="relative z-10 text-white scale-125">
+                                  {getIcon(value.icon_name)}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Title */}
+                            <h4 className={`text-2xl md:text-3xl font-black text-white mb-5 tracking-tighter uppercase leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${colors.titleHover} transition-all duration-500`}>
+                              {language === 'id' ? value.title_id : value.title_en}
+                            </h4>
+
+                            {/* Divider */}
+                            <div className="flex items-center gap-2 mb-6">
+                              <div className={`h-1 w-12 bg-gradient-to-r ${colors.divider} rounded-full`}></div>
+                              <div className={`h-0.5 w-8 bg-gradient-to-r ${colors.divider2} to-transparent rounded-full`}></div>
+                            </div>
+
+                            {/* Description */}
+                            <p className="text-sm md:text-base text-blue-100/60 font-medium leading-relaxed group-hover:text-blue-100/80 transition-colors duration-500 flex-grow">
+                              {language === 'id' ? value.description_id : value.description_en}
+                            </p>
+
+                            {/* Footer Accent */}
+                            <div className="mt-8 pt-6 border-t border-white/5 w-full">
+                              <div className="flex items-center justify-center gap-2">
+                                <div className={`w-1.5 h-1.5 ${colors.footerDot1} rounded-full animate-pulse`}></div>
+                                <span className={`text-[9px] font-black ${colors.footerText} uppercase tracking-[0.3em]`}>Core Value</span>
+                                <div className={`w-1.5 h-1.5 ${colors.footerDot2} rounded-full animate-pulse`} style={{ animationDelay: '0.5s' }}></div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Large Background Number */}
+                          <div className="absolute -bottom-8 -right-4 text-[10rem] font-black text-white/[0.01] select-none pointer-events-none leading-none">
+                            {idx + 1}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Strategic Timeline: Ultra Premium Redesign */}
+        <div className="mb-12 relative">
+          {/* Contained Background with Rounded Corners */}
+          <div className="relative mx-auto max-w-[1600px] rounded-[4rem] overflow-hidden shadow-2xl">
+            {/* Advanced Animated Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e27] via-[#0f1729] to-[#0a0e27]">
+              {/* Animated Mesh Gradient */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute top-0 right-1/4 w-[700px] h-[700px] bg-blue-600/30 rounded-full mix-blend-multiply filter blur-[120px] animate-blob"></div>
+                <div className="absolute bottom-0 left-1/4 w-[700px] h-[700px] bg-cyan-500/30 rounded-full mix-blend-multiply filter blur-[120px] animate-blob animation-delay-2000"></div>
+                <div className="absolute top-1/2 left-1/2 w-[700px] h-[700px] bg-purple-600/20 rounded-full mix-blend-multiply filter blur-[120px] animate-blob animation-delay-4000"></div>
+              </div>
+
+              {/* Dot Grid Pattern */}
+              <div className="absolute inset-0 opacity-[0.03]" style={{
+                backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)',
+                backgroundSize: '40px 40px'
+              }}></div>
+            </div>
+
+            {/* Border Glow Effect */}
+            <div className="absolute inset-0 rounded-[4rem] border border-white/10"></div>
+
+            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40">
+              <div className="max-w-[1200px] mx-auto">
+                {/* Premium Header */}
+                <div className="text-center mb-32 px-4">
+                  <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/[0.03] backdrop-blur-xl rounded-full border border-white/10 mb-8 group hover:bg-white/[0.05] transition-all duration-300">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-gradient-to-r from-cyan-400 to-blue-500"></span>
+                    </span>
+                    <span className="text-xs font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-white/80 transition-colors">{t('about.timeline.tagline')}</span>
+                  </div>
+
+                  <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none mb-6 px-4">
+                    {language === 'id' ? (
+                      <>
+                        <span className="inline-block hover:scale-105 transition-transform duration-300">Evolusi</span>{' '}
+                        <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic animate-gradient-x hover:scale-105 transition-transform duration-300 pr-2">Strategis</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="inline-block hover:scale-105 transition-transform duration-300">Strategic</span>{' '}
+                        <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 italic animate-gradient-x hover:scale-105 transition-transform duration-300 pr-2">Evolution</span>
+                      </>
+                    )}
+                  </h3>
+
+                  <p className="text-lg text-blue-100/50 font-medium max-w-2xl mx-auto px-4">
+                    {language === 'id'
+                      ? 'Perjalanan transformatif kami dalam mendefinisikan ulang standar distribusi farmasi di Indonesia'
+                      : 'Our transformative journey in redefining pharmaceutical distribution standards in Indonesia'}
+                  </p>
+                </div>
+
+                {/* Vertical Timeline */}
+                <div className="relative">
+                  {/* Animated Central Line */}
+                  <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500/20 via-cyan-500/40 to-blue-500/20 -translate-x-1/2 rounded-full">
+                    {/* Traveling Glow */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-24 bg-gradient-to-b from-transparent via-cyan-400 to-transparent animate-infinite-scroll opacity-60"></div>
+                  </div>
+
+                  {/* Timeline Items */}
+                  <div className="space-y-16">
+                    {timeline.map((item, index) => {
+                      // Color schemes for each timeline item
+                      const colors = [
+                        { dot: 'from-blue-500 to-cyan-500', badge: 'from-blue-500 to-cyan-500', glow: 'shadow-blue-500/50' },
+                        { dot: 'from-purple-500 to-pink-500', badge: 'from-purple-500 to-pink-500', glow: 'shadow-purple-500/50' },
+                        { dot: 'from-emerald-500 to-teal-500', badge: 'from-emerald-500 to-teal-500', glow: 'shadow-emerald-500/50' },
+                        { dot: 'from-orange-500 to-amber-500', badge: 'from-orange-500 to-amber-500', glow: 'shadow-orange-500/50' },
+                      ][index % 4];
+
+                      return (
+                        <div key={item.id} className={`group relative flex items-start gap-8 md:gap-16 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                          {/* Timeline Dot */}
+                          <div className="absolute left-8 md:left-1/2 -translate-x-1/2 z-20">
+                            <div className="relative">
+                              {/* Outer Glow Ring */}
+                              <div className={`absolute inset-0 w-16 h-16 bg-gradient-to-br ${colors.dot} rounded-2xl blur-xl opacity-0 group-hover:opacity-60 transition-all duration-500 group-hover:scale-150`}></div>
+
+                              {/* Dot Container */}
+                              <div className="relative w-16 h-16 bg-[#0a0e27] rounded-2xl border-2 border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                                <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${colors.dot} ${colors.glow} shadow-2xl group-hover:scale-110 transition-transform duration-500`}></div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Content Card */}
+                          <div className={`flex-1 pl-24 md:pl-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'} ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                            <div className="relative group/card">
+                              {/* Year Badge */}
+                              <div className={`inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r ${colors.badge} rounded-2xl mb-6 shadow-2xl ${colors.glow} group-hover/card:scale-110 transition-all duration-500`}>
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span className="text-xl font-black text-white tracking-tight">{item.year}</span>
+                              </div>
+
+                              {/* Card Content */}
+                              <div className="relative p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-br from-slate-800/80 via-slate-900/80 to-slate-950/80 backdrop-blur-xl border border-white/10 overflow-hidden shadow-2xl group-hover/card:scale-[1.02] group-hover/card:border-white/20 transition-all duration-500">
+                                {/* Background Glow */}
+                                <div className={`absolute ${index % 2 === 0 ? 'top-0 right-0' : 'top-0 left-0'} w-48 h-48 bg-gradient-to-br ${colors.dot} opacity-0 group-hover/card:opacity-10 blur-[60px] transition-opacity duration-700`}></div>
+
+                                {/* Geometric Decoration */}
+                                <div className={`absolute ${index % 2 === 0 ? 'bottom-6 left-6' : 'bottom-6 right-6'} w-24 h-24 border border-white/5 rounded-3xl rotate-12 group-hover/card:rotate-45 transition-transform duration-700`}></div>
+
+                                <div className="relative z-10">
+                                  <h4 className="text-2xl md:text-3xl font-black text-white mb-4 tracking-tight group-hover/card:text-transparent group-hover/card:bg-clip-text group-hover/card:bg-gradient-to-r group-hover/card:from-cyan-400 group-hover/card:to-blue-400 transition-all duration-500">
+                                    {language === 'id' ? item.title_id : item.title_en}
+                                  </h4>
+
+                                  <p className="text-base md:text-lg text-blue-100/60 font-medium leading-relaxed group-hover/card:text-blue-100/80 transition-colors duration-500">
+                                    {language === 'id' ? item.description_id : item.description_en}
+                                  </p>
+
+                                  {/* Decorative Line */}
+                                  <div className={`mt-6 flex items-center gap-2 ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'}`}>
+                                    <div className={`h-1 w-16 bg-gradient-to-r ${colors.badge} rounded-full`}></div>
+                                    <div className={`h-0.5 w-10 bg-gradient-to-r ${colors.badge} opacity-50 to-transparent rounded-full`}></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Large Background Year (Desktop Only) */}
+                          <div className={`hidden md:block flex-1 ${index % 2 === 0 ? 'md:pl-12' : 'md:pr-12'}`}>
+                            <div className={`text-[10rem] font-black text-white/[0.02] select-none leading-none group-hover:text-white/[0.04] transition-colors duration-700 ${index % 2 === 0 ? 'text-left' : 'text-right'}`}>
+                              {item.year}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );

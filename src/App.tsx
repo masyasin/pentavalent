@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import NewsPage from "./pages/NewsPage";
 import NewsDetail from "./pages/NewsDetail";
 
 const queryClient = new QueryClient();
@@ -19,8 +20,14 @@ const App = () => (
         <Toaster />
         <Sonner />
         <LanguageProvider>
-          <BrowserRouter>
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true,
+            }}
+          >
             <Routes>
+              <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:slug" element={<NewsDetail />} />
               <Route path="/*" element={<Index />} />
             </Routes>

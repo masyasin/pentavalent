@@ -298,6 +298,7 @@
   animation: ken-burns 12s ease-in-out infinite alternate;
 }
 
+
 .animate-slide-reveal {
   animation: slide-reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
 }
@@ -314,6 +315,104 @@
   animation: fade-in-up 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
+/* Premium Vision & Mission Animations */
+@keyframes blob {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-20px);
+    opacity: 1;
+  }
+}
+
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes gradient-xy {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 100% 50%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+.animate-blob {
+  animation: blob 7s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
+}
+
+.animate-gradient-xy {
+  background-size: 400% 400%;
+  animation: gradient-xy 8s ease infinite;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none !important;
@@ -325,4 +424,58 @@
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+}
+
+/* Wow Button Gradient for Business Tabs - Premium Version */
+.wow-button-gradient {
+  background: linear-gradient(135deg,
+      #1e40af 0%,
+      /* Deep Blue */
+      #3b82f6 25%,
+      /* Bright Blue */
+      #06b6d4 50%,
+      /* Cyan */
+      #14b8a6 75%,
+      /* Teal */
+      #10b981 100%
+      /* Emerald */
+    );
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+  box-shadow:
+    0 10px 40px -10px rgba(6, 182, 212, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 2px 4px rgba(255, 255, 255, 0.2) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.wow-button-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent);
+  transition: left 0.5s;
+}
+
+.wow-button-gradient:hover::before {
+  left: 100%;
+}
+
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
