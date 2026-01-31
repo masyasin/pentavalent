@@ -67,10 +67,9 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel }) =>
                                 <img
                                     src={slide.image_url}
                                     alt={language === 'id' ? slide.title_id : slide.title_en}
-                                    className={`w-full h-full object-cover transition-all duration-[8000ms] ${selectedIndex === index ? 'scale-110 opacity-60' : 'scale-100 opacity-0'}`}
+                                    className={`w-full h-full object-cover transition-all duration-[8000ms] ${selectedIndex === index ? 'scale-110 opacity-80' : 'scale-100 opacity-0'}`}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-transparent z-10"></div>
-                                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/60 z-10"></div>
+                                <div className="absolute inset-0 bg-slate-950/30 z-10"></div>
                             </div>
 
                             {/* Content */}

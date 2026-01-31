@@ -195,10 +195,7 @@ const Management: React.FC = () => {
                                             <p className="text-sm font-bold text-cyan-600 uppercase tracking-wide">
                                                 {language === 'id' ? member.position_id : member.position_en}
                                             </p>
-                                            <div className="mt-4 flex items-center gap-2 text-xs text-slate-500 font-semibold group-hover:text-cyan-600 transition-colors">
-                                                <ArrowRight size={14} />
-                                                {language === 'id' ? 'Lihat Profil' : 'View Profile'}
-                                            </div>
+                                            <span className="font-bold">{language === 'id' ? 'Lihat Profil' : 'View Profile'}</span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -236,89 +233,90 @@ const Management: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </main>
+            </main >
 
             {/* Profile Modal - Upgraded to Premium Bio Style */}
             <AnimatePresence>
-                {selectedMember && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setSelectedMember(null)}
-                            className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl"
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 40 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                            className="relative w-full max-w-5xl bg-white rounded-[4rem] overflow-hidden shadow-4xl flex flex-col md:flex-row border border-white/20"
-                        >
-                            <button
+                {
+                    selectedMember && (
+                        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
                                 onClick={() => setSelectedMember(null)}
-                                className="absolute top-8 right-8 z-30 w-14 h-14 flex items-center justify-center bg-slate-900 text-white rounded-2xl hover:bg-primary transition-all shadow-xl shadow-slate-950/20"
+                                className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 40 }}
+                                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                                className="relative w-full max-w-5xl bg-white rounded-[4rem] overflow-hidden shadow-4xl flex flex-col md:flex-row border border-white/20"
                             >
-                                <X size={28} />
-                            </button>
+                                <button
+                                    onClick={() => setSelectedMember(null)}
+                                    className="absolute top-8 right-8 z-30 w-14 h-14 flex items-center justify-center bg-slate-900 text-white rounded-2xl hover:bg-primary transition-all shadow-xl shadow-slate-950/20"
+                                >
+                                    <X size={28} />
+                                </button>
 
-                            <div className="w-full md:w-5/12 aspect-[4/5] md:aspect-auto bg-slate-950 relative">
-                                <img
-                                    src={selectedMember.image_url}
-                                    alt={selectedMember.name}
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
-                                <div className="absolute bottom-10 left-10 hidden md:block">
-                                    <div className="w-12 h-1 bg-primary rounded-full mb-4 shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>
-                                    <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Official Narrative</p>
-                                </div>
-                            </div>
-
-                            <div className="p-10 md:p-20 flex-1 overflow-y-auto max-h-[60vh] md:max-h-none bg-white relative">
-                                <div className="mb-12 relative">
-                                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 block">Executive Leadership Profile</span>
-                                    <h3 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter italic mb-4 leading-none">
-                                        {selectedMember.name}
-                                    </h3>
-                                    <div className="inline-block px-5 py-2 bg-slate-50 border border-slate-100 rounded-xl">
-                                        <p className="text-xs font-black text-slate-500 uppercase tracking-widest">
-                                            {language === 'id' ? selectedMember.position_id : selectedMember.position_en}
-                                        </p>
-                                    </div>
-                                    <div className="absolute -right-10 -top-10 opacity-[0.03] select-none pointer-events-none">
-                                        <User size={260} strokeWidth={4} />
+                                <div className="w-full md:w-5/12 aspect-[4/5] md:aspect-auto bg-slate-950 relative">
+                                    <img
+                                        src={selectedMember.image_url}
+                                        alt={selectedMember.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
+                                    <div className="absolute bottom-10 left-10 hidden md:block">
+                                        <div className="w-12 h-1 bg-primary rounded-full mb-4 shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>
+                                        <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Official Narrative</p>
                                     </div>
                                 </div>
 
-                                <div className="prose prose-slate max-w-none">
-                                    <div className="relative">
-                                        <div className="absolute -left-8 top-1 bottom-1 w-1 bg-primary/20 rounded-full"></div>
-                                        <p className="text-slate-600 leading-loose text-lg whitespace-pre-wrap font-medium">
-                                            {language === 'id' ? selectedMember.bio_id : selectedMember.bio_en}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="mt-16 pt-10 border-t border-slate-100 flex flex-wrap gap-8 items-center">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all cursor-pointer">
-                                            <Linkedin size={24} />
+                                <div className="p-10 md:p-20 flex-1 overflow-y-auto max-h-[60vh] md:max-h-none bg-white relative">
+                                    <div className="mb-12 relative">
+                                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 block">Executive Leadership Profile</span>
+                                        <h3 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter italic mb-4 leading-none">
+                                            {selectedMember.name}
+                                        </h3>
+                                        <div className="inline-block px-5 py-2 bg-slate-50 border border-slate-100 rounded-xl">
+                                            <p className="text-xs font-black text-slate-500 uppercase tracking-widest">
+                                                {language === 'id' ? selectedMember.position_id : selectedMember.position_en}
+                                            </p>
                                         </div>
-                                        <span className="text-[10px] font-black uppercase text-slate-400">Professional Network</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-slate-900 hover:text-white transition-all cursor-pointer">
-                                            <Mail size={24} />
+                                        <div className="absolute -right-10 -top-10 opacity-[0.03] select-none pointer-events-none">
+                                            <User size={260} strokeWidth={4} />
                                         </div>
-                                        <span className="text-[10px] font-black uppercase text-slate-400">Official Channel</span>
+                                    </div>
+
+                                    <div className="prose prose-slate max-w-none">
+                                        <div className="relative">
+                                            <div className="absolute -left-8 top-1 bottom-1 w-1 bg-primary/20 rounded-full"></div>
+                                            <p className="text-slate-600 leading-loose text-lg whitespace-pre-wrap font-medium">
+                                                {language === 'id' ? selectedMember.bio_id : selectedMember.bio_en}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-16 pt-10 border-t border-slate-100 flex flex-wrap gap-8 items-center">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all cursor-pointer">
+                                                <Linkedin size={24} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase text-slate-400">Professional Network</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-slate-900 hover:text-white transition-all cursor-pointer">
+                                                <Mail size={24} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase text-slate-400">Official Channel</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                )
+                            </motion.div>
+                        </div>
+                    )
                 }
             </AnimatePresence >
 

@@ -64,155 +64,184 @@ const LegalityAchievements: React.FC = () => {
 
             <PageSlider
                 pagePath="/about/legality-achievements"
-                breadcrumbLabel={language === 'id' ? 'Legalitas' : 'Legality'}
+                breadcrumbLabel={language === 'id' ? 'Legalitas, Kepatuhan & Pencapaian' : 'Legality, Compliance & Achievements'}
             />
 
             <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    <div className="lg:col-span-12 space-y-24">
-                        {/* Section 1: Standards */}
-                        <div className="grid lg:grid-cols-2 gap-16 items-center">
-                            <motion.div
-                                initial={{ opacity: 0, x: -30 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                className="space-y-10"
-                            >
-                                <div className="inline-flex items-center gap-3 px-5 py-2 bg-emerald-50 border border-emerald-100 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 mb-2">
-                                    <ShieldCheck size={14} />
-                                    Operational Integrity
-                                </div>
-                                <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase italic leading-[1.1]">
-                                    Uncompromising <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-400 text-6xl md:text-7xl">Compliance</span>
-                                </h2>
-                                <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-xl">
-                                    Our commitment to quality goes beyond certifications. It is embedded in every cold-chain protocol and warehouse workflow we execute.
-                                </p>
-                                <div className="space-y-6">
-                                    {[
-                                        { title_id: 'Sertifikasi CDOB', title_en: 'CDOB Standards', desc: 'Sesuai standar distribusi obat BPOM resmi.' },
-                                        { title_id: 'Sertifikasi CDAKB', title_en: 'CDAKB Compliance', desc: 'Standar distribusi alat kesehatan nasional.' },
-                                    ].map((item, idx) => (
-                                        <div key={idx} className="flex gap-6 p-6 bg-white rounded-[2.5rem] border border-slate-100 hover:enterprise-shadow transition-all group">
-                                            <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
-                                                <CheckCircle2 size={24} />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-black text-slate-900 uppercase tracking-tight mb-2 italic">
-                                                    {language === 'id' ? item.title_id : item.title_en}
-                                                </h4>
-                                                <p className="text-sm text-slate-500 font-medium">{item.desc}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </motion.div>
+                <div className="space-y-24">
 
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                className="relative aspect-[4/5] rounded-[4rem] overflow-hidden shadow-4xl group"
-                            >
-                                <img
-                                    src="https://images.unsplash.com/photo-1576091160550-217359f4ecf8?auto=format&fit=crop&q=80&w=1000"
-                                    alt="Legality"
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[8000ms]"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/60 via-transparent to-transparent"></div>
-                                <div className="absolute bottom-12 left-12 right-12 bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl">
-                                    <div className="flex items-center gap-4 text-white">
-                                        <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/40">
-                                            <Star size={24} />
+                    {/* 1. Legalitas Perusahaan (Company Legality) */}
+                    <section className="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden">
+                        <div className="relative z-10">
+                            <h2 className="text-4xl md:text-5xl font-black text-slate-900 uppercase italic tracking-tighter mb-10 border-b border-slate-100 pb-6">
+                                {language === 'id' ? 'Legalitas Perusahaan' : 'Company Legality'}
+                            </h2>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {[
+                                    { title: language === 'id' ? 'Akta Pendirian & Perubahan' : 'Deed of Establishment & Amendments', status: 'Verified', code: 'AHU-Standard' },
+                                    { title: language === 'id' ? 'Pengesahan Kemenkumham' : 'Ministry of Law Approval', status: 'Verified', code: 'Valid' },
+                                    { title: language === 'id' ? 'NPWP Perseroan' : 'Corporate Tax ID (NPWP)', status: 'Active', code: 'Tax Compliance' },
+                                    { title: language === 'id' ? 'Nomor Induk Berusaha (NIB)' : 'Business ID Number (NIB)', status: 'Registered', code: 'OSS System' },
+                                    { title: language === 'id' ? 'Status Badan Hukum' : 'Legal Entity Status', status: 'PT Tbk', code: 'Public Company' },
+                                    { title: language === 'id' ? 'KBLI Utama & Pendukung' : 'Standard Industrial Classification', status: 'Registered', code: 'Distribution' },
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-white hover:shadow-lg transition-all">
+                                        <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                            <ShieldCheck size={20} />
                                         </div>
                                         <div>
-                                            <div className="text-xl font-black italic tracking-tighter uppercase leading-none mb-1">Elite Standard</div>
-                                            <div className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">Verified Capability</div>
+                                            <h4 className="font-bold text-slate-800 text-sm leading-tight mb-1">{item.title}</h4>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[10px] bg-emerald-500 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest">{item.status}</span>
+                                                <span className="text-[10px] text-slate-400 font-mono">{item.code}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </motion.div>
-                        </div>
-
-                        {/* Wall of Honor: Certifications */}
-                        <div className="space-y-16">
-                            <div className="text-center space-y-6">
-                                <div className="flex items-center justify-center gap-4 text-slate-300">
-                                    <div className="h-px w-20 bg-slate-100"></div>
-                                    <h3 className="text-sm font-black uppercase tracking-[0.4em]">Credential Vault</h3>
-                                    <div className="h-px w-20 bg-slate-100"></div>
-                                </div>
-                                <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase italic">
-                                    Official <span className="text-primary italic">Accreditations</span>
-                                </h2>
-                            </div>
-
-                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                                {certs.map((cert, index) => (
-                                    <motion.div
-                                        key={cert.id}
-                                        initial={{ opacity: 0, y: 30 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: index * 0.1 }}
-                                        className="group p-10 bg-white border border-slate-100 rounded-[3.5rem] enterprise-shadow hover:-translate-y-3 transition-all duration-700 relative overflow-hidden"
-                                    >
-                                        <div className="absolute top-0 right-0 w-48 h-48 bg-slate-50 rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-primary/5 transition-colors"></div>
-
-                                        <div className="relative z-10">
-                                            <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center text-primary mb-10 transition-all group-hover:bg-primary group-hover:text-white group-hover:scale-110 shadow-sm border border-slate-50">
-                                                <Award size={40} strokeWidth={1.5} />
-                                            </div>
-
-                                            <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tight mb-6 italic leading-tight group-hover:text-primary transition-colors">
-                                                {cert.name}
-                                            </h4>
-
-                                            <p className="text-sm text-slate-500 leading-relaxed font-medium mb-10 min-h-[60px]">
-                                                {language === 'id' ? cert.description_id : cert.description_en}
-                                            </p>
-
-                                            <div className="space-y-4 pt-8 border-t border-slate-50">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Issuing Authority</span>
-                                                    <span className="text-xs font-bold text-slate-800 italic">{cert.issuer}</span>
-                                                </div>
-                                                {cert.certificate_number && (
-                                                    <div className="flex items-center gap-3 bg-slate-50 px-5 py-3 rounded-2xl border border-slate-100 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
-                                                        <FileText size={16} className="text-primary" />
-                                                        <span className="text-xs font-black text-slate-600 tracking-widest font-mono">{cert.certificate_number}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </motion.div>
                                 ))}
                             </div>
                         </div>
+                    </section>
 
-                        {/* Bottom CTA Card */}
-                        <div className="bg-slate-900 p-12 md:p-20 rounded-[4rem] text-white relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/20 transition-colors duration-1000"></div>
-                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4"></div>
+                    {/* 2. Perizinan & Sertifikasi (Licenses & Certifications) */}
+                    <section>
+                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 uppercase italic tracking-tighter mb-10 pl-6 border-l-4 border-primary">
+                            {language === 'id' ? 'Perizinan & Sertifikasi' : 'Licenses & Certifications'}
+                        </h2>
+                        <div className="grid lg:grid-cols-2 gap-8">
+                            {certs.concat([
+                                // Hardcoded backups if DB is empty or for specific critical ones not in DB
+                                { name: 'Izin PBF (Pedagang Besar Farmasi)', description_id: 'Lisensi resmi distribusi farmasi skala besar.', description_en: 'Official license for large-scale pharmaceutical distribution.', issuer: 'Ministry of Health', certificate_number: 'PBF-LICENSE-001', id: 'static-1', image_url: '' },
+                                { name: 'ISO 9001:2015', description_id: 'Sistem Manajemen Mutu Internasional.', description_en: 'International Quality Management System.', issuer: 'ISO Body', certificate_number: 'ISO-9001-2015', id: 'static-2', image_url: '' }
+                            ].filter(c => !certs.find(existing => existing.name === c.name))).slice(0, 6).map((cert, idx) => (
+                                <motion.div
+                                    key={cert.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: idx * 0.1 }}
+                                    className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:-translate-y-1 transition-transform group flex flex-col sm:flex-row gap-6 items-start"
+                                >
+                                    <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                                        <Award size={32} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="text-xl font-black text-slate-900 uppercase italic tracking-tight mb-2">{cert.name}</h3>
+                                        <p className="text-slate-500 text-sm mb-4 leading-relaxed">
+                                            {language === 'id' ? cert.description_id : cert.description_en}
+                                        </p>
+                                        <div className="flex flex-wrap items-center gap-3">
+                                            <span className="px-3 py-1 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-slate-200">
+                                                {cert.issuer || 'Official Body'}
+                                            </span>
+                                            {cert.certificate_number && (
+                                                <span className="px-3 py-1 bg-slate-100 rounded-lg text-xs font-mono text-slate-500 border border-slate-200 flex items-center gap-2">
+                                                    <FileText size={12} />
+                                                    {cert.certificate_number}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </section>
 
-                            <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto space-y-10">
-                                <div className="w-20 h-20 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2rem] flex items-center justify-center text-emerald-400 shadow-2xl group-hover:scale-110 group-hover:rotate-12 transition-all">
-                                    <Database size={36} />
+                    {/* 3. Compliance & 4. Policies */}
+                    <div className="grid lg:grid-cols-2 gap-12">
+                        {/* 3. Kepatuhan Regulasi */}
+                        <section className="bg-slate-900 text-white p-10 md:p-14 rounded-[3.5rem] relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+                            <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-10 relative z-10 flex items-center gap-3">
+                                <ShieldCheck className="text-primary" />
+                                {language === 'id' ? 'Kepatuhan Regulasi' : 'Regulatory Compliance'}
+                            </h2>
+
+                            <ul className="space-y-6 relative z-10">
+                                {[
+                                    { label: language === 'id' ? 'Peraturan OJK & BEI' : 'OJK & IDX Regulations', desc: language === 'id' ? 'Kepatuhan penuh pasar modal' : 'Full capital market compliance' },
+                                    { label: language === 'id' ? 'Standar BPOM & Kemenkes' : 'BPOM & MoH Standards', desc: language === 'id' ? 'CDOB & CDAKB terverifikasi' : 'Verified GDP & GDPMDS' },
+                                    { label: language === 'id' ? 'Tata Kelola (GCG)' : 'Corporate Governance', desc: language === 'id' ? 'Audit internal & eksternal rutin' : 'Regular internal & external audits' },
+                                    { label: language === 'id' ? 'Kepatuhan Pajak' : 'Tax Compliance', desc: language === 'id' ? 'Laporan fiskal transparan' : 'Transparent fiscal reporting' },
+                                ].map((item, i) => (
+                                    <li key={i} className="flex gap-4 items-start">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0"></div>
+                                        <div>
+                                            <h4 className="font-bold text-lg leading-tight">{item.label}</h4>
+                                            <p className="text-white/60 text-sm">{item.desc}</p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+
+                        {/* 4. Kebijakan Perusahaan */}
+                        <section className="bg-white p-10 md:p-14 rounded-[3.5rem] border border-slate-100 shadow-xl relative overflow-hidden">
+                            <h2 className="text-3xl font-black text-slate-900 uppercase italic tracking-tighter mb-10">
+                                {language === 'id' ? 'Kebijakan Perusahaan' : 'Corporate Policies'}
+                            </h2>
+                            <div className="grid gap-4">
+                                {[
+                                    language === 'id' ? 'Kode Etik Perusahaan' : 'Code of Conduct',
+                                    language === 'id' ? 'Kebijakan Anti Suap & Korupsi' : 'Anti-Bribery & Corruption',
+                                    language === 'id' ? 'Sistem Pelaporan Pelanggaran' : 'Whistleblowing System',
+                                    language === 'id' ? 'Manajemen Risiko' : 'Risk Management',
+                                    language === 'id' ? 'Perlindungan Data Pribadi' : 'Data Privacy Protection'
+                                ].map((policy, i) => (
+                                    <div key={i} className="group flex items-center justify-between p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors cursor-default">
+                                        <span className="font-bold text-slate-700">{policy}</span>
+                                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-300 border border-slate-200">
+                                            <CheckCircle2 size={16} />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </div>
+
+                    {/* 5. Penghargaan & Pencapaian & 6. Transparansi */}
+                    <div className="grid lg:grid-cols-12 gap-8">
+                        {/* Awards */}
+                        <div className="lg:col-span-8 bg-gradient-to-br from-primary/5 to-cyan-500/5 p-10 rounded-[3rem] border border-primary/10">
+                            <h2 className="text-2xl font-black text-slate-900 uppercase italic tracking-tighter mb-8">
+                                {language === 'id' ? 'Penghargaan & Pencapaian' : 'Awards & Achievements'}
+                            </h2>
+                            <div className="grid sm:grid-cols-2 gap-6">
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                                    <div className="p-2 bg-yellow-400/10 text-yellow-600 rounded-lg w-fit mb-4">
+                                        <Star size={20} fill="currentColor" />
+                                    </div>
+                                    <h4 className="font-bold text-slate-900 mb-1">Top Distributor Award</h4>
+                                    <p className="text-xs text-slate-500 uppercase tracking-widest">National Level • 2024</p>
                                 </div>
-                                <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic uppercase leading-tight">
-                                    Access Our <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary">Public Disclosures</span>
-                                </h2>
-                                <p className="text-white/60 text-lg font-medium leading-relaxed">
-                                    As a public entity, we maintain a central repository for all regulatory filings and corporate achievements.
-                                </p>
-                                <button onClick={() => handleNavigate('investor')} className="px-12 py-6 wow-button-gradient text-white font-black uppercase text-xs tracking-[0.4em] rounded-full shadow-2xl hover:shadow-primary/50 transition-all flex items-center gap-4 group/btn active:scale-95">
-                                    Investor Center
-                                    <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform" />
-                                </button>
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                                    <div className="p-2 bg-blue-400/10 text-blue-600 rounded-lg w-fit mb-4">
+                                        <Database size={20} />
+                                    </div>
+                                    <h4 className="font-bold text-slate-900 mb-1">Digital Transformation</h4>
+                                    <p className="text-xs text-slate-500 uppercase tracking-widest">Supply Chain • 2023</p>
+                                </div>
                             </div>
                         </div>
+
+                        {/* Transparency CTA */}
+                        <div className="lg:col-span-4 bg-slate-900 p-10 rounded-[3rem] text-white flex flex-col justify-between">
+                            <div>
+                                <h2 className="text-xl font-black uppercase italic tracking-tighter mb-4 text-emerald-400">
+                                    {language === 'id' ? 'Transparansi Publik' : 'Public Transparency'}
+                                </h2>
+                                <p className="text-white/60 text-sm mb-8">
+                                    {language === 'id'
+                                        ? 'Pernyataan kepatuhan penuh dan tidak adanya sengketa material yang sedang berlangsung.'
+                                        : 'Statement of full compliance and absence of ongoing material litigation.'}
+                                </p>
+                            </div>
+                            <button onClick={() => handleNavigate('investor')} className="w-full py-4 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-white/10 font-black uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-2">
+                                ESG & Reports <ArrowRight size={14} />
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </main>
 

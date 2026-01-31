@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { ArrowRight } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface HeroSectionProps {
@@ -67,69 +68,56 @@ const HeroSlideItem: React.FC<{
             )
           )}
         </div>
-        {/* Advanced Overlay for Maximum Readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent z-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/30 z-10"></div>
+        {/* Advanced Overlay for Maximum Readability - Corporate Style */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-slate-950/20 to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent z-10"></div>
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex items-center pt-24 md:pt-32 z-20">
+      <div className="relative h-full flex items-end pb-12 md:pb-20 lg:pb-28 z-20">
         <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 w-full">
           <div className="max-w-4xl">
-            {/* Decorative Top Line */}
-            {((language === 'id' ? slide.title_id : slide.title_en) || (language === 'id' ? slide.subtitle_id : slide.subtitle_en)) && (
-              <div className="flex items-center gap-4 mb-4 md:mb-6 animate-fade-in">
-                <div className="h-[2px] w-8 md:w-12 bg-accent md:shadow-none shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>
-                <span className="text-[10px] md:text-sm font-black text-accent uppercase tracking-[0.4em]">Enterprise Logistics Intelligence</span>
-              </div>
-            )}
+            {/* Institutional Badge */}
+            <div className={`inline-flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg mb-8 transition-all duration-1000 ${selectedIndex === index ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+              <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+              <span className="text-[13px] font-bold text-white uppercase tracking-[0.3em]">IDX: PEVE</span>
+              <div className="w-px h-3 bg-white/20"></div>
+              <span className="text-[13px] font-medium text-white/70 uppercase tracking-widest">{language === 'id' ? 'Terbuka (Tbk)' : 'Publicly Listed'}</span>
+            </div>
 
             {/* Title */}
             {(language === 'id' ? slide.title_id : slide.title_en) && (
               <div className="relative mb-6 transform transition-all duration-1000">
-                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tighter transition-all duration-1000 ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
-                  {language === 'id' ? (
-                    <div className="space-y-2">
-                      {slide.title_id.split(' ').map((word, i) => (
-                        <span key={i} className="inline-block mr-4">{word}</span>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {slide.title_en.split(' ').map((word, i) => (
-                        <span key={i} className="inline-block mr-4">{word}</span>
-                      ))}
-                    </div>
-                  )}
+                <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight transition-all duration-1000 drop-shadow-2xl ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+                  {language === 'id' ? slide.title_id : slide.title_en}
                 </h1>
               </div>
             )}
 
             {/* Subtitle */}
             {(language === 'id' ? slide.subtitle_id : slide.subtitle_en) && (
-              <p className={`text-base sm:text-lg md:text-2xl mb-8 max-w-2xl font-medium leading-relaxed text-white/70 transition-all duration-1000 delay-300 ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+              <p className={`text-lg sm:text-xl md:text-2xl mb-10 max-w-3xl font-medium leading-relaxed text-blue-50/80 transition-all duration-1000 delay-300 drop-shadow-lg ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
                 {language === 'id' ? slide.subtitle_id : slide.subtitle_en}
               </p>
             )}
 
             {/* Buttons */}
-            <div className={`flex flex-col sm:flex-row items-center gap-4 mt-8 transition-all duration-1000 delay-500 ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+            <div className={`flex flex-col sm:flex-row items-center gap-4 mt-4 transition-all duration-1000 delay-500 ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
               {(language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en) && slide.cta_primary_link && (
                 <button
                   onClick={() => onNavigate(slide.cta_primary_link.replace('#', ''))}
-                  className="w-full sm:w-auto px-10 py-5 wow-button-gradient text-white font-black rounded-full shadow-2xl md:shadow-none flex items-center justify-center gap-3 group/btn touch-active"
+                  className="w-full sm:w-auto px-10 py-5 bg-accent text-white hover:bg-white hover:text-slate-900 transition-all duration-500 font-black text-[13px] uppercase tracking-[0.25em] rounded-xl shadow-2xl flex items-center justify-center gap-4 group/btn"
                 >
                   {language === 'id' ? slide.cta_primary_text_id : slide.cta_primary_text_en}
-                  <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-2" />
                 </button>
               )}
               {(language === 'id' ? slide.cta_secondary_text_id : slide.cta_secondary_text_en) && slide.cta_secondary_link && (
                 <button
                   onClick={() => onNavigate(slide.cta_secondary_link.replace('#', ''))}
-                  className="w-full sm:w-auto px-10 py-5 bg-white/5 backdrop-blur-md border border-white/10 text-white font-black rounded-full hover:bg-white/20 transition-all duration-500 flex items-center justify-center gap-3 touch-active"
+                  className="w-full sm:w-auto px-10 py-5 bg-white/5 backdrop-blur-xl border border-white/10 text-white hover:bg-white hover:text-slate-900 transition-all duration-500 font-black text-[13px] uppercase tracking-[0.25em] rounded-xl flex items-center justify-center gap-4 group/btn"
                 >
                   {language === 'id' ? slide.cta_secondary_text_id : slide.cta_secondary_text_en}
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 12l2 2 4-4" /></svg>
                 </button>
               )}
             </div>
@@ -158,7 +146,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         .from('hero_slides')
         .select('*')
         .eq('is_active', true)
-        .or('cta_secondary_link.is.null,cta_secondary_link.not.ilike./about/%')
+        // Exclude slides intended for specific sub-pages (PageSlider)
+        .not('cta_secondary_link', 'ilike', '/about/%')
+        .not('cta_secondary_link', 'ilike', '/investor/%')
+        .not('cta_secondary_link', 'ilike', '/business/%')
+        .not('cta_secondary_link', 'ilike', '/news/%')
+        .not('cta_secondary_link', 'ilike', '/career%') // Covers /career and /career/...
+        .not('cta_secondary_link', 'ilike', '/contact%') // Covers /contact and /contact/...
         .order('sort_order', { ascending: true });
 
       if (error) throw error;
@@ -237,35 +231,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Slide Indicators - Bottom Navigation */}
-      <div className="absolute bottom-12 left-0 right-0 z-30 pointer-events-none">
-        <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 flex items-end justify-between">
-          <div className="flex gap-4 pointer-events-auto">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollTo(i)}
-                className="group relative py-4 focus:outline-none"
-                aria-label={`Go to slide ${i + 1}`}
-              >
-                <div className={`h-[4px] transition-all duration-500 rounded-full ${selectedIndex === i ? 'w-16 bg-accent' : 'w-8 bg-white/20 group-hover:bg-white/40'}`}>
-                  {selectedIndex === i && (
-                    <div
-                      className="h-full bg-white rounded-full transition-none"
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
 
-          <div className="hidden md:flex items-center gap-6">
-            <div className="flex flex-col items-end">
-              <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Current Protocol</span>
-              <span className="text-sm font-black text-accent uppercase tracking-widest">{String(selectedIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}</span>
-            </div>
-          </div>
+      {/* Floating Scroll Indicator - Luxurious Detail */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3 animate-fade-in delay-1000">
+        <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-1">Explore Journey</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-accent/60 via-accent to-transparent relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-accent rounded-full animate-bounce"></div>
         </div>
       </div>
     </section>

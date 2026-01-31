@@ -144,6 +144,11 @@ const CompanyProfile: React.FC = () => {
                                     </span>
                                 </h2>
 
+                                {/* Legal Descriptor */}
+                                <p className="text-sm font-bold text-slate-500 mt-[-1.5rem] mb-10 uppercase tracking-widest leading-relaxed opacity-80">
+                                    {language === 'id' ? 'Profil Korporasi PT Penta Valent Tbk' : 'Corporate Profile of PT Penta Valent Tbk'}
+                                </p>
+
                                 <div
                                     className="prose prose-lg max-w-none prose-p:text-slate-600 prose-p:leading-relaxed mb-12 prose-headings:font-black prose-headings:text-slate-900 prose-strong:text-slate-800 prose-strong:font-bold prose-ul:list-disc prose-ol:list-decimal"
                                     dangerouslySetInnerHTML={{ __html: (language === 'id' ? info?.description_id : info?.description_en) || '' }}
@@ -293,7 +298,8 @@ const CompanyProfile: React.FC = () => {
                                 <Mail size={32} />
                             </div>
                             <h3 className="text-2xl font-black text-slate-900 tracking-tighter italic mb-4 leading-tight">
-                                Reliable <span className="text-primary">Intelligence</span>
+                                {language === 'id' ? 'Kredibilitas' : 'Corporate'} <br />
+                                <span className="text-primary">{language === 'id' ? 'Korporasi' : 'Credibility'}</span>
                             </h3>
                             <p className="text-slate-500 text-sm leading-relaxed mb-8">
                                 PT Penta Valent Tbk has been a trusted leader in medical and pharmaceutical distribution for over 50 years.

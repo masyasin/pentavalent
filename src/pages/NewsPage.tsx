@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import Header from '../components/layout/Header';
@@ -33,11 +33,17 @@ interface BannerItem {
 const NewsPage: React.FC = () => {
     const { t, language } = useLanguage();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Parse query params
+    const searchParams = new URLSearchParams(location.search);
+    const categoryParam = searchParams.get('category');
+
     const [news, setNews] = useState<NewsItem[]>([]);
     const [banners, setBanners] = useState<BannerItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'all');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9;
 
@@ -54,6 +60,14 @@ const NewsPage: React.FC = () => {
         fetchNews();
         fetchBanners();
     }, []);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const cat = params.get('category');
+        if (cat) {
+            setSelectedCategory(cat);
+        }
+    }, [location.search]);
 
     const fetchBanners = async () => {
         try {
@@ -110,21 +124,28 @@ const NewsPage: React.FC = () => {
     };
 
     const categories = [
-        { id: 'all', label: language === 'id' ? 'Semua' : 'All' },
-        { id: 'corporate', label: t('news.cat.corporate') },
-        { id: 'press_release', label: t('news.cat.press_release') },
-        { id: 'investor', label: t('news.cat.investor') },
-        { id: 'partnership', label: t('news.cat.partnership') },
-        { id: 'expansion', label: t('news.cat.expansion') },
-        { id: 'award', label: t('news.cat.award') },
+        { id: 'all', label: language === 'id' ? 'Semua Berita' : 'All Updates' },
+        { id: 'news', label: 'News' },
+        { id: 'press_release', label: 'Press Release' },
+        { id: 'corporate_news', label: 'Corporate News' },
     ];
+
+    const [selectedYear, setSelectedYear] = useState('All Years');
+
+    // Extract unique years from news
+    const years = [...new Set(news.map(item => new Date(item.published_at).getFullYear()))].sort((a, b) => b - a);
 
     const filteredNews = news.filter(item => {
         const matchesSearch = (language === 'id' ? item.title_id : item.title_en)
             .toLowerCase()
             .includes(searchTerm.toLowerCase());
+
         const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-        return matchesSearch && matchesCategory;
+
+        const itemYear = new Date(item.published_at).getFullYear().toString();
+        const matchesYear = selectedYear === 'All Years' || itemYear === selectedYear;
+
+        return matchesSearch && matchesCategory && matchesYear;
     });
 
     const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
@@ -142,13 +163,10 @@ const NewsPage: React.FC = () => {
     };
 
     const categoryColors: { [key: string]: string } = {
-        'award': 'bg-accent/10 text-accent',
-        'expansion': 'bg-primary/10 text-primary',
-        'investor': 'bg-accent/10 text-accent',
-        'partnership': 'bg-primary/10 text-primary',
-        'press_release': 'bg-blue-500/10 text-blue-600',
-        'corporate': 'bg-indigo-500/10 text-indigo-600',
-        'default': 'bg-secondary text-muted-foreground',
+        'press_release': 'bg-red-500/10 text-red-600 border-red-200',
+        'corporate_news': 'bg-blue-600/10 text-blue-600 border-blue-200',
+        'news': 'bg-emerald-500/10 text-emerald-600 border-emerald-200',
+        'default': 'bg-slate-100 text-slate-500 border-slate-200',
     };
 
     const handleNavigate = (section: string) => {
@@ -187,7 +205,7 @@ const NewsPage: React.FC = () => {
                                         </div>
 
                                         <div className="relative">
-                                            <h1 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] max-w-4xl mx-auto text-white italic px-4 drop-shadow-2xl">
+                                            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tighter leading-[1.1] max-w-4xl mx-auto text-white italic px-4 drop-shadow-2xl">
                                                 {language === 'id' ? banner.title_id : banner.title_en}
                                             </h1>
                                             <div className="w-16 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.8)]"></div>
@@ -234,8 +252,8 @@ const NewsPage: React.FC = () => {
             <main className="max-w-7xl mx-auto px-6 py-20">
                 {/* Modern Search & Filter Interface */}
                 <div className="max-w-4xl mx-auto mb-20 space-y-10">
-                    {/* High-Impact Search Bar */}
-                    <div className="relative group/search">
+                    {/* High-Impact Search Bar - Centered */}
+                    <div className="relative group/search max-w-2xl mx-auto">
                         <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-[2.5rem] blur opacity-20 group-focus-within/search:opacity-40 transition duration-1000"></div>
                         <div className="relative bg-white border border-slate-100 rounded-[2.2rem] shadow-[0_20px_40px_rgba(0,0,0,0.04)] flex items-center p-2 group-focus-within/search:border-blue-500/30 transition-all">
                             <div className="pl-8 pr-4">
@@ -249,35 +267,8 @@ const NewsPage: React.FC = () => {
                                     setSearchTerm(e.target.value);
                                     setCurrentPage(1);
                                 }}
-                                className="w-full py-6 pr-8 bg-transparent text-lg font-bold text-slate-900 placeholder:text-slate-300 outline-none"
+                                className="w-full py-4 md:py-6 pr-8 bg-transparent text-lg font-bold text-slate-900 placeholder:text-slate-300 outline-none"
                             />
-
-                            {/* Autocomplete Suggestions */}
-                            {searchTerm.length >= 2 && news.filter(n => (language === 'id' ? n.title_id : n.title_en).toLowerCase().includes(searchTerm.toLowerCase())).length > 0 && (
-                                <div className="absolute top-full left-0 right-0 mt-4 bg-white/80 backdrop-blur-2xl border border-white/20 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.15)] overflow-hidden z-50 animate-in fade-in slide-in-from-top-4 duration-500">
-                                    <div className="p-4 border-b border-slate-100 bg-slate-50/50">
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Suggestions</span>
-                                    </div>
-                                    <div className="max-h-[300px] overflow-y-auto">
-                                        {news
-                                            .filter(n => (language === 'id' ? n.title_id : n.title_en).toLowerCase().includes(searchTerm.toLowerCase()))
-                                            .slice(0, 5)
-                                            .map((item) => (
-                                                <div
-                                                    key={item.id}
-                                                    onClick={() => navigate(`/news/${item.slug}`)}
-                                                    className="px-8 py-5 hover:bg-blue-50 cursor-pointer transition-all border-b border-slate-50 last:border-0 flex items-center justify-between group/item"
-                                                >
-                                                    <span className="font-bold text-slate-700 group-hover/item:text-blue-600 transition-colors line-clamp-1 flex-1">
-                                                        {language === 'id' ? item.title_id : item.title_en}
-                                                    </span>
-                                                    <ArrowRight size={14} className="text-slate-300 group-hover/item:text-blue-600 transform group-hover/item:translate-x-1 transition-all" />
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     </div>
 
@@ -302,121 +293,161 @@ const NewsPage: React.FC = () => {
                             </button>
                         ))}
                     </div>
-                </div>
 
-                {loading ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {[...Array(6)].map((_, i) => (
-                            <div key={i} className="bg-slate-50 rounded-[3rem] h-[500px] animate-pulse"></div>
-                        ))}
-                    </div>
-                ) : paginatedNews.length > 0 ? (
-                    <>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
-                            {paginatedNews.map((item, index) => (
-                                <article
-                                    key={item.id}
-                                    onClick={() => navigate(`/news/${item.slug}`)}
-                                    className="group relative bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_70px_rgba(6,182,212,0.12)] hover:-translate-y-4 transition-all duration-700 cursor-pointer"
-                                >
-                                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left z-20"></div>
+                    {/* Horizontal Year Filter - Like Screenshot */}
+                    <div className="space-y-6 pt-10 border-t border-slate-100/50">
+                        {/* Title if Category Selected */}
+                        {selectedCategory !== 'all' && (
+                            <h2 className="text-2xl font-bold text-blue-900 border-b-2 border-blue-900 inline-block pb-2 mb-4">
+                                {categories.find(c => c.id === selectedCategory)?.label}
+                            </h2>
+                        )}
 
-                                    <div className="relative aspect-[16/11] overflow-hidden">
-                                        <img
-                                            src={item.featured_image || 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop'}
-                                            alt={language === 'id' ? item.title_id : item.title_en}
-                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                        />
-                                        <div className="absolute top-6 left-6 z-10">
-                                            <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] backdrop-blur-md border border-white/20 shadow-lg ${categoryColors[item.category] || categoryColors.default}`}>
-                                                {item.category.replace('_', ' ')}
-                                            </span>
-                                        </div>
-                                        <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                                    </div>
-
-                                    <div className="p-10 flex flex-col h-full relative">
-                                        <div className="flex items-center gap-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">
-                                            <div className="w-8 h-px bg-slate-200 group-hover:w-12 group-hover:bg-blue-600 transition-all duration-500"></div>
-                                            {formatDate(item.published_at)}
-                                        </div>
-
-                                        <h3 className="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors duration-500 leading-tight mb-4 line-clamp-2 min-h-[3rem]">
-                                            {language === 'id' ? item.title_id : item.title_en}
-                                        </h3>
-
-                                        <div
-                                            className="text-slate-500 text-sm leading-relaxed font-medium line-clamp-2 mb-10 opacity-70 group-hover:opacity-100 transition-opacity"
-                                            dangerouslySetInnerHTML={{ __html: (language === 'id' ? item.excerpt_id : item.excerpt_en) || '' }}
-                                        />
-
-                                        <div className="pt-8 border-t border-slate-50 flex items-center justify-between mt-auto">
-                                            <div className="flex items-center gap-2 group/link">
-                                                <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t('news.readmore')}</span>
-                                                <div className="relative flex h-2 w-2">
-                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-                                                </div>
-                                            </div>
-
-                                            <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-inner group-hover:rotate-6">
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-
-                        {/* Pagination */}
-                        {totalPages > 1 && (
-                            <div className="flex justify-center items-center gap-4 mt-20">
+                        {/* Horizontal Years List */}
+                        <div className="relative">
+                            <div className="flex flex-wrap items-center gap-8 md:gap-12 overflow-x-auto pb-4">
                                 <button
-                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                                    disabled={currentPage === 1}
-                                    className="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all disabled:opacity-30"
+                                    onClick={() => setSelectedYear('All Years')}
+                                    className={`text-lg transition-colors whitespace-nowrap font-medium ${selectedYear === 'All Years' ? 'text-blue-600 font-bold' : 'text-slate-400 hover:text-blue-600'
+                                        }`}
                                 >
-                                    <ChevronLeft className="w-5 h-5" />
+                                    {language === 'id' ? 'Semua' : 'All'}
                                 </button>
-
-                                {[...Array(totalPages)].map((_, i) => (
+                                {years.map(year => (
                                     <button
-                                        key={i}
-                                        onClick={() => setCurrentPage(i + 1)}
-                                        className={`w-12 h-12 rounded-2xl font-black text-xs transition-all ${currentPage === i + 1
-                                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                            : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                                        key={year}
+                                        onClick={() => setSelectedYear(year.toString())}
+                                        className={`text-lg transition-colors whitespace-nowrap font-medium ${selectedYear === year.toString() ? 'text-blue-600 font-bold' : 'text-blue-900/60 hover:text-blue-600'
                                             }`}
                                     >
-                                        {i + 1}
+                                        {year}
                                     </button>
                                 ))}
-
-                                <button
-                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                                    disabled={currentPage === totalPages}
-                                    className="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all disabled:opacity-30"
-                                >
-                                    <ChevronRight className="w-5 h-5" />
-                                </button>
                             </div>
-                        )}
-                    </>
-                ) : (
-                    <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-100">
-                        <Newspaper className="w-16 h-16 text-slate-200 mx-auto mb-6" />
-                        <h3 className="text-xl font-black text-slate-900 mb-2">
-                            {language === 'id' ? 'Tidak ada berita ditemukan' : 'No news found'}
-                        </h3>
-                        <p className="text-slate-500">
-                            {language === 'id' ? 'Coba gunakan kata kunci atau kategori yang berbeda.' : 'Try using different keywords or categories.'}
-                        </p>
+                            {/* Gradient Line matching Header */}
+                            <div className="absolute bottom-0 left-0 w-full h-[4px] bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 rounded-full opacity-80"></div>
+                        </div>
+
                     </div>
-                )}
-            </main>
+                </div>
+
+                {/* News List */}
+                {
+                    loading ? (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {[...Array(6)].map((_, i) => (
+                                <div key={i} className="bg-slate-50 rounded-[3rem] h-[500px] animate-pulse"></div>
+                            ))
+                            }
+                        </div >
+                    ) : paginatedNews.length > 0 ? (
+                        <>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
+                                {paginatedNews.map((item, index) => (
+                                    <article
+                                        key={item.id}
+                                        onClick={() => navigate(`/news/${item.slug}`)}
+                                        className="group relative bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_70px_rgba(6,182,212,0.12)] hover:-translate-y-4 transition-all duration-700 cursor-pointer"
+                                    >
+                                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left z-20"></div>
+
+                                        <div className="relative aspect-[16/11] overflow-hidden">
+                                            <img
+                                                src={item.featured_image || 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop'}
+                                                alt={language === 'id' ? item.title_id : item.title_en}
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                            />
+                                            <div className="absolute top-6 left-6 z-10">
+                                                <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] backdrop-blur-md border border-white/20 shadow-lg ${categoryColors[item.category] || categoryColors.default}`}>
+                                                    {item.category.replace('_', ' ')}
+                                                </span>
+                                            </div>
+                                            <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                        </div>
+
+                                        <div className="p-10 flex flex-col h-full relative">
+                                            <div className="flex items-center gap-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">
+                                                <div className="w-8 h-px bg-slate-200 group-hover:w-12 group-hover:bg-blue-600 transition-all duration-500"></div>
+                                                {formatDate(item.published_at)}
+                                            </div>
+
+                                            <h3 className="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors duration-500 leading-tight mb-4 line-clamp-2 min-h-[3rem]">
+                                                {language === 'id' ? item.title_id : item.title_en}
+                                            </h3>
+
+                                            <div
+                                                className="text-slate-500 text-sm leading-relaxed font-medium line-clamp-2 mb-10 opacity-70 group-hover:opacity-100 transition-opacity"
+                                                dangerouslySetInnerHTML={{ __html: (language === 'id' ? item.excerpt_id : item.excerpt_en) || '' }}
+                                            />
+
+                                            <div className="pt-8 border-t border-slate-50 flex items-center justify-between mt-auto">
+                                                <div className="flex items-center gap-2 group/link">
+                                                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t('news.readmore')}</span>
+                                                    <div className="relative flex h-2 w-2">
+                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-inner group-hover:rotate-6">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
+
+                            {/* Pagination */}
+                            {totalPages > 1 && (
+                                <div className="flex justify-center items-center gap-4 mt-20">
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                        className="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all disabled:opacity-30"
+                                    >
+                                        <ChevronLeft className="w-5 h-5" />
+                                    </button>
+
+                                    {[...Array(totalPages)].map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setCurrentPage(i + 1)}
+                                            className={`w-12 h-12 rounded-2xl font-black text-xs transition-all ${currentPage === i + 1
+                                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                                                : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                                                }`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages}
+                                        className="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:border-blue-600 hover:text-blue-600 transition-all disabled:opacity-30"
+                                    >
+                                        <ChevronRight className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-100">
+                            <Newspaper className="w-16 h-16 text-slate-200 mx-auto mb-6" />
+                            <h3 className="text-xl font-black text-slate-900 mb-2">
+                                {language === 'id' ? 'Tidak ada berita ditemukan' : 'No news found'}
+                            </h3>
+                            <p className="text-slate-500">
+                                {language === 'id' ? 'Coba gunakan kata kunci atau kategori yang berbeda.' : 'Try using different keywords or categories.'}
+                            </p>
+                        </div>
+                    )
+                }
+            </main >
 
             <Footer onNavigate={handleNavigate} />
-        </div>
+        </div >
     );
 };
 

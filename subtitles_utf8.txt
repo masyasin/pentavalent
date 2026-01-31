@@ -1,0 +1,220 @@
+﻿ID: 601be1e6-b085-49a4-9e5a-b8f0bd5f15cb
+Title ID: Mitra Distribusi Farmasi, Medis, dan Kesehatan Terpercaya di Indonesia
+Subtitle ID: PT Penta Valent Tbk adalah perusahaan distribusi nasional dengan jaringan luas, sistem terstandar, dan kepatuhan penuh terhadap regulasi kesehatan Indonesia.
+Subtitle EN: PT Penta Valent Tbk is a national distribution company with an extensive network, standardized systems and full compliance with Indonesian health regulations.
+---
+ID: 635fe8b2-0912-42d6-984e-0ec886ba2603
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: add00220-5ad1-4a9e-a74a-b56587e3bd44
+Title ID: Solusi Logistik Modern
+Subtitle ID: Inovasi untuk efisiensi distribusi nasional
+Subtitle EN: Innovation for national distribution efficiency
+---
+ID: 043a7854-b7bd-4a51-8caa-669ef6f00f37
+Title ID: Kemitraan Strategis
+Subtitle ID: Kolaborasi global untuk kesehatan bangsa
+Subtitle EN: Global collaboration for nation health
+---
+ID: bf34cd2c-aa38-4cc6-8199-ff7c99902c9a
+Title ID: Misi Kemanusiaan
+Subtitle ID: Memberikan nilai tambah bagi seluruh stakeholder
+Subtitle EN: Providing added value to all stakeholders
+---
+ID: 0ecc6022-573d-41c0-8f23-a61d6c482dc3
+Title ID: Nilai Inti Utama
+Subtitle ID: Inovasi, Integritas, dan Keunggulan Operasional
+Subtitle EN: Innovation, Integrity, and Operational Excellence
+---
+ID: 72e8e659-3c32-4fde-991e-2a526fccfcc2
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 3f804667-7bea-465e-825c-43d38548f19c
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 3b247e1d-b4f3-4601-93bf-16f0da6032b6
+Title ID: 
+Subtitle ID: 
+Subtitle EN: 
+---
+ID: 0e86c238-ecc7-4292-877e-8d3e4613b0b0
+Title ID: 
+Subtitle ID: 
+Subtitle EN: 
+---
+ID: 04d9d055-7b67-4d80-84d0-52ee238ef1c7
+Title ID: Governance Profesional
+Subtitle ID: Standar tata kelola perusahaan yang transparan
+Subtitle EN: Transparent corporate governance standards
+---
+ID: ff122822-672a-4ad9-88ff-b39997b4ef10
+Title ID: Kolaborasi Tim Terbaik
+Subtitle ID: Sinergi menuju pertumbuhan yang berkelanjutan
+Subtitle EN: Synergy towards sustainable growth
+---
+ID: eb84c2f5-fda7-43bc-bd8d-ba4e01c83c51
+Title ID: Distribution Hubs
+Subtitle ID: Infrastruktur modern berstandar internasional
+Subtitle EN: Modern infrastructure with international standards
+---
+ID: 88fa756b-5d55-4527-a327-82229468e768
+Title ID: Global Network
+Subtitle ID: Menghubungkan prinsipal dunia dengan Indonesia
+Subtitle EN: Connecting world principals with Indonesia
+---
+ID: 8937df39-d08a-4e8c-adb6-85a2833bc87d
+Title ID: Standar Kualitas CDOB
+Subtitle ID: Menjamin keamanan produk farmasi hingga tujuan
+Subtitle EN: Ensuring pharmaceutical product safety to destination
+---
+ID: fc977e02-b0ff-40dc-87ab-b6101fca3266
+Title ID: Penghargaan Industri
+Subtitle ID: Pencapaian atas komitmen melayani bangsa
+Subtitle EN: Achievements for commitment to serving the nation
+---
+ID: 455ef0c9-8e67-4bed-8368-0342a48c8df5
+Title ID: Distribusi Farmasi
+Subtitle ID: Standar tertinggi dalam rantai pasok farmasi nasional.
+Subtitle EN: Highest standards in national pharmaceutical supply chain.
+---
+ID: c1e8842f-d0db-46a1-b4d6-0dddb746cb5d
+Title ID: Produk Konsumen
+Subtitle ID: Menjangkau setiap keluarga dengan produk berkualitas.
+Subtitle EN: Reaching every family with quality products.
+---
+ID: e0d1a04c-f9a9-42d8-848f-7ea0d3ea48fa
+Title ID: Infrastruktur Modern
+Subtitle ID: Didukung fasilitas penyimpanan berstandar CDOB terkini.
+Subtitle EN: Supported by the latest GSDP standard storage facilities.
+---
+ID: b0d6d853-0309-4ace-90b1-22fe7badf2c4
+Title ID: Jangkauan Nasional
+Subtitle ID: Melayani pengiriman ke seluruh pelosok Indonesia tepat waktu.
+Subtitle EN: Serving timely deliveries to all corners of Indonesia.
+---
+ID: c211a079-c8af-467e-9218-4c19c67bcd99
+Title ID: Kemitraan Global
+Subtitle ID: Dipercaya oleh berbagai brand multinasional terkemuka.
+Subtitle EN: Trusted by various leading multinational brands.
+---
+ID: 788d4ae5-bd0a-477d-9fcd-8ad666a017ad
+Title ID: Kualitas Terjamin
+Subtitle ID: Memastikan produk sampai ke tangan konsumen dalam kondisi terbaik.
+Subtitle EN: Ensuring products reach consumers in the best condition.
+---
+ID: 8cb72d5c-6c9d-4a07-b94e-a8b7555a6608
+Title ID: Ketepatan Pengiriman
+Subtitle ID: Memastikan setiap produk sampai tepat waktu di seluruh Indonesia.
+Subtitle EN: Ensuring every product arrives on time across Indonesia.
+---
+ID: afed8c51-2934-4b0d-ba57-d38b0eca4520
+Title ID: Integrasi Sistem End-to-End
+Subtitle ID: Monitoring real-time untuk transparansi alur distribusi maksimal.
+Subtitle EN: Real-time monitoring for maximum distribution flow transparency.
+---
+ID: e7c3fd51-e27f-4392-b0f7-2f38b58a4e52
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 3742f25b-2fb2-465c-9269-01aa57f92835
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 6a41dd42-fb69-44c7-ae24-88c761117c67
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: aa4ed7cd-b5e3-4b67-a944-b110a648ec70
+Title ID: Modern Trade & Market
+Subtitle ID: Mendistribusikan produk ke jaringan ritel modern terkemuka.
+Subtitle EN: Distributing products to leading modern retail networks.
+---
+ID: 30402fc1-1f34-49d1-b83b-609abd334112
+Title ID: Pusat Kosmetik & Ritel
+Subtitle ID: Menjangkau kios kosmetik dan pasar tradisional hingga ke pelosok.
+Subtitle EN: Reaching cosmetic kiosks and traditional markets nationwide.
+---
+ID: 26747a6c-d48d-4981-9439-3fa45faa0576
+Title ID: Ekspansi Jaringan Nasional
+Subtitle ID: Terus memperluas jangkauan untuk melayani seluruh pelosok Indonesia.
+Subtitle EN: Continuously expanding reach to serve every corner of Indonesia.
+---
+ID: f449bd38-89ff-4e2a-a8c6-21e6f0d16a10
+Title ID: Kembangkan Potensi Anda
+Subtitle ID: Lingkungan kerja yang mendukung inovasi dan profesionalisme.
+Subtitle EN: A work environment that supports innovation and professionalism.
+---
+ID: c831d1e8-4a3a-4126-9420-278567827e2b
+Title ID: Infrastruktur Kelas Dunia
+Subtitle ID: Fasilitas berstandar internasional untuk mendukung layanan distribusi ke seluruh negeri.
+Subtitle EN: International standard facilities to support nationwide distribution services.
+---
+ID: 86e63746-fb1e-48b7-b735-f1fa635bcfd0
+Title ID: Layanan Profesional
+Subtitle ID: Tim kami siap menyambut Anda di kantor pusat kami yang representatif.
+Subtitle EN: Our team is ready to welcome you at our representative headquarters.
+---
+ID: 75c392bc-1d58-4b70-9aba-73d3942a5b82
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 3c4c2de1-0352-424a-9784-8b705f5eac95
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: c0322bd3-4313-40d3-bdbe-da293457bfb8
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 574c53d4-484c-4b19-ade5-9b81cbd3936c
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 4e8f2b8c-ebef-44c3-aa11-d0b3d12f9b4b
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 5b859d33-3ac0-4724-ac3d-55b006bc2430
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: a7563ada-6ac8-4f04-b483-0b6af533e8e0
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 8d945839-951d-4184-ad68-4f2aebea1713
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 6194b4e7-9bf0-4419-bff4-d09c066e889e
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: cc1532d1-b6fc-4b06-8a62-9ea8049f7366
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---
+ID: 0fb2a707-2dbe-4762-84dc-c2619ef2dd6e
+Title ID: Mendukung Rantai Distribusi Kesehatan Indonesia
+Subtitle ID: Melalui sistem distribusi farmasi, medis, dan kesehatan yang terstandar dan terpercaya.
+Subtitle EN: Through a standardized and trusted distribution system for pharmaceuticals, medical, and healthcare products.
+---

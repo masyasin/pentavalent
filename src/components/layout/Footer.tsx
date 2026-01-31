@@ -58,6 +58,12 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       } else {
         onNavigate(path.substring(1));
       }
+    } else if (path === '/' || path === '') {
+      if (location.pathname === '/') {
+        onNavigate('beranda');
+      } else {
+        navigate('/');
+      }
     } else if (path.startsWith('/')) {
       navigate(path);
     } else if (path.startsWith('http')) {
@@ -159,32 +165,22 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
     if (count === null) return null;
 
     return (
-      <div className="flex flex-col gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-3xl backdrop-blur-2xl shadow-3xl shadow-blue-500/10 hover:bg-white/[0.06] hover:border-blue-500/30 transition-all group w-full max-w-[200px]">
-        {/* Live Traffic */}
+      <div className="flex flex-col gap-4 p-5 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl shadow-2xl shadow-blue-900/20 w-full max-w-[200px]">
+        {/* Institutional Visibility */}
         <div className="flex flex-col items-center gap-2">
-          <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-              <Users size={18} className="wow-text-primary group-hover:scale-110 transition-transform" />
-            </div>
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#020617]"></span>
-          </div>
           <div className="text-center">
-            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] leading-none mb-1">Traffic Live</p>
-            <p className="text-xl font-black text-white leading-none tracking-tighter group-hover:wow-icon-gradient inline-block transition-colors uppercase italic">{active}</p>
+            <p className="text-[9px] font-bold text-white/40 uppercase tracking-[0.2em] mb-1">Active Sessions</p>
+            <p className="text-xl font-black text-white leading-none tracking-tighter transition-colors uppercase italic">{active}</p>
           </div>
         </div>
 
         <div className="w-full h-px bg-white/10"></div>
 
-        {/* Total Audit */}
+        {/* Global Reach Audit */}
         <div className="flex flex-col items-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-            <Eye size={18} className="wow-text-primary group-hover:scale-110 transition-transform" />
-          </div>
           <div className="text-center">
-            <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] leading-none mb-1">Total Audit</p>
-            <p className="text-xl font-black text-white leading-none tracking-tighter group-hover:wow-icon-gradient inline-block transition-colors uppercase italic">
+            <p className="text-[9px] font-bold text-white/40 uppercase tracking-[0.2em] mb-1">Cumulative Reach</p>
+            <p className="text-xl font-black text-white leading-none tracking-tighter transition-colors uppercase italic">
               {count.toLocaleString()}
             </p>
           </div>
@@ -209,18 +205,41 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <path fill="currentColor" d="M0,320 L0,160 L50,160 L50,140 L100,140 L100,200 L180,200 L180,100 L240,100 L240,250 L300,250 L300,120 L380,120 L380,220 L440,220 L440,180 L500,180 L500,280 L580,280 L580,80 L640,80 L640,190 L700,190 L700,150 L760,150 L760,240 L820,240 L820,110 L900,110 L900,200 L960,200 L960,130 L1020,130 L1020,260 L1080,260 L1080,90 L1140,90 L1140,170 L1200,170 L1200,230 L1280,230 L1280,140 L1350,140 L1350,320 Z"></path>
           </svg>
         </div>
-        <div className="absolute bottom-0 left-0 w-full h-full overflow-hidden opacity-90">
-          <div className="absolute bottom-0 left-[10%] w-[2px] h-32 bg-cyan-400 shadow-[0_0_10px_cyan] animate-pulse"></div>
-          <div className="absolute bottom-0 left-[15%] w-[3px] h-48 bg-blue-500 shadow-[0_0_15px_blue]"></div>
-          <div className="absolute bottom-0 left-[25%] w-[2px] h-24 bg-purple-400 shadow-[0_0_10px_purple]"></div>
-          <div className="absolute bottom-0 left-[45%] w-[4px] h-64 bg-indigo-500 shadow-[0_0_20px_indigo] opacity-80"></div>
-          <div className="absolute bottom-0 left-[60%] w-[3px] h-40 bg-blue-300 shadow-[0_0_12px_blue]"></div>
-          <div className="absolute bottom-0 left-[80%] w-[2px] h-36 bg-cyan-300 shadow-[0_0_10px_cyan]"></div>
-          <div className="absolute bottom-0 left-[90%] w-[3px] h-56 bg-purple-500 shadow-[0_0_15px_purple]"></div>
+        <div className="absolute bottom-0 left-0 w-full h-full overflow-hidden opacity-30">
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+          <div className="absolute inset-x-0 bottom-10 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
         </div>
         <div className="absolute bottom-0 left-0 w-full h-[200px] bg-gradient-to-t from-[#020617] to-transparent opacity-80"></div>
         <div className="absolute bottom-[-50px] left-1/4 w-[800px] h-[500px] bg-blue-600/30 rounded-full blur-[100px] mix-blend-screen animate-pulse"></div>
         <div className="absolute bottom-[-50px] right-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-700"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-20">
+        {/* Closing CTA Banner */}
+        <div className="relative p-10 md:p-16 rounded-[3rem] overflow-hidden border border-white/10 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-slate-900/50 to-cyan-900/50 backdrop-blur-3xl transition-all duration-700 group-hover:scale-105"></div>
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="max-w-2xl text-center md:text-left">
+              <h3 className="text-2xl md:text-4xl font-black text-white leading-tight tracking-tighter mb-4 italic">
+                {language === 'id'
+                  ? 'Mendukung Rantai Distribusi Kesehatan Indonesia'
+                  : 'Supporting Indonesia\'s Healthcare Distribution Chain'}
+              </h3>
+              <p className="text-blue-100/60 mb-6 text-lg font-medium">
+                {language === 'id'
+                  ? 'PT Penta Valent Tbk berkomitmen untuk terus berkontribusi dalam memastikan ketersediaan produk farmasi, medis, dan kesehatan secara merata dan berkelanjutan di Indonesia.'
+                  : 'PT Penta Valent Tbk is committed to continuing to contribute to ensuring the availability of pharmaceutical, medical, and health products equally and sustainably in Indonesia.'}
+              </p>
+              <div className="h-1 w-20 bg-accent rounded-full mb-4 mx-auto md:mx-0"></div>
+            </div>
+            <button
+              onClick={() => onNavigate('contact')}
+              className="px-12 py-5 bg-white text-slate-950 font-black uppercase tracking-widest text-xs rounded-full hover:bg-accent hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-2xl"
+            >
+              {language === 'id' ? 'Hubungi Kami' : 'Contact Us'}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">

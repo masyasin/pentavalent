@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const WhatsAppButton: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
-
-  if (!isVisible) return null;
-
   const [isHovered, setIsHovered] = useState(false);
+  const location = useLocation();
+
+  // Tbk Rules:
+  // 1. Completely hide if user manually closed it
+  // 2. Disable on Homepage ('/') - Too casual for Tbk first impression
+  // 3. Enable ONLY on '/contact' and '/business/*' pages
+  const isTargetPage = location.pathname.startsWith('/contact') || location.pathname.startsWith('/business');
+
+  if (!isVisible || !isTargetPage) return null;
   const phoneNumber = '6281234567890'; // Replace with actual WhatsApp number
   const message = encodeURIComponent('Halo, saya ingin bertanya tentang layanan PT. Penta Valent Tbk');
 

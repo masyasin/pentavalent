@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
+import { Building2, Truck, Globe } from 'lucide-react';
+
+// Leaflet imports
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface Branch {
   id: string;
@@ -15,13 +21,12 @@ interface Branch {
 }
 
 const NetworkSection: React.FC = () => {
-  const { t, language } = useLanguage();
-  const [selectedBranchId, setSelectedBranchId] = useState<string | null>(null);
+  const { language } = useLanguage();
+  const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[]>([]);
-  const [selectedProvince, setSelectedProvince] = useState<string>('all');
   const [loading, setLoading] = useState(true);
-  const [modalBranch, setModalBranch] = useState<Branch | null>(null);
-  const [showAll, setShowAll] = useState(false);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstance = useRef<L.Map | null>(null);
 
   useEffect(() => {
     fetchBranches();
@@ -44,144 +49,176 @@ const NetworkSection: React.FC = () => {
     }
   };
 
-  const provinces = ['all', ...new Set(branches.map(b => b.province))];
-  const filteredBranches = selectedProvince === 'all'
-    ? branches
-    : branches.filter(b => b.province === selectedProvince);
+  useEffect(() => {
+    if (!loading && mapRef.current && branches.length > 0 && !mapInstance.current) {
+      // Initialize Leaflet Map
+      mapInstance.current = L.map(mapRef.current, {
+        center: [-2.5489, 118.0149],
+        zoom: 5,
+        zoomControl: false,
+        attributionControl: false,
+        scrollWheelZoom: false
+      });
 
-  const branchCount = branches.filter(b => b.type === 'branch').length;
-  const depoCount = branches.filter(b => b.type === 'depo').length;
+      // Modern Voyager Tiles
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+      }).addTo(mapInstance.current);
+
+      // Add Markers
+      branches.forEach((branch) => {
+        if (branch.latitude && branch.longitude) {
+          const customIcon = L.divIcon({
+            className: 'custom-node-marker',
+            html: `
+                        <div class="relative group">
+                            <div class="absolute -inset-2 bg-blue-400/20 rounded-full animate-ping"></div>
+                            <div class="w-3 h-3 bg-blue-600 rounded-full border-2 border-white shadow-[0_0_10px_rgba(37,99,235,0.6)] relative z-10"></div>
+                        </div>
+                    `,
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+          });
+
+          L.marker([branch.latitude, branch.longitude], { icon: customIcon })
+            .addTo(mapInstance.current!)
+            .bindPopup(`
+                        <div class="p-3 min-w-[150px] font-sans">
+                            <div class="text-[8px] font-black text-blue-600 uppercase tracking-widest mb-1">${branch.type}</div>
+                            <h4 class="text-xs font-black uppercase mb-2">${branch.city}</h4>
+                            <p class="text-[9px] text-slate-500 leading-tight mb-2">${branch.address}</p>
+                            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(branch.name + ' ' + branch.city)}', '_blank')" 
+                                class="w-full py-1.5 bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest rounded hover:bg-blue-600 transition-colors">
+                                Directions
+                            </button>
+                        </div>
+                    `, {
+              className: 'custom-leaflet-popup',
+              offset: [0, -5]
+            });
+        }
+      });
+
+      // Force resize
+      setTimeout(() => {
+        if (mapInstance.current) mapInstance.current.invalidateSize();
+      }, 500);
+    }
+
+    return () => {
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+        mapInstance.current = null;
+      }
+    };
+  }, [loading, branches]);
+
+  const mainHubs = branches.filter(b =>
+    ['Jakarta', 'Surabaya', 'Medan', 'Makassar', 'Semarang', 'Bandung'].includes(b.city)
+  );
+  const depots = branches.filter(b => !mainHubs.find(h => h.id === b.id));
 
   return (
-    <section id="network" className="py-16 md:py-24 bg-gray-50 relative overflow-hidden text-slate-900">
-      {/* Background Decor */}
-      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-100/50 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-100/50 rounded-full blur-3xl"></div>
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}></div>
-      </div>
-
+    <section id="network" className="py-24 md:py-32 bg-slate-50 relative overflow-hidden text-slate-900">
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        {/* Header - Enterprise Mobile System */}
-        <div className="text-center max-w-4xl mx-auto mb-20 relative">
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-xl rounded-full shadow-lg border border-white/60 mb-8 touch-active">
-            <div className="relative flex items-center gap-2">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+
+          {/* Left: Content & Stats */}
+          <div className="lg:w-[40%]">
+            <div className="inline-flex items-center gap-3 px-5 py-2 bg-white rounded-full shadow-sm border border-slate-100 mb-8">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
               </span>
-              <span className="text-xs font-black text-slate-700 uppercase tracking-widest">{t('network.header.title')}</span>
+              <span className="text-[13px] font-black text-slate-500 uppercase tracking-widest">{language === 'id' ? 'Jaringan Logistik Nasional' : 'National Logistics Network'}</span>
             </div>
-          </div>
 
-          <h2 className="text-fluid-h1 py-2 mb-8 text-slate-900">
-            {t('network.title.text')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('network.title.italic')}</span>
-          </h2>
-          <p className="text-fluid-body text-gray-500 max-w-3xl mx-auto">
-            {t('network.header.desc')}
-          </p>
-        </div>
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tighter leading-[1.05] uppercase">
+              {language === 'id' ? 'Cakupan &' : 'National'} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 italic pr-4">{language === 'id' ? 'Akses Seluruh Indonesia' : 'Coverage & Access'}</span>
+            </h2>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-20">
-          {[
-            { label: t('network.stats.main'), value: branchCount, icon: '🏢' },
-            { label: t('network.stats.depots'), value: depoCount, icon: '📦' },
-            { label: t('network.stats.provinces'), value: '34', icon: '🗺️' },
-            { label: 'Reliability', value: '99.8%', icon: '⚡' }
-          ].map((stat, idx) => (
-            <div key={idx} className="bg-white p-6 md:p-10 rounded-3xl border border-slate-200 shadow-xl hover:shadow-2xl transition-all touch-active">
-              <div className="text-3xl md:text-5xl font-black text-slate-900 mb-2">{stat.value}</div>
-              <div className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+            <p className="text-slate-500 text-lg font-medium leading-relaxed mb-12">
+              {language === 'id'
+                ? 'Didukung oleh infrastruktur modern yang menghubungkan pusat-pusat ekonomi utama dengan wilayah regional di seluruh nusantara.'
+                : 'Supported by modern infrastructure connecting major economic centers with regional areas throughout the archipelago.'}
+            </p>
 
-        {/* Action Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {(showAll ? filteredBranches : filteredBranches.slice(0, 8)).map((branch) => (
-            <div key={branch.id} className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-xl hover:-translate-y-2 transition-all flex flex-col h-full touch-active">
-              <div className="bg-slate-900 p-8 flex justify-between items-start">
-                <div className="text-white">
-                  <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">{branch.type}</div>
-                  <div className="text-xl font-black tracking-tight">{branch.city}</div>
+            <div className="grid grid-cols-2 gap-6 mb-12">
+              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group">
+                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-4 transition-transform group-hover:scale-110">
+                  <Building2 size={24} />
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
-                  {branch.type === 'branch' ? '🏢' : '📦'}
+                <div className="text-3xl font-black text-slate-900 mb-1">{mainHubs.length}</div>
+                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight">
+                  {language === 'id' ? 'Hub Utama (Tier 1)' : 'Main Strategic Hubs'}
                 </div>
               </div>
-              <div className="p-8 flex-grow flex flex-col justify-between">
-                <div className="mb-6">
-                  <h4 className="text-xl font-black text-slate-900 mb-4">{branch.name}</h4>
-                  <p className="text-sm text-slate-500 font-medium leading-relaxed">{branch.address}</p>
+              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group">
+                <div className="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center text-cyan-600 mb-4 transition-transform group-hover:scale-110">
+                  <Truck size={24} />
                 </div>
-                <button
-                  onClick={() => setModalBranch(branch)}
-                  className="w-full py-4 bg-slate-50 hover:bg-slate-900 group/btn hover:text-white text-slate-900 border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 touch-active"
-                >
-                  {t('map.view_on_map')}
-                  <svg className="w-4 h-4 transition-transform duration-500 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </button>
+                <div className="text-3xl font-black text-slate-900 mb-1">{depots.length}</div>
+                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight">
+                  {language === 'id' ? 'Cabang & Depo' : 'Regional Branches'}
+                </div>
               </div>
             </div>
-          ))}
-        </div>
 
-        {filteredBranches.length > 8 && (
-          <div className="mt-16 text-center">
             <button
-              onClick={() => setShowAll(!showAll)}
-              className="px-12 py-5 bg-white border-2 border-slate-100 text-slate-900 font-black uppercase tracking-widest text-xs rounded-full hover:border-cyan-500 transition-all touch-active"
+              onClick={() => navigate('/about/network-partners')}
+              className="group/btn inline-flex items-center gap-4 text-[13px] font-black uppercase tracking-[0.3em] text-slate-900 hover:text-blue-600 transition-all border border-slate-200 px-8 py-4 rounded-2xl hover:bg-white"
             >
-              {showAll ? 'Sembunyikan' : `Lihat ${filteredBranches.length - 8} Lainnya`}
+              {language === 'id' ? 'Lihat Seluruh Jaringan' : 'View Full Network'}
+              <Globe size={16} className="group-hover/btn:rotate-180 transition-transform duration-1000" />
             </button>
           </div>
-        )}
-      </div>
 
-      {/* Modal - Enterprise Interaction Layer */}
-      {modalBranch && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-xl" onClick={() => setModalBranch(null)}></div>
-          <div className="relative w-full max-w-4xl bg-white rounded-3xl overflow-hidden shadow-2xl animate-in zoom-in duration-300">
-            <div className="grid md:grid-cols-2">
-              <div className="h-64 md:h-96 bg-slate-100">
-                <iframe
-                  width="100%" height="100%" frameBorder="0"
-                  src={`https://maps.google.com/maps?q=${modalBranch.latitude},${modalBranch.longitude}&z=15&output=embed`}
-                ></iframe>
-              </div>
-              <div className="p-8 md:p-12 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <div className="text-[10px] font-black text-cyan-600 uppercase tracking-widest mb-1">{modalBranch.type}</div>
-                      <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">{modalBranch.name}</h3>
-                    </div>
-                    <button onClick={() => setModalBranch(null)} className="p-2 hover:bg-slate-100 rounded-xl transition-all touch-active">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                  </div>
-                  <p className="text-slate-500 font-medium mb-8">{modalBranch.address}</p>
+          {/* Right: Interactive Live Map */}
+          <div className="lg:w-[60%] relative">
+            <div className="relative h-[400px] md:h-[600px] bg-white rounded-[3rem] border border-white shadow-2xl overflow-hidden group">
+              {/* Visual Loading State */}
+              {loading && (
+                <div className="absolute inset-0 z-20 bg-slate-50 flex items-center justify-center">
+                  <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
                 </div>
-                <button
-                  onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(modalBranch.name + ' ' + modalBranch.city)}`, '_blank')}
-                  className="w-full py-5 wow-button-gradient text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl touch-active"
-                >
-                  Direction
-                </button>
+              )}
+
+              {/* Actual Map Container */}
+              <div ref={mapRef} className="absolute inset-0 w-full h-full z-10" />
+
+              {/* Map Floating UI Overlay */}
+              <div className="absolute bottom-8 right-8 z-20 pointer-events-none">
+                <div className="bg-slate-900/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                  <span className="text-[9px] font-black text-white uppercase tracking-widest">Live Interactive Grid</span>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
-      )}
+      </div>
+
+      <style>{`
+        .custom-leaflet-popup .leaflet-popup-content-wrapper {
+            background: white;
+            color: #0f172a;
+            border-radius: 1.5rem;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+        }
+        .custom-leaflet-popup .leaflet-popup-content {
+            margin: 0;
+        }
+        .custom-leaflet-popup .leaflet-popup-tip {
+            background: white;
+        }
+        .leaflet-container {
+            font-family: inherit;
+        }
+      `}</style>
     </section>
   );
 };

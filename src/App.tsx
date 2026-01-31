@@ -16,6 +16,9 @@ import NetworkPartners from "./pages/public/about/NetworkPartners";
 import LegalityAchievements from "./pages/public/about/LegalityAchievements";
 import BusinessPage from "./pages/public/business/BusinessPage";
 import InvestorPage from "./pages/public/investor/InvestorPage";
+import CareerPage from "./pages/public/career/CareerPage";
+import ContactPage from "./pages/public/contact/ContactPage";
+import GlobalTools from "./components/ui/GlobalTools";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,7 @@ const App = () => (
               v7_relativeSplatPath: true,
             }}
           >
+            <GlobalTools />
             <Routes>
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:slug" element={<NewsDetail />} />
@@ -52,6 +56,8 @@ const App = () => (
               <Route path="/investor/prospektus" element={<InvestorPage />} />
               <Route path="/investor/rups" element={<InvestorPage />} />
               <Route path="/investor/keterbukaan-informasi" element={<InvestorPage />} />
+              <Route path="/career" element={<CareerPage />} />
+              <Route path="/contact" element={<ContactPage />} />
               <Route path="/*" element={<AppLayout />} />
             </Routes>
           </BrowserRouter>

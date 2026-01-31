@@ -69,69 +69,69 @@ const InvestorSection: React.FC = () => {
   };
 
   return (
-    <section id="investors" className="py-20 md:py-32 bg-gray-50 relative overflow-hidden">
-      {/* Dynamic background element */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
+    <section id="investors" className="py-24 md:py-48 bg-white relative overflow-hidden">
+      {/* Subtle Institutional Grid Background */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+        backgroundSize: '100px 100px'
+      }}></div>
 
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-8">
-          <div className="max-w-3xl">
-            <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
-              {t('investor.tagline')}
-            </span>
-            <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
-              {t('investor.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('investor.title.italic')}</span>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-20 gap-12">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg mb-8">
+              <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+                {language === 'id' ? 'Transparansi & Tata Kelola' : 'Transparency & Governance'}
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-7xl font-black mb-0 text-slate-900 tracking-tighter leading-[1.05]">
+              {language === 'id' ? 'Hubungan' : 'Investor'} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-blue-900 to-slate-800 italic pr-4">{language === 'id' ? 'Investor' : 'Relations'}</span>
             </h2>
-            <p className="text-fluid-body text-gray-500 max-w-3xl">
-              {t('investor.description')}
-            </p>
           </div>
 
-          <div className="glass-panel p-8 rounded-[2.5rem] enterprise-shadow border-white/60 flex items-center gap-8 group hover:wow-border-glow transition-all duration-500">
-            <div className="w-16 h-16 rounded-3xl wow-button-gradient flex items-center justify-center text-white shadow-xl shadow-cyan-500/20 group-hover:scale-110 transition-all">
-              <svg className="w-8 h-8 font-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          <div className="bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl flex items-center gap-10 group transition-all duration-500">
+            <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-all border border-white/10">
+              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
             </div>
             <div>
-              <div className="text-3xl font-black wow-text-primary inline-block transition-colors leading-none mb-1">PEVE</div>
-              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-white/60 transition-colors">{t('investor.ticker.label')}</div>
+              <div className="text-4xl font-black text-white leading-none mb-2">PEVE</div>
+              <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">{t('investor.ticker.label')}</div>
             </div>
           </div>
         </div>
 
-        {/* Financial Highlights */}
+        {/* Financial Highlights - Formalized */}
         <div className="grid md:grid-cols-3 gap-8 mb-20">
           {[
-            { label: t('investor.stats.revenue'), value: '18.4%', color: 'accent' },
-            { label: t('investor.stats.mcap'), value: '2.4T', color: 'primary' },
-            { label: t('investor.stats.dividen'), value: '4.2%', color: 'primary' }
+            { label: t('investor.stats.revenue'), value: '18.4%', desc: 'Annual Growth' },
+            { label: t('investor.stats.mcap'), value: '2.4T', desc: 'Market Cap' },
+            { label: t('investor.stats.dividen'), value: '4.2%', desc: 'Current Yield' }
           ].map((stat, i) => (
-            <div key={i} className="bg-white p-6 sm:p-12 rounded-[2rem] md:rounded-[3rem] enterprise-shadow border border-gray-100 group wow-border-glow transition-all text-center">
-              <div className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-4 group-hover:wow-text-primary transition-colors">{stat.label}</div>
-              <div className={`text-5xl font-black wow-text-primary inline-block mb-6 tracking-tighter group-hover:scale-110 transition-transform`}>{stat.value}</div>
-              <div className="flex items-center justify-center gap-2 wow-text-primary">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                <span className="text-xs font-black uppercase tracking-widest">{t('investor.stats.growth')}</span>
-              </div>
+            <div key={i} className="bg-slate-50 p-10 md:p-14 rounded-[3rem] border border-slate-100 group hover:bg-white hover:shadow-2xl transition-all duration-500">
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4">{stat.label}</div>
+              <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 mb-2 tracking-tighter">{stat.value}</div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.desc}</div>
             </div>
           ))}
         </div>
 
-        {/* Resources Grid */}
+        {/* Resources Grid - Simplified structure */}
         <div className="grid lg:grid-cols-2 gap-12">
-          <div className="enterprise-gradient rounded-[2rem] md:rounded-[3.5rem] p-8 md:p-20 text-white relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
-              <svg className="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" /></svg>
-            </div>
-            <h3 className="text-4xl font-black text-white mb-8 tracking-tighter leading-tight">{t('investor.reports.title')}</h3>
-            <p className="text-blue-100/60 mb-12 text-xl font-medium leading-relaxed max-w-sm">
-              {t('investor.reports.desc')}
-            </p>
+          <div className="bg-slate-900 rounded-[3.5rem] p-12 md:p-20 text-white relative overflow-hidden group">
+            <h3 className="text-4xl font-black text-white mb-10 tracking-tighter">{t('investor.reports.title')}</h3>
             <div className="space-y-4">
-              {['Annual Report 2024', 'Quarterly Presentation Q3', 'Consolidated Financials'].map((item, i) => (
-                <button key={i} className="w-full flex items-center justify-between p-6 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/5 transition-all group">
-                  <span className="font-bold tracking-tight">{item}</span>
-                  <div className="w-10 h-10 bg-white text-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:bg-cyan-500 group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+              {[
+                { title: 'Annual Report 2024', date: 'Jan 2025' },
+                { title: 'Financial Statement Q3 2024', date: 'Oct 2024' }
+              ].map((item, i) => (
+                <button key={i} className="w-full flex items-center justify-between p-8 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all group/item">
+                  <div className="text-left">
+                    <div className="font-black tracking-tight text-lg mb-1">{item.title}</div>
+                    <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{item.date}</div>
+                  </div>
+                  <div className="w-12 h-12 bg-white text-slate-900 rounded-xl flex items-center justify-center shadow-lg group-hover/item:bg-blue-500 group-hover/item:text-white transition-all">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5m0 0l5-5m-5 5V3" /></svg>
                   </div>
                 </button>
@@ -139,35 +139,49 @@ const InvestorSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] p-8 md:p-20 border border-gray-100 enterprise-shadow relative group">
-            <div className="flex items-start justify-between mb-12">
-              <div className="w-16 h-16 wow-button-gradient text-white rounded-3xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-              </div>
-              <div className="text-right">
-                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">{t('investor.calendar.upcoming')}</div>
-                <div className="text-lg font-black wow-text-primary">AGMS FY2024</div>
-              </div>
-            </div>
-            <h3 className="text-4xl font-black mb-8 tracking-tighter leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-4 pr-6">{t('investor.calendar.title')}</h3>
-            <div className="space-y-8">
+          <div className="bg-white rounded-[3.5rem] p-12 md:p-20 border border-slate-100 shadow-2xl relative">
+            <h3 className="text-4xl font-black mb-12 tracking-tighter text-slate-900">{t('investor.calendar.title')}</h3>
+            <div className="space-y-10">
               {[
-                { date: 'MAR 15', label: 'FY2024 Financial Results Release', type: 'Earnings' },
-                { date: 'APR 22', label: 'Annual General Meeting (AGMS)', type: 'Corporate' },
-                { date: 'MAY 10', label: 'Quarterly Filing - Q1 2025', type: 'Earnings' }
+                { date: 'MAR 15', label: 'Financial Results Release', type: 'Earnings' },
+                { date: 'APR 22', label: 'Annual General Meeting', type: 'Corporate' }
               ].map((event, i) => (
-                <div key={i} className="flex items-center gap-8 group cursor-pointer">
-                  <div className="text-center w-20">
-                    <div className="text-sm font-black wow-text-primary uppercase tracking-widest">{event.date.split(' ')[0]}</div>
-                    <div className="text-2xl font-black text-slate-900 group-hover:wow-text-primary inline-block transition-colors">{event.date.split(' ')[1]}</div>
+                <div key={i} className="flex items-center gap-10 group border-b border-slate-50 pb-10 last:border-0 last:pb-0">
+                  <div className="text-center w-24">
+                    <div className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">{event.date.split(' ')[0]}</div>
+                    <div className="text-3xl font-black text-slate-900">{event.date.split(' ')[1]}</div>
                   </div>
-                  <div className="flex-1 pb-8 border-b border-gray-50 group-last:border-0">
-                    <div className="text-sm font-black text-gray-400 uppercase tracking-widest mb-1 group-hover:wow-text-primary transition-colors">{event.type}</div>
-                    <div className="text-lg font-bold text-slate-900 group-hover:wow-text-primary inline-block group-hover:translate-x-2 transition-all duration-300">{event.label}</div>
+                  <div className="flex-1">
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{event.type}</div>
+                    <div className="text-xl font-bold text-slate-900 leading-tight group-hover:text-slate-600 transition-colors">{event.label}</div>
                   </div>
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Quick Institutional Access */}
+        <div className="mt-24 pt-24 border-t border-slate-100">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { label_id: 'Profil Perusahaan', label_en: 'Company Profile', link: '/about/profile', icon: '🏢' },
+              { label_id: 'Laporan Keuangan', label_en: 'Financial Reports', link: '#', icon: '📊' },
+              { label_id: 'Tata Kelola GCG', label_en: 'Corporate Governance', link: '/about/legality-achievements', icon: '⚖️' },
+              { label_id: 'Pusat Berita', label_en: 'Media Center', link: '#news', icon: '📰' }
+            ].map((link, i) => (
+              <a
+                key={i}
+                href={link.link}
+                className="group p-8 rounded-3xl hover:bg-slate-50 transition-all duration-300 border border-transparent hover:border-slate-100"
+              >
+                <div className="text-3xl mb-6 grayscale group-hover:grayscale-0 transition-all">{link.icon}</div>
+                <div className="text-lg font-black text-slate-900 mb-2">
+                  {language === 'id' ? link.label_id : link.label_en}
+                </div>
+                <div className="w-10 h-1 bg-slate-100 group-hover:w-20 group-hover:bg-slate-900 transition-all duration-500"></div>
+              </a>
+            ))}
           </div>
         </div>
       </div>

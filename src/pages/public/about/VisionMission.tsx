@@ -199,7 +199,7 @@ const VisionMission: React.FC = () => {
                             {[
                                 {
                                     id: '1',
-                                    title_id: 'Customer Fokus',
+                                    title_id: 'Fokus Pelanggan',
                                     title_en: 'Customer Focus',
                                     image: '/images/values/customer-focus.png',
                                     gradient: 'from-cyan-500 to-blue-600',
@@ -208,7 +208,7 @@ const VisionMission: React.FC = () => {
                                 },
                                 {
                                     id: '2',
-                                    title_id: 'Integrity',
+                                    title_id: 'Integritas',
                                     title_en: 'Integrity',
                                     image: '/images/values/integrity.png',
                                     gradient: 'from-blue-500 to-indigo-600',
@@ -217,7 +217,7 @@ const VisionMission: React.FC = () => {
                                 },
                                 {
                                     id: '3',
-                                    title_id: 'Teamwork',
+                                    title_id: 'Kerjasama Tim',
                                     title_en: 'Teamwork',
                                     image: '/images/values/teamwork.png',
                                     gradient: 'from-cyan-500 to-teal-600',
@@ -226,7 +226,7 @@ const VisionMission: React.FC = () => {
                                 },
                                 {
                                     id: '4',
-                                    title_id: 'Agility',
+                                    title_id: 'Ketangkasan',
                                     title_en: 'Agility',
                                     image: '/images/values/agility.png',
                                     gradient: 'from-blue-600 to-purple-600',
@@ -248,13 +248,19 @@ const VisionMission: React.FC = () => {
                                             {/* Gradient Overlay on Hover */}
                                             <div className={`absolute inset-0 ${val.bg} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
 
-                                            {/* Image Container - Full Card */}
+                                            {/* Image Container */}
                                             <div className="relative aspect-square overflow-hidden">
                                                 <img
                                                     src={val.image}
-                                                    alt={language === 'id' ? val.title_id : val.title_en}
+                                                    alt={val.title_id}
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                 />
+                                            </div>
+
+                                            {/* Text Label Overlay (Added for clarity & bilingual support) */}
+                                            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent pt-12">
+                                                <h3 className="text-white text-xl font-black italic tracking-tight">{val.title_id}</h3>
+                                                <p className="text-white/60 text-xs font-bold uppercase tracking-widest">{val.title_en}</p>
                                             </div>
                                         </div>
                                     </motion.div>

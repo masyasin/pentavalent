@@ -479,6 +479,39 @@ const BusinessPage: React.FC = () => {
                                     {language === 'id' ? businessData.title_id : businessData.title_en}
                                 </h2>
 
+                                {/* Special Compliance/Intro Text */}
+                                {(() => {
+                                    const slug = businessData.slug;
+                                    const specialTexts: Record<string, { id: string, en: string }> = {
+                                        'distribusi-farmasi': {
+                                            id: "Seluruh aktivitas distribusi farmasi dijalankan sesuai standar CDOB BPOM dan regulasi Kementerian Kesehatan.",
+                                            en: "All pharmaceutical distribution activities are carried out in accordance with BPOM CDOB standards and Ministry of Health regulations."
+                                        },
+                                        'alur-distribusi': {
+                                            id: "Didukung sistem distribusi yang memenuhi persyaratan regulator dan audit berkala.",
+                                            en: "Supported by a distribution system that meets regulatory requirements and periodic audits."
+                                        },
+                                        'strategi-bisnis': {
+                                            id: "Pertumbuhan bisnis dijalankan dengan mengedepankan kepatuhan regulasi dan tata kelola perusahaan yang baik.",
+                                            en: "Business growth is executed by prioritizing regulatory compliance and good corporate governance."
+                                        }
+                                    };
+
+                                    const text = specialTexts[slug];
+                                    if (!text) return null;
+
+                                    return (
+                                        <div className="mb-10 p-6 bg-emerald-50/50 rounded-3xl border border-emerald-100 flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-1">
+                                                <ShieldCheck size={20} />
+                                            </div>
+                                            <p className="text-lg font-bold text-slate-700 italic leading-relaxed">
+                                                "{language === 'id' ? text.id : text.en}"
+                                            </p>
+                                        </div>
+                                    );
+                                })()}
+
                                 {location.pathname.includes('strategi-usaha') ? (
                                     <div className="space-y-12">
                                         {/* 2025 Targets High-Impact Cards */}

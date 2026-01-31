@@ -67,7 +67,7 @@ const NewsSection: React.FC = () => {
         .select('*')
         .eq('is_published', true)
         .order('published_at', { ascending: false })
-        .limit(10);
+        .limit(3);
 
       if (error) throw error;
       setNews(data || []);
@@ -125,15 +125,12 @@ const NewsSection: React.FC = () => {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-8">
           <div className="max-w-3xl">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
-              {t('news.tagline')}
+              {language === 'id' ? 'Berita & Keterbukaan Informasi' : 'News & Disclosure'}
             </span>
-            <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
-              {t('news.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('news.title.italic')}</span>
+            <h2 className="text-fluid-h1 py-2 mb-0 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
+              {language === 'id' ? 'Update' : 'Corporate'} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{language === 'id' ? 'Korporasi' : 'Updates'}</span>
             </h2>
-            <p className="text-fluid-body text-gray-500 max-w-3xl">
-              {t('news.description')}
-            </p>
           </div>
           <div className="hidden sm:flex flex-col sm:flex-row items-start sm:items-center gap-6">
             <button

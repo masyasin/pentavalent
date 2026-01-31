@@ -98,6 +98,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
       } else {
         onNavigate(path.substring(1));
       }
+    } else if (path === '/' || path === '' || path === '/beranda') {
+      if (location.pathname === '/' || location.pathname === '/beranda') {
+        onNavigate('beranda');
+      } else {
+        navigate('/');
+      }
     } else if (path.startsWith('/')) {
       navigate(path);
     } else if (path.startsWith('http')) {
@@ -142,7 +148,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 const children = getChildMenus(menu.id);
                 const hasChildren = children.length > 0;
                 const menuLabel = language === 'id' ? menu.label_id : menu.label_en;
-                const isActive = activeSection === menu.path.substring(1);
+                const menuPath = menu.path.startsWith('#') ? menu.path.substring(1) : menu.path;
+                const isActive = activeSection === menuPath || (activeSection === 'beranda' && (menuPath === '' || menuPath === 'home' || menuPath === 'hero'));
+                const isRightAligned = menu.label_en.toLowerCase().includes('news');
 
                 return (
                   <div
@@ -158,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                         : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-100/50' : 'text-white/80 hover:text-white hover:bg-white/10')
                         }`}
                     >
-                      <span className="relative z-10 transition-transform duration-300 group-hover/btn:scale-105">{menuLabel}</span>
+                      <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-0.5">{menuLabel}</span>
                       {hasChildren && (
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ${activeDropdown === menu.id ? 'rotate-180' : ''}`} />
                       )}
@@ -172,33 +180,37 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                     {/* Desktop Dropdown - Upgraded to Premium Enterprise Style */}
                     <AnimatePresence>
                       {hasChildren && activeDropdown === menu.id && (
+
                         <motion.div
                           initial={{ opacity: 0, y: 15, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
                           transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                          className="absolute top-full left-0 mt-3 w-[320px] bg-white/90 backdrop-blur-2xl border border-white/40 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] rounded-[2.5rem] p-4 overflow-hidden z-[100]"
+                          className={`absolute top-full mt-3 bg-white/95 backdrop-blur-2xl border border-white/40 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] rounded-[2rem] p-6 overflow-hidden z-[100] ${isRightAligned ? 'w-80 right-0 origin-top-right' : 'w-[640px] left-0 origin-top-left'}`}
                         >
-                          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-primary via-cyan-400 to-transparent opacity-20"></div>
-                          <div className="space-y-2 relative z-10">
+                          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-cyan-400/5 to-transparent opacity-100 pointer-events-none"></div>
+                          <div className={`grid gap-4 relative z-10 text-pretty ${isRightAligned ? 'grid-cols-1' : 'grid-cols-2'}`}>
                             {children.map(child => {
                               const icons: Record<string, any> = {
-                                '/about/profile': <Building2 size={18} />,
-                                '/about/vision-mission': <Target size={18} />,
-                                '/about/management': <Users size={18} />,
-                                '/about/network-partners': <Globe size={18} />,
-                                '/about/legality-achievements': <ShieldCheck size={18} />,
-                                '/business/pharmaceuticals': <Building2 size={18} />,
-                                '/business/consumer-goods': <Target size={18} />,
-                                '/business/strategi-usaha': <TrendingUp size={18} />,
-                                '/business/distribution-flow': <Server size={18} />,
-                                '/business/target-market': <Users size={18} />,
-                                '/investor/ringkasan-investor': <TrendingUp size={18} />,
-                                '/investor/informasi-saham': <Activity size={18} />,
-                                '/investor/laporan-keuangan': <FileText size={18} />,
-                                '/investor/prospektus': <FileSearch size={18} />,
-                                '/investor/rups': <Users size={18} />,
-                                '/investor/keterbukaan-informasi': <Info size={18} />
+                                '/about/profile': <Building2 size={20} />,
+                                '/about/vision-mission': <Target size={20} />,
+                                '/about/management': <Users size={20} />,
+                                '/about/network-partners': <Globe size={20} />,
+                                '/about/legality-achievements': <ShieldCheck size={20} />,
+                                '/business/pharmaceuticals': <Building2 size={20} />,
+                                '/business/consumer-goods': <Target size={20} />,
+                                '/business/strategi-usaha': <TrendingUp size={20} />,
+                                '/business/distribution-flow': <Server size={20} />,
+                                '/business/target-market': <Users size={20} />,
+                                '/investor/ringkasan-investor': <TrendingUp size={20} />,
+                                '/investor/informasi-saham': <Activity size={20} />,
+                                '/investor/laporan-keuangan': <FileText size={20} />,
+                                '/investor/prospektus': <FileSearch size={20} />,
+                                '/investor/rups': <Users size={20} />,
+                                '/investor/keterbukaan-informasi': <Info size={20} />,
+                                '/news?category=news': <FileText size={20} />,
+                                '/news?category=press_release': <Target size={20} />,
+                                '/news?category=corporate_news': <Building2 size={20} />
                               };
 
                               const descriptions: Record<string, any> = {
@@ -206,7 +218,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                                 '/about/vision-mission': language === 'id' ? 'Arah Strategis & Nilai Inti' : 'Strategic Direction & Core Values',
                                 '/about/management': language === 'id' ? 'Dewan Direksi & Komisaris' : 'Board of Directors & Commissioners',
                                 '/about/network-partners': language === 'id' ? 'Distribusi & Prinsipal Global' : 'Global Distribution & Principals',
-                                '/about/legality-achievements': language === 'id' ? 'Sertifikasi & Legalitas' : 'Legality & Achievements',
+                                '/about/legality-achievements': language === 'id' ? 'Sertifikasi, Legalitas & Kepatuhan' : 'Legality, Compliance & Achievements',
                                 '/business/pharmaceuticals': language === 'id' ? 'Solusi Distribusi Farmasi' : 'Pharmaceutical Distribution Solutions',
                                 '/business/consumer-goods': language === 'id' ? 'Produk Kebutuhan Sehari-hari' : 'Consumer Goods Products',
                                 '/business/strategi-usaha': language === 'id' ? 'Strategi Bisnis & Usaha' : 'Business & Growth Strategy',
@@ -217,37 +229,33 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                                 '/investor/laporan-keuangan': language === 'id' ? 'Laporan Tahunan & Kuartalan' : 'Annual & Quarterly Reports',
                                 '/investor/prospektus': language === 'id' ? 'Prospektus & Dokumen IPO' : 'Prospectus & IPO Documents',
                                 '/investor/rups': language === 'id' ? 'Info RUPS Terkini' : 'Latest General Meetings Info',
-                                '/investor/keterbukaan-informasi': language === 'id' ? 'Berita & Fakta Material' : 'Material News & Facts'
+                                '/investor/keterbukaan-informasi': language === 'id' ? 'Berita & Fakta Material' : 'Material News & Facts',
+                                '/news?category=news': language === 'id' ? 'Berita & Artikel Terbaru' : 'Latest News & Articles',
+                                '/news?category=press_release': language === 'id' ? 'Siaran Pers Resmi' : 'Official Press Releases',
+                                '/news?category=corporate_news': language === 'id' ? 'Kegiatan & Info Korporasi' : 'Corporate Events & Info'
                               };
 
                               return (
                                 <button
                                   key={child.id}
                                   onClick={() => handleLinkClick(child.path)}
-                                  className="w-full text-left p-4 rounded-[1.5rem] bg-transparent hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-300 flex items-start gap-4 group/item relative overflow-hidden"
+                                  className="w-full text-left p-3 rounded-2xl bg-white/50 hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all duration-300 flex items-start gap-3 group/item relative overflow-hidden shadow-sm hover:shadow-md h-full"
                                 >
-                                  <div className="w-10 h-10 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center transition-all group-hover/item:bg-primary group-hover/item:text-white group-hover/item:scale-110 shadow-sm border border-slate-100/50">
+                                  <div className="w-10 h-10 rounded-xl bg-white text-slate-400 flex items-center justify-center transition-all group-hover/item:bg-primary group-hover/item:text-white shadow-sm border border-slate-100 flex-shrink-0">
                                     {icons[child.path] || <ArrowRight size={18} />}
                                   </div>
-                                  <div className="flex-1">
-                                    <div className="text-xs font-black text-slate-800 uppercase tracking-tight group-hover/item:text-primary transition-colors flex items-center justify-between">
-                                      {language === 'id' ? child.label_id : child.label_en}
-                                      <ArrowRight size={14} className="opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all text-primary" />
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-[11px] font-black text-slate-800 uppercase tracking-tight group-hover/item:text-primary transition-colors flex items-center justify-between mb-0.5">
+                                      <span className="pr-2 leading-tight">{language === 'id' ? child.label_id : child.label_en}</span>
                                     </div>
-                                    <p className="text-[10px] font-medium text-slate-400 mt-1 leading-relaxed line-clamp-1 group-hover/item:text-slate-500 transition-colors">
+                                    <p className="text-[10px] font-medium text-slate-500 leading-tight line-clamp-2">
                                       {descriptions[child.path] || (language === 'id' ? 'Informasi lebih lanjut' : 'Further information')}
                                     </p>
                                   </div>
-
-                                  {/* Item Shine Effect */}
-                                  <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-25deg] transition-all duration-[600ms] group-hover/item:left-[100%]"></div>
                                 </button>
                               );
                             })}
                           </div>
-
-                          {/* Dropdown Decorative Glow */}
-                          <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -322,7 +330,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   const hasChildren = children.length > 0;
                   const menuLabel = language === 'id' ? menu.label_id : menu.label_en;
                   const isOpen = activeDropdown === menu.id;
-                  const isActive = activeSection === menu.path.substring(1);
+                  const menuPath = menu.path.startsWith('#') ? menu.path.substring(1) : menu.path;
+                  const isActive = activeSection === menuPath || (activeSection === 'beranda' && (menuPath === '' || menuPath === 'home' || menuPath === 'hero'));
 
                   return (
                     <div key={menu.id} className="space-y-2">

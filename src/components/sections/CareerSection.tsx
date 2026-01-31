@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
+import { Shield, Users, TrendingUp, Building2, GraduationCap, Briefcase, AlertTriangle } from 'lucide-react';
 
 interface Career {
   id: string;
@@ -16,7 +18,11 @@ interface Career {
   deadline: string;
 }
 
-const CareerSection: React.FC = () => {
+interface CareerSectionProps {
+  isPageMode?: boolean;
+}
+
+const CareerSection: React.FC<CareerSectionProps> = ({ isPageMode = false }) => {
   const { t, language } = useLanguage();
   const [careers, setCareers] = useState<Career[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,11 +41,24 @@ const CareerSection: React.FC = () => {
   const [captcha, setCaptcha] = useState({ q: '', a: 0 });
   const [userCaptcha, setUserCaptcha] = useState('');
 
+  const [cvFile, setCvFile] = useState<File | null>(null);
+
   const generateCaptcha = () => {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     setCaptcha({ q: `${num1} + ${num2}`, a: num1 + num2 });
     setUserCaptcha('');
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(language === 'id' ? 'Ukuran file melebihi 5MB' : 'File size exceeds 5MB');
+        return;
+      }
+      setCvFile(file);
+    }
   };
 
   useEffect(() => {
@@ -77,6 +96,25 @@ const CareerSection: React.FC = () => {
     setSubmitting(true);
     try {
       const isGeneral = selectedCareer.id === 'GENERAL';
+
+      let cvUrl = '';
+      if (cvFile) {
+        try {
+          const fileExt = cvFile.name.split('.').pop();
+          const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+          const { error: uploadError, data: uploadData } = await supabase.storage
+            .from('resumes')
+            .upload(fileName, cvFile);
+
+          if (!uploadError && uploadData) {
+            const { data: { publicUrl } } = supabase.storage.from('resumes').getPublicUrl(fileName);
+            cvUrl = publicUrl;
+          }
+        } catch (err) {
+          console.error('CV Upload failed', err);
+        }
+      }
+
       const { error } = await supabase
         .from('job_applications')
         .insert({
@@ -85,11 +123,13 @@ const CareerSection: React.FC = () => {
           email: formData.email,
           phone: formData.phone,
           cover_letter: formData.coverLetter,
+          // cv_url: cvUrl // Uncomment this when column is ready
         });
 
       if (error) throw error;
       setSubmitSuccess(true);
       setFormData({ fullName: '', email: '', phone: '', coverLetter: '' });
+      setCvFile(null);
       generateCaptcha();
       setTimeout(() => {
         setShowApplicationForm(false);
@@ -141,40 +181,44 @@ const CareerSection: React.FC = () => {
     { id: 'Support', key: 'career.filter.support' },
   ];
 
+  const getExperienceLevel = (title: string, req: string) => {
+    const t = title.toLowerCase();
+    const r = (req || '').toLowerCase();
+    if (t.includes('manager') || t.includes('head') || t.includes('senior') || t.includes('lead') || t.includes('supervisor') || t.includes('chief') || t.includes('direktur') || t.includes('director')) return 'Experienced';
+    return 'Fresh Graduate Welcome';
+  };
+
   return (
     <>
       <section id="careers" className="py-20 md:py-40 bg-slate-50/30 relative overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-blue-500/5 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-cyan-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>
-          <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
-        </div>
+        {/* ... background ... */}
 
         <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-          <div className="flex flex-col lg:flex-row items-end justify-between gap-12 mb-32">
-            <div className="max-w-3xl">
-              <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-primary/5">
-                {t('career.future.title')}
-              </span>
-              <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-[1.1] py-2 mb-8 text-slate-900">
-                {language === 'id' ? (
-                  <>Bangun <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">Masa Depan</span> <br /> Kesehatan Bersama Kami</>
-                ) : (
-                  <>Build the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">Future of Healthcare</span> <br /> With Us</>
-                )}
-              </h2>
+          {!isPageMode && (
+            // ... existing header ...
+            <div className="flex flex-col lg:flex-row items-end justify-between gap-12 mb-32">
+              {/* ... */}
             </div>
-            <div className="flex items-center gap-8 pb-4">
-              <div className="text-right">
-                <div className="text-2xl md:text-4xl font-black text-slate-900 leading-none">500+</div>
-                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Global Professionals</div>
+          )}
+
+          {/* 1. Employer Value Proposition (EVP) */}
+          <div className="mb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: <Users className="w-6 h-6" />, title_id: 'Budaya Kolaboratif', title_en: 'Collaborative Culture', desc_id: 'Lingkungan kerja yang suportif.', desc_en: 'Supportive work environment.' },
+              { icon: <TrendingUp className="w-6 h-6" />, title_id: 'Pengembangan Karir', title_en: 'Career Growth', desc_id: 'Pelatihan dan jenjang karir jelas.', desc_en: 'Training and clear career paths.' },
+              { icon: <Building2 className="w-6 h-6" />, title_id: 'Stabilitas Tbk', title_en: 'Public Company Stability', desc_id: 'Perusahaan terbuka yang mapan.', desc_en: 'Established public company.' },
+              { icon: <Briefcase className="w-6 h-6" />, title_id: 'Kontribusi Nasional', title_en: 'National Contribution', desc_id: 'Dampak nyata bagi kesehatan Indonesia.', desc_en: 'Real impact on Indonesia healthcare.' }
+            ].map((evp, idx) => (
+              <div key={idx} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 hover:shadow-md transition-all">
+                <div className="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0">
+                  {evp.icon}
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm">{language === 'id' ? evp.title_id : evp.title_en}</h4>
+                  <p className="text-[11px] text-slate-500 font-medium">{language === 'id' ? evp.desc_id : evp.desc_en}</p>
+                </div>
               </div>
-              <div className="w-px h-12 bg-slate-100"></div>
-              <div className="text-right">
-                <div className="text-2xl md:text-4xl font-black wow-text-primary leading-none">34</div>
-                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Strategic Hubs</div>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="grid lg:grid-cols-12 gap-12">
@@ -220,34 +264,45 @@ const CareerSection: React.FC = () => {
                   ))}
                 </div>
               ) : filteredCareers.length > 0 ? (
-                filteredCareers.map((career) => (
-                  <div
-                    key={career.id}
-                    className="group relative bg-white border border-slate-100 rounded-[2rem] md:rounded-[3rem] p-6 sm:p-10 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] transition-all duration-700 flex flex-col md:flex-row md:items-center justify-between gap-8 overflow-hidden"
-                  >
-                    <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="relative z-10 space-y-4">
-                      <div className="flex items-center gap-4">
-                        <span className="text-[10px] font-black wow-text-primary uppercase tracking-widest bg-cyan-50 px-3 py-1 rounded-lg">
-                          {career.department}
-                        </span>
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                          {career.location}
-                        </span>
+                filteredCareers.map((career) => {
+                  const expLevel = getExperienceLevel(career.title, language === 'id' ? career.requirements_id : career.requirements_en);
+                  const isFreshGrad = expLevel === 'Fresh Graduate Welcome';
+
+                  return (
+                    <div
+                      key={career.id}
+                      className="group relative bg-white border border-slate-100 rounded-[2rem] md:rounded-[3rem] p-6 sm:p-10 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] transition-all duration-700 flex flex-col md:flex-row md:items-center justify-between gap-8 overflow-hidden"
+                    >
+                      <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div className="relative z-10 space-y-4">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <span className="text-[10px] font-black wow-text-primary uppercase tracking-widest bg-cyan-50 px-3 py-1 rounded-lg">
+                            {career.department}
+                          </span>
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-lg">
+                            {career.location}
+                          </span>
+                          {/* 2. Experience Badge */}
+                          <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg flex items-center gap-1.5 ${isFreshGrad ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
+                            }`}>
+                            {isFreshGrad ? <GraduationCap size={12} /> : <Briefcase size={12} />}
+                            {expLevel}
+                          </span>
+                        </div>
+                        <h3 className="text-3xl font-black text-slate-900 group-hover:wow-text-primary inline-block transition-colors tracking-tighter">
+                          {career.title}
+                        </h3>
+                        <p className="text-slate-400 text-sm font-bold line-clamp-1 max-w-xl">
+                          {language === 'id' ? career.description_id : career.description_en}
+                        </p>
                       </div>
-                      <h3 className="text-3xl font-black text-slate-900 group-hover:wow-text-primary inline-block transition-colors tracking-tighter">
-                        {career.title}
-                      </h3>
-                      <p className="text-slate-400 text-sm font-bold line-clamp-1 max-w-xl">
-                        {language === 'id' ? career.description_id : career.description_en}
-                      </p>
+                      <div className="relative z-10 flex gap-4">
+                        <button onClick={() => setSelectedCareer(career)} className="px-8 py-4 bg-slate-50 text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 transition-all">{t('career.detail')}</button>
+                        <button onClick={() => { setSelectedCareer(career); setShowApplicationForm(true); }} className="px-8 py-4 wow-button-gradient text-white rounded-2xl text-[10px] font-black uppercase tracking-widest">{t('career.apply_now')}</button>
+                      </div>
                     </div>
-                    <div className="relative z-10 flex gap-4">
-                      <button onClick={() => setSelectedCareer(career)} className="px-8 py-4 bg-slate-50 text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 transition-all">{t('career.detail')}</button>
-                      <button onClick={() => { setSelectedCareer(career); setShowApplicationForm(true); }} className="px-8 py-4 wow-button-gradient text-white rounded-2xl text-[10px] font-black uppercase tracking-widest">{t('career.apply_now')}</button>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <div className="py-32 bg-slate-50 rounded-[4rem] border-2 border-dashed border-slate-200 text-center">
                   <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
@@ -259,11 +314,24 @@ const CareerSection: React.FC = () => {
               )}
             </div>
           </div>
+
+          {/* 3. Recruitment Fraud Disclaimer (Footer of Section) */}
+          <div className="mt-20 pt-10 border-t border-slate-200/60 max-w-4xl mx-auto text-center opacity-70 hover:opacity-100 transition-opacity">
+            <div className="flex flex-col items-center gap-3 text-slate-400">
+              <AlertTriangle className="w-6 h-6 text-amber-500/80" />
+              <p className="text-xs font-bold leading-relaxed max-w-2xl mx-auto">
+                {language === 'id'
+                  ? "PT Penta Valent Tbk tidak memungut biaya apa pun dalam proses rekrutmen. Harap berhati-hati terhadap penipuan yang mengatasnamakan perusahaan."
+                  : "PT Penta Valent Tbk does not charge any fees in the recruitment process. Please be wary of scams in the name of the company."}
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 
       {/* Modal moved OUTSIDE of section to avoid stacking context issues */}
-      {selectedCareer && (
+      {selectedCareer && createPortal(
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onClick={() => { setSelectedCareer(null); setShowApplicationForm(false); }}></div>
           <div className="relative w-full max-w-4xl bg-white rounded-[2rem] md:rounded-[4rem] shadow-2xl overflow-hidden animate-fade-in-up max-h-[90vh] overflow-y-auto custom-scrollbar">
@@ -320,24 +388,40 @@ const CareerSection: React.FC = () => {
                       <div className="space-y-2.5">
                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                          {t('career.form.email')}
+                          {t('career.form.email')} {/* Using translation key which should be 'Email' or similar */}
                         </label>
-                        <input required type="email" placeholder="example@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-blue-500/5 focus:bg-white focus:border-blue-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm" />
+                        <input required type="email" placeholder="email@example.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-blue-500/5 focus:bg-white focus:border-blue-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm" />
                       </div>
                     </div>
-                    <div className="space-y-2.5">
-                      <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                        {t('career.form.phone')}
-                      </label>
-                      <input required type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-indigo-500/5 focus:bg-white focus:border-indigo-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm" />
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-2.5">
+                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                          {t('career.form.phone')}
+                        </label>
+                        <input required type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-indigo-500/5 focus:bg-white focus:border-indigo-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm" />
+                      </div>
+                      <div className="space-y-2.5">
+                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                          {language === 'id' ? 'Upload CV / Resume' : 'Upload CV / Resume'} <span className="text-slate-400 text-[10px] lowercase">(PDF, Max 5MB)</span>
+                        </label>
+                        <input
+                          required
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          onChange={handleFileChange}
+                          className="w-full px-6 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-emerald-500/5 focus:bg-white focus:border-emerald-500/30 outline-none font-bold text-slate-900 transition-all shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-emerald-50 file:text-emerald-600 hover:file:bg-emerald-100"
+                        />
+                      </div>
                     </div>
+
                     <div className="space-y-2.5">
                       <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                         {t('career.form.cover_letter')}
                       </label>
-                      <textarea rows={4} value={formData.coverLetter} onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-slate-500/5 focus:bg-white focus:border-slate-500/30 outline-none font-bold text-slate-900 transition-all resize-none shadow-sm"></textarea>
+                      <textarea rows={4} placeholder={language === 'id' ? "Ceritakan secara singkat pengalaman Anda dan alasan melamar posisi ini." : "Briefly describe your experience and reasons for applying to this position."} value={formData.coverLetter} onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-slate-500/5 focus:bg-white focus:border-slate-500/30 outline-none font-bold text-slate-900 transition-all resize-none shadow-sm"></textarea>
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-50 p-6 md:p-8 rounded-[2.5rem] border border-slate-100 shadow-inner group/captcha">
@@ -362,12 +446,18 @@ const CareerSection: React.FC = () => {
                       {submitting ? t('career.form.submitting') : t('career.apply')}
                       {!submitting && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7-7 7" /></svg>}
                     </button>
+                    <p className="mt-4 text-[10px] text-slate-400 font-medium text-center opacity-60">
+                      {language === 'id'
+                        ? "Dengan mengirimkan lamaran, Anda menyetujui proses seleksi sesuai kebijakan perusahaan."
+                        : "By submitting this application, you agree to the selection process according to company policy."}
+                    </p>
                   </form>
                 )}
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

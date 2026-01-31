@@ -7,44 +7,57 @@ import AboutSection from './sections/AboutSection';
 import BusinessSection from './sections/BusinessSection';
 import NetworkSection from './sections/NetworkSection';
 import CertificationSection from './sections/CertificationSection';
-import PartnersSection from './sections/PartnersSection';
 import InvestorSection from './sections/InvestorSection';
 import NewsSection from './sections/NewsSection';
-import CareerSection from './sections/CareerSection';
-import ContactSection from './sections/ContactSection';
-import ManagementSection from './sections/ManagementSection';
-import GCGSection from './sections/GCGSection';
-import CookieBanner from './ui/CookieBanner';
-import WhatsAppButton from './ui/WhatsAppButton';
-import ScrollToTop from './ui/ScrollToTop';
+import SnapshotSection from './sections/SnapshotSection';
 import AdminPage from '../pages/admin/AdminPage';
 
 const MainWebsite: React.FC = () => {
-  const [currentSection, setCurrentSection] = useState('home');
+  const [currentSection, setCurrentSection] = useState('beranda');
+  const isScrolling = useRef(false);
 
   const sectionRefs = {
-    home: useRef<HTMLDivElement>(null),
+    beranda: useRef<HTMLDivElement>(null),
     about: useRef<HTMLDivElement>(null),
     business: useRef<HTMLDivElement>(null),
     network: useRef<HTMLDivElement>(null),
     certification: useRef<HTMLDivElement>(null),
     partners: useRef<HTMLDivElement>(null),
     investor: useRef<HTMLDivElement>(null),
-    gcg: useRef<HTMLDivElement>(null),
     news: useRef<HTMLDivElement>(null),
     career: useRef<HTMLDivElement>(null),
     contact: useRef<HTMLDivElement>(null),
   };
 
   const handleNavigate = (section: string) => {
-    // External pages routing
-    if (section === 'faq' || section === 'sitemap') {
-      window.location.href = `/${section}`;
+    // External pages routing or absolute paths
+    if (section === 'faq' || section === 'sitemap' || section.startsWith('/')) {
+      window.location.href = section.startsWith('/') ? section : `/${section}`;
       return;
     }
 
+    // Lock observer
+    isScrolling.current = true;
+
     // Standard hash navigation
-    const ref = sectionRefs[section as keyof typeof sectionRefs];
+    const targetSection = (!section || section === 'hero' || section === 'home' || section === 'beranda') ? 'beranda' : section;
+
+    if (targetSection === 'beranda') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+      setCurrentSection('beranda');
+      // Update URL without hash for home
+      window.history.pushState(null, '', '/');
+
+      setTimeout(() => {
+        isScrolling.current = false;
+      }, 1000);
+      return;
+    }
+
+    const ref = sectionRefs[targetSection as keyof typeof sectionRefs];
     if (ref?.current) {
       const headerOffset = 80;
       const elementPosition = ref.current.getBoundingClientRect().top;
@@ -54,14 +67,27 @@ const MainWebsite: React.FC = () => {
         top: offsetPosition,
         behavior: 'smooth',
       });
-      setCurrentSection(section);
+      setCurrentSection(targetSection);
     } else {
       // If ref doesn't exist (e.g., calling from another page), go home first
-      window.location.href = `/#${section}`;
+      window.location.href = `/#${targetSection}`;
     }
+
+    // Unlock observer after scroll animation
+    setTimeout(() => {
+      isScrolling.current = false;
+    }, 1000);
   };
 
   useEffect(() => {
+    // Scroll to hash on mount
+    if (window.location.hash) {
+      const hash = window.location.hash.replace('#', '');
+      setTimeout(() => {
+        handleNavigate(hash);
+      }, 500);
+    }
+
     const observerOptions = {
       root: null,
       rootMargin: '-80px 0px -50% 0px',
@@ -69,9 +95,11 @@ const MainWebsite: React.FC = () => {
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      if (isScrolling.current) return;
+
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const sectionId = entry.target.id || 'home';
+          const sectionId = entry.target.id || 'beranda';
           setCurrentSection(sectionId);
         }
       });
@@ -93,15 +121,19 @@ const MainWebsite: React.FC = () => {
     <div className="min-h-screen bg-white w-full relative">
       <Header activeSection={currentSection} onNavigate={handleNavigate} />
 
-      <main className="w-full">
-        <div ref={sectionRefs.home}>
+      <main className="w-full relative">
+        {/* Global Luxury Decorative Elements */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] animate-blob transition-all duration-1000"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[150px] animate-blob animation-delay-4000"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-gradient-radial from-slate-50/50 to-transparent opacity-30"></div>
+        </div>
+
+        <div ref={sectionRefs.beranda} className="relative z-10">
           <HeroSection onNavigate={handleNavigate} />
         </div>
 
-        <div ref={sectionRefs.about}>
-          <AboutSection />
-          <ManagementSection />
-        </div>
+        <SnapshotSection />
 
         <div ref={sectionRefs.business}>
           <BusinessSection />
@@ -115,36 +147,20 @@ const MainWebsite: React.FC = () => {
           <CertificationSection />
         </div>
 
-        <div ref={sectionRefs.partners}>
-          <PartnersSection />
+        <div ref={sectionRefs.about}>
+          <AboutSection />
         </div>
 
         <div ref={sectionRefs.investor}>
           <InvestorSection />
         </div>
 
-        <div ref={sectionRefs.gcg}>
-          <GCGSection />
-        </div>
-
         <div ref={sectionRefs.news}>
           <NewsSection />
-        </div>
-
-        <div ref={sectionRefs.career}>
-          <CareerSection />
-        </div>
-
-        <div ref={sectionRefs.contact}>
-          <ContactSection />
         </div>
       </main>
 
       <Footer onNavigate={handleNavigate} />
-
-      <WhatsAppButton />
-      <ScrollToTop />
-      <CookieBanner />
     </div>
   );
 };

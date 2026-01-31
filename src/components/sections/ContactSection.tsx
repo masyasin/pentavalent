@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
+import { Info, Lock } from 'lucide-react';
 
-const ContactSection: React.FC = () => {
+interface ContactSectionProps {
+  isPageMode?: boolean;
+}
+
+const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) => {
   const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
@@ -107,18 +112,31 @@ const ContactSection: React.FC = () => {
       </div>
 
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="mb-24">
-          <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-primary/5">
-            {t('contact.tagline')}
-          </span>
-          <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-accent pl-6 md:pl-10">
-            {t('contact.title.text')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('contact.title.italic')}</span>
-          </h2>
-          <p className="text-fluid-body text-slate-500 max-w-xl">
-            {t('contact.description')}
-          </p>
-        </div>
+        {!isPageMode && (
+          <div className="mb-24">
+            <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-primary/5">
+              {t('contact.tagline')}
+            </span>
+            <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-accent pl-6 md:pl-10">
+              {t('contact.title.text')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('contact.title.italic')}</span>
+            </h2>
+            <p className="text-fluid-body text-slate-500 max-w-xl">
+              {t('contact.description')}
+            </p>
+
+            <div className="mt-8 p-6 bg-cyan-50/50 rounded-2xl border border-cyan-100 flex items-start gap-4 max-w-xl">
+              <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 shrink-0">
+                <Info size={16} />
+              </div>
+              <p className="text-xs font-bold text-slate-600 leading-relaxed pt-1">
+                {language === 'id'
+                  ? "Untuk pertanyaan kerja sama bisnis, distribusi, kemitraan strategis, dan layanan korporat."
+                  : "For inquiries regarding business cooperation, distribution, strategic partnerships, and corporate services."}
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Neural Communication Form */}
@@ -169,9 +187,12 @@ const ContactSection: React.FC = () => {
                     <div className="relative">
                       <select value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-emerald-500/5 focus:bg-white focus:border-emerald-500/30 outline-none font-bold text-slate-900 appearance-none transition-all cursor-pointer shadow-sm">
                         <option value="">{t('contact.form.category_placeholder')}</option>
-                        <option value="partnership">{t('contact.form.partnership')}</option>
-                        <option value="investor">{t('contact.form.investor')}</option>
-                        <option value="sales">{t('contact.form.sales')}</option>
+                        <option value="Business Enquiry">{t('contact.form.business')}</option>
+                        <option value="Employment Enquiry">{t('contact.form.employment')}</option>
+                        <option value="Media Enquiry">{t('contact.form.media')}</option>
+                        <option value="Order Enquiry">{t('contact.form.order')}</option>
+                        <option value="Product Complain">{t('contact.form.complain')}</option>
+                        <option value="Product Return">{t('contact.form.return')}</option>
                       </select>
                       <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
@@ -229,6 +250,15 @@ const ContactSection: React.FC = () => {
                         {!submitting && <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7-7 7" /></svg>}
                       </span>
                     </button>
+
+                    <div className="mt-6 flex items-center justify-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
+                      <Lock size={12} className="text-slate-400" />
+                      <p className="text-[10px] text-slate-400 font-bold text-center">
+                        {language === 'id'
+                          ? "Data yang Anda kirimkan akan diproses sesuai kebijakan privasi perusahaan."
+                          : "The data you submit will be processed in accordance with the company's privacy policy."}
+                      </p>
+                    </div>
                   </div>
                 </form>
               </div>
