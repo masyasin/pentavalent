@@ -26,6 +26,7 @@ const documentTypes = [
     { id: 'financial_report', label: 'Financial Report' },
     { id: 'public_disclosure', label: 'Public Disclosure' },
     { id: 'prospectus', label: 'Prospectus' },
+    { id: 'rups_report', label: 'RUPS Report' },
     { id: 'gcg', label: 'GCG' },
 ];
 

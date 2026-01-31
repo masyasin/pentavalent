@@ -169,6 +169,45 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     initAuth();
   }, []);
 
+  // Idle Timer Logic - Auto logout after 30 minutes of inactivity
+  useEffect(() => {
+    if (!user || !token) return;
+
+    let idleTimer: NodeJS.Timeout;
+    const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+
+    const handleIdle = () => {
+      console.log('User idle for 30 minutes, logging out...');
+      logout();
+    };
+
+    const resetTimer = () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(handleIdle, IDLE_TIMEOUT);
+    };
+
+    // Events that count as activity
+    const activityEvents = [
+      'mousedown', 'mousemove', 'keydown',
+      'scroll', 'touchstart', 'click'
+    ];
+
+    // Initialize timer
+    resetTimer();
+
+    // Add activity listeners
+    activityEvents.forEach(event => {
+      window.addEventListener(event, resetTimer);
+    });
+
+    return () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, resetTimer);
+      });
+    };
+  }, [user, token]);
+
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
       const { data, error } = await supabase.functions.invoke('auth', {

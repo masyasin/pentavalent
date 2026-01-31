@@ -112,11 +112,11 @@ const ContactSection: React.FC = () => {
             {t('contact.tagline')}
           </span>
           <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-accent pl-6 md:pl-10">
-            {t('contact.subtitle.text')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('contact.subtitle.italic')}</span>
+            {t('contact.title.text')} <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('contact.title.italic')}</span>
           </h2>
           <p className="text-fluid-body text-slate-500 max-w-xl">
-            {t('contact.desc')}
+            {t('contact.description')}
           </p>
         </div>
 

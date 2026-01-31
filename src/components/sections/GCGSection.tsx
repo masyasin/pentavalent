@@ -147,16 +147,16 @@ const GCGSection: React.FC = () => {
                         </div>
                     </div>
 
-                    <span className="inline-block px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-[10px] font-black tracking-[0.3em] uppercase mb-8 border border-blue-100">
-                        {language === 'id' ? 'TATA KELOLA PERUSAHAAN' : 'CORPORATE GOVERNANCE'}
+                    <span className="inline-block px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 border border-blue-100 shadow-xl shadow-blue-500/5">
+                        {t('gcg.tagline')}
                     </span>
 
                     <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-emerald-500 pl-6 md:pl-10">
                         {t('gcg.title.text')} <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('gcg.title.italic')}</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('gcg.title.italic')}</span>
                     </h2>
                     <p className="text-fluid-body text-gray-500 max-w-3xl">
-                        {t('gcg.desc')}
+                        {t('gcg.description')}
                     </p>
                 </div>
 

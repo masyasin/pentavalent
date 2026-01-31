@@ -1,30 +1,74 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Search, X } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Search, X, ChevronDown, Building2, Target, Users, Globe, ShieldCheck, ArrowRight, Server, TrendingUp, Activity, FileText, FileSearch, Info } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../../lib/supabase';
 
 interface HeaderProps {
   onNavigate: (section: string) => void;
   activeSection: string;
 }
 
+interface NavMenu {
+  id: string;
+  label_id: string;
+  label_en: string;
+  path: string;
+  parent_id: string | null;
+  sort_order: number;
+  location?: string;
+}
+
 const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
   const { language, setLanguage, t } = useLanguage();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [menus, setMenus] = useState<NavMenu[]>([]);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [settings, setSettings] = useState<any>(null);
 
-  // Autocomplete Data
-  const searchItems = [
-    { type: 'Section', label: t('nav.about'), id: 'about', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { type: 'Section', label: t('nav.business'), id: 'business', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
-    { type: 'Section', label: t('nav.network'), id: 'network', icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { type: 'Section', label: t('nav.career'), id: 'career', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-    { type: 'Section', label: t('nav.contact'), id: 'contact', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
-    { type: 'Info', label: t('nav.investor'), id: 'investor', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { type: 'Info', label: t('nav.news'), id: 'news', icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z' },
-  ];
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const { data: menuData, error: menuError } = await supabase
+        .from('nav_menus')
+        .select('*')
+        .eq('is_active', true)
+        .eq('location', 'header')
+        .order('sort_order', { ascending: true });
+
+      if (menuError) throw menuError;
+      setMenus(menuData || []);
+
+      const { data: settingsData, error: settingsError } = await supabase
+        .from('site_settings')
+        .select('*')
+        .single();
+
+      if (!settingsError) {
+        setSettings(settingsData);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  // Autocomplete Data based on dynamic menus
+  const searchItems = menus.map(menu => ({
+    type: 'Menu',
+    label: language === 'id' ? menu.label_id : menu.label_en,
+    id: menu.path.replace('#', '').replace('/', ''),
+    icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+  }));
 
   const filteredResults = searchQuery
     ? searchItems.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -43,16 +87,25 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { id: 'about', label: t('nav.about') },
-    { id: 'business', label: t('nav.business') },
-    { id: 'network', label: t('nav.network') },
-    { id: 'certification', label: t('nav.certification') },
-    { id: 'investor', label: t('nav.investor') },
-    { id: 'news', label: t('nav.news') },
-    { id: 'career', label: t('nav.career') }, // Fixed: uses translation key
-    { id: 'contact', label: t('nav.contact') },
-  ];
+  const parentMenus = menus.filter(m => !m.parent_id);
+
+  const getChildMenus = (parentId: string) => menus.filter(m => m.parent_id === parentId);
+
+  const handleLinkClick = (path: string) => {
+    if (path.startsWith('#')) {
+      if (location.pathname !== '/') {
+        navigate('/' + path);
+      } else {
+        onNavigate(path.substring(1));
+      }
+    } else if (path.startsWith('/')) {
+      navigate(path);
+    } else if (path.startsWith('http')) {
+      window.open(path, '_blank');
+    }
+    setIsMobileMenuOpen(false);
+    setActiveDropdown(null);
+  };
 
   return (
     <>
@@ -75,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               >
                 <div className="transition-all duration-700 flex items-center justify-center py-1">
                   <img
-                    src="/logo-icon.png"
+                    src={settings?.logo_url || "/logo-icon.png"}
                     alt="Penta Valent"
                     className={`${isScrolled ? 'h-10 lg:h-14' : 'h-12 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
                   />
@@ -83,20 +136,124 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               </div>
             </div>
 
-            {/* Navigation Column - Optimized for density */}
+            {/* Navigation Column - Dynamic menus from Admin */}
             <nav className="hidden xl:flex items-center justify-center gap-0.5 flex-none">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => onNavigate(item.id)}
-                  className={`px-3 lg:px-5 py-2 rounded-full text-[11px] lg:text-[13px] font-black uppercase tracking-wider transition-all duration-300 relative group whitespace-nowrap ${activeSection === item.id
-                    ? (isScrolled ? 'bg-gradient-to-r from-[#0052D4] to-[#4364F7] text-white shadow-lg shadow-blue-500/30' : 'text-white bg-white/10 ring-1 ring-white/20')
-                    : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-50' : 'text-white/80 hover:text-white hover:bg-white/5')
-                    }`}
-                >
-                  <span className="relative z-10">{item.label}</span>
-                </button>
-              ))}
+              {parentMenus.map((menu) => {
+                const children = getChildMenus(menu.id);
+                const hasChildren = children.length > 0;
+                const menuLabel = language === 'id' ? menu.label_id : menu.label_en;
+                const isActive = activeSection === menu.path.substring(1);
+
+                return (
+                  <div
+                    key={menu.id}
+                    className="relative group"
+                    onMouseEnter={() => hasChildren && setActiveDropdown(menu.id)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
+                    <button
+                      onClick={() => !hasChildren && handleLinkClick(menu.path)}
+                      className={`px-3 lg:px-4 py-2.5 rounded-full text-[11px] lg:text-[12px] font-black uppercase tracking-[0.16em] transition-all duration-500 relative flex items-center gap-2 group/btn ${isActive
+                        ? (isScrolled ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'text-white bg-white/20 ring-1 ring-white/30')
+                        : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-100/50' : 'text-white/80 hover:text-white hover:bg-white/10')
+                        }`}
+                    >
+                      <span className="relative z-10 transition-transform duration-300 group-hover/btn:scale-105">{menuLabel}</span>
+                      {hasChildren && (
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ${activeDropdown === menu.id ? 'rotate-180' : ''}`} />
+                      )}
+
+                      {/* Active Indicator Underline */}
+                      {isActive && !isScrolled && (
+                        <motion.div layoutId="nav-active" className="absolute -bottom-1 left-4 right-4 h-0.5 bg-primary rounded-full shadow-[0_0_10px_#22d3ee]" />
+                      )}
+                    </button>
+
+                    {/* Desktop Dropdown - Upgraded to Premium Enterprise Style */}
+                    <AnimatePresence>
+                      {hasChildren && activeDropdown === menu.id && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+                          className="absolute top-full left-0 mt-3 w-[320px] bg-white/90 backdrop-blur-2xl border border-white/40 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] rounded-[2.5rem] p-4 overflow-hidden z-[100]"
+                        >
+                          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-primary via-cyan-400 to-transparent opacity-20"></div>
+                          <div className="space-y-2 relative z-10">
+                            {children.map(child => {
+                              const icons: Record<string, any> = {
+                                '/about/profile': <Building2 size={18} />,
+                                '/about/vision-mission': <Target size={18} />,
+                                '/about/management': <Users size={18} />,
+                                '/about/network-partners': <Globe size={18} />,
+                                '/about/legality-achievements': <ShieldCheck size={18} />,
+                                '/business/pharmaceuticals': <Building2 size={18} />,
+                                '/business/consumer-goods': <Target size={18} />,
+                                '/business/strategi-usaha': <TrendingUp size={18} />,
+                                '/business/distribution-flow': <Server size={18} />,
+                                '/business/target-market': <Users size={18} />,
+                                '/investor/ringkasan-investor': <TrendingUp size={18} />,
+                                '/investor/informasi-saham': <Activity size={18} />,
+                                '/investor/laporan-keuangan': <FileText size={18} />,
+                                '/investor/prospektus': <FileSearch size={18} />,
+                                '/investor/rups': <Users size={18} />,
+                                '/investor/keterbukaan-informasi': <Info size={18} />
+                              };
+
+                              const descriptions: Record<string, any> = {
+                                '/about/profile': language === 'id' ? 'Sejarah & Profil Korporasi' : 'Corporate History & Profile',
+                                '/about/vision-mission': language === 'id' ? 'Arah Strategis & Nilai Inti' : 'Strategic Direction & Core Values',
+                                '/about/management': language === 'id' ? 'Dewan Direksi & Komisaris' : 'Board of Directors & Commissioners',
+                                '/about/network-partners': language === 'id' ? 'Distribusi & Prinsipal Global' : 'Global Distribution & Principals',
+                                '/about/legality-achievements': language === 'id' ? 'Sertifikasi & Legalitas' : 'Legality & Achievements',
+                                '/business/pharmaceuticals': language === 'id' ? 'Solusi Distribusi Farmasi' : 'Pharmaceutical Distribution Solutions',
+                                '/business/consumer-goods': language === 'id' ? 'Produk Kebutuhan Sehari-hari' : 'Consumer Goods Products',
+                                '/business/strategi-usaha': language === 'id' ? 'Strategi Bisnis & Usaha' : 'Business & Growth Strategy',
+                                '/business/distribution-flow': language === 'id' ? 'Alur Distribusi Kami' : 'Our Distribution Flow',
+                                '/business/target-market': language === 'id' ? 'Cakupan Target Pasar' : 'Market Target Coverage',
+                                '/investor/ringkasan-investor': language === 'id' ? 'Ringkasan Kinerja Keuangan' : 'Financial Highlights',
+                                '/investor/informasi-saham': language === 'id' ? 'Data & Grafik Saham PENT' : 'PENT Stock Data & Charts',
+                                '/investor/laporan-keuangan': language === 'id' ? 'Laporan Tahunan & Kuartalan' : 'Annual & Quarterly Reports',
+                                '/investor/prospektus': language === 'id' ? 'Prospektus & Dokumen IPO' : 'Prospectus & IPO Documents',
+                                '/investor/rups': language === 'id' ? 'Info RUPS Terkini' : 'Latest General Meetings Info',
+                                '/investor/keterbukaan-informasi': language === 'id' ? 'Berita & Fakta Material' : 'Material News & Facts'
+                              };
+
+                              return (
+                                <button
+                                  key={child.id}
+                                  onClick={() => handleLinkClick(child.path)}
+                                  className="w-full text-left p-4 rounded-[1.5rem] bg-transparent hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-300 flex items-start gap-4 group/item relative overflow-hidden"
+                                >
+                                  <div className="w-10 h-10 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center transition-all group-hover/item:bg-primary group-hover/item:text-white group-hover/item:scale-110 shadow-sm border border-slate-100/50">
+                                    {icons[child.path] || <ArrowRight size={18} />}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="text-xs font-black text-slate-800 uppercase tracking-tight group-hover/item:text-primary transition-colors flex items-center justify-between">
+                                      {language === 'id' ? child.label_id : child.label_en}
+                                      <ArrowRight size={14} className="opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all text-primary" />
+                                    </div>
+                                    <p className="text-[10px] font-medium text-slate-400 mt-1 leading-relaxed line-clamp-1 group-hover/item:text-slate-500 transition-colors">
+                                      {descriptions[child.path] || (language === 'id' ? 'Informasi lebih lanjut' : 'Further information')}
+                                    </p>
+                                  </div>
+
+                                  {/* Item Shine Effect */}
+                                  <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-25deg] transition-all duration-[600ms] group-hover/item:left-[100%]"></div>
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          {/* Dropdown Decorative Glow */}
+                          <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
             </nav>
 
             {/* Actions Column - Compact right side */}
@@ -160,21 +317,56 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             </div>
             <div className="flex-1 overflow-y-auto py-6">
               <nav className="space-y-1.5 px-6">
-                {navItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      onNavigate(item.id);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-base font-bold transition-all touch-active ${activeSection === item.id ? 'bg-cyan-50 text-cyan-600 border-l-4 border-cyan-500' : 'text-gray-600 hover:bg-gray-50'}`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span>{item.label}</span>
-                      <svg className="w-4 h-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+                {parentMenus.map((menu) => {
+                  const children = getChildMenus(menu.id);
+                  const hasChildren = children.length > 0;
+                  const menuLabel = language === 'id' ? menu.label_id : menu.label_en;
+                  const isOpen = activeDropdown === menu.id;
+                  const isActive = activeSection === menu.path.substring(1);
+
+                  return (
+                    <div key={menu.id} className="space-y-2">
+                      <button
+                        onClick={() => hasChildren ? setActiveDropdown(isOpen ? null : menu.id) : handleLinkClick(menu.path)}
+                        className={`w-full text-left px-6 py-5 rounded-[2rem] text-sm font-black uppercase tracking-widest transition-all flex items-center justify-between border ${isActive
+                          ? 'bg-slate-900 text-white border-slate-900 shadow-xl shadow-slate-900/20'
+                          : 'text-slate-600 bg-slate-50 border-slate-100 hover:bg-white hover:border-primary/30'}`}
+                      >
+                        <span>{menuLabel}</span>
+                        {hasChildren ? (
+                          <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isOpen ? 'rotate-180 text-primary' : 'opacity-30'}`} />
+                        ) : (
+                          <ArrowRight size={16} className="opacity-20" />
+                        )}
+                      </button>
+
+                      {/* Mobile Dropdown - Upgraded */}
+                      <AnimatePresence>
+                        {hasChildren && isOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden pl-4 pr-2 space-y-2"
+                          >
+                            {children.map(child => (
+                              <button
+                                key={child.id}
+                                onClick={() => handleLinkClick(child.path)}
+                                className="w-full text-left px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-400 bg-white border border-slate-50 hover:border-primary/20 hover:text-primary transition-all flex items-center justify-between group"
+                              >
+                                <span>{language === 'id' ? child.label_id : child.label_en}</span>
+                                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                  <ArrowRight size={12} />
+                                </div>
+                              </button>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </button>
-                ))}
+                  );
+                })}
               </nav>
             </div>
             <div className="p-6 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm">
@@ -250,16 +442,20 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4">Suggested</h5>
                   {/* Static quick links */}
                   <div className="grid grid-cols-2 gap-3 px-2">
-                    {[
-                      { label: t('nav.business'), id: 'business', color: 'text-blue-500' },
-                      { label: t('nav.network'), id: 'network', color: 'text-cyan-500' },
-                      { label: t('nav.career'), id: 'career', color: 'text-purple-500' },
-                      { label: t('nav.investor'), id: 'investor', color: 'text-orange-500' },
-                    ].map(item => (
-                      <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-md transition-all text-left">
-                        <span className={`text-[10px] font-black uppercase tracking-widest ${item.color}`}>{item.label}</span>
-                      </button>
-                    ))}
+                    {menus
+                      .filter(m => !m.parent_id && m.location !== 'footer')
+                      .slice(0, 4)
+                      .map(item => (
+                        <button
+                          key={item.id}
+                          onClick={() => { handleLinkClick(item.path); setIsSearchOpen(false); }}
+                          className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-md transition-all text-left"
+                        >
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
+                            {language === 'id' ? item.label_id : item.label_en}
+                          </span>
+                        </button>
+                      ))}
                   </div>
                 </div>
               )}

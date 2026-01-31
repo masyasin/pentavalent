@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import RichTextEditor from '../../components/admin/RichTextEditor';
 import FileUpload from '../../components/admin/FileUpload';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Save, RefreshCw, CheckCircle2, AlertCircle, Type, Image as ImageIcon, Briefcase, Eye, Target, Sparkles, Network, Building2, User as UserIcon } from 'lucide-react';
@@ -271,15 +272,16 @@ const GeneralInfoManager: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-6 pt-4 border-t border-gray-50">
+                            <div className="space-y-6">
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Description (ID)</label>
-                                    <textarea
-                                        value={info?.description_id}
-                                        onChange={(e) => setInfo({ ...info!, description_id: e.target.value })}
-                                        rows={4}
-                                        className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2rem] transition-all font-medium text-base leading-relaxed"
-                                    />
+                                    <div className="rounded-[2rem] overflow-hidden border-2 border-transparent focus-within:border-blue-500 transition-all">
+                                        <RichTextEditor
+                                            content={info?.description_id || ''}
+                                            onChange={(content) => setInfo({ ...info!, description_id: content })}
+                                            placeholder="Deskripsi perusahaan dalam Bahasa Indonesia..."
+                                        />
+                                    </div>
                                 </div>
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center px-2">
@@ -294,12 +296,13 @@ const GeneralInfoManager: React.FC = () => {
                                             <span className="text-[8px] font-black uppercase tracking-widest">Auto Translate</span>
                                         </button>
                                     </div>
-                                    <textarea
-                                        value={info?.description_en}
-                                        onChange={(e) => setInfo({ ...info!, description_en: e.target.value })}
-                                        rows={4}
-                                        className="w-full px-6 py-5 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2rem] transition-all font-medium text-base leading-relaxed"
-                                    />
+                                    <div className="rounded-[2rem] overflow-hidden border-2 border-transparent focus-within:border-blue-500 transition-all">
+                                        <RichTextEditor
+                                            content={info?.description_en || ''}
+                                            onChange={(content) => setInfo({ ...info!, description_en: content })}
+                                            placeholder="Company description in English..."
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

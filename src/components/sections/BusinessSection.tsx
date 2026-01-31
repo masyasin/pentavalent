@@ -83,7 +83,7 @@ const BusinessSection: React.FC = () => {
   if (loading || businessLines.length === 0) return null;
 
   return (
-    <section id="business" className="py-20 md:py-40 bg-white relative overflow-hidden">
+    <section id="business" className="py-20 md:py-40 lg:py-64 bg-white relative overflow-hidden">
       {/* Dynamic Background Accents */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[1000px] h-[1000px] bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
@@ -97,7 +97,7 @@ const BusinessSection: React.FC = () => {
             </span>
             <h2 className="text-fluid-h1 py-2 mb-6 md:mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
               {t('business.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('business.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('business.title.italic')}</span>
             </h2>
             <p className="text-fluid-body text-slate-500 max-w-xl">
               {t('business.description')}
@@ -149,18 +149,12 @@ const BusinessSection: React.FC = () => {
                 key={line.id}
                 onClick={() => setActiveTab(index)}
                 className={`relative flex-1 px-4 py-3 md:px-10 md:py-5 rounded-xl md:rounded-[2rem] text-[10px] md:text-[11px] font-black uppercase tracking-wider transition-all duration-700 flex items-center justify-center gap-2 md:gap-3 touch-active ${activeTab === index
-                  ? 'text-white'
+                  ? 'bg-white text-slate-900 shadow-lg shadow-slate-200/50'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
                 aria-label={`Switch to ${language === 'id' ? line.title_id : line.title_en} division`}
               >
-                {activeTab === index && (
-                  <div className="absolute inset-0 wow-button-gradient animate-in fade-in zoom-in duration-500 rounded-xl md:rounded-[2rem]"></div>
-                )}
                 <span className="relative z-10 text-center">{language === 'id' ? line.title_id : line.title_en}</span>
-                {activeTab === index && (
-                  <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-accent relative z-10 animate-pulse"></div>
-                )}
               </button>
             ))}
           </div>
@@ -282,12 +276,7 @@ const BusinessSection: React.FC = () => {
 
                 {/* Features Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 mb-12 md:mb-20">
-                  {(businessLines[activeTab].features || [
-                    'National Logistics Network',
-                    'Cold Chain Management',
-                    'AI-Driven Inventory',
-                    'Regulatory Compliance'
-                  ]).map((feature, index) => (
+                  {(businessLines[activeTab].features || []).map((feature, index) => (
                     <div key={index} className="flex items-center gap-4 md:gap-5">
                       <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center flex-shrink-0 text-cyan-500 shadow-lg shadow-cyan-500/10 scale-90 md:scale-100">
                         <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,7 +338,7 @@ const BusinessSection: React.FC = () => {
               bg: 'bg-indigo-50'
             }
           ].map((item, i) => (
-            <div key={i} className="group relative bg-white p-8 md:p-12 rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 overflow-hidden">
+            <div key={i} className="group relative bg-white p-8 md:p-12 lg:p-20 rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 overflow-hidden">
               {/* Background Accent */}
               <div className={`absolute top-0 right-0 w-32 h-32 ${item.bg} rounded-bl-[8rem] transform transition-transform duration-700 group-hover:scale-150 group-hover:bg-slate-900 group-hover:opacity-5 opacity-50`}></div>
 

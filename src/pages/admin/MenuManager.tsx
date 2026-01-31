@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import { toast } from 'sonner';
 import {
     Plus, Edit2, Trash2, ArrowUp, ArrowDown,
     Link as LinkIcon, ExternalLink, Layout,
@@ -80,6 +81,7 @@ const MenuManager: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            setLoading(true);
             const dataToSave = {
                 ...formData,
                 parent_id: formData.parent_id === '' ? null : formData.parent_id
@@ -91,18 +93,23 @@ const MenuManager: React.FC = () => {
                     .update(dataToSave)
                     .eq('id', editingMenu.id);
                 if (error) throw error;
+                toast.success('Menu updated successfully');
             } else {
                 const { error } = await supabase
                     .from('nav_menus')
                     .insert(dataToSave);
                 if (error) throw error;
+                toast.success('Menu created successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchMenus();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving menu:', error);
+            toast.error(error.message || 'Failed to save menu');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -143,10 +150,12 @@ const MenuManager: React.FC = () => {
             setLoading(true);
             const { error } = await supabase.from('nav_menus').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            toast.success('Menu deleted successfully');
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchMenus();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting menu:', error);
+            toast.error(error.message || 'Failed to delete menu');
         } finally {
             setLoading(false);
         }
@@ -398,9 +407,13 @@ const MenuManager: React.FC = () => {
                                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-8 py-5 border-2 border-gray-100 text-gray-400 font-black rounded-2xl hover:bg-gray-50 transition-all uppercase tracking-widest text-xs">
                                     Cancel
                                 </button>
-                                <button type="submit" className="flex-1 px-8 py-5 bg-gray-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-200 uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                                    <Save size={18} />
-                                    Save Link
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="flex-1 px-8 py-5 bg-gray-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-200 uppercase tracking-widest text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {loading ? <RefreshCw size={18} className="animate-spin" /> : <Save size={18} />}
+                                    {loading ? 'Saving...' : 'Save Link'}
                                 </button>
                             </div>
                         </form>

@@ -113,7 +113,7 @@ const NewsSection: React.FC = () => {
   ];
 
   return (
-    <section id="news" className="py-24 md:py-36 bg-white relative overflow-hidden">
+    <section id="news" className="py-24 md:py-36 lg:py-48 bg-white relative overflow-hidden">
       {/* Super Premium Background Decor */}
       <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-gradient-to-br from-blue-50/50 via-cyan-50/30 to-transparent rounded-full blur-[120px] -mr-96 -mt-96 animate-pulse"></div>
       <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-cyan-50/30 via-blue-50/20 to-transparent rounded-full blur-[100px] -ml-64 -mb-64"></div>
@@ -128,11 +128,11 @@ const NewsSection: React.FC = () => {
               {t('news.tagline')}
             </span>
             <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
-              {t('news.title')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('news.subtitle')}</span>
+              {t('news.title.text')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('news.title.italic')}</span>
             </h2>
             <p className="text-fluid-body text-gray-500 max-w-3xl">
-              {t('news.desc')}
+              {t('news.description')}
             </p>
           </div>
           <div className="hidden sm:flex flex-col sm:flex-row items-start sm:items-center gap-6">

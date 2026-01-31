@@ -81,7 +81,7 @@ const InvestorSection: React.FC = () => {
             </span>
             <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10">
               {t('investor.title.text')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('investor.title.italic')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('investor.title.italic')}</span>
             </h2>
             <p className="text-fluid-body text-gray-500 max-w-3xl">
               {t('investor.description')}
@@ -93,7 +93,7 @@ const InvestorSection: React.FC = () => {
               <svg className="w-8 h-8 font-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
             </div>
             <div>
-              <div className="text-3xl font-black wow-text-primary inline-block transition-colors leading-none mb-1">PENT</div>
+              <div className="text-3xl font-black wow-text-primary inline-block transition-colors leading-none mb-1">PEVE</div>
               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-white/60 transition-colors">{t('investor.ticker.label')}</div>
             </div>
           </div>
@@ -149,7 +149,7 @@ const InvestorSection: React.FC = () => {
                 <div className="text-lg font-black wow-text-primary">AGMS FY2024</div>
               </div>
             </div>
-            <h3 className="text-4xl font-black mb-8 tracking-tighter leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-4">{t('investor.calendar.title')}</h3>
+            <h3 className="text-4xl font-black mb-8 tracking-tighter leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-4 pr-6">{t('investor.calendar.title')}</h3>
             <div className="space-y-8">
               {[
                 { date: 'MAR 15', label: 'FY2024 Financial Results Release', type: 'Earnings' },

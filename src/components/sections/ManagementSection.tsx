@@ -41,25 +41,25 @@ const ManagementSection: React.FC = () => {
   if (loading || management.length === 0) return null;
 
   return (
-    <section id="management" className="py-16 md:py-32 bg-gray-50 relative overflow-hidden">
+    <section id="management" className="py-20 md:py-32 lg:py-32 bg-gray-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
 
-      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="text-center mb-24">
-          <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
+      <div className="max-w-[1500px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
+        <div className="text-center mb-16 md:mb-20">
+          <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-6 border border-primary/10">
             {t('mgmt.title')}
           </span>
-          <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900">
+          <h2 className="text-fluid-h1 py-2 mb-8 text-slate-900 font-black tracking-tighter">
             {t('mgmt.visionary')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-6 inline-block">{t('mgmt.governance')}</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic px-2 inline-block pr-6">{t('mgmt.governance')}</span>
           </h2>
-          <p className="text-fluid-body text-gray-500 max-w-3xl mx-auto">
+          <p className="text-fluid-body text-gray-500 max-w-2xl mx-auto">
             {t('mgmt.desc')}
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {management.map((person) => (
             <div
               key={person.id}
@@ -117,24 +117,7 @@ const ManagementSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Governance Commitment */}
-        <div className="mt-20 md:mt-32 p-8 md:p-12 bg-white rounded-[3.5rem] border border-gray-100 enterprise-shadow text-center relative overflow-hidden group">
-          <div className="absolute top-0 left-0 w-2 h-full bg-accent"></div>
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="text-left">
-              <h3 className="text-2xl font-black text-primary tracking-tighter mb-2">{t('gcg.title')}</h3>
-              <p className="text-gray-400 font-bold text-sm">We strictly adhere to the highest standards of transparency and institutional ethics.</p>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-16 h-16 bg-gray-50 border border-slate-100 rounded-2xl flex items-center justify-center text-primary/40 group-hover:text-cyan-500 transition-colors shadow-sm">
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" /></svg>
-              </div>
-              <div className="w-16 h-16 bg-gray-50 border border-slate-100 rounded-2xl flex items-center justify-center text-primary/40 group-hover:text-cyan-500 transition-colors shadow-sm">
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" /></svg>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </section>
   );

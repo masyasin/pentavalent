@@ -79,7 +79,7 @@ const NetworkSection: React.FC = () => {
 
           <h2 className="text-fluid-h1 py-2 mb-8 text-slate-900">
             {t('network.title.text')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('network.title.italic')}</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('network.title.italic')}</span>
           </h2>
           <p className="text-fluid-body text-gray-500 max-w-3xl mx-auto">
             {t('network.header.desc')}
@@ -121,9 +121,13 @@ const NetworkSection: React.FC = () => {
                 </div>
                 <button
                   onClick={() => setModalBranch(branch)}
-                  className="w-full py-4 bg-slate-50 hover:bg-cyan-500 hover:text-white text-slate-900 border border-slate-200 rounded-2xl text-xs font-black uppercase tracking-widest transition-all touch-active"
+                  className="w-full py-4 bg-slate-50 hover:bg-slate-900 group/btn hover:text-white text-slate-900 border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 touch-active"
                 >
-                  {t('map.view_on_map') || 'Lihat Peta'}
+                  {t('map.view_on_map')}
+                  <svg className="w-4 h-4 transition-transform duration-500 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
                 </button>
               </div>
             </div>

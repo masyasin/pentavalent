@@ -8,9 +8,73 @@ interface Partner {
   logo_url: string;
   partner_type: string;
   website: string;
+  description_id: string;
+  description_en: string;
 }
 
+const PartnerCard: React.FC<{
+  partner: Partner;
+  index: number;
+  partnerColors: string[];
+  language: string;
+  getPartnerInitials: (name: string) => string;
+}> = ({ partner, index, partnerColors, language, getPartnerInitials }) => {
+  const [imgError, setImgError] = useState(false);
+
+  return (
+    <div
+      className="group relative bg-white rounded-[2.5rem] p-4 flex flex-col items-center text-center transition-all duration-700 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 border border-slate-100/80 overflow-hidden"
+    >
+      {/* Logo Box - Clean & Minimalist */}
+      <div className="w-full aspect-[16/10] bg-slate-50/30 rounded-[2rem] flex items-center justify-center relative mb-6 overflow-hidden border border-slate-50 group/logo">
+        {partner.logo_url && !imgError ? (
+          <img
+            src={partner.logo_url}
+            alt={partner.name}
+            onError={() => setImgError(true)}
+            className="w-[85%] h-[85%] object-contain relative z-10 transition-all duration-700 group-hover:scale-110"
+          />
+        ) : (
+          <div className={`w-14 h-14 ${partnerColors[index % partnerColors.length]} rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md relative z-10`}>
+            {getPartnerInitials(partner.name)}
+          </div>
+        )}
+      </div>
+
+      {/* Content - Clean & Proportional */}
+      <div className="px-4 pb-6 flex flex-col flex-grow items-center w-full">
+        <h3 className="text-lg md:text-xl font-black text-slate-800 mb-3 uppercase italic tracking-tight leading-tight min-h-[2.5rem] flex items-center justify-center">
+          {partner.name}
+        </h3>
+
+        <p className="text-slate-400 font-medium text-[13px] leading-relaxed mb-6 line-clamp-3">
+          {language === 'id' ? partner.description_id : partner.description_en}
+        </p>
+
+        <button
+          onClick={() => partner.website && window.open(partner.website, '_blank')}
+          className="mt-auto group/btn flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-primary transition-all duration-500"
+        >
+          DISCOVER MORE
+          <svg
+            className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:translate-x-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Subtle Hover Accent */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    </div>
+  );
+};
+
 const PartnersSection: React.FC = () => {
+  const { language } = useLanguage();
   const { t } = useLanguage();
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,37 +105,36 @@ const PartnersSection: React.FC = () => {
     ? partners
     : partners.filter(p => p.partner_type === activeFilter);
 
-  // Generate placeholder logos for partners
+  // Generate placeholder colors for partners without logos
+  const partnerColors = [
+    'bg-blue-600', 'bg-cyan-600', 'bg-green-600', 'bg-purple-600',
+    'bg-red-600', 'bg-orange-600'
+  ];
+
   const getPartnerInitials = (name: string) => {
     return name.split(' ').map(word => word[0]).join('').slice(0, 2).toUpperCase();
   };
 
-  const partnerColors = [
-    'bg-blue-600', 'bg-cyan-600', 'bg-green-600', 'bg-purple-600',
-    'bg-red-600', 'bg-orange-600', 'bg-pink-600', 'bg-indigo-600',
-    'bg-teal-600', 'bg-yellow-600', 'bg-emerald-600', 'bg-rose-600'
-  ];
-
   return (
-    <section id="partners" className="py-20 md:py-32 bg-gray-50 relative overflow-hidden">
+    <section id="partners" className="py-24 md:py-36 bg-[#f8fafc] relative overflow-hidden">
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20 uppercase tracking-tight">
-          <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] mb-6 border border-primary/10">
+        <div className="text-center max-w-3xl mx-auto mb-24">
+          <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[11px] font-black tracking-[0.3em] uppercase mb-8 border border-primary/20">
             {t('partners.tagline')}
           </span>
-          <h2 className="text-fluid-h1 py-2 mb-8 text-slate-900">
+          <h2 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 tracking-tighter uppercase">
             {t('partners.title.text')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block">{t('partners.title.italic')}</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic pr-4">{t('partners.title.italic')}</span>
           </h2>
-          <p className="text-fluid-body text-gray-500">
+          <p className="text-xl text-slate-500 leading-relaxed font-medium">
             {t('partners.description')}
           </p>
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex justify-center mb-16">
-          <div className="inline-flex bg-gray-100/80 p-1.5 rounded-2xl border border-gray-200 backdrop-blur-sm">
+        <div className="flex justify-center mb-20">
+          <div className="inline-flex bg-white/80 p-2 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 backdrop-blur-xl">
             {[
               { id: 'all', label: t('partners.filter.all') },
               { id: 'principal', label: t('partners.filter.national') },
@@ -80,9 +143,9 @@ const PartnersSection: React.FC = () => {
               <button
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
-                className={`px-4 sm:px-8 py-2 sm:py-3 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 ${activeFilter === filter.id
-                  ? 'wow-button-gradient text-white shadow-xl'
-                  : 'bg-white text-gray-400 hover:bg-gray-50 hover:text-slate-600'
+                className={`px-8 sm:px-10 py-3 sm:py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-500 ${activeFilter === filter.id
+                  ? 'bg-slate-900 text-white shadow-lg'
+                  : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
                   }`}
               >
                 {filter.label}
@@ -93,28 +156,22 @@ const PartnersSection: React.FC = () => {
 
         {/* Partners Grid */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="bg-white/50 border border-gray-100 rounded-3xl p-8 h-40 animate-pulse"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="bg-white rounded-[3.5rem] h-[550px] animate-pulse"></div>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredPartners.map((partner, index) => (
-              <div
+              <PartnerCard
                 key={partner.id}
-                className="bg-white rounded-[2rem] p-10 flex items-center justify-center hover:shadow-4xl hover:-translate-y-2 transition-all duration-500 cursor-pointer group border border-gray-100 enterprise-shadow relative overflow-hidden touch-active active:scale-[0.98]"
-                onClick={() => partner.website && window.open(partner.website, '_blank')}
-                aria-label={`Visit ${partner.name} website`}
-              >
-                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className={`w-20 h-20 ${partnerColors[index % partnerColors.length]} rounded-3xl flex items-center justify-center text-white font-black text-2xl group-hover:scale-110 group-hover:wow-button-gradient transition-all shadow-lg`}>
-                  {getPartnerInitials(partner.name)}
-                </div>
-                <div className="absolute bottom-4 left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <span className="text-[9px] font-black wow-text-primary uppercase tracking-[0.2em]">{partner.name}</span>
-                </div>
-              </div>
+                partner={partner}
+                index={index}
+                partnerColors={partnerColors}
+                language={language}
+                getPartnerInitials={getPartnerInitials}
+              />
             ))}
           </div>
         )}

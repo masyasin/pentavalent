@@ -90,7 +90,7 @@ const AboutSection: React.FC = () => {
   return (
     <section id="about" className="py-16 md:py-32 bg-white relative overflow-hidden">
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center mb-20 md:mb-32">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-32 items-center mb-20 md:mb-32 lg:mb-48">
           <div className="lg:w-1/2">
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
               {info ? (language === 'id' ? info.tagline_id : info.tagline_en) : t('about.tagline')}
@@ -159,7 +159,7 @@ const AboutSection: React.FC = () => {
             {/* Border Glow Effect */}
             <div className="absolute inset-0 rounded-[4rem] border border-white/10"></div>
 
-            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40">
+            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40 lg:py-64">
               <div className="max-w-[1400px] mx-auto">
                 {/* Premium Section Header */}
                 <div className="text-center mb-24 px-4">
@@ -350,7 +350,7 @@ const AboutSection: React.FC = () => {
             {/* Border Glow Effect */}
             <div className="absolute inset-0 rounded-[4rem] border border-white/10"></div>
 
-            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40">
+            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40 lg:py-64">
               <div className="max-w-[1600px] mx-auto">
                 {/* Premium Header */}
                 <div className="text-center max-w-4xl mx-auto mb-24 px-4">
@@ -566,7 +566,7 @@ const AboutSection: React.FC = () => {
             {/* Border Glow Effect */}
             <div className="absolute inset-0 rounded-[4rem] border border-white/10"></div>
 
-            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40">
+            <div className="relative z-10 px-6 md:px-12 lg:px-16 py-40 lg:py-64">
               <div className="max-w-[1200px] mx-auto">
                 {/* Premium Header */}
                 <div className="text-center mb-32 px-4">

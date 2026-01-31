@@ -119,6 +119,20 @@ const translations: Translations = {
   'investor.calendar.title': { id: 'Kalender Investor', en: 'Investor Calendar' },
   'investor.calendar.upcoming': { id: 'Acara Mendatang', en: 'Upcoming Event' },
   'investor.disclosure.share': { id: 'Bagikan Pengungkapan', en: 'Share Disclosure' },
+  'investor.nav.title': { id: 'Navigasi Investor', en: 'Investor Navigation' },
+  'investor.nav.highlights': { id: 'Ringkasan Investor', en: 'Investor Highlight' },
+  'investor.nav.stock': { id: 'Informasi Saham', en: 'Stock Information' },
+  'investor.nav.financials': { id: 'Laporan Keuangan', en: 'Financial Reports' },
+  'investor.nav.prospectus': { id: 'Prospektus', en: 'Prospectus' },
+  'investor.nav.rups': { id: 'RUPS', en: 'General Meetings' },
+  'investor.nav.disclosure': { id: 'Keterbukaan Informasi', en: 'Information Disclosure' },
+  'investor.docs.empty': { id: 'Belum ada dokumen yang tersedia di kategori ini.', en: 'No documents available for this category yet.' },
+  'investor.docs.download': { id: 'Unduh PDF', en: 'Download PDF' },
+  'investor.stock.performance': { id: 'Performa Saham PEVE', en: 'PEVE Stock Performance' },
+  'investor.stock.chart_placeholder': { id: 'Visualisasi Grafik Saham - Hub Realtime', en: 'Stock Chart Visualization - Realtime Hub' },
+  'investor.contact.title': { id: 'Hubungi IR', en: 'Contact IR' },
+  'investor.contact.desc': { id: 'Ada pertanyaan mengenai performa perusahaan?', en: 'Have questions regarding company performance?' },
+  'investor.contact.button': { id: 'Email Tim IR', en: 'Email IR Team' },
 
   // News
   'news.tagline': { id: 'Pers & Wawasan', en: 'Press & Insights' },
@@ -371,7 +385,10 @@ const translations: Translations = {
   'qa.iso.title': { id: 'Kepatuhan ISO 9001:2015', en: 'ISO 9001:2015 Compliant' },
   'qa.iso.desc': { id: 'Sertifikasi manajemen mutu internasional.', en: 'International quality management certification.' },
 
-  'gcg.title': { id: 'Tata Kelola Perusahaan yang Baik', en: 'Good Corporate Governance' },
+  'gcg.tagline': { id: 'TATA KELOLA PERUSAHAAN', en: 'CORPORATE GOVERNANCE' },
+  'gcg.title.text': { id: 'Tata Kelola,', en: 'Good Corporate,' },
+  'gcg.title.italic': { id: 'Perusahaan yang Baik', en: 'Governance Excellence' },
+  'gcg.description': { id: 'Penta Valent berkomitmen untuk menjunjung tinggi standar transparansi, akuntabilitas, dan integritas dalam seluruh aspek operasional bisnis kami.', en: 'Penta Valent is committed to upholding the highest standards of transparency, accountability, and integrity across all aspects of our business operations.' },
 
   'career.future.title': { id: 'Future Talent Pipeline', en: 'Future Talent Pipeline' },
   'career.future.desc': { id: 'Bangun Masa Depan Kesehatan Bersama Kami', en: 'Build the Future of Healthcare With Us' },
@@ -379,6 +396,7 @@ const translations: Translations = {
   'contact.cta.title': { id: 'Hubungkan Visi Anda', en: 'Connect Your Vision' },
   'contact.cta.subtitle': { id: 'Saluran Intelijen Langsung', en: 'Direct Intelligence Channel' },
   'contact.fast_response': { id: 'Jalur Respon Cepat', en: 'Fast Response Line' },
+  'map.view_on_map': { id: 'Lihat Detail Lokasi', en: 'Explore Location Details' },
 
 };
 

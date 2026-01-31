@@ -273,7 +273,7 @@ const NewsDetail: React.FC = () => {
         <div className="min-h-screen bg-background font-sans text-foreground">
             <Header onNavigate={handleNavigate} activeSection="news" />
 
-            <section className="relative h-[60dvh] w-full overflow-hidden bg-slate-900 border-b border-white/5">
+            <section className="relative h-[60dvh] md:min-h-[550px] lg:h-[75vh] lg:min-h-[650px] w-full overflow-hidden bg-slate-900">
                 <div className="absolute inset-0 z-0 embla h-full" ref={emblaRef}>
                     <div className="flex h-full">
                         {heroImages.map((img, idx) => (
@@ -283,8 +283,8 @@ const NewsDetail: React.FC = () => {
                                     alt={`Hero ${idx}`}
                                     className="w-full h-full object-cover opacity-50 transition-all duration-700"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-slate-950 z-10"></div>
-                                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/50 via-transparent to-slate-950/50 z-10"></div>
+                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-transparent z-10"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/40 via-transparent to-slate-950/40 z-10"></div>
                             </div>
                         ))}
                     </div>
@@ -303,7 +303,7 @@ const NewsDetail: React.FC = () => {
                         </div>
 
                         <div className="relative">
-                            <h1 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] max-w-4xl mx-auto text-white italic px-4 drop-shadow-2xl">
+                            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tighter leading-[1.1] max-w-4xl mx-auto text-white italic px-4 drop-shadow-2xl">
                                 {language === 'id' ? article.title_id : article.title_en}
                             </h1>
                             <div className="w-16 h-1 bg-primary mx-auto mt-8 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.8)]"></div>
