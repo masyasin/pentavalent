@@ -32,10 +32,15 @@ import UserActivityManager from './UserActivityManager';
 // Admin Pages Component with Auth Check and Routing
 const AdminContent: React.FC = () => {
   const { isAuthenticated, isInitializing, canAccessModule } = useAuth();
-  const [authView, setAuthView] = useState<'login' | 'forgot'>('login');
+  const [authView, setAuthView] = useState<'login' | 'forgot' | 'reset'>('login');
   const location = useLocation();
 
-  // Show loading state ONLY during initial boot
+  // Check for recovery flow
+  useEffect(() => {
+    if (location.pathname === '/admin/reset-password') {
+      setAuthView('reset');
+    }
+  }, [location]);
   if (isInitializing) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
