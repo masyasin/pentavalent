@@ -4,7 +4,8 @@ import { translateText } from '../../lib/translation';
 import FileUpload from '../../components/admin/FileUpload';
 import {
     Plus, Edit2, Trash2, FileText, Download,
-    X, Save, Filter, FileUp, Calendar, Sparkles, RefreshCw
+    X, Save, Filter, FileUp, Calendar, Sparkles, RefreshCw,
+    Search, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -50,6 +51,15 @@ const InvestorManager: React.FC = () => {
         file_url: '',
         is_published: true,
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         fetchDocuments();
@@ -174,6 +184,18 @@ const InvestorManager: React.FC = () => {
                 </button>
             </div>
 
+            {/* Search Check */}
+            <div className="relative max-w-xl">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+                <input
+                    type="text"
+                    placeholder="Search documents by title..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
+                />
+            </div>
+
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
@@ -187,59 +209,107 @@ const InvestorManager: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
-                            {loading ? (
-                                <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-400">Loading documents...</td>
-                                </tr>
-                            ) : documents.length === 0 ? (
-                                <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-400">No documents uploaded yet</td>
-                                </tr>
-                            ) : (
-                                documents.map((doc) => (
-                                    <tr key={doc.id} className="hover:bg-blue-50/30 transition-colors group">
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center">
-                                                    <FileText size={20} />
-                                                </div>
-                                                <div>
-                                                    <div className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{doc.title_id}</div>
-                                                    <div className="text-xs text-gray-500">{doc.title_en}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-[10px] font-black uppercase tracking-tight">
-                                                {doc.document_type.replace('_', ' ')}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                                                <Calendar size={14} className="text-blue-400" />
-                                                {doc.year} {doc.quarter ? `- ${doc.quarter}` : ''}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className={`inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest ${doc.is_published ? 'text-green-600' : 'text-red-600'
-                                                }`}>
-                                                <div className={`w-1.5 h-1.5 rounded-full ${doc.is_published ? 'bg-green-600' : 'bg-red-600'}`}></div>
-                                                {doc.is_published ? 'Published' : 'Draft'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button onClick={() => handleEdit(doc)} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-white rounded-lg transition-all">
-                                                    <Edit2 size={18} />
-                                                </button>
-                                                <button onClick={() => handleDelete(doc.id, doc.title_id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-white rounded-lg transition-all">
-                                                    <Trash2 size={18} />
-                                                </button>
-                                            </div>
-                                        </td>
+                            {(() => {
+                                const filteredDocs = documents.filter(doc => {
+                                    return doc.title_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        doc.title_en.toLowerCase().includes(searchTerm.toLowerCase());
+                                });
+
+                                const totalPages = Math.ceil(filteredDocs.length / itemsPerPage);
+                                const paginatedDocs = filteredDocs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+                                if (loading) return (
+                                    <tr>
+                                        <td colSpan={5} className="px-6 py-12 text-center text-gray-400">Loading documents...</td>
                                     </tr>
-                                ))
-                            )}
+                                );
+
+                                if (filteredDocs.length === 0) return (
+                                    <tr>
+                                        <td colSpan={5} className="px-6 py-12 text-center text-gray-400">No documents found</td>
+                                    </tr>
+                                );
+
+                                return (
+                                    <>
+                                        {paginatedDocs.map((doc) => (
+                                            <tr key={doc.id} className="hover:bg-blue-50/30 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center">
+                                                            <FileText size={20} />
+                                                        </div>
+                                                        <div>
+                                                            <div className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{doc.title_id}</div>
+                                                            <div className="text-xs text-gray-500">{doc.title_en}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-[10px] font-black uppercase tracking-tight">
+                                                        {doc.document_type.replace('_', ' ')}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
+                                                        <Calendar size={14} className="text-blue-400" />
+                                                        {doc.year} {doc.quarter ? `- ${doc.quarter}` : ''}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest ${doc.is_published ? 'text-green-600' : 'text-red-600'
+                                                        }`}>
+                                                        <div className={`w-1.5 h-1.5 rounded-full ${doc.is_published ? 'bg-green-600' : 'bg-red-600'}`}></div>
+                                                        {doc.is_published ? 'Published' : 'Draft'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <button onClick={() => handleEdit(doc)} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-white rounded-lg transition-all">
+                                                            <Edit2 size={18} />
+                                                        </button>
+                                                        <button onClick={() => handleDelete(doc.id, doc.title_id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-white rounded-lg transition-all">
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+
+                                        {/* Pagination Row - Rendered as a row but styling it nicely */}
+                                        {totalPages > 1 && (
+                                            <tr>
+                                                <td colSpan={5} className="px-6 py-4 bg-gray-50/30">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                                            Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredDocs.length)} of {filteredDocs.length}
+                                                        </div>
+                                                        <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
+                                                            <button
+                                                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                                                disabled={currentPage === 1}
+                                                                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                                            >
+                                                                <ChevronLeft size={16} />
+                                                            </button>
+                                                            <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                                                {currentPage} / {totalPages}
+                                                            </div>
+                                                            <button
+                                                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                                                disabled={currentPage === totalPages}
+                                                                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                                            >
+                                                                <ChevronRight size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </>
+                                );
+                            })()}
                         </tbody>
                     </table>
                 </div>

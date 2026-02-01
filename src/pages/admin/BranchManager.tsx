@@ -3,8 +3,9 @@ import { supabase } from '../../lib/supabase';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
   Plus, Building2, MapPin, Phone, Mail, Globe,
-  X, Save, Edit2, Trash2, Map, ChevronRight,
-  Search, Filter, Activity, Compass
+  X, Save, Edit2, Trash2, Map,
+  Search, Filter, Activity, Compass, ChevronLeft, ChevronRight,
+  Users, RefreshCw
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -36,6 +37,16 @@ const BranchManager: React.FC = () => {
     id: null,
     name: ''
   });
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [distributionPoints, setDistributionPoints] = useState('0');
+  const [isSavingStats, setIsSavingStats] = useState(false);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filter]);
   const [formData, setFormData] = useState({
     name: '',
     type: 'branch',
@@ -52,7 +63,56 @@ const BranchManager: React.FC = () => {
 
   useEffect(() => {
     fetchBranches();
+    fetchDistributionPoints();
   }, []);
+
+  const fetchDistributionPoints = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('company_stats')
+        .single();
+
+      if (data?.company_stats) {
+        const stats = data.company_stats as any[];
+        const distPoint = stats.find(s => s.label_id === 'Titik Distribusi' || s.label_en === 'Distribution Points');
+        if (distPoint) {
+          setDistributionPoints(distPoint.value);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching distribution points:', error);
+    }
+  };
+
+  const saveDistributionPoints = async () => {
+    try {
+      setIsSavingStats(true);
+      const { data: currentSettings } = await supabase
+        .from('site_settings')
+        .select('id, company_stats')
+        .single();
+
+      let stats = currentSettings?.company_stats as any[] || [];
+      const index = stats.findIndex(s => s.label_id === 'Titik Distribusi' || s.label_en === 'Distribution Points');
+
+      if (index !== -1) {
+        stats[index] = { ...stats[index], value: distributionPoints };
+      } else {
+        stats.push({ value: distributionPoints, label_id: 'Titik Distribusi', label_en: 'Distribution Points', icon: 'Users' });
+      }
+
+      await supabase
+        .from('site_settings')
+        .update({ company_stats: stats })
+        .eq('id', currentSettings?.id);
+
+    } catch (error) {
+      console.error('Error saving distribution points:', error);
+    } finally {
+      setIsSavingStats(false);
+    }
+  };
 
   const fetchBranches = async () => {
     try {
@@ -271,6 +331,26 @@ const BranchManager: React.FC = () => {
             <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Regional Depots</div>
           </div>
         </div>
+
+        <div className="bg-amber-50 rounded-[2.5rem] p-8 border border-amber-100 shadow-sm flex flex-col items-start gap-4 hover:shadow-xl transition-all group overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-amber-100/50 rounded-bl-full -z-10 group-hover:scale-110 duration-500"></div>
+          <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-200 group-hover:rotate-12 transition-transform">
+            <Users size={24} />
+          </div>
+          <div className="text-left w-full">
+            <div className="flex items-center justify-between gap-2">
+              <input
+                type="text"
+                value={distributionPoints}
+                onChange={(e) => setDistributionPoints(e.target.value)}
+                onBlur={saveDistributionPoints}
+                className="text-3xl font-black text-gray-900 italic tracking-tighter bg-transparent border-none p-0 w-24 focus:ring-0"
+              />
+              {isSavingStats && <RefreshCw size={12} className="animate-spin text-amber-600" />}
+            </div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Titik Distribusi</div>
+          </div>
+        </div>
       </div>
 
       {/* Controls */}
@@ -317,77 +397,122 @@ const BranchManager: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {loading ? (
-                <tr>
-                  <td colSpan={6} className="px-10 py-32 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Syncing Network Ledger...</td>
-                </tr>
-              ) : filteredBranches.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-10 py-32 text-center">
-                    <div className="space-y-4">
-                      <Compass size={48} className="mx-auto text-gray-100" />
-                      <p className="text-gray-300 font-black uppercase tracking-widest">No signals found in this sector</p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                filteredBranches.map((branch, idx) => (
-                  <tr key={branch.id} className="hover:bg-blue-50/30 transition-colors group">
-                    <td className="px-10 py-8 font-black text-gray-200 italic text-xl">#{(idx + 1).toString().padStart(3, '0')}</td>
-                    <td className="px-10 py-8">
-                      <div className="space-y-1">
-                        <div className="text-xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors">{branch.name}</div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase">
-                            <Phone size={10} className="text-blue-400" />
-                            {branch.phone || 'SECURE LINE'}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-10 py-8">
-                      <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] italic border ${branch.type === 'head_office' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                        branch.type === 'depo' ? 'bg-purple-50 text-purple-600 border-purple-100' :
-                          'bg-blue-50 text-blue-600 border-blue-100'
-                        }`}>
-                        {(branch.type || '').replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td className="px-10 py-8">
-                      <div className="space-y-1">
-                        <div className="text-sm font-black text-gray-700 italic flex items-center gap-2 uppercase tracking-tight">
-                          <MapPin size={12} className="text-rose-500" />
-                          {branch.city}
-                        </div>
-                        <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{branch.province}</div>
-                      </div>
-                    </td>
-                    <td className="px-10 py-8">
-                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border w-fit ${branch.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-gray-50 text-gray-400 border-gray-100'
-                        }`}>
-                        <div className={`w-2 h-2 rounded-full ${branch.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`}></div>
-                        <span className="text-[9px] font-black uppercase tracking-widest">{branch.is_active ? 'PULSING' : 'SILENT'}</span>
-                      </div>
-                    </td>
-                    <td className="px-10 py-8">
-                      <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
-                        <button
-                          onClick={() => handleEdit(branch)}
-                          className="w-12 h-12 flex items-center justify-center bg-white shadow-xl hover:shadow-blue-200 text-gray-400 hover:text-blue-600 rounded-2xl transition-all border border-gray-50"
-                        >
-                          <Edit2 size={18} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(branch.id, branch.name)}
-                          className="w-12 h-12 flex items-center justify-center bg-white shadow-xl hover:shadow-rose-200 text-gray-400 hover:text-rose-500 rounded-2xl transition-all border border-gray-50"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+              {(() => {
+                const totalPages = Math.ceil(filteredBranches.length / itemsPerPage);
+                const paginatedBranches = filteredBranches.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+                if (loading) return (
+                  <tr>
+                    <td colSpan={6} className="px-10 py-32 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Syncing Network Ledger...</td>
+                  </tr>
+                );
+
+                if (filteredBranches.length === 0) return (
+                  <tr>
+                    <td colSpan={6} className="px-10 py-32 text-center">
+                      <div className="space-y-4">
+                        <Compass size={48} className="mx-auto text-gray-100" />
+                        <p className="text-gray-300 font-black uppercase tracking-widest">No signals found in this sector</p>
                       </div>
                     </td>
                   </tr>
-                ))
-              )}
+                );
+
+                return (
+                  <>
+                    {paginatedBranches.map((branch, idx) => (
+                      <tr key={branch.id} className="hover:bg-blue-50/30 transition-colors group">
+                        <td className="px-10 py-8 font-black text-gray-200 italic text-xl">
+                          #{((currentPage - 1) * itemsPerPage + idx + 1).toString().padStart(3, '0')}
+                        </td>
+                        <td className="px-10 py-8">
+                          <div className="space-y-1">
+                            <div className="text-xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors">{branch.name}</div>
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase">
+                                <Phone size={10} className="text-blue-400" />
+                                {branch.phone || 'SECURE LINE'}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-10 py-8">
+                          <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] italic border ${branch.type === 'head_office' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                            branch.type === 'depo' ? 'bg-purple-50 text-purple-600 border-purple-100' :
+                              'bg-blue-50 text-blue-600 border-blue-100'
+                            }`}>
+                            {(branch.type || '').replace('_', ' ')}
+                          </span>
+                        </td>
+                        <td className="px-10 py-8">
+                          <div className="space-y-1">
+                            <div className="text-sm font-black text-gray-700 italic flex items-center gap-2 uppercase tracking-tight">
+                              <MapPin size={12} className="text-rose-500" />
+                              {branch.city}
+                            </div>
+                            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{branch.province}</div>
+                          </div>
+                        </td>
+                        <td className="px-10 py-8">
+                          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border w-fit ${branch.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-gray-50 text-gray-400 border-gray-100'
+                            }`}>
+                            <div className={`w-2 h-2 rounded-full ${branch.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`}></div>
+                            <span className="text-[9px] font-black uppercase tracking-widest">{branch.is_active ? 'PULSING' : 'SILENT'}</span>
+                          </div>
+                        </td>
+                        <td className="px-10 py-8">
+                          <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
+                            <button
+                              onClick={() => handleEdit(branch)}
+                              className="w-12 h-12 flex items-center justify-center bg-white shadow-xl hover:shadow-blue-200 text-gray-400 hover:text-blue-600 rounded-2xl transition-all border border-gray-50"
+                            >
+                              <Edit2 size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(branch.id, branch.name)}
+                              className="w-12 h-12 flex items-center justify-center bg-white shadow-xl hover:shadow-rose-200 text-gray-400 hover:text-rose-500 rounded-2xl transition-all border border-gray-50"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {/* Pagination Row */}
+                    {totalPages > 1 && (
+                      <tr>
+                        <td colSpan={6} className="px-10 py-4 bg-gray-50/30">
+                          <div className="flex items-center justify-between">
+                            <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                              Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredBranches.length)} of {filteredBranches.length}
+                            </div>
+                            <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
+                              <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                              >
+                                <ChevronLeft size={16} />
+                              </button>
+                              <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                {currentPage} / {totalPages}
+                              </div>
+                              <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                              >
+                                <ChevronRight size={16} />
+                              </button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                );
+              })()}
             </tbody>
           </table>
         </div>

@@ -55,6 +55,7 @@ export type AdminModule =
   | 'settings'
   | 'audit_logs'
   | 'hero'
+  | 'page_banners'
   | 'seo'
   | 'company'
   | 'channels'
@@ -117,6 +118,7 @@ const moduleAccess: Record<AdminModule, UserRole[]> = {
   settings: ['super_admin'],
   audit_logs: ['super_admin', 'admin'],
   hero: ['super_admin', 'admin', 'editor'],
+  page_banners: ['super_admin', 'admin', 'editor'],
   seo: ['super_admin', 'admin', 'editor'],
   company: ['super_admin', 'admin', 'editor'],
   channels: ['super_admin', 'admin', 'editor'],

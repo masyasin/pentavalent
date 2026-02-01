@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ChevronUp } from 'lucide-react';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 import HeroSection from './sections/HeroSection';
@@ -117,6 +118,26 @@ const MainWebsite: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  const footerRef = useRef<HTMLDivElement>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!footerRef.current) return;
+
+      const rect = footerRef.current.getBoundingClientRect();
+      const isFooterVisible = rect.top <= window.innerHeight + 100; // Buffer
+      const isNotAtTop = window.scrollY > 500;
+
+      setShowScrollTop(isFooterVisible && isNotAtTop);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white w-full relative">
       <Header activeSection={currentSection} onNavigate={handleNavigate} />
@@ -160,7 +181,19 @@ const MainWebsite: React.FC = () => {
         </div>
       </main>
 
-      <Footer onNavigate={handleNavigate} />
+      <div ref={footerRef}>
+        <Footer onNavigate={handleNavigate} />
+      </div>
+
+      {/* Scroll To Top Button - Only appears when footer is visible */}
+      <button
+        onClick={() => handleNavigate('beranda')}
+        className={`fixed bottom-8 right-8 z-50 p-4 bg-gray-900 text-white rounded-full shadow-2xl transition-all duration-500 hover:scale-110 active:scale-95 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-24 opacity-0'
+          }`}
+        aria-label="Scroll to top"
+      >
+        <ChevronUp size={24} />
+      </button>
     </div>
   );
 };

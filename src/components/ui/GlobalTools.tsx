@@ -2,7 +2,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import WhatsAppButton from './WhatsAppButton';
-import ScrollToTop from './ScrollToTop';
 import CookieBanner from './CookieBanner';
 
 const GlobalTools: React.FC = () => {
@@ -14,7 +13,6 @@ const GlobalTools: React.FC = () => {
     return (
         <>
             <WhatsAppButton />
-            <ScrollToTop />
             <CookieBanner />
         </>
     );

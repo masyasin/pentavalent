@@ -147,12 +147,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         .select('*')
         .eq('is_active', true)
         // Exclude slides intended for specific sub-pages (PageSlider)
-        .not('cta_secondary_link', 'ilike', '/about/%')
-        .not('cta_secondary_link', 'ilike', '/investor/%')
-        .not('cta_secondary_link', 'ilike', '/business/%')
-        .not('cta_secondary_link', 'ilike', '/news/%')
-        .not('cta_secondary_link', 'ilike', '/career%') // Covers /career and /career/...
-        .not('cta_secondary_link', 'ilike', '/contact%') // Covers /contact and /contact/...
+        // Exclude slides intended for specific sub-pages (PageSlider)
+        // Using % without slash ensures we catch both "/about" and "/about/..."
+        .not('cta_secondary_link', 'ilike', '/about%')
+        .not('cta_secondary_link', 'ilike', '/investor%')
+        .not('cta_secondary_link', 'ilike', '/business%')
+        .not('cta_secondary_link', 'ilike', '/news%')
+        .not('cta_secondary_link', 'ilike', '/career%')
+        .not('cta_secondary_link', 'ilike', '/contact%')
+        .not('cta_secondary_link', 'ilike', '/privacy-policy%')
+        .not('cta_secondary_link', 'ilike', '/code-of-conduct%')
         .order('sort_order', { ascending: true });
 
       if (error) throw error;

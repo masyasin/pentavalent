@@ -4,7 +4,7 @@ import { translateText } from '../../lib/translation';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 import FileUpload from '../../components/admin/FileUpload';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Save, RefreshCw, CheckCircle2, AlertCircle, Type, Image as ImageIcon, Briefcase, Eye, Target, Sparkles, Network, Building2, User as UserIcon } from 'lucide-react';
+import { Save, RefreshCw, CheckCircle2, AlertCircle, Type, Image as ImageIcon, Briefcase, Eye, Target, Sparkles, Network, Building2, User as UserIcon, Plus } from 'lucide-react';
 import OrganizationManager from '../../components/admin/OrganizationManager';
 import StructureManager from '../../components/admin/StructureManager';
 
@@ -39,10 +39,53 @@ const GeneralInfoManager: React.FC = () => {
     const [translating, setTranslating] = useState<string | null>(null);
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [activeTab, setActiveTab] = useState<'profile' | 'management' | 'structure'>('profile');
+    const [companyStats, setCompanyStats] = useState<any[]>([]);
+    const [loadingStats, setLoadingStats] = useState(false);
 
     useEffect(() => {
         fetchInfo();
+        fetchStats();
     }, []);
+
+    const fetchStats = async () => {
+        try {
+            setLoadingStats(true);
+            const { data, error } = await supabase
+                .from('site_settings')
+                .select('company_stats')
+                .single();
+            if (data?.company_stats) {
+                setCompanyStats(data.company_stats as any[]);
+            }
+        } catch (error) {
+            console.error('Error fetching stats:', error);
+        } finally {
+            setLoadingStats(false);
+        }
+    };
+
+    const saveStats = async (newStats: any[]) => {
+        try {
+            setSaving(true);
+            const { data: settings } = await supabase
+                .from('site_settings')
+                .select('id')
+                .single();
+
+            if (settings) {
+                const { error } = await supabase
+                    .from('site_settings')
+                    .update({ company_stats: newStats })
+                    .eq('id', settings.id);
+                if (error) throw error;
+                setCompanyStats(newStats);
+            }
+        } catch (error) {
+            console.error('Error saving stats:', error);
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const handleAutoTranslate = async (sourceText: string, targetField: keyof CompanyInfo) => {
         if (!sourceText || !info) return;
@@ -335,84 +378,94 @@ const GeneralInfoManager: React.FC = () => {
                                 </div>
 
                                 <div className="space-y-6">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Year Stat</label>
-                                            <input
-                                                type="text"
-                                                value={info?.stats_years_value}
-                                                onChange={(e) => setInfo({ ...info!, stats_years_value: e.target.value })}
-                                                className="w-full px-4 py-3 bg-slate-800 border-none rounded-xl text-white font-black text-xl italic"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Public Stat</label>
-                                            <input
-                                                type="text"
-                                                value={info?.stats_public_value}
-                                                onChange={(e) => setInfo({ ...info!, stats_public_value: e.target.value })}
-                                                className="w-full px-4 py-3 bg-slate-800 border-none rounded-xl text-white font-black text-xl italic"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4 pt-4 border-t border-slate-800">
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
+                                    {companyStats.map((stat, index) => (
+                                        <div key={index} className="p-6 bg-slate-800/50 rounded-2xl border border-slate-700/30 space-y-4 group">
+                                            <div className="flex justify-between items-center">
+                                                <div className="flex items-center gap-3">
+                                                    <select
+                                                        value={stat.icon}
+                                                        onChange={(e) => {
+                                                            const newStats = [...companyStats];
+                                                            newStats[index] = { ...newStats[index], icon: e.target.value };
+                                                            saveStats(newStats);
+                                                        }}
+                                                        className="bg-slate-800 text-blue-400 text-xs font-black p-2 rounded-lg border-none focus:ring-2 focus:ring-blue-500"
+                                                    >
+                                                        <option value="Clock">Clock</option>
+                                                        <option value="Building2">Building</option>
+                                                        <option value="Users">Users</option>
+                                                        <option value="TrendingUp">Trend</option>
+                                                        <option value="Award">Award</option>
+                                                        <option value="Globe">Globe</option>
+                                                        <option value="Shield">Shield</option>
+                                                        <option value="MapPin">MapPin</option>
+                                                    </select>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newStats = companyStats.filter((_, i) => i !== index);
+                                                        saveStats(newStats);
+                                                    }}
+                                                    className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all"
+                                                >
+                                                    <AlertCircle size={16} />
+                                                </button>
+                                            </div>
+
+                                            <div className="space-y-4">
                                                 <input
                                                     type="text"
-                                                    value={info?.stats_years_label_id}
-                                                    onChange={(e) => setInfo({ ...info!, stats_years_label_id: e.target.value })}
-                                                    className="w-full px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-400 text-[10px] font-black uppercase tracking-tighter"
-                                                    placeholder="Label ID"
+                                                    value={stat.value}
+                                                    onChange={(e) => {
+                                                        const newStats = [...companyStats];
+                                                        newStats[index] = { ...newStats[index], value: e.target.value };
+                                                        setCompanyStats(newStats);
+                                                    }}
+                                                    onBlur={() => saveStats(companyStats)}
+                                                    className="w-full px-4 py-3 bg-slate-800 border-none rounded-xl text-white font-black text-2xl italic tracking-tight"
+                                                    placeholder="Value (e.g. 55+)"
                                                 />
-                                                <div className="flex items-center gap-2">
+                                                <div className="grid grid-cols-2 gap-3">
                                                     <input
                                                         type="text"
-                                                        value={info?.stats_years_label_en}
-                                                        onChange={(e) => setInfo({ ...info!, stats_years_label_en: e.target.value })}
-                                                        className="flex-1 px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-500 text-[10px] font-bold uppercase tracking-tighter"
-                                                        placeholder="Label EN"
+                                                        value={stat.label_id}
+                                                        onChange={(e) => {
+                                                            const newStats = [...companyStats];
+                                                            newStats[index] = { ...newStats[index], label_id: e.target.value };
+                                                            setCompanyStats(newStats);
+                                                        }}
+                                                        onBlur={() => saveStats(companyStats)}
+                                                        className="px-3 py-2 bg-slate-800/80 border-none rounded-lg text-slate-300 text-[10px] font-black uppercase tracking-tighter"
+                                                        placeholder="Label (ID)"
                                                     />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleAutoTranslate(info?.stats_years_label_id || '', 'stats_years_label_en')}
-                                                        disabled={!!translating}
-                                                        className="text-blue-400 hover:text-blue-300 transition-colors"
-                                                        title="Auto Translate"
-                                                    >
-                                                        {translating === 'stats_years_label_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <input
-                                                    type="text"
-                                                    value={info?.stats_public_label_id}
-                                                    onChange={(e) => setInfo({ ...info!, stats_public_label_id: e.target.value })}
-                                                    className="w-full px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-400 text-[10px] font-black uppercase tracking-tighter"
-                                                    placeholder="Label ID"
-                                                />
-                                                <div className="flex items-center gap-2">
                                                     <input
                                                         type="text"
-                                                        value={info?.stats_public_label_en}
-                                                        onChange={(e) => setInfo({ ...info!, stats_public_label_en: e.target.value })}
-                                                        className="flex-1 px-3 py-2 bg-slate-800/50 border-none rounded-lg text-slate-500 text-[10px] font-bold uppercase tracking-tighter"
-                                                        placeholder="Label EN"
+                                                        value={stat.label_en}
+                                                        onChange={(e) => {
+                                                            const newStats = [...companyStats];
+                                                            newStats[index] = { ...newStats[index], label_en: e.target.value };
+                                                            setCompanyStats(newStats);
+                                                        }}
+                                                        onBlur={() => saveStats(companyStats)}
+                                                        className="px-3 py-2 bg-slate-800/80 border-none rounded-lg text-slate-500 text-[10px] font-black uppercase tracking-tighter"
+                                                        placeholder="Label (EN)"
                                                     />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleAutoTranslate(info?.stats_public_label_id || '', 'stats_public_label_en')}
-                                                        disabled={!!translating}
-                                                        className="text-blue-400 hover:text-blue-300 transition-colors"
-                                                        title="Auto Translate"
-                                                    >
-                                                        {translating === 'stats_public_label_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ))}
+
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const newStats = [...companyStats, { value: '0', label_id: 'Label', label_en: 'Label', icon: 'Clock' }];
+                                            saveStats(newStats);
+                                        }}
+                                        className="w-full py-4 border-2 border-dashed border-slate-800 rounded-2xl text-slate-600 font-black uppercase tracking-widest text-[10px] hover:border-blue-500 hover:text-blue-400 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        <Plus size={14} /> Add New Stat
+                                    </button>
                                 </div>
                             </div>
                         </div>

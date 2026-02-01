@@ -5,7 +5,8 @@ import RichTextEditor from '../../components/admin/RichTextEditor';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import {
     Save, Plus, Edit2, Trash2, FileText, Shield,
-    CheckCircle2, AlertCircle, Sparkles, Calendar, Hash, X
+    CheckCircle2, AlertCircle, Sparkles, Calendar, Hash, X,
+    Search, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 interface LegalDocument {
@@ -46,6 +47,15 @@ const LegalDocumentsManager: React.FC = () => {
         version: '1.0',
         is_active: true
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6; // 2 cols x 3 rows
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         fetchDocuments();
@@ -245,64 +255,121 @@ const LegalDocumentsManager: React.FC = () => {
                 </div>
             )}
 
-            {/* Documents Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {documents.map((doc) => (
-                    <div key={doc.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all">
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${doc.type === 'privacy_policy' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600'
-                                    }`}>
-                                    {getTypeIcon(doc.type)}
-                                </div>
-                                <div>
-                                    <h3 className="font-black text-gray-900">{doc.title_en}</h3>
-                                    <p className="text-xs text-gray-500 font-medium">{getTypeLabel(doc.type)}</p>
-                                </div>
-                            </div>
-                            {doc.is_active && (
-                                <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-black rounded-full">ACTIVE</span>
-                            )}
-                        </div>
-
-                        <div className="space-y-2 mb-4">
-                            <div className="flex items-center gap-2 text-sm">
-                                <Hash size={14} className="text-gray-400" />
-                                <span className="text-gray-600 font-medium">Version: {doc.version}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                                <Calendar size={14} className="text-gray-400" />
-                                <span className="text-gray-600 font-medium">
-                                    Effective: {new Date(doc.effective_date).toLocaleDateString()}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => handleEdit(doc)}
-                                className="flex-1 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-100 transition-all flex items-center justify-center gap-2"
-                            >
-                                <Edit2 size={16} />
-                                Edit
-                            </button>
-                            <button
-                                onClick={() => handleDelete(doc.id, doc.title_en)}
-                                className="px-4 py-2 bg-red-50 text-red-600 rounded-xl font-bold hover:bg-red-100 transition-all"
-                            >
-                                <Trash2 size={16} />
-                            </button>
-                        </div>
-                    </div>
-                ))}
+            {/* Search Check */}
+            <div className="relative max-w-xl">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+                <input
+                    type="text"
+                    placeholder="Search documents by title..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
+                />
             </div>
 
-            {documents.length === 0 && (
-                <div className="text-center py-12">
-                    <FileText size={48} className="mx-auto text-gray-300 mb-4" />
-                    <p className="text-gray-500 font-medium">No legal documents yet. Click "Add Document" to create one.</p>
-                </div>
-            )}
+            {/* Documents Grid */}
+            <div className="space-y-6">
+                {(() => {
+                    const filteredDocs = documents.filter(doc => {
+                        return doc.title_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            doc.title_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            doc.version.toLowerCase().includes(searchTerm.toLowerCase());
+                    });
+
+                    const totalPages = Math.ceil(filteredDocs.length / itemsPerPage);
+                    const paginatedDocs = filteredDocs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+                    if (filteredDocs.length === 0) return (
+                        <div className="text-center py-12">
+                            <FileText size={48} className="mx-auto text-gray-300 mb-4" />
+                            <p className="text-gray-500 font-medium">No legal documents found.</p>
+                        </div>
+                    );
+
+                    return (
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {paginatedDocs.map((doc) => (
+                                    <div key={doc.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all">
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${doc.type === 'privacy_policy' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600'
+                                                    }`}>
+                                                    {getTypeIcon(doc.type)}
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-black text-gray-900">{doc.title_en}</h3>
+                                                    <p className="text-xs text-gray-500 font-medium">{getTypeLabel(doc.type)}</p>
+                                                </div>
+                                            </div>
+                                            {doc.is_active && (
+                                                <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-black rounded-full">ACTIVE</span>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-2 mb-4">
+                                            <div className="flex items-center gap-2 text-sm">
+                                                <Hash size={14} className="text-gray-400" />
+                                                <span className="text-gray-600 font-medium">Version: {doc.version}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm">
+                                                <Calendar size={14} className="text-gray-400" />
+                                                <span className="text-gray-600 font-medium">
+                                                    Effective: {new Date(doc.effective_date).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleEdit(doc)}
+                                                className="flex-1 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-100 transition-all flex items-center justify-center gap-2"
+                                            >
+                                                <Edit2 size={16} />
+                                                Edit
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(doc.id, doc.title_en)}
+                                                className="px-4 py-2 bg-red-50 text-red-600 rounded-xl font-bold hover:bg-red-100 transition-all"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Pagination Controls */}
+                            {totalPages > 1 && (
+                                <div className="flex items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100">
+                                    <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                        Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredDocs.length)} of {filteredDocs.length}
+                                    </div>
+                                    <div className="flex bg-gray-50 rounded-xl p-1 gap-1">
+                                        <button
+                                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                            disabled={currentPage === 1}
+                                            className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                        >
+                                            <ChevronLeft size={16} />
+                                        </button>
+                                        <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                            {currentPage} / {totalPages}
+                                        </div>
+                                        <button
+                                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                            disabled={currentPage === totalPages}
+                                            className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                        >
+                                            <ChevronRight size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    );
+                })()}
+            </div>
 
             {/* Modal */}
             {showModal && (

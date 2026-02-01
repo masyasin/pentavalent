@@ -450,6 +450,7 @@ const BusinessPage: React.FC = () => {
             <PageSlider
                 pagePath={location.pathname}
                 breadcrumbLabel={language === 'id' ? businessData.title_id : businessData.title_en}
+                parentLabel={language === 'id' ? 'Lini Bisnis' : 'Business Lines'}
             />
 
             <main className="max-w-[1600px] mx-auto px-6 lg:px-12 py-20 relative z-10 -mt-24 md:-mt-32">

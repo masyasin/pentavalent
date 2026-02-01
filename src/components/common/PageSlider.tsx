@@ -18,24 +18,28 @@ interface Slide {
 interface PageSliderProps {
     pagePath: string;
     breadcrumbLabel: string;
+    parentLabel?: string;
 }
 
-const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel }) => {
+const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, parentLabel }) => {
     const { language, t } = useLanguage();
     const [slides, setSlides] = useState<Slide[]>([]);
     const [emblaRef, emblaApi] = useEmblaCarousel({
-        loop: true,
+        loop: slides.length > 1,
         duration: 40,
         skipSnaps: false
-    }, [Autoplay({ delay: 6000, stopOnInteraction: false })]);
+    }, slides.length > 1 ? [Autoplay({ delay: 6000, stopOnInteraction: false })] : []);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     useEffect(() => {
         const fetchSlides = async () => {
+            // Remove hash if present, but keep leading slash to match database format
+            const cleanPath = pagePath.replace('#', '');
+
             const { data, error } = await supabase
-                .from('hero_slides')
+                .from('page_banners')
                 .select('*')
-                .eq('cta_secondary_link', pagePath)
+                .eq('page_path', cleanPath)
                 .eq('is_active', true)
                 .order('sort_order', { ascending: true });
 
@@ -98,7 +102,40 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel }) =>
                                                     {language === 'id' ? slide.title_id : slide.title_en}
                                                 </h1>
 
-                                                <div className="w-16 h-1.5 bg-primary mx-auto rounded-full shadow-[0_0_20px_rgba(6,182,212,0.8)]"></div>
+                                                <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mt-8 mb-8 select-none">
+                                                    {/* Home Node */}
+                                                    <a href="/" className="flex items-center group">
+                                                        <div className="w-3 h-3 rounded-full border-2 border-cyan-400 bg-transparent group-hover:bg-cyan-400 transition-colors shrink-0"></div>
+                                                        <div className="w-6 md:w-10 h-0.5 bg-cyan-400"></div>
+                                                        <span className="ml-3 text-[10px] md:text-xs font-bold text-cyan-100/80 group-hover:text-cyan-400 uppercase tracking-[0.2em] transition-colors">
+                                                            {language === 'id' ? 'Beranda' : 'Home'}
+                                                        </span>
+                                                    </a>
+
+                                                    {/* Parent Node (Optional) */}
+                                                    {parentLabel && (
+                                                        <div className="flex items-center">
+                                                            <div className="w-6 md:w-10 h-0.5 bg-cyan-400"></div>
+                                                            <div className="w-3 h-3 rounded-full border-2 border-cyan-400 bg-transparent shrink-0"></div>
+                                                            <div className="w-6 md:w-10 h-0.5 bg-cyan-400"></div>
+                                                            <span className="ml-3 text-[10px] md:text-xs font-bold text-cyan-100/80 uppercase tracking-[0.2em]">
+                                                                {parentLabel}
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Current Page Node */}
+                                                    <div className="flex items-center">
+                                                        <div className="w-6 md:w-10 h-0.5 bg-cyan-400"></div>
+                                                        <div className="w-3 h-3 rounded-full border-2 border-cyan-400 bg-cyan-950 grid place-items-center shrink-0 z-10">
+                                                            <div className="w-1 h-1 bg-cyan-400 rounded-full"></div>
+                                                        </div>
+                                                        <div className="w-6 md:w-10 h-0.5 bg-cyan-400"></div>
+                                                        <span className="ml-3 text-[10px] md:text-xs font-black text-cyan-400 uppercase tracking-[0.2em] shadow-cyan-500/20 drop-shadow-sm">
+                                                            {breadcrumbLabel}
+                                                        </span>
+                                                    </div>
+                                                </div>
 
                                                 <p className="text-lg md:text-2xl text-blue-100/70 font-medium max-w-3xl mx-auto leading-relaxed">
                                                     {language === 'id' ? slide.subtitle_id : slide.subtitle_en}
@@ -113,46 +150,25 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel }) =>
                 </div>
             </div>
 
-            {/* Navigation Controls */}
-            <div className="absolute bottom-16 left-0 right-0 z-30 flex flex-col items-center gap-8 pointer-events-none">
-                {/* Indicators */}
-                <div className="flex items-center gap-4 pointer-events-auto">
-                    {slides.map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => emblaApi?.scrollTo(i)}
-                            className="group py-4 focus:outline-none"
-                            aria-label={`Go to slide ${i + 1}`}
-                        >
-                            <div className={`h-[4px] transition-all duration-500 rounded-full ${selectedIndex === i ? 'w-16 bg-primary shadow-[0_0_15px_rgba(6,182,212,0.5)]' : 'w-8 bg-white/20 group-hover:bg-white/40'}`}>
-                            </div>
-                        </button>
-                    ))}
-                </div>
 
-                {/* Breadcrumbs */}
-                <div className="flex items-center justify-center gap-3 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-white/40 pointer-events-auto">
-                    <a href="/" className="hover:text-primary transition-colors">{language === 'id' ? 'Beranda' : 'Home'}</a>
-                    <BreadcrumbRight size={14} className="opacity-30" />
-                    <span className="text-white/80">{breadcrumbLabel}</span>
-                </div>
-            </div>
 
-            {/* Side Arrows (Desktop) */}
-            <div className="hidden xl:block pointer-events-none">
-                <button
-                    onClick={() => emblaApi?.scrollPrev()}
-                    className="absolute left-12 top-1/2 -translate-y-1/2 z-40 p-6 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-white hover:bg-primary hover:border-primary hover:scale-110 transition-all pointer-events-auto group"
-                >
-                    <ChevronLeft size={28} className="group-hover:-translate-x-1 transition-transform" />
-                </button>
-                <button
-                    onClick={() => emblaApi?.scrollNext()}
-                    className="absolute right-12 top-1/2 -translate-y-1/2 z-40 p-6 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-white hover:bg-primary hover:border-primary hover:scale-110 transition-all pointer-events-auto group"
-                >
-                    <ChevronRight size={28} className="group-hover:translate-x-1 transition-transform" />
-                </button>
-            </div>
+            {/* Side Arrows (Desktop) - Only show if more than 1 slide */}
+            {slides.length > 1 && (
+                <div className="hidden xl:block pointer-events-none">
+                    <button
+                        onClick={() => emblaApi?.scrollPrev()}
+                        className="absolute left-12 top-1/2 -translate-y-1/2 z-40 p-6 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-white hover:bg-primary hover:border-primary hover:scale-110 transition-all pointer-events-auto group"
+                    >
+                        <ChevronLeft size={28} className="group-hover:-translate-x-1 transition-transform" />
+                    </button>
+                    <button
+                        onClick={() => emblaApi?.scrollNext()}
+                        className="absolute right-12 top-1/2 -translate-y-1/2 z-40 p-6 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-white hover:bg-primary hover:border-primary hover:scale-110 transition-all pointer-events-auto group"
+                    >
+                        <ChevronRight size={28} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                </div>
+            )}
 
             {/* Bottom Interface Fade */}
             <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent z-10"></div>

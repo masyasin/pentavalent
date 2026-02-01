@@ -5,7 +5,8 @@ import FileUpload from '../../components/admin/FileUpload';
 import {
     Plus, Edit2, Trash2, Image as ImageIcon, Video,
     Save, X, MoveUp, MoveDown, CheckCircle2, AlertCircle,
-    Link as LinkIcon, Type, Sparkles, RefreshCw
+    Link as LinkIcon, Type, Sparkles, RefreshCw,
+    Search, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -54,6 +55,15 @@ const HeroSliderManager: React.FC = () => {
         sort_order: 0,
         is_active: true,
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(3);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         fetchSlides();
@@ -178,86 +188,166 @@ const HeroSliderManager: React.FC = () => {
                 </button>
             </div>
 
+            {/* Search Check */}
+            <div className="relative max-w-xl">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+                <input
+                    type="text"
+                    placeholder="Search slides by title or subtitle..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
+                />
+            </div>
+
             <div className="grid grid-cols-1 gap-6">
-                {loading ? (
-                    <div className="p-20 text-center text-gray-400">Loading visual assets...</div>
-                ) : slides.length === 0 ? (
-                    <div className="bg-white rounded-[2rem] border-4 border-dashed border-gray-100 p-20 text-center">
-                        <ImageIcon className="mx-auto text-gray-200 mb-6" size={64} />
-                        <h3 className="text-2xl font-black text-gray-900 uppercase">No Slides Found</h3>
-                        <p className="text-gray-500 mb-8">Your homepage hero section is currently empty</p>
-                        <button
-                            onClick={() => setShowModal(true)}
-                            className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:underline"
-                        >
-                            Add first slide now <Plus size={16} />
-                        </button>
-                    </div>
-                ) : (
-                    slides.map((slide) => (
-                        <div key={slide.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:border-blue-200 transition-all group">
-                            <div className="flex flex-col md:flex-row gap-8">
-                                {/* Visual Preview */}
-                                <div className="w-full md:w-64 h-40 bg-gray-100 rounded-3xl overflow-hidden relative border border-gray-50">
-                                    {slide.video_url ? (
-                                        <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                                            <Video className="text-white opacity-50" size={32} />
-                                            <span className="absolute bottom-2 right-2 px-2 py-0.5 bg-blue-600 text-[8px] font-black text-white rounded uppercase tracking-widest">Video BG</span>
-                                        </div>
-                                    ) : (
-                                        <img src={slide.image_url} alt={slide.title_id} className="w-full h-full object-cover" />
-                                    )}
-                                    <div className="absolute top-2 left-2 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-black tracking-widest uppercase">
-                                        Order: {slide.sort_order}
-                                    </div>
-                                </div>
+                {(() => {
+                    const filteredSlides = slides.filter(slide => {
+                        return slide.title_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            slide.title_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            slide.subtitle_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            slide.subtitle_en.toLowerCase().includes(searchTerm.toLowerCase());
+                    });
 
-                                {/* Content Info */}
-                                <div className="flex-1 space-y-3">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter group-hover:text-blue-600 transition-colors italic">
-                                                {slide.title_id}
-                                            </h3>
-                                            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mt-1">{slide.title_en}</p>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => handleEdit(slide)}
-                                                className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all"
-                                            >
-                                                <Edit2 size={20} />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(slide.id, slide.title_id)}
-                                                className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all"
-                                            >
-                                                <Trash2 size={20} />
-                                            </button>
-                                        </div>
-                                    </div>
+                    const totalPages = Math.ceil(filteredSlides.length / itemsPerPage);
+                    const paginatedSlides = filteredSlides.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-                                    <p className="text-gray-500 text-sm line-clamp-2 pr-10 italic">"{slide.subtitle_id}"</p>
+                    if (loading) {
+                        return <div className="p-20 text-center text-gray-400">Loading visual assets...</div>;
+                    }
 
-                                    <div className="pt-4 flex items-center gap-6">
-                                        <div className="flex items-center gap-2">
-                                            <div className={`w-3 h-3 rounded-full ${slide.is_active ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-                                                Status: {slide.is_active ? 'Active Display' : 'Hidden'}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <LinkIcon size={12} className="text-blue-400" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-                                                CTA: {slide.cta_primary_link}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                    if (filteredSlides.length === 0) {
+                        return (
+                            <div className="bg-white rounded-[2rem] border-4 border-dashed border-gray-100 p-20 text-center">
+                                <ImageIcon className="mx-auto text-gray-200 mb-6" size={64} />
+                                <h3 className="text-2xl font-black text-gray-900 uppercase">No Slides Found</h3>
+                                <p className="text-gray-500 mb-8">No slides match your search criteria.</p>
+                                {slides.length === 0 && (
+                                    <button
+                                        onClick={() => setShowModal(true)}
+                                        className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:underline"
+                                    >
+                                        Add first slide now <Plus size={16} />
+                                    </button>
+                                )}
                             </div>
-                        </div>
-                    ))
-                )}
+                        );
+                    }
+
+                    return (
+                        <>
+                            {paginatedSlides.map((slide) => (
+                                <div key={slide.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:border-blue-200 transition-all group">
+                                    <div className="flex flex-col md:flex-row gap-8">
+                                        {/* Visual Preview */}
+                                        <div className="w-full md:w-64 h-40 bg-gray-100 rounded-3xl overflow-hidden relative border border-gray-50">
+                                            {slide.video_url ? (
+                                                <div className="w-full h-full flex items-center justify-center bg-gray-900">
+                                                    <Video className="text-white opacity-50" size={32} />
+                                                    <span className="absolute bottom-2 right-2 px-2 py-0.5 bg-blue-600 text-[8px] font-black text-white rounded uppercase tracking-widest">Video BG</span>
+                                                </div>
+                                            ) : (
+                                                <img src={slide.image_url} alt={slide.title_id} className="w-full h-full object-cover" />
+                                            )}
+                                            <div className="absolute top-2 left-2 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-black tracking-widest uppercase">
+                                                Order: {slide.sort_order}
+                                            </div>
+                                        </div>
+
+                                        {/* Content Info */}
+                                        <div className="flex-1 space-y-3">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter group-hover:text-blue-600 transition-colors italic">
+                                                        {slide.title_id}
+                                                    </h3>
+                                                    <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mt-1">{slide.title_en}</p>
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => handleEdit(slide)}
+                                                        className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all"
+                                                    >
+                                                        <Edit2 size={20} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(slide.id, slide.title_id)}
+                                                        className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all"
+                                                    >
+                                                        <Trash2 size={20} />
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <p className="text-gray-500 text-sm line-clamp-2 pr-10 italic">"{slide.subtitle_id}"</p>
+
+                                            <div className="pt-4 flex items-center gap-6">
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`w-3 h-3 rounded-full ${slide.is_active ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                                        Status: {slide.is_active ? 'Active Display' : 'Hidden'}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <LinkIcon size={12} className="text-blue-400" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                                        CTA: {slide.cta_primary_link}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {/* Pagination Controls */}
+                            {filteredSlides.length > 0 && (
+                                <div className="flex flex-col md:flex-row items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100 gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                            Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredSlides.length)} of {filteredSlides.length}
+                                        </div>
+                                        <select
+                                            value={itemsPerPage}
+                                            onChange={(e) => {
+                                                setItemsPerPage(Number(e.target.value));
+                                                setCurrentPage(1);
+                                            }}
+                                            className="bg-gray-50 border-none rounded-lg text-xs font-bold text-gray-600 focus:ring-0 cursor-pointer py-1 pl-2 pr-8"
+                                        >
+                                            <option value={3}>3 per page</option>
+                                            <option value={5}>5 per page</option>
+                                            <option value={10}>10 per page</option>
+                                            <option value={20}>20 per page</option>
+                                        </select>
+                                    </div>
+
+                                    {totalPages > 1 && (
+                                        <div className="flex bg-gray-50 rounded-xl p-1 gap-1">
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                                disabled={currentPage === 1}
+                                                className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                            >
+                                                <ChevronLeft size={16} />
+                                            </button>
+                                            <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                                {currentPage} / {totalPages}
+                                            </div>
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                                disabled={currentPage === totalPages}
+                                                className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                            >
+                                                <ChevronRight size={16} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    );
+                })()}
             </div>
 
             {showModal && (

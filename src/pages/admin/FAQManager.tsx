@@ -4,7 +4,7 @@ import { translateText } from '../../lib/translation';
 import {
     Plus, Edit2, Trash2, X, Save,
     Search, HelpCircle, AlertCircle, RefreshCw,
-    MessageCircle, CheckCircle2, ChevronDown, Sparkles
+    MessageCircle, CheckCircle2, ChevronDown, Sparkles, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
@@ -27,6 +27,13 @@ const FAQManager: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(6);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
+
     const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
         isOpen: false,
         id: null,
@@ -151,11 +158,6 @@ const FAQManager: React.FC = () => {
         setShowModal(true);
     };
 
-    const filteredFaqs = faqs.filter(faq =>
-        faq.question_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        faq.question_en.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     return (
         <div className="space-y-6 pb-20">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -190,66 +192,130 @@ const FAQManager: React.FC = () => {
             </div>
 
             <div className="grid gap-4">
-                {loading ? (
-                    <div className="p-12 text-center text-gray-400">Loading FAQs...</div>
-                ) : filteredFaqs.length === 0 ? (
-                    <div className="bg-white rounded-[2rem] border border-gray-100 p-12 text-center">
-                        <MessageCircle className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-                        <h3 className="text-lg font-bold text-gray-900">No FAQs found</h3>
-                        <p className="text-gray-500">Start by adding common questions to help your users</p>
-                    </div>
-                ) : (
-                    filteredFaqs.map((faq) => (
-                        <div key={faq.id} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:border-blue-200 transition-all group">
-                            <div className="flex items-start justify-between gap-6">
-                                <div className="flex-1 space-y-4">
-                                    <div className="flex items-center gap-3">
-                                        <span className="px-3 py-1 rounded-lg bg-gray-100 text-gray-600 text-xs font-bold uppercase tracking-wider">
-                                            {faq.category}
-                                        </span>
-                                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${faq.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                            {faq.is_active ? 'Active' : 'Draft'}
-                                        </span>
-                                    </div>
+                {(() => {
+                    const filteredFaqs = faqs.filter(faq =>
+                        faq.question_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        faq.question_en.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
 
-                                    <div className="grid md:grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                                                <img src="https://flagcdn.com/id.svg" className="w-4 h-3 object-cover rounded shadow-sm" alt="ID" />
-                                                Bahasa Indonesia
-                                            </div>
-                                            <h4 className="text-lg font-bold text-gray-900">{faq.question_id}</h4>
-                                            <div className="text-sm text-gray-600 line-clamp-2" dangerouslySetInnerHTML={{ __html: faq.answer_id }} />
-                                        </div>
-                                        <div className="space-y-2 border-l border-gray-100 pl-6 hidden md:block">
-                                            <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                                                <img src="https://flagcdn.com/gb.svg" className="w-4 h-3 object-cover rounded shadow-sm" alt="EN" />
-                                                English
-                                            </div>
-                                            <h4 className="text-lg font-bold text-gray-900">{faq.question_en}</h4>
-                                            <div className="text-sm text-gray-600 line-clamp-2" dangerouslySetInnerHTML={{ __html: faq.answer_en }} />
-                                        </div>
-                                    </div>
-                                </div>
+                    const totalPages = Math.ceil(filteredFaqs.length / itemsPerPage);
+                    const paginatedFaqs = filteredFaqs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-                                <div className="flex flex-col gap-2">
-                                    <button
-                                        onClick={() => handleEdit(faq)}
-                                        className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
-                                    >
-                                        <Edit2 size={18} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(faq.id, faq.question_id)}
-                                        className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-blue-50 rounded-xl transition-all"
-                                    >
-                                        <Trash2 size={18} />
-                                    </button>
-                                </div>
+                    if (loading) {
+                        return <div className="p-12 text-center text-gray-400">Loading FAQs...</div>;
+                    }
+
+                    if (filteredFaqs.length === 0) {
+                        return (
+                            <div className="bg-white rounded-[2rem] border border-gray-100 p-12 text-center">
+                                <MessageCircle className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+                                <h3 className="text-lg font-bold text-gray-900">No FAQs found</h3>
+                                <p className="text-gray-500">Start by adding common questions to help your users</p>
                             </div>
-                        </div>
-                    ))
-                )}
+                        );
+                    }
+
+                    return (
+                        <>
+                            {paginatedFaqs.map((faq) => (
+                                <div key={faq.id} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:border-blue-200 transition-all group">
+                                    <div className="flex items-start justify-between gap-6">
+                                        <div className="flex-1 space-y-4">
+                                            <div className="flex items-center gap-3">
+                                                <span className="px-3 py-1 rounded-lg bg-gray-100 text-gray-600 text-xs font-bold uppercase tracking-wider">
+                                                    {faq.category}
+                                                </span>
+                                                <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${faq.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                    {faq.is_active ? 'Active' : 'Draft'}
+                                                </span>
+                                            </div>
+
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                                        <img src="https://flagcdn.com/id.svg" className="w-4 h-3 object-cover rounded shadow-sm" alt="ID" />
+                                                        Bahasa Indonesia
+                                                    </div>
+                                                    <h4 className="text-lg font-bold text-gray-900">{faq.question_id}</h4>
+                                                    <div className="text-sm text-gray-600 line-clamp-2" dangerouslySetInnerHTML={{ __html: faq.answer_id }} />
+                                                </div>
+                                                <div className="space-y-2 border-l border-gray-100 pl-6 hidden md:block">
+                                                    <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                                        <img src="https://flagcdn.com/gb.svg" className="w-4 h-3 object-cover rounded shadow-sm" alt="EN" />
+                                                        English
+                                                    </div>
+                                                    <h4 className="text-lg font-bold text-gray-900">{faq.question_en}</h4>
+                                                    <div className="text-sm text-gray-600 line-clamp-2" dangerouslySetInnerHTML={{ __html: faq.answer_en }} />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-col gap-2">
+                                            <button
+                                                onClick={() => handleEdit(faq)}
+                                                className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                                            >
+                                                <Edit2 size={18} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(faq.id, faq.question_id)}
+                                                className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-blue-50 rounded-xl transition-all"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {/* Pagination Controls */}
+                            {filteredFaqs.length > 0 && (
+                                <div className="flex flex-col md:flex-row items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100 gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                            Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredFaqs.length)} of {filteredFaqs.length}
+                                        </div>
+                                        <select
+                                            value={itemsPerPage}
+                                            onChange={(e) => {
+                                                setItemsPerPage(Number(e.target.value));
+                                                setCurrentPage(1);
+                                            }}
+                                            className="bg-gray-50 border-none rounded-lg text-xs font-bold text-gray-600 focus:ring-0 cursor-pointer py-1 pl-2 pr-8"
+                                        >
+                                            <option value={6}>6 per page</option>
+                                            <option value={12}>12 per page</option>
+                                            <option value={24}>24 per page</option>
+                                            <option value={48}>48 per page</option>
+                                        </select>
+                                    </div>
+
+                                    {totalPages > 1 && (
+                                        <div className="flex bg-gray-50 rounded-xl p-1 gap-1">
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                                disabled={currentPage === 1}
+                                                className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                            >
+                                                <ChevronLeft size={16} />
+                                            </button>
+                                            <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                                {currentPage} / {totalPages}
+                                            </div>
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                                disabled={currentPage === totalPages}
+                                                className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                            >
+                                                <ChevronRight size={16} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    );
+                })()}
             </div>
 
             {showModal && (

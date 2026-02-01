@@ -6,7 +6,7 @@ import { translateText } from '../../lib/translation';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
     Plus, Edit2, Trash2, Box, Image as ImageIcon,
-    X, Save, Layers, ArrowRight, Sparkles, RefreshCw, Maximize2, Minimize2, ChevronRight
+    X, Save, Layers, ArrowRight, Sparkles, RefreshCw, Maximize2, Minimize2, ChevronRight, ChevronLeft, Search
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -47,6 +47,15 @@ const BusinessLineManager: React.FC = () => {
         sort_order: 0,
         is_active: true,
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         fetchLines();
@@ -213,82 +222,143 @@ const BusinessLineManager: React.FC = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-8">
-                {loading ? (
-                    <div className="py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Synchronizing Global Units...</div>
-                ) : lines.length === 0 ? (
-                    <div className="bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
-                        <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
-                            <Layers size={64} />
-                        </div>
-                        <div className="space-y-2">
-                            <h3 className="text-2xl font-black text-gray-900 uppercase italic">Architecture Empty</h3>
-                            <p className="text-gray-400 font-medium">No business divisions have been deployed to the global ledger.</p>
-                        </div>
-                        <button
-                            onClick={() => setShowModal(true)}
-                            className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs"
-                        >
-                            Deploy New Strategy <Plus size={16} />
-                        </button>
-                    </div>
-                ) : (
-                    lines.map((item) => (
-                        <div key={item.id} className="bg-white rounded-[3rem] p-8 border border-gray-50 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/5 transition-all group flex flex-col md:flex-row items-center gap-10 text-left relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-bl-full -z-10 transition-all group-hover:scale-110 duration-700"></div>
+            {/* Search Check */}
+            <div className="relative max-w-xl">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+                <input
+                    type="text"
+                    placeholder="Search divisions by title or slug..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
+                />
+            </div>
 
-                            <div className="w-48 h-48 bg-slate-900 rounded-[2.5rem] flex items-center justify-center overflow-hidden border-8 border-white shadow-2xl shrink-0 group-hover:rotate-3 transition-transform duration-500">
-                                {item.images && item.images.length > 0 ? (
-                                    <div className="relative w-full h-full">
-                                        <img src={item.images[0]} alt={item.title_id} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                        {item.images.length > 1 && (
-                                            <div className="absolute bottom-3 right-3 bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg shadow-lg border border-white/20">
-                                                +{item.images.length - 1} GALLERY
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <Box className="text-slate-800" size={64} />
+            <div className="grid grid-cols-1 gap-8">
+                {(() => {
+                    const filteredLines = lines.filter(item => {
+                        return item.title_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            item.title_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            item.slug.toLowerCase().includes(searchTerm.toLowerCase());
+                    });
+
+                    const totalPages = Math.ceil(filteredLines.length / itemsPerPage);
+                    const paginatedLines = filteredLines.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+                    if (loading) {
+                        return <div className="py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Synchronizing Global Units...</div>;
+                    }
+
+                    if (filteredLines.length === 0) {
+                        return (
+                            <div className="bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
+                                <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
+                                    <Layers size={64} />
+                                </div>
+                                <div className="space-y-2">
+                                    <h3 className="text-2xl font-black text-gray-900 uppercase italic">Architecture Empty</h3>
+                                    <p className="text-gray-400 font-medium">No business divisions found matching your search.</p>
+                                </div>
+                                {lines.length === 0 && (
+                                    <button
+                                        onClick={() => setShowModal(true)}
+                                        className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs"
+                                    >
+                                        Deploy New Strategy <Plus size={16} />
+                                    </button>
                                 )}
                             </div>
+                        );
+                    }
 
-                            <div className="flex-1 space-y-6">
-                                <div className="flex justify-between items-start">
-                                    <div className="space-y-2">
-                                        <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors">
-                                            {language === 'id' ? item.title_id : item.title_en}
-                                        </h3>
-                                        <div className="flex flex-wrap items-center gap-4">
-                                            <span className="text-[10px] font-black text-blue-600 bg-blue-50/50 px-3 py-1 rounded-lg uppercase tracking-widest italic">
-                                                Sequence Protocol #{item.sort_order}
-                                            </span>
-                                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                                                /{item.slug}
-                                            </span>
-                                            <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${item.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
-                                                }`}>
-                                                <div className={`w-2 h-2 rounded-full ${item.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
-                                                <span className="text-[9px] font-black uppercase tracking-widest">{item.is_active ? 'ACTIVE' : 'DEACTIVATED'}</span>
+                    return (
+                        <>
+                            {paginatedLines.map((item) => (
+                                <div key={item.id} className="bg-white rounded-[3rem] p-8 border border-gray-50 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/5 transition-all group flex flex-col md:flex-row items-center gap-10 text-left relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-bl-full -z-10 transition-all group-hover:scale-110 duration-700"></div>
+
+                                    <div className="w-48 h-48 bg-slate-900 rounded-[2.5rem] flex items-center justify-center overflow-hidden border-8 border-white shadow-2xl shrink-0 group-hover:rotate-3 transition-transform duration-500">
+                                        {item.images && item.images.length > 0 ? (
+                                            <div className="relative w-full h-full">
+                                                <img src={item.images[0]} alt={item.title_id} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                                {item.images.length > 1 && (
+                                                    <div className="absolute bottom-3 right-3 bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg shadow-lg border border-white/20">
+                                                        +{item.images.length - 1} GALLERY
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <Box className="text-slate-800" size={64} />
+                                        )}
+                                    </div>
+
+                                    <div className="flex-1 space-y-6">
+                                        <div className="flex justify-between items-start">
+                                            <div className="space-y-2">
+                                                <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors">
+                                                    {language === 'id' ? item.title_id : item.title_en}
+                                                </h3>
+                                                <div className="flex flex-wrap items-center gap-4">
+                                                    <span className="text-[10px] font-black text-blue-600 bg-blue-50/50 px-3 py-1 rounded-lg uppercase tracking-widest italic">
+                                                        Sequence Protocol #{item.sort_order}
+                                                    </span>
+                                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                                                        /{item.slug}
+                                                    </span>
+                                                    <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${item.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
+                                                        }`}>
+                                                        <div className={`w-2 h-2 rounded-full ${item.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
+                                                        <span className="text-[9px] font-black uppercase tracking-widest">{item.is_active ? 'ACTIVE' : 'DEACTIVATED'}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-3">
+                                                <button onClick={() => handleEdit(item)} className="p-4 text-gray-400 hover:text-blue-600 bg-white shadow-sm border border-gray-50 hover:border-blue-100 rounded-2xl transition-all">
+                                                    <Edit2 size={20} />
+                                                </button>
+                                                <button onClick={() => handleDelete(item.id, item.title_id)} className="p-4 text-gray-400 hover:text-rose-500 bg-white shadow-sm border border-gray-50 hover:border-rose-100 rounded-2xl transition-all">
+                                                    <Trash2 size={20} />
+                                                </button>
                                             </div>
                                         </div>
+                                        <div className="text-gray-500 text-sm font-medium leading-relaxed italic line-clamp-2 group-hover:line-clamp-none transition-all cursor-pointer bg-gray-50/50 p-6 rounded-[2rem] border border-transparent group-hover:border-blue-50">
+                                            {/* Just a preview of the content - strip HTML if necessary or use a snippet */}
+                                            <div dangerouslySetInnerHTML={{ __html: language === 'id' ? item.description_id : item.description_en }} className="line-clamp-2" />
+                                        </div>
                                     </div>
-                                    <div className="flex gap-3">
-                                        <button onClick={() => handleEdit(item)} className="p-4 text-gray-400 hover:text-blue-600 bg-white shadow-sm border border-gray-50 hover:border-blue-100 rounded-2xl transition-all">
-                                            <Edit2 size={20} />
+                                </div>
+                            ))}
+
+                            {/* Pagination Controls */}
+                            {totalPages > 1 && (
+                                <div className="flex items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100">
+                                    <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                        Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredLines.length)} of {filteredLines.length}
+                                    </div>
+                                    <div className="flex bg-gray-50 rounded-xl p-1 gap-1">
+                                        <button
+                                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                            disabled={currentPage === 1}
+                                            className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                        >
+                                            <ChevronLeft size={16} />
                                         </button>
-                                        <button onClick={() => handleDelete(item.id, item.title_id)} className="p-4 text-gray-400 hover:text-rose-500 bg-white shadow-sm border border-gray-50 hover:border-rose-100 rounded-2xl transition-all">
-                                            <Trash2 size={20} />
+                                        <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                            {currentPage} / {totalPages}
+                                        </div>
+                                        <button
+                                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                            disabled={currentPage === totalPages}
+                                            className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                        >
+                                            <ChevronRight size={16} />
                                         </button>
                                     </div>
                                 </div>
-                                <div className="text-gray-500 text-sm font-medium leading-relaxed italic line-clamp-2 group-hover:line-clamp-none transition-all cursor-pointer bg-gray-50/50 p-6 rounded-[2rem] border border-transparent group-hover:border-blue-50">
-                                    {/* Just a preview of the content - strip HTML if necessary or use a snippet */}
-                                    <div dangerouslySetInnerHTML={{ __html: language === 'id' ? item.description_id : item.description_en }} className="line-clamp-2" />
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                )}
+                            )}
+                        </>
+                    );
+                })()}
             </div>
 
             {showModal && (

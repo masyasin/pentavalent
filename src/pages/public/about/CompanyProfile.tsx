@@ -116,6 +116,7 @@ const CompanyProfile: React.FC = () => {
             <PageSlider
                 pagePath="/about/profile"
                 breadcrumbLabel={language === 'id' ? 'Profil Perusahaan' : 'Company Profile'}
+                parentLabel={language === 'id' ? 'Tentang Kami' : 'About Us'}
             />
 
             <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32">

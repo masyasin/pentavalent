@@ -6,7 +6,7 @@ import { translateText } from '../../lib/translation';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
     Plus, Search, Edit2, Trash2, Globe, Image as ImageIcon,
-    ChevronRight, X, Save, AlertCircle, ExternalLink, Sparkles, RefreshCw, Layers
+    ChevronRight, ChevronLeft, X, Save, AlertCircle, ExternalLink, Sparkles, RefreshCw, Layers
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -47,6 +47,15 @@ const PartnerManager: React.FC = () => {
         sort_order: 0,
         is_active: true,
     });
+
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8; // 4 columns x 2 rows optimum
+
+    // Reset pagination when search changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, filterType]);
 
     useEffect(() => {
         fetchPartners();
@@ -212,74 +221,112 @@ const PartnerManager: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {loading ? (
-                    <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Syncing Alliance Protocols...</div>
-                ) : filteredPartners.length === 0 ? (
-                    <div className="col-span-full bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
-                        <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
-                            <Globe size={64} />
-                        </div>
-                        <div className="space-y-2">
-                            <h3 className="text-2xl font-black text-gray-900 uppercase italic">Alliances Empty</h3>
-                            <p className="text-gray-400 font-medium">No business partners have been synchronized with the grid.</p>
-                        </div>
-                        <button onClick={() => setShowModal(true)} className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs">
-                            Anchor First Alliance <Plus size={16} />
-                        </button>
-                    </div>
-                ) : (
-                    filteredPartners.map((partner) => (
-                        <div key={partner.id} className="bg-white rounded-[3rem] p-8 border border-gray-50 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-2 transition-all group flex flex-col h-full relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[4rem] -z-10 group-hover:scale-110 duration-500"></div>
+            {(() => {
+                const totalPages = Math.ceil(filteredPartners.length / itemsPerPage);
+                const paginatedPartners = filteredPartners.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-                            <div className="flex items-center justify-between mb-8">
-                                <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] italic border ${partner.partner_type === 'principal' ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-blue-50 text-blue-600 border-blue-100'
-                                    }`}>
-                                    {partner.partner_type}
-                                </span>
-                                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-y-[-10px] group-hover:translate-y-0 duration-500">
-                                    <button onClick={() => handleEdit(partner)} className="w-10 h-10 bg-white shadow-xl text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50">
-                                        <Edit2 size={16} />
-                                    </button>
-                                    <button onClick={() => handleDelete(partner.id, partner.name)} className="w-10 h-10 bg-white shadow-xl text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50">
-                                        <Trash2 size={16} />
+                return (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            {loading ? (
+                                <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Syncing Alliance Protocols...</div>
+                            ) : filteredPartners.length === 0 ? (
+                                <div className="col-span-full bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
+                                    <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
+                                        <Globe size={64} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-black text-gray-900 uppercase italic">Alliances Empty</h3>
+                                        <p className="text-gray-400 font-medium">No business partners have been synchronized with the grid.</p>
+                                    </div>
+                                    <button onClick={() => setShowModal(true)} className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs">
+                                        Anchor First Alliance <Plus size={16} />
                                     </button>
                                 </div>
-                            </div>
+                            ) : (
+                                paginatedPartners.map((partner) => (
+                                    <div key={partner.id} className="bg-white rounded-[3rem] p-8 border border-gray-50 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-2 transition-all group flex flex-col h-full relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[4rem] -z-10 group-hover:scale-110 duration-500"></div>
 
-                            <div className="flex-1 flex flex-col items-center text-center space-y-6">
-                                <div className="w-32 h-32 bg-white rounded-[2.5rem] flex items-center justify-center overflow-hidden border-4 border-white shadow-2xl group-hover:scale-105 transition-all duration-500 p-6 relative">
-                                    {partner.logo_url ? (
-                                        <img src={partner.logo_url} alt={partner.name} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-700" />
-                                    ) : (
-                                        <ImageIcon className="text-gray-100" size={48} />
-                                    )}
-                                </div>
-                                <div className="space-y-1">
-                                    <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors leading-tight">
-                                        {partner.name}
-                                    </h3>
-                                    {partner.website && (
-                                        <a href={partner.website} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-blue-400 hover:text-blue-600 uppercase tracking-widest flex items-center justify-center gap-1 transition-colors italic">
-                                            Visit Signal <ExternalLink size={10} />
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
+                                        <div className="flex items-center justify-between mb-8">
+                                            <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] italic border ${partner.partner_type === 'principal' ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-blue-50 text-blue-600 border-blue-100'
+                                                }`}>
+                                                {partner.partner_type}
+                                            </span>
+                                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-y-[-10px] group-hover:translate-y-0 duration-500">
+                                                <button onClick={() => handleEdit(partner)} className="w-10 h-10 bg-white shadow-xl text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50">
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button onClick={() => handleDelete(partner.id, partner.name)} className="w-10 h-10 bg-white shadow-xl text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
 
-                            <div className="mt-8 pt-6 border-t border-gray-50 flex justify-between items-center bg-gray-50/50 -mx-8 -mb-8 px-8 py-4">
-                                <div className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Protocol #{partner.sort_order}</div>
-                                <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${partner.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
-                                    }`}>
-                                    <div className={`w-1.5 h-1.5 rounded-full ${partner.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
-                                    <span className="text-[8px] font-black uppercase tracking-widest">{partner.is_active ? 'ACTIVE' : 'OFFLINE'}</span>
-                                </div>
-                            </div>
+                                        <div className="flex-1 flex flex-col items-center text-center space-y-6">
+                                            <div className="w-32 h-32 bg-white rounded-[2.5rem] flex items-center justify-center overflow-hidden border-4 border-white shadow-2xl group-hover:scale-105 transition-all duration-500 p-6 relative">
+                                                {partner.logo_url ? (
+                                                    <img src={partner.logo_url} alt={partner.name} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-700" />
+                                                ) : (
+                                                    <ImageIcon className="text-gray-100" size={48} />
+                                                )}
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors leading-tight">
+                                                    {partner.name}
+                                                </h3>
+                                                {partner.website && (
+                                                    <a href={partner.website} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-blue-400 hover:text-blue-600 uppercase tracking-widest flex items-center justify-center gap-1 transition-colors italic">
+                                                        Visit Signal <ExternalLink size={10} />
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-8 pt-6 border-t border-gray-50 flex justify-between items-center bg-gray-50/50 -mx-8 -mb-8 px-8 py-4">
+                                            <div className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Protocol #{partner.sort_order}</div>
+                                            <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${partner.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
+                                                }`}>
+                                                <div className={`w-1.5 h-1.5 rounded-full ${partner.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
+                                                <span className="text-[8px] font-black uppercase tracking-widest">{partner.is_active ? 'ACTIVE' : 'OFFLINE'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
-                    ))
-                )}
-            </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex items-center justify-between p-4 px-8 mt-4">
+                                <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                    Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredPartners.length)} of {filteredPartners.length}
+                                </div>
+                                <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                        className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                    >
+                                        <ChevronLeft size={16} />
+                                    </button>
+                                    <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                        {currentPage} / {totalPages}
+                                    </div>
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages}
+                                        className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                    >
+                                        <ChevronRight size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                );
+            })()
+            }
 
             {showModal && (
                 <div className="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[200] flex items-center justify-center p-0 md:p-8 transition-all duration-500 font-medium">

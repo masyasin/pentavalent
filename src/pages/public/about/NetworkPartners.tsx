@@ -263,6 +263,7 @@ const NetworkPartners: React.FC = () => {
             <PageSlider
                 pagePath="/about/network-partners"
                 breadcrumbLabel={language === 'id' ? 'Jaringan & Mitra' : 'Network & Partners'}
+                parentLabel={language === 'id' ? 'Tentang Kami' : 'About Us'}
             />
 
             <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32">

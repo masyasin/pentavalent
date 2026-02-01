@@ -14,6 +14,7 @@ import InvestorManager from './InvestorManager';
 import BusinessLineManager from './BusinessLineManager';
 import SiteSettingsManager from './SiteSettingsManager';
 import HeroSliderManager from './HeroSliderManager';
+import PageBannersManager from './PageBannersManager';
 import SeoManager from './SeoManager';
 import CompanyProfileManager from './CompanyProfileManager';
 import UserManager from './UserManager';
@@ -82,6 +83,7 @@ const AdminContent: React.FC = () => {
         <Route path="careers" element={<ProtectedRoute module="careers"><CareerManager /></ProtectedRoute>} />
         <Route path="investor" element={<ProtectedRoute module="investor"><InvestorManager /></ProtectedRoute>} />
         <Route path="hero" element={<ProtectedRoute module="hero"><HeroSliderManager /></ProtectedRoute>} />
+        <Route path="page_banners" element={<ProtectedRoute module="hero"><PageBannersManager /></ProtectedRoute>} />
         <Route path="seo" element={<ProtectedRoute module="seo"><SeoManager /></ProtectedRoute>} />
         <Route path="analytics" element={<ProtectedRoute module="analytics"><AnalyticsManager /></ProtectedRoute>} />
         <Route path="newsletter" element={<ProtectedRoute module="newsletter"><NewsletterManager /></ProtectedRoute>} />

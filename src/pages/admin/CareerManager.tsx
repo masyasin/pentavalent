@@ -5,7 +5,7 @@ import { translateText } from '../../lib/translation';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
     Plus, Search, Edit2, Trash2, MapPin, Building2,
-    Calendar, Briefcase, ChevronRight, X, Save, AlertCircle, Sparkles, RefreshCw, Maximize2, Minimize2
+    Calendar, Briefcase, ChevronRight, ChevronLeft, X, Save, AlertCircle, Sparkles, RefreshCw, Maximize2, Minimize2
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -49,6 +49,11 @@ const CareerManager: React.FC = () => {
         deadline: '',
         is_active: true,
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchCareers();
@@ -183,72 +188,137 @@ const CareerManager: React.FC = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-6">
-                {loading ? (
-                    <div className="p-20 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">
-                        {t('common.loading') || 'Scanning Career Network...'}
-                    </div>
-                ) : careers.length === 0 ? (
-                    <div className="bg-white rounded-[3rem] border-2 border-dashed border-gray-100 p-20 text-center space-y-6">
-                        <div className="w-20 h-20 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto shadow-inner text-gray-200">
-                            <Briefcase size={40} />
-                        </div>
-                        <div className="space-y-2">
-                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">No Global Vacancies</h3>
-                            <p className="text-gray-400 font-medium text-sm">Start building your team by posting the first job opening.</p>
-                        </div>
-                    </div>
-                ) : (
-                    careers.map((career) => (
-                        <div key={career.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 hover:border-blue-200 transition-all group shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 text-left">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                <div className="flex items-start gap-6">
-                                    <div className="w-16 h-16 bg-blue-50 rounded-[1.5rem] flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner shrink-0">
-                                        <Briefcase size={28} />
+            {/* Filter & Search */}
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 rounded-[2rem] border border-gray-100 shadow-sm">
+                <div className="relative w-full md:w-96">
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search opportunities..."
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        className="w-full pl-14 pr-6 py-4 bg-gray-50 border-transparent focus:bg-white focus:border-blue-500 rounded-[1.5rem] transition-all font-bold text-sm"
+                    />
+                </div>
+            </div>
+
+            {/* Logic */}
+            {
+                (() => {
+                    const filteredCareers = careers.filter(item =>
+                        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        item.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        item.location.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+
+                    const totalPages = Math.ceil(filteredCareers.length / itemsPerPage);
+                    const paginatedCareers = filteredCareers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+                    return (
+                        <>
+                            <div className="grid grid-cols-1 gap-6">
+                                {loading ? (
+                                    <div className="p-20 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">
+                                        {t('common.loading') || 'Scanning Career Network...'}
                                     </div>
-                                    <div className="space-y-2">
-                                        <h3 className="text-2xl font-black text-gray-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight italic leading-none">
-                                            {career.title}
-                                        </h3>
-                                        <div className="flex flex-wrap items-center gap-6 text-[11px] font-black uppercase tracking-widest text-gray-400">
-                                            <div className="flex items-center gap-2">
-                                                <Building2 size={14} className="text-blue-500" />
-                                                {career.department}
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <MapPin size={14} className="text-rose-500" />
-                                                {career.location}
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <Calendar size={14} className="text-amber-500" />
-                                                {career.employment_type.replace('_', ' ')}
-                                            </div>
-                                            <div className={`px-3 py-1 rounded-lg text-[9px] ${career.is_active ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'
-                                                }`}>
-                                                {career.is_active ? 'ACTIVE' : 'CLOSED'}
-                                            </div>
+                                ) : filteredCareers.length === 0 ? (
+                                    <div className="bg-white rounded-[3rem] border-2 border-dashed border-gray-100 p-20 text-center space-y-6">
+                                        <div className="w-20 h-20 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto shadow-inner text-gray-200">
+                                            <Briefcase size={40} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">No Global Vacancies</h3>
+                                            <p className="text-gray-400 font-medium text-sm">{searchTerm ? 'No matches found.' : 'Start building your team by posting the first job opening.'}</p>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        onClick={() => handleEdit(career)}
-                                        className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
-                                    >
-                                        <Edit2 size={20} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(career.id, career.title)}
-                                        className="p-4 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-[1.25rem] transition-all"
-                                    >
-                                        <Trash2 size={20} />
-                                    </button>
-                                </div>
+                                ) : (
+                                    paginatedCareers.map((career) => (
+                                        <div key={career.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 hover:border-blue-200 transition-all group shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 text-left">
+                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                                <div className="flex items-start gap-6">
+                                                    <div className="w-16 h-16 bg-blue-50 rounded-[1.5rem] flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner shrink-0">
+                                                        <Briefcase size={28} />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <h3 className="text-2xl font-black text-gray-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight italic leading-none">
+                                                            {career.title}
+                                                        </h3>
+                                                        <div className="flex flex-wrap items-center gap-6 text-[11px] font-black uppercase tracking-widest text-gray-400">
+                                                            <div className="flex items-center gap-2">
+                                                                <Building2 size={14} className="text-blue-500" />
+                                                                {career.department}
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <MapPin size={14} className="text-rose-500" />
+                                                                {career.location}
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <Calendar size={14} className="text-amber-500" />
+                                                                {career.employment_type.replace('_', ' ')}
+                                                            </div>
+                                                            <div className={`px-3 py-1 rounded-lg text-[9px] ${career.is_active ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'
+                                                                }`}>
+                                                                {career.is_active ? 'ACTIVE' : 'CLOSED'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        onClick={() => handleEdit(career)}
+                                                        className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
+                                                    >
+                                                        <Edit2 size={20} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(career.id, career.title)}
+                                                        className="p-4 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-[1.25rem] transition-all"
+                                                    >
+                                                        <Trash2 size={20} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
-                        </div>
-                    ))
-                )}
-            </div>
+
+                            {/* Pagination */}
+                            {
+                                totalPages > 1 && (
+                                    <div className="flex items-center justify-between p-4 px-8 mt-4">
+                                        <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                            Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredCareers.length)} of {filteredCareers.length}
+                                        </div>
+                                        <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                                disabled={currentPage === 1}
+                                                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                            >
+                                                <ChevronLeft size={16} />
+                                            </button>
+                                            <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                                {currentPage} / {totalPages}
+                                            </div>
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                                disabled={currentPage === totalPages}
+                                                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                            >
+                                                <ChevronRight size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </>
+                    );
+                })()
+            }
 
             {
                 showModal && (
@@ -500,7 +570,7 @@ const CareerManager: React.FC = () => {
                 itemName={deleteDialog.name}
                 isLoading={loading}
             />
-        </div>
+        </div >
     );
 };
 

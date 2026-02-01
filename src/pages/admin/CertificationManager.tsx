@@ -6,7 +6,7 @@ import { translateText } from '../../lib/translation';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
     Plus, Edit2, Trash2, Award, Image as ImageIcon,
-    X, Save, FileCheck, ShieldCheck, Sparkles, RefreshCw, Maximize2, Minimize2, ChevronRight
+    X, Save, FileCheck, ShieldCheck, Sparkles, RefreshCw, Maximize2, Minimize2, ChevronRight, ChevronLeft, Search
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -44,6 +44,15 @@ const CertificationManager: React.FC = () => {
         image_url: '',
         is_active: true,
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         fetchCertifications();
@@ -172,72 +181,133 @@ const CertificationManager: React.FC = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {loading ? (
-                    <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Scanning Quality Ledger...</div>
-                ) : certifications.length === 0 ? (
-                    <div className="col-span-full bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
-                        <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
-                            <ShieldCheck size={64} />
-                        </div>
-                        <div className="space-y-2">
-                            <h3 className="text-2xl font-black text-gray-900 uppercase italic">No Credentials Registered</h3>
-                            <p className="text-gray-400 font-medium">Display your company's global quality standards here.</p>
-                        </div>
-                        <button onClick={() => setShowModal(true)} className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs">
-                            Verify Global Entry <Plus size={16} />
-                        </button>
-                    </div>
-                ) : (
-                    certifications.map((cert) => (
-                        <div key={cert.id} className="bg-white rounded-[3.5rem] p-8 border border-gray-50 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/5 transition-all group flex flex-col sm:flex-row gap-10 text-left relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[4rem] -z-10 group-hover:scale-110 duration-500"></div>
+            {/* Search Check */}
+            <div className="relative max-w-xl">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+                <input
+                    type="text"
+                    placeholder="Search certifications by name, issuer, or number..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
+                />
+            </div>
 
-                            <div className="w-32 h-48 bg-slate-900 rounded-[2rem] flex items-center justify-center overflow-hidden border-4 border-white shadow-2xl transform group-hover:-rotate-3 transition-transform duration-500 shrink-0">
-                                {cert.image_url ? (
-                                    <img src={cert.image_url} alt={cert.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                                ) : (
-                                    <Award className="text-slate-800" size={64} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {(() => {
+                    const filteredCerts = certifications.filter(cert => {
+                        return cert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            cert.issuer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            cert.certificate_number.toLowerCase().includes(searchTerm.toLowerCase());
+                    });
+
+                    const totalPages = Math.ceil(filteredCerts.length / itemsPerPage);
+                    const paginatedCerts = filteredCerts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+                    if (loading) {
+                        return <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Scanning Quality Ledger...</div>;
+                    }
+
+                    if (filteredCerts.length === 0) {
+                        return (
+                            <div className="col-span-full bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
+                                <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
+                                    <ShieldCheck size={64} />
+                                </div>
+                                <div className="space-y-2">
+                                    <h3 className="text-2xl font-black text-gray-900 uppercase italic">No Credentials Found</h3>
+                                    <p className="text-gray-400 font-medium">No certifications match your search criteria.</p>
+                                </div>
+                                {certifications.length === 0 && (
+                                    <button onClick={() => setShowModal(true)} className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs">
+                                        Verify Global Entry <Plus size={16} />
+                                    </button>
                                 )}
                             </div>
+                        );
+                    }
 
-                            <div className="flex-1 space-y-6">
-                                <div className="flex justify-between items-start">
-                                    <div className="space-y-2">
-                                        <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors leading-none">
-                                            {cert.name}
-                                        </h3>
-                                        <div className="flex flex-wrap items-center gap-4">
-                                            <p className="text-blue-600 font-black text-[10px] uppercase tracking-widest italic">{cert.issuer}</p>
-                                            <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${cert.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
-                                                }`}>
-                                                <div className={`w-2 h-2 rounded-full ${cert.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
-                                                <span className="text-[9px] font-black uppercase tracking-widest">{cert.is_active ? 'VALID' : 'EXPIRED'}</span>
+                    return (
+                        <>
+                            {paginatedCerts.map((cert) => (
+                                <div key={cert.id} className="bg-white rounded-[3.5rem] p-8 border border-gray-50 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/5 transition-all group flex flex-col sm:flex-row gap-10 text-left relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[4rem] -z-10 group-hover:scale-110 duration-500"></div>
+
+                                    <div className="w-32 h-48 bg-slate-900 rounded-[2rem] flex items-center justify-center overflow-hidden border-4 border-white shadow-2xl transform group-hover:-rotate-3 transition-transform duration-500 shrink-0">
+                                        {cert.image_url ? (
+                                            <img src={cert.image_url} alt={cert.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                                        ) : (
+                                            <Award className="text-slate-800" size={64} />
+                                        )}
+                                    </div>
+
+                                    <div className="flex-1 space-y-6">
+                                        <div className="flex justify-between items-start">
+                                            <div className="space-y-2">
+                                                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors leading-none">
+                                                    {cert.name}
+                                                </h3>
+                                                <div className="flex flex-wrap items-center gap-4">
+                                                    <p className="text-blue-600 font-black text-[10px] uppercase tracking-widest italic">{cert.issuer}</p>
+                                                    <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${cert.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
+                                                        }`}>
+                                                        <div className={`w-2 h-2 rounded-full ${cert.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
+                                                        <span className="text-[9px] font-black uppercase tracking-widest">{cert.is_active ? 'VALID' : 'EXPIRED'}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <button onClick={() => handleEdit(cert)} className="w-10 h-10 text-gray-400 hover:text-blue-600 bg-white shadow-sm border border-gray-50 hover:border-blue-100 rounded-xl transition-all flex items-center justify-center">
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button onClick={() => handleDelete(cert.id, cert.name)} className="w-10 h-10 text-gray-400 hover:text-rose-500 bg-white shadow-sm border border-gray-50 hover:border-rose-100 rounded-xl transition-all flex items-center justify-center">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-4">
+                                            <div className="flex items-center gap-2 text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] italic">
+                                                <FileCheck size={14} className="text-blue-400" />
+                                                Registry Code: {cert.certificate_number || 'CORE-PROTOCOL-PENDING'}
+                                            </div>
+                                            <div className="bg-gray-50/50 p-6 rounded-[2rem] border border-transparent group-hover:border-blue-50 transition-all">
+                                                <div dangerouslySetInnerHTML={{ __html: language === 'id' ? cert.description_id : cert.description_en }} className="text-gray-500 text-[13px] font-medium leading-relaxed italic line-clamp-2 group-hover:line-clamp-none transition-all" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => handleEdit(cert)} className="w-10 h-10 text-gray-400 hover:text-blue-600 bg-white shadow-sm border border-gray-50 hover:border-blue-100 rounded-xl transition-all flex items-center justify-center">
-                                            <Edit2 size={16} />
+                                </div>
+                            ))}
+
+                            {/* Pagination Controls */}
+                            {totalPages > 1 && (
+                                <div className="col-span-full flex items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100">
+                                    <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                        Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredCerts.length)} of {filteredCerts.length}
+                                    </div>
+                                    <div className="flex bg-gray-50 rounded-xl p-1 gap-1">
+                                        <button
+                                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                            disabled={currentPage === 1}
+                                            className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                        >
+                                            <ChevronLeft size={16} />
                                         </button>
-                                        <button onClick={() => handleDelete(cert.id, cert.name)} className="w-10 h-10 text-gray-400 hover:text-rose-500 bg-white shadow-sm border border-gray-50 hover:border-rose-100 rounded-xl transition-all flex items-center justify-center">
-                                            <Trash2 size={16} />
+                                        <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                            {currentPage} / {totalPages}
+                                        </div>
+                                        <button
+                                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                            disabled={currentPage === totalPages}
+                                            className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                        >
+                                            <ChevronRight size={16} />
                                         </button>
                                     </div>
                                 </div>
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-2 text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] italic">
-                                        <FileCheck size={14} className="text-blue-400" />
-                                        Registry Code: {cert.certificate_number || 'CORE-PROTOCOL-PENDING'}
-                                    </div>
-                                    <div className="bg-gray-50/50 p-6 rounded-[2rem] border border-transparent group-hover:border-blue-50 transition-all">
-                                        <div dangerouslySetInnerHTML={{ __html: language === 'id' ? cert.description_id : cert.description_en }} className="text-gray-500 text-[13px] font-medium leading-relaxed italic line-clamp-2 group-hover:line-clamp-none transition-all" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                )}
+                            )}
+                        </>
+                    );
+                })()}
             </div>
 
             {showModal && (

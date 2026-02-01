@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Mail, Phone, Calendar, Trash2, Search, Filter, CheckCircle, Clock } from 'lucide-react';
+import { Mail, Phone, Calendar, Trash2, Search, Filter, CheckCircle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -21,6 +21,9 @@ const MessagesManager: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [filter, setFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
   const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
     isOpen: false,
     id: null,
@@ -81,13 +84,27 @@ const MessagesManager: React.FC = () => {
     }
   };
 
-  const filteredMessages = filter === 'all'
-    ? messages
-    : filter === 'unread'
-      ? messages.filter(m => !m.is_read)
-      : messages.filter(m => m.is_read);
+  const filteredMessages = messages.filter(m => {
+    const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.subject.toLowerCase().includes(searchTerm.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (filter === 'unread') return !m.is_read;
+    if (filter === 'read') return m.is_read;
+    return true;
+  });
 
   const unreadCount = messages.filter(m => !m.is_read).length;
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredMessages.length / itemsPerPage);
+  const paginatedMessages = filteredMessages.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filter]);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-20">
@@ -108,6 +125,19 @@ const MessagesManager: React.FC = () => {
       <div className="grid lg:grid-cols-12 gap-8 items-start">
         {/* Left: Message List */}
         <div className="lg:col-span-4 space-y-6">
+
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search inbox..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-14 pr-6 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold text-xs"
+            />
+          </div>
+
           {/* Filter Bar */}
           <div className="bg-white p-2 rounded-[2rem] border border-gray-100 shadow-sm flex gap-1">
             {['all', 'unread', 'read'].map((type) => (
@@ -115,8 +145,8 @@ const MessagesManager: React.FC = () => {
                 key={type}
                 onClick={() => setFilter(type)}
                 className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === type
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-100'
-                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100'
+                  : 'text-gray-400 hover:bg-gray-50 hover:text-gray-700'
                   }`}
               >
                 {t(`admin.messages.filter.${type}`)}
@@ -129,8 +159,8 @@ const MessagesManager: React.FC = () => {
             ))}
           </div>
 
-          <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden text-left">
-            <div className="divide-y divide-gray-50 max-h-[700px] overflow-y-auto custom-scrollbar">
+          <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden text-left flex flex-col">
+            <div className="divide-y divide-gray-50 max-h-[700px] overflow-y-auto custom-scrollbar flex-1">
               {loading ? (
                 <div className="p-12 text-center text-gray-400 font-bold uppercase tracking-widest animate-pulse">
                   {t('common.loading') || 'Loading...'}
@@ -143,7 +173,7 @@ const MessagesManager: React.FC = () => {
                   </p>
                 </div>
               ) : (
-                filteredMessages.map((msg) => (
+                paginatedMessages.map((msg) => (
                   <button
                     key={msg.id}
                     onClick={() => {
@@ -151,8 +181,8 @@ const MessagesManager: React.FC = () => {
                       if (!msg.is_read) markAsRead(msg.id);
                     }}
                     className={`w-full text-left p-6 transition-all border-l-4 group ${selectedMessage?.id === msg.id
-                        ? 'bg-blue-50 border-blue-600 shadow-inner'
-                        : 'border-transparent hover:bg-gray-50'
+                      ? 'bg-blue-50 border-blue-600 shadow-inner'
+                      : 'border-transparent hover:bg-gray-50'
                       }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -179,6 +209,29 @@ const MessagesManager: React.FC = () => {
                 ))
               )}
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="p-4 border-t border-gray-50 bg-gray-50/30 flex items-center justify-between">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 hover:bg-white hover:shadow-sm rounded-xl disabled:opacity-30 transition-all text-gray-500"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-2 hover:bg-white hover:shadow-sm rounded-xl disabled:opacity-30 transition-all text-gray-500"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

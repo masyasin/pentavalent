@@ -75,6 +75,7 @@ const VisionMission: React.FC = () => {
             <PageSlider
                 pagePath="/about/vision-mission"
                 breadcrumbLabel={language === 'id' ? 'Visi & Misi' : 'Vision & Mission'}
+                parentLabel={language === 'id' ? 'Tentang Kami' : 'About Us'}
             />
 
             <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32">
@@ -127,9 +128,10 @@ const VisionMission: React.FC = () => {
                                     Our <span className="text-cyan-400">Mission</span>
                                 </h2>
 
-                                <div className="prose prose-invert prose-lg max-w-none text-white/80 leading-loose prose-p:mb-6">
-                                    <p>{language === 'id' ? info?.mission_text_id : info?.mission_text_en}</p>
-                                </div>
+                                <div
+                                    className="prose prose-invert prose-lg max-w-none text-white/80 leading-loose prose-p:mb-6"
+                                    dangerouslySetInnerHTML={{ __html: (language === 'id' ? info?.mission_text_id : info?.mission_text_en) || '' }}
+                                />
                             </motion.div>
                         </section>
                     </div>

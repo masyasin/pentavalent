@@ -208,7 +208,8 @@ const InvestorPage: React.FC = () => {
             <main>
                 <PageSlider
                     pagePath={pathname}
-                    breadcrumbLabel={language === 'id' ? 'Hubungan Investor' : 'Investor Relations'}
+                    breadcrumbLabel={language === 'id' ? pageContent?.title_id : pageContent?.title_en}
+                    parentLabel={language === 'id' ? 'Hubungan Investor' : 'Investor Relations'}
                 />
 
                 <section className="py-20 md:py-32">
@@ -696,8 +697,8 @@ const InvestorPage: React.FC = () => {
 
                                                                             {getSlug() === 'laporan-keuangan' && (
                                                                                 <span className={`text-[10px] px-2 py-0.5 rounded border uppercase tracking-wider ${(doc.document_type === 'annual_report' || doc.document_type === 'audit_report')
-                                                                                        ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
-                                                                                        : 'bg-amber-50 text-amber-600 border-amber-200'
+                                                                                    ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
+                                                                                    : 'bg-amber-50 text-amber-600 border-amber-200'
                                                                                     }`}>
                                                                                     {(doc.document_type === 'annual_report' || doc.document_type === 'audit_report')
                                                                                         ? 'Audited'
@@ -707,8 +708,8 @@ const InvestorPage: React.FC = () => {
 
                                                                             {getSlug() === 'rups' && (
                                                                                 <span className={`text-[10px] px-2 py-0.5 rounded border uppercase tracking-wider ${doc.document_type === 'rups_annual'
-                                                                                        ? 'bg-blue-50 text-blue-600 border-blue-200'
-                                                                                        : 'bg-orange-50 text-orange-600 border-orange-200'
+                                                                                    ? 'bg-blue-50 text-blue-600 border-blue-200'
+                                                                                    : 'bg-orange-50 text-orange-600 border-orange-200'
                                                                                     }`}>
                                                                                     {doc.document_type === 'rups_annual' ? 'RUPST' : 'RUPS-LB'}
                                                                                 </span>

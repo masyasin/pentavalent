@@ -161,7 +161,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   >
                     <button
                       onClick={() => !hasChildren && handleLinkClick(menu.path)}
-                      className={`px-3 lg:px-4 py-2.5 rounded-full text-[11px] lg:text-[12px] font-black uppercase tracking-[0.16em] transition-all duration-500 relative flex items-center gap-2 group/btn ${isActive
+                      className={`px-3 lg:px-4 py-2.5 rounded-full text-[11px] lg:text-[12px] font-black uppercase tracking-[0.16em] transition-all duration-500 relative flex items-center gap-2 group/btn ${isActive || (hasChildren && activeDropdown === menu.id)
                         ? (isScrolled ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'text-white bg-white/20 ring-1 ring-white/30')
                         : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-100/50' : 'text-white/80 hover:text-white hover:bg-white/10')
                         }`}

@@ -65,6 +65,7 @@ const LegalityAchievements: React.FC = () => {
             <PageSlider
                 pagePath="/about/legality-achievements"
                 breadcrumbLabel={language === 'id' ? 'Legalitas, Kepatuhan & Pencapaian' : 'Legality, Compliance & Achievements'}
+                parentLabel={language === 'id' ? 'Tentang Kami' : 'About Us'}
             />
 
             <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32">

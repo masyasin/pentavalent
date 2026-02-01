@@ -3,7 +3,8 @@ import { supabase } from '../../lib/supabase';
 import {
     Plus, Edit2, Trash2, Globe, Facebook,
     Instagram, Twitter, Linkedin, Youtube,
-    Share2, ExternalLink, Save, X, Hash
+    Share2, ExternalLink, Save, X, Hash,
+    Search, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 
@@ -34,6 +35,15 @@ const ChannelsManager: React.FC = () => {
         is_active: true,
         sort_order: 0
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(6);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         fetchChannels();
@@ -161,52 +171,131 @@ const ChannelsManager: React.FC = () => {
                 </button>
             </div>
 
+            {/* Search Check */}
+            <div className="relative max-w-xl">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+                <input
+                    type="text"
+                    placeholder="Search channels by platform or url..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
+                />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {loading ? (
-                    <div className="col-span-full p-20 text-center text-gray-400 font-black uppercase tracking-widest">Loading channels...</div>
-                ) : channels.length === 0 ? (
-                    <div className="col-span-full bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-gray-100">
-                        <Share2 className="text-gray-200 mx-auto mb-6" size={64} />
-                        <h3 className="text-2xl font-black text-gray-900 uppercase">No Channels Connected</h3>
-                        <p className="text-gray-500 mt-2 italic">Add your social media profiles to connect with your audience</p>
-                    </div>
-                ) : (
-                    channels.map((channel) => (
-                        <div key={channel.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all group relative overflow-hidden">
-                            <div className="flex items-start justify-between relative z-10">
-                                <div className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-white shadow-lg ${getPlatformColor(channel.platform).split(' ')[2]}`}>
-                                    {getPlatformIcon(channel.platform)}
-                                </div>
-                                <div className="flex gap-2">
-                                    <button onClick={() => handleEdit(channel)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all">
-                                        <Edit2 size={18} />
-                                    </button>
-                                    <button onClick={() => handleDelete(channel.id, channel.platform)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
-                                        <Trash2 size={18} />
-                                    </button>
-                                </div>
-                            </div>
+                {(() => {
+                    const filteredChannels = channels.filter(channel => {
+                        return channel.platform.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            channel.url.toLowerCase().includes(searchTerm.toLowerCase());
+                    });
 
-                            <div className="mt-8 space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">{channel.platform}</h3>
-                                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${channel.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                        {channel.is_active ? 'Active' : 'Inactive'}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-2xl text-sm font-medium text-gray-500 break-all border border-gray-100/50">
-                                    <ExternalLink size={14} className="flex-shrink-0" />
-                                    {channel.url}
-                                </div>
-                            </div>
+                    const totalPages = Math.ceil(filteredChannels.length / itemsPerPage);
+                    const paginatedChannels = filteredChannels.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-                            {/* Decorative background number */}
-                            <div className="absolute -bottom-6 -right-6 text-9xl font-black text-gray-50/50 -z-0 pointer-events-none select-none">
-                                {channel.sort_order}
+                    if (loading) {
+                        return <div className="col-span-full p-20 text-center text-gray-400 font-black uppercase tracking-widest">Loading channels...</div>;
+                    }
+
+                    if (filteredChannels.length === 0) {
+                        return (
+                            <div className="col-span-full bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-gray-100">
+                                <Share2 className="text-gray-200 mx-auto mb-6" size={64} />
+                                <h3 className="text-2xl font-black text-gray-900 uppercase">No Channels Found</h3>
+                                <p className="text-gray-500 mt-2 italic">Try adjusting your search query.</p>
+                                {channels.length === 0 && (
+                                    <p className="text-gray-500 mt-2 italic">Add your social media profiles to connect with your audience</p>
+                                )}
                             </div>
-                        </div>
-                    ))
-                )}
+                        );
+                    }
+
+                    return (
+                        <>
+                            {paginatedChannels.map((channel) => (
+                                <div key={channel.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all group relative overflow-hidden">
+                                    <div className="flex items-start justify-between relative z-10">
+                                        <div className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-white shadow-lg ${getPlatformColor(channel.platform).split(' ')[2]}`}>
+                                            {getPlatformIcon(channel.platform)}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => handleEdit(channel)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all">
+                                                <Edit2 size={18} />
+                                            </button>
+                                            <button onClick={() => handleDelete(channel.id, channel.platform)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">{channel.platform}</h3>
+                                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${channel.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                {channel.is_active ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-2xl text-sm font-medium text-gray-500 break-all border border-gray-100/50">
+                                            <ExternalLink size={14} className="flex-shrink-0" />
+                                            {channel.url}
+                                        </div>
+                                    </div>
+
+                                    {/* Decorative background number */}
+                                    <div className="absolute -bottom-6 -right-6 text-9xl font-black text-gray-50/50 -z-0 pointer-events-none select-none">
+                                        {channel.sort_order}
+                                    </div>
+                                </div>
+                            ))}
+
+                            {/* Pagination Controls */}
+                            {filteredChannels.length > 0 && (
+                                <div className="col-span-full flex flex-col md:flex-row items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100 gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                            Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredChannels.length)} of {filteredChannels.length}
+                                        </div>
+                                        <select
+                                            value={itemsPerPage}
+                                            onChange={(e) => {
+                                                setItemsPerPage(Number(e.target.value));
+                                                setCurrentPage(1);
+                                            }}
+                                            className="bg-gray-50 border-none rounded-lg text-xs font-bold text-gray-600 focus:ring-0 cursor-pointer py-1 pl-2 pr-8"
+                                        >
+                                            <option value={6}>6 per page</option>
+                                            <option value={12}>12 per page</option>
+                                            <option value={24}>24 per page</option>
+                                            <option value={48}>48 per page</option>
+                                        </select>
+                                    </div>
+
+                                    {totalPages > 1 && (
+                                        <div className="flex bg-gray-50 rounded-xl p-1 gap-1">
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                                disabled={currentPage === 1}
+                                                className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                            >
+                                                <ChevronLeft size={16} />
+                                            </button>
+                                            <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                                {currentPage} / {totalPages}
+                                            </div>
+                                            <button
+                                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                                disabled={currentPage === totalPages}
+                                                className="p-2 hover:bg-white rounded-lg disabled:opacity-30 transition-all shadow-sm"
+                                            >
+                                                <ChevronRight size={16} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    );
+                })()}
             </div>
 
             {showModal && (

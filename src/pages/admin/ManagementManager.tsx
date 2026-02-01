@@ -4,7 +4,7 @@ import { translateText } from '../../lib/translation';
 import FileUpload from '../../components/admin/FileUpload';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
-    Plus, Edit2, Trash2, Save, X,
+    Plus, Edit2, Trash2, Save, X, Search, ChevronLeft,
     User as UserIcon, Camera, MoveUp, MoveDown,
     RefreshCw, CheckCircle2, AlertCircle, Sparkles, UserCircle
 } from 'lucide-react';
@@ -44,6 +44,11 @@ const ManagementManager: React.FC = () => {
         sort_order: 0,
         is_active: true,
     });
+
+    // Pagination & Search
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9; // Display 3x3 grid
 
     useEffect(() => {
         fetchMembers();
@@ -179,93 +184,156 @@ const ManagementManager: React.FC = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {loading ? (
-                    <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-[0.3em] animate-pulse">
-                        Synchronizing Management Hierarchy...
-                    </div>
-                ) : members.length === 0 ? (
-                    <div className="col-span-full bg-white rounded-[3rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
-                        <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200 shadow-inner">
-                            <UserIcon size={64} />
-                        </div>
-                        <div className="space-y-2">
-                            <h3 className="text-2xl font-black text-gray-900 uppercase italic">No Hierarchy Defined</h3>
-                            <p className="text-gray-400 font-medium">Start building your global corporate leadership structure.</p>
-                        </div>
-                        <button
-                            onClick={() => setShowModal(true)}
-                            className="text-blue-600 font-black flex items-center gap-3 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs"
-                        >
-                            Deploy First Mission <ChevronRight size={16} />
-                        </button>
-                    </div>
-                ) : (
-                    members.map((member, index) => (
-                        <div key={member.id} className="bg-white rounded-[3.5rem] overflow-hidden border border-gray-50 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-3 transition-all p-8 group relative text-left">
-                            <div className="relative mb-8">
-                                <div className="w-full aspect-square bg-slate-900 rounded-[2.5rem] overflow-hidden border-8 border-white shadow-xl relative group/img">
-                                    {member.image_url ? (
-                                        <img src={member.image_url} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-800">
-                                            <UserIcon size={120} />
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
-                                </div>
-
-                                <div className="absolute top-6 right-6 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-all transform translate-x-10 group-hover:translate-x-0 duration-500">
-                                    <button
-                                        onClick={() => handleEdit(member)}
-                                        className="w-12 h-12 bg-white text-blue-600 rounded-2xl shadow-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50"
-                                    >
-                                        <Edit2 size={20} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(member.id, member.name)}
-                                        className="w-12 h-12 bg-white text-rose-500 rounded-2xl shadow-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50"
-                                    >
-                                        <Trash2 size={20} />
-                                    </button>
-                                </div>
-
-                                <div className={`absolute bottom-6 left-6 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl backdrop-blur-md border border-white/20 ${member.is_active ? 'bg-emerald-500/90 text-white' : 'bg-rose-500/90 text-white'
-                                    }`}>
-                                    {member.is_active ? 'LIVE' : 'HIDDEN'}
-                                </div>
-                            </div>
-
-                            <div className="space-y-3 px-2">
-                                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter leading-none italic group-hover:text-blue-600 transition-colors">{member.name}</h3>
-                                <p className="text-blue-600 font-bold uppercase tracking-widest text-[11px] bg-blue-50/50 inline-block px-3 py-1 rounded-lg">
-                                    {language === 'id' ? member.position_id : member.position_en}
-                                </p>
-
-                                <div className="pt-6 flex items-center justify-between border-t border-gray-50 mt-6">
-                                    <div className="flex bg-gray-50 p-1.5 rounded-2xl gap-1">
-                                        <button
-                                            disabled={index === 0}
-                                            onClick={() => updateSortOrder(member.id, member.sort_order - 1)}
-                                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-white hover:text-blue-600 hover:shadow-sm rounded-xl transition-all disabled:opacity-0"
-                                        >
-                                            <MoveUp size={16} />
-                                        </button>
-                                        <button
-                                            disabled={index === members.length - 1}
-                                            onClick={() => updateSortOrder(member.id, member.sort_order + 1)}
-                                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-white hover:text-blue-600 hover:shadow-sm rounded-xl transition-all disabled:opacity-0"
-                                        >
-                                            <MoveDown size={16} />
-                                        </button>
-                                    </div>
-                                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em] italic">Rank #{index + 1}</span>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                )}
+            {/* Filter & Search */}
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 rounded-[2rem] border border-gray-100 shadow-sm">
+                <div className="relative w-full md:w-96">
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search leadership..."
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        className="w-full pl-14 pr-6 py-4 bg-gray-50 border-transparent focus:bg-white focus:border-blue-500 rounded-[1.5rem] transition-all font-bold text-sm"
+                    />
+                </div>
             </div>
+
+            {(() => {
+                const filteredMembers = members.filter(item =>
+                    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.position_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.position_en.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+
+                const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
+                const paginatedMembers = filteredMembers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+                return (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {loading ? (
+                                <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-[0.3em] animate-pulse">
+                                    Synchronizing Management Hierarchy...
+                                </div>
+                            ) : filteredMembers.length === 0 ? (
+                                <div className="col-span-full bg-white rounded-[3rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
+                                    <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200 shadow-inner">
+                                        <UserIcon size={64} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-black text-gray-900 uppercase italic">No Hierarchy Defined</h3>
+                                        <p className="text-gray-400 font-medium">{searchTerm ? 'No matches found.' : 'Start building your global corporate leadership structure.'}</p>
+                                    </div>
+                                    {!searchTerm && (
+                                        <button
+                                            onClick={() => setShowModal(true)}
+                                            className="text-blue-600 font-black flex items-center gap-3 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs"
+                                        >
+                                            Deploy First Mission <ChevronRight size={16} />
+                                        </button>
+                                    )}
+                                </div>
+                            ) : (
+                                paginatedMembers.map((member, index) => (
+                                    <div key={member.id} className="bg-white rounded-[3.5rem] overflow-hidden border border-gray-50 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-3 transition-all p-8 group relative text-left">
+                                        <div className="relative mb-8">
+                                            <div className="w-full aspect-square bg-slate-900 rounded-[2.5rem] overflow-hidden border-8 border-white shadow-xl relative group/img">
+                                                {member.image_url ? (
+                                                    <img src={member.image_url} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110" />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-slate-800">
+                                                        <UserIcon size={120} />
+                                                    </div>
+                                                )}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
+                                            </div>
+
+                                            <div className="absolute top-6 right-6 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-all transform translate-x-10 group-hover:translate-x-0 duration-500">
+                                                <button
+                                                    onClick={() => handleEdit(member)}
+                                                    className="w-12 h-12 bg-white text-blue-600 rounded-2xl shadow-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50"
+                                                >
+                                                    <Edit2 size={20} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(member.id, member.name)}
+                                                    className="w-12 h-12 bg-white text-rose-500 rounded-2xl shadow-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50"
+                                                >
+                                                    <Trash2 size={20} />
+                                                </button>
+                                            </div>
+
+                                            <div className={`absolute bottom-6 left-6 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl backdrop-blur-md border border-white/20 ${member.is_active ? 'bg-emerald-500/90 text-white' : 'bg-rose-500/90 text-white'
+                                                }`}>
+                                                {member.is_active ? 'LIVE' : 'HIDDEN'}
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3 px-2">
+                                            <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter leading-none italic group-hover:text-blue-600 transition-colors">{member.name}</h3>
+                                            <p className="text-blue-600 font-bold uppercase tracking-widest text-[11px] bg-blue-50/50 inline-block px-3 py-1 rounded-lg">
+                                                {language === 'id' ? member.position_id : member.position_en}
+                                            </p>
+
+                                            <div className="pt-6 flex items-center justify-between border-t border-gray-50 mt-6">
+                                                <div className="flex bg-gray-50 p-1.5 rounded-2xl gap-1">
+                                                    <button
+                                                        disabled={index === 0}
+                                                        onClick={() => updateSortOrder(member.id, member.sort_order - 1)}
+                                                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-white hover:text-blue-600 hover:shadow-sm rounded-xl transition-all disabled:opacity-0"
+                                                    >
+                                                        <MoveUp size={16} />
+                                                    </button>
+                                                    <button
+                                                        disabled={index === members.length - 1}
+                                                        onClick={() => updateSortOrder(member.id, member.sort_order + 1)}
+                                                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:bg-white hover:text-blue-600 hover:shadow-sm rounded-xl transition-all disabled:opacity-0"
+                                                    >
+                                                        <MoveDown size={16} />
+                                                    </button>
+                                                </div>
+                                                <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em] italic">Rank #{index + 1}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex items-center justify-between p-4 px-8 mt-4">
+                                <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                                    Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredMembers.length)} of {filteredMembers.length}
+                                </div>
+                                <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                        className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                    >
+                                        <ChevronLeft size={16} />
+                                    </button>
+                                    <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                                        {currentPage} / {totalPages}
+                                    </div>
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages}
+                                        className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                                    >
+                                        <ChevronRight size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                );
+            })()
+            }
 
             {showModal && (
                 <div className="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[200] flex items-center justify-center p-0 md:p-8 transition-all duration-500">

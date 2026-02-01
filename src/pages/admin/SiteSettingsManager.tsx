@@ -29,6 +29,12 @@ interface SiteSettings {
     footer_text_id: string;
     footer_text_en: string;
     visitor_count: number;
+    company_stats?: {
+        value: string;
+        label_id: string;
+        label_en: string;
+        icon: string;
+    }[];
 }
 
 const SiteSettingsManager: React.FC = () => {
@@ -70,7 +76,8 @@ const SiteSettingsManager: React.FC = () => {
             if (data) {
                 setSettings({
                     ...data,
-                    social_links: data.social_links || {}
+                    social_links: data.social_links || {},
+                    company_stats: data.company_stats || []
                 });
             } else {
                 // Fallback or initial blank state
@@ -87,6 +94,7 @@ const SiteSettingsManager: React.FC = () => {
                     footer_text_id: '',
                     footer_text_en: '',
                     visitor_count: 0,
+                    company_stats: []
                 });
             }
         } catch (error) {
@@ -395,6 +403,113 @@ const SiteSettingsManager: React.FC = () => {
                                 className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-medium text-sm"
                             />
                         </div>
+                    </div>
+                </div>
+
+                {/* Company Statistics */}
+                <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 space-y-8">
+                    <div className="flex items-center gap-3 pb-4 border-b border-gray-50">
+                        <Sparkles className="text-blue-600" size={24} />
+                        <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Key Statistics</h3>
+                    </div>
+
+                    <div className="space-y-6">
+                        {settings?.company_stats?.map((stat: any, index: number) => (
+                            <div key={index} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-4">
+                                <div className="flex justify-between items-start">
+                                    <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest">Stat Item #{index + 1}</h4>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const newStats = [...(settings.company_stats || [])];
+                                            newStats.splice(index, 1);
+                                            setSettings({ ...settings, company_stats: newStats });
+                                        }}
+                                        className="text-red-500 hover:text-red-700 transition-colors"
+                                    >
+                                        <div className="bg-red-100 p-1.5 rounded-lg">
+                                            <AlertCircle size={16} />
+                                        </div>
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Value</label>
+                                        <input
+                                            type="text"
+                                            value={stat.value}
+                                            onChange={(e) => {
+                                                const newStats = [...(settings.company_stats || [])];
+                                                newStats[index] = { ...newStats[index], value: e.target.value };
+                                                setSettings({ ...settings, company_stats: newStats });
+                                            }}
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-50 text-sm font-bold"
+                                            placeholder="e.g. 55+"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Icon</label>
+                                        <select
+                                            value={stat.icon}
+                                            onChange={(e) => {
+                                                const newStats = [...(settings.company_stats || [])];
+                                                newStats[index] = { ...newStats[index], icon: e.target.value };
+                                                setSettings({ ...settings, company_stats: newStats });
+                                            }}
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-50 text-sm font-bold"
+                                        >
+                                            <option value="Clock">Clock (Time)</option>
+                                            <option value="Building2">Building (Branches)</option>
+                                            <option value="Users">Users (Distribution)</option>
+                                            <option value="TrendingUp">Trending Up (Growth)</option>
+                                            <option value="Award">Award (Quality)</option>
+                                            <option value="Globe">Globe (Network)</option>
+                                            <option value="Shield">Shield (Safety)</option>
+                                            <option value="MapPin">MapPin (Location)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Label (ID)</label>
+                                        <input
+                                            type="text"
+                                            value={stat.label_id}
+                                            onChange={(e) => {
+                                                const newStats = [...(settings.company_stats || [])];
+                                                newStats[index] = { ...newStats[index], label_id: e.target.value };
+                                                setSettings({ ...settings, company_stats: newStats });
+                                            }}
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-50 text-sm font-medium"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Label (EN)</label>
+                                        <input
+                                            type="text"
+                                            value={stat.label_en}
+                                            onChange={(e) => {
+                                                const newStats = [...(settings.company_stats || [])];
+                                                newStats[index] = { ...newStats[index], label_en: e.target.value };
+                                                setSettings({ ...settings, company_stats: newStats });
+                                            }}
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-50 text-sm font-medium"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                        <button
+                            type="button"
+                            onClick={() => {
+                                const newStats = [...(settings?.company_stats || [])];
+                                newStats.push({ value: '0', label_id: 'Label Baru', label_en: 'New Label', icon: 'Clock' });
+                                setSettings({ ...settings!, company_stats: newStats });
+                            }}
+                            className="w-full py-4 border-2 border-dashed border-gray-200 rounded-2xl text-gray-400 font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all flex items-center justify-center gap-2"
+                        >
+                            <Sparkles size={18} /> Add New Statistic
+                        </button>
                     </div>
                 </div>
 

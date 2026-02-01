@@ -101,7 +101,7 @@ const CertificationSection: React.FC = () => {
                 { id: 'Transparansi Digital Terpadu', en: 'Integrated Digital Transparency', badge: 'Compliance' }
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner border border-blue-600/20">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner border border-emerald-100 transition-all">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <div className="flex flex-col">
