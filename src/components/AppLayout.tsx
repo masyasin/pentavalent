@@ -205,6 +205,20 @@ import CodeOfConductPage from '../pages/CodeOfConductPage';
 
 const AppLayout: React.FC = () => {
   const location = useLocation();
+  
+  // Handle Supabase Password Recovery Redirect
+  // When user clicks the email link, they are redirected to /#access_token=...&type=recovery
+  useEffect(() => {
+    if (location.hash && location.hash.includes('type=recovery')) {
+      // Redirect to Admin Password Reset page
+      // We use window.location to force a full reload and clear the hash from the URL bar cleanly
+      // But SPA navigation is smoother if we can pass the hash.
+      
+      // Let's redirect to /admin/reset-password which we will create/handle
+      window.location.href = `/admin/reset-password${location.hash}`;
+    }
+  }, [location]);
+
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isFAQRoute = location.pathname === '/faq';
   const isSitemapRoute = location.pathname === '/sitemap';

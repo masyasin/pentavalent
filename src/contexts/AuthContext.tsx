@@ -388,6 +388,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const resetPassword = async (resetToken: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {
     try {
+      // FLOW 1: If resetToken is actually a "session check" signal (from email link flow)
+      // When user comes from email link, Supabase client automatically establishes a session.
+      // We just need to update the user.
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+         console.log('Session found (Recovery Flow). Updating password directly...');
+         const { error } = await supabase.auth.updateUser({ password: newPassword });
+         
+         if (error) {
+            return { success: false, error: error.message };
+         }
+         return { success: true };
+      }
+
+      // FLOW 2: Manual Token (Legacy / Fallback) - Requires Edge Function
       const { data, error } = await supabase.functions.invoke('auth', {
         body: { action: 'reset_password', token: resetToken, new_password: newPassword },
       });

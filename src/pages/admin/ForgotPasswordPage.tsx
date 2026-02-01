@@ -21,6 +21,30 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const otpInputs = React.useRef<(HTMLInputElement | null)[]>([]);
 
+  // Auto-detect hash token from URL (Supabase Recovery Flow)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token')) {
+        // Parse token from hash
+        // #access_token=...&expires_at=...&refresh_token=...&token_type=bearer&type=recovery
+        const params = new URLSearchParams(hash.replace('#', '?'));
+        const accessToken = params.get('access_token');
+        
+        if (accessToken) {
+            setStep('reset');
+            // We use the access token as the "reset token" for our UI logic,
+            // although Supabase usually handles this via `supabase.auth.updateUser` directly
+            // once the session is established.
+            // 
+            // IMPORTANT: When redirecting from email link, Supabase client automatically detects the hash
+            // and sets the session. So `useAuth().user` might actually be populated soon.
+            // But we are in the "Unauthenticated" view of AdminPage.
+            
+            // Let's store it temporarily or just let the user set the new password.
+        }
+    }
+  }, []);
+
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');

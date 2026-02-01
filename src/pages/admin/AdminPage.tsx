@@ -55,6 +55,11 @@ const AdminContent: React.FC = () => {
     if (authView === 'forgot') {
       return <ForgotPasswordPage onBack={() => setAuthView('login')} />;
     }
+    if (authView === 'reset') {
+       // We reuse ForgotPasswordPage but force it to 'reset' step? 
+       // Or better, pass the hash to it.
+       return <ForgotPasswordPage onBack={() => setAuthView('login')} initialStep="reset" />;
+    }
     return <LoginPage onForgotPassword={() => setAuthView('forgot')} />;
   }
 
