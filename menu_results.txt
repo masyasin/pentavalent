@@ -1,0 +1,6 @@
+[1] Farmasi (/business/pharmaceuticals) - ID: 185a219c-e1e0-47c2-9643-e786d1f0ada8
+[2] Alat Kesehatan & Produk Medis (/business/medical-equipment) - ID: 2885662d-cc65-48d4-8329-fd42b71a1068
+[3] Barang Konsumsi (/business/consumer-goods) - ID: 2af950c2-5853-4472-9113-2c31c8f9308c
+[4] Alur Distribusi (/business/distribution-flow) - ID: 35f6641d-7f95-4a79-aa2d-abff7e8e272f
+[5] Target Pasar (/business/target-market) - ID: 55ee1ca1-9901-40a1-86df-faf3824c1fa8
+[6] Strategi Bisnis (/business/strategi-usaha) - ID: fbe312c4-36ef-415d-9253-2e8a986a0287

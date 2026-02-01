@@ -8,7 +8,7 @@ import { supabase } from '../../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ChevronLeft, ChevronRight, TrendingUp, Search, X, Package, ShieldCheck, Zap, Activity, Users, Globe, Building2, Target, ArrowRight, Heart, Smile, Sparkles, Stethoscope, Leaf, Briefcase, Pill, Server, Handshake, CheckCircle2,
-    Hospital, Building, Ambulance, ClipboardList, ShoppingBag, Store, ShoppingCart, Scissors, Gem, Warehouse, Home, Truck, Boxes, Coffee, Droplet
+    Hospital, Building, Ambulance, ClipboardList, ShoppingBag, Store, ShoppingCart, Scissors, Gem, Warehouse, Home, Truck, Boxes, Coffee, Droplet, MapPin
 } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -179,9 +179,10 @@ const TARGET_MARKET_DETAILS = [
 const BusinessPage: React.FC = () => {
     const { language, t } = useLanguage();
     const location = useLocation();
+    const [loading, setLoading] = useState(true);
     const [businessData, setBusinessData] = useState<BusinessLine | null>(null);
     const [advantages, setAdvantages] = useState<BusinessAdvantage[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [settings, setSettings] = useState<any>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [activeTargetTab, setActiveTargetTab] = useState<string | null>('Farmasi');
 
@@ -379,6 +380,16 @@ const BusinessPage: React.FC = () => {
                     } else {
                         setAdvantages([]);
                     }
+
+                    // Fetch Site Settings for National Reach Bar
+                    const { data: settingsData } = await supabase
+                        .from('site_settings')
+                        .select('*')
+                        .single();
+
+                    if (settingsData) {
+                        setSettings(settingsData);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching business line:', error);
@@ -438,7 +449,7 @@ const BusinessPage: React.FC = () => {
         );
     }
 
-    const isSpecialBusinessPage = (location.pathname.includes('pharmaceuticals') || location.pathname.includes('consumer-goods')) && !location.pathname.includes('strategi-usaha');
+    const isSpecialBusinessPage = (location.pathname.includes('pharmaceuticals') || location.pathname.includes('consumer-goods') || location.pathname.includes('medical-equipment')) && !location.pathname.includes('strategi-usaha');
     const isTargetMarketOrFlow = location.pathname.includes('target-market') || location.pathname.includes('distribution-flow');
 
 
@@ -454,6 +465,64 @@ const BusinessPage: React.FC = () => {
             />
 
             <main className="max-w-[1600px] mx-auto px-6 lg:px-12 py-20 relative z-10 -mt-24 md:-mt-32">
+                {/* National Reach Trust Bar */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mb-12"
+                >
+                    <div className="bg-white/70 backdrop-blur-xl p-8 md:p-10 rounded-[3rem] border border-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.05)] relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500"></div>
+                        <div className={`grid grid-cols-1 ${settings?.company_stats?.length === 4 ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-10 md:gap-4 items-center`}>
+                            {(settings?.company_stats && settings.company_stats.length > 0 ? settings.company_stats : [
+                                { value: '2023', label_id: 'Melantai di Bursa', label_en: 'Publicly Listed', icon: 'TrendingUp', subtitle_id: 'PT Penta Valent Tbk', subtitle_en: 'PT Penta Valent Tbk' },
+                                { value: '34', label_id: 'Cabang Nasional', label_en: 'National Branches', icon: 'MapPin', subtitle_id: 'Seluruh Wilayah Indonesia', subtitle_en: 'Across Indonesia Territory' },
+                                { value: '21.000+', label_id: 'Outlet Farmasi', label_en: 'Pharma Outlets', icon: 'Pill', subtitle_id: 'Apotek, RS & Klinik', subtitle_en: 'Pharmacies, Hospitals & Clinics' },
+                                { value: '14.000+', label_id: 'Outlet Konsumsi', label_en: 'Consumer Outlets', icon: 'ShoppingBag', subtitle_id: 'Modern Trade & Retail', subtitle_en: 'Modern Trade & Retailers' }
+                            ]).map((stat: any, idx: number, arr: any[]) => {
+                                const IconComp = {
+                                    MapPin: MapPin,
+                                    Pill: Pill,
+                                    ShoppingBag: ShoppingBag,
+                                    Building2: Building2,
+                                    Users: Users,
+                                    TrendingUp: TrendingUp,
+                                    Clock: CheckCircle2 // Fallback
+                                }[stat.icon as string] || CheckCircle2;
+
+                                const colorStyles: Record<string, string> = {
+                                    TrendingUp: 'bg-indigo-50 text-indigo-600',
+                                    MapPin: 'bg-cyan-50 text-cyan-600',
+                                    Pill: 'bg-blue-50 text-blue-600',
+                                    ShoppingBag: 'bg-emerald-50 text-emerald-600',
+                                    Building2: 'bg-blue-50 text-blue-600',
+                                    Users: 'bg-rose-50 text-rose-600'
+                                };
+
+                                const currentStyle = colorStyles[stat.icon] || 'bg-slate-50 text-slate-600';
+
+                                return (
+                                    <div key={idx} className={`flex items-center gap-6 px-4 ${idx < arr.length - 1 ? 'border-r-0 md:border-r border-slate-100' : ''}`}>
+                                        <div className={`w-16 h-16 rounded-[1.5rem] ${currentStyle} flex items-center justify-center shadow-sm shrink-0`}>
+                                            <IconComp size={32} />
+                                        </div>
+                                        <div>
+                                            <div className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tighter italic">{stat.value}</div>
+                                            <div className="text-[10px] lg:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">
+                                                {language === 'id' ? stat.label_id : stat.label_en}
+                                            </div>
+                                            <p className="text-[10px] font-bold text-slate-500 mt-1 leading-tight">
+                                                {stat.subtitle_id ? (language === 'id' ? stat.subtitle_id : stat.subtitle_en) : (idx === 1 ? (language === 'id' ? 'Seluruh Wilayah Indonesia' : 'Across Indonesia Territory') : idx === 2 ? (language === 'id' ? 'Apotek, RS & Klinik' : 'Pharmacies, Hospitals & Clinics') : (language === 'id' ? 'Modern Trade & Retail' : 'Modern Trade & Retailers'))}
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </motion.div>
+
                 <div className={`grid grid-cols-1 gap-12 ${isTargetMarketOrFlow ? 'lg:grid-cols-1' : 'lg:grid-cols-12'}`}>
                     {/* Main Content */}
                     <div className={(
@@ -842,11 +911,11 @@ const BusinessPage: React.FC = () => {
                                             <h3 className="text-sm font-black text-white/40 uppercase tracking-[0.3em]">Performance Metrics</h3>
 
                                             <div className="flex flex-wrap gap-12">
-                                                {[
-                                                    { value: '5000+', label: 'Produk Aktif' },
-                                                    { value: '12000+', label: 'Outlet Terlayani' },
-                                                    { value: '150+', label: 'Prinsipal Partner' }
-                                                ].map((stat, idx) => (
+                                                {(businessData.stats && businessData.stats.length > 0 ? businessData.stats : [
+                                                    { value: '5000+', label: language === 'id' ? 'Produk Aktif' : 'Active Products' },
+                                                    { value: '12000+', label: language === 'id' ? 'Outlet Terlayani' : 'Outlets Served' },
+                                                    { value: '150+', label: language === 'id' ? 'Prinsipal Partner' : 'Principal Partners' }
+                                                ]).map((stat, idx) => (
                                                     <div key={idx} className="relative group">
                                                         <div className="text-4xl xl:text-5xl font-black text-cyan-400 tracking-tighter italic mb-2 group-hover:scale-105 transition-transform origin-left">
                                                             {stat.value}
@@ -888,7 +957,7 @@ const BusinessPage: React.FC = () => {
                                                         </div>
                                                         <div>
                                                             <div className="font-bold text-slate-900 text-sm group-hover/file:text-cyan-700 transition-colors">{file.label}</div>
-                                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">{file.type} • {file.size}</div>
+                                                            <div className="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider mt-1">{file.type} • {file.size}</div>
                                                         </div>
                                                         <div className="ml-auto opacity-0 group-hover/file:opacity-100 transition-opacity -translate-x-2 group-hover/file:translate-x-0">
                                                             <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>

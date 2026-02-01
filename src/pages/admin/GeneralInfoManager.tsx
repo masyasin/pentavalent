@@ -362,7 +362,7 @@ const GeneralInfoManager: React.FC = () => {
                                 <FileUpload
                                     onUploadComplete={(url) => setInfo({ ...info!, image_url: url })}
                                     currentUrl={info?.image_url || ''}
-                                    label="Featured Corporate Image"
+                                    label="Corporate Visual (Grand Office Building)"
                                     bucket="images"
                                     type="image"
                                 />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
-import { Clock, Building2, Users, TrendingUp, Award, Globe, Shield, MapPin } from 'lucide-react';
+import { Clock, Building2, Users, TrendingUp, Award, Globe, Shield, MapPin, Pill, ShoppingBag } from 'lucide-react';
 
 interface StatItem {
     value: string;
@@ -31,10 +31,9 @@ const SnapshotSection: React.FC = () => {
             } else {
                 // Fallback defaults
                 setStats([
-                    { value: '55+', label_id: 'Tahun Pengalaman', label_en: 'Years of Experience', icon: 'Clock' },
-                    { value: '34', label_id: 'Cabang & Depo', label_en: 'Branches & Depots', icon: 'Building2' },
-                    { value: '14K+', label_id: 'Titik Distribusi', label_en: 'Distribution Points', icon: 'Users' },
-                    { value: '2023', label_id: 'Melantai di Bursa', label_en: 'Publicly Listed', icon: 'TrendingUp' }
+                    { value: '34', label_id: 'Cabang Nasional', label_en: 'National Branches', icon: 'MapPin' },
+                    { value: '21.000+', label_id: 'Outlet Farmasi', label_en: 'Pharma Outlets', icon: 'Pill' },
+                    { value: '14.000+', label_id: 'Outlet Konsumsi', label_en: 'Consumer Outlets', icon: 'ShoppingBag' }
                 ]);
             }
         } catch (error) {
@@ -50,11 +49,13 @@ const SnapshotSection: React.FC = () => {
             case 'Clock': return { icon: <Clock {...props} />, color: 'bg-amber-100 text-amber-600' };
             case 'Building2': return { icon: <Building2 {...props} />, color: 'bg-blue-100 text-blue-600' };
             case 'Users': return { icon: <Users {...props} />, color: 'bg-rose-100 text-rose-600' };
-            case 'TrendingUp': return { icon: <TrendingUp {...props} />, color: 'bg-emerald-100 text-emerald-600' };
+            case 'TrendingUp': return { icon: <TrendingUp {...props} />, color: 'bg-indigo-100 text-indigo-600' };
             case 'Award': return { icon: <Award {...props} />, color: 'bg-purple-100 text-purple-600' };
             case 'Globe': return { icon: <Globe {...props} />, color: 'bg-cyan-100 text-cyan-600' };
             case 'Shield': return { icon: <Shield {...props} />, color: 'bg-indigo-100 text-indigo-600' };
-            case 'MapPin': return { icon: <MapPin {...props} />, color: 'bg-teal-100 text-teal-600' };
+            case 'MapPin': return { icon: <MapPin {...props} />, color: 'bg-cyan-100 text-cyan-600' };
+            case 'Pill': return { icon: <Pill {...props} />, color: 'bg-blue-100 text-blue-600' };
+            case 'ShoppingBag': return { icon: <ShoppingBag {...props} />, color: 'bg-emerald-100 text-emerald-600' };
             default: return { icon: <Clock {...props} />, color: 'bg-slate-100 text-slate-600' };
         }
     };
@@ -62,7 +63,7 @@ const SnapshotSection: React.FC = () => {
     return (
         <section className="relative z-30 -mt-10 md:-mt-20 px-6">
             <div className="max-w-[1700px] mx-auto">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+                <div className={`grid grid-cols-2 ${stats.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-4 md:gap-8`}>
                     {stats.map((stat, i) => {
                         const iconData = getIcon(stat.icon);
                         return (

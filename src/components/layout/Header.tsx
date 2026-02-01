@@ -161,7 +161,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   >
                     <button
                       onClick={() => !hasChildren && handleLinkClick(menu.path)}
-                      className={`px-3 lg:px-4 py-2.5 rounded-full text-[11px] lg:text-[12px] font-black uppercase tracking-[0.16em] transition-all duration-500 relative flex items-center gap-2 group/btn ${isActive || (hasChildren && activeDropdown === menu.id)
+                      className={`px-3 lg:px-4 py-2.5 rounded-full text-[12px] lg:text-[13px] font-black uppercase tracking-[0.16em] transition-all duration-500 relative flex items-center gap-2 group/btn ${isActive || (hasChildren && activeDropdown === menu.id)
                         ? (isScrolled ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'text-white bg-white/20 ring-1 ring-white/30')
                         : (isScrolled ? 'text-slate-600 hover:text-primary hover:bg-slate-100/50' : 'text-white/80 hover:text-white hover:bg-white/10')
                         }`}
@@ -241,14 +241,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                                   onClick={() => handleLinkClick(child.path)}
                                   className="w-full text-left p-3 rounded-2xl bg-white/50 hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all duration-300 flex items-start gap-3 group/item relative overflow-hidden shadow-sm hover:shadow-md h-full"
                                 >
-                                  <div className="w-10 h-10 rounded-xl bg-white text-slate-400 flex items-center justify-center transition-all group-hover/item:bg-primary group-hover/item:text-white shadow-sm border border-slate-100 flex-shrink-0">
-                                    {icons[child.path] || <ArrowRight size={18} />}
+                                  <div className="w-11 h-11 rounded-xl bg-white text-slate-400 flex items-center justify-center transition-all group-hover/item:bg-primary group-hover/item:text-white shadow-sm border border-slate-100 flex-shrink-0">
+                                    {icons[child.path] || <ArrowRight size={20} />}
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <div className="text-[11px] font-black text-slate-800 uppercase tracking-tight group-hover/item:text-primary transition-colors flex items-center justify-between mb-0.5">
+                                    <div className="text-[13px] font-black text-slate-800 uppercase tracking-tight group-hover/item:text-primary transition-colors flex items-center justify-between mb-0.5">
                                       <span className="pr-2 leading-tight">{language === 'id' ? child.label_id : child.label_en}</span>
                                     </div>
-                                    <p className="text-[10px] font-medium text-slate-500 leading-tight line-clamp-2">
+                                    <p className="text-[11.5px] font-medium text-slate-500 leading-tight line-clamp-2">
                                       {descriptions[child.path] || (language === 'id' ? 'Informasi lebih lanjut' : 'Further information')}
                                     </p>
                                   </div>
@@ -362,7 +362,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                               <button
                                 key={child.id}
                                 onClick={() => handleLinkClick(child.path)}
-                                className="w-full text-left px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-400 bg-white border border-slate-50 hover:border-primary/20 hover:text-primary transition-all flex items-center justify-between group"
+                                className="w-full text-left px-6 py-4 rounded-2xl text-[12px] font-black uppercase tracking-widest text-slate-400 bg-white border border-slate-50 hover:border-primary/20 hover:text-primary transition-all flex items-center justify-between group"
                               >
                                 <span>{language === 'id' ? child.label_id : child.label_en}</span>
                                 <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
@@ -432,7 +432,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                         </div>
                         <div>
                           <h4 className="text-sm font-bold text-slate-900 group-hover:wow-icon-gradient inline-block transition-colors">{item.label}</h4>
-                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">{item.type}</p>
+                          <p className="text-[11.5px] text-slate-400 font-bold uppercase tracking-wide">{item.type}</p>
                         </div>
                         <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                           <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>

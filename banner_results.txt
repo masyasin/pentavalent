@@ -1,0 +1,28 @@
+[
+  {
+    "id": "322b72ee-e82b-4470-82b2-e46dc4ebffcf",
+    "page_path": "/business/pharmaceuticals",
+    "title_id": "Infrastruktur Modern",
+    "title_en": "Modern Infrastructure",
+    "subtitle_id": "Didukung fasilitas penyimpanan berstandar CDOB terkini.",
+    "subtitle_en": "Supported by the latest GSDP standard storage facilities.",
+    "image_url": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000",
+    "sort_order": 12,
+    "is_active": true,
+    "created_at": "2026-02-01T04:37:01.180187+00:00",
+    "updated_at": "2026-02-01T04:37:01.180187+00:00"
+  },
+  {
+    "id": "399da147-8b3c-47fe-ac52-170f6905d5e5",
+    "page_path": "/business/pharmaceuticals",
+    "title_id": "Jangkauan Nasional",
+    "title_en": "National Reach",
+    "subtitle_id": "Melayani pengiriman ke seluruh pelosok Indonesia tepat waktu.",
+    "subtitle_en": "Serving timely deliveries to all corners of Indonesia.",
+    "image_url": "https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&q=80&w=2000",
+    "sort_order": 13,
+    "is_active": true,
+    "created_at": "2026-02-01T04:37:01.180187+00:00",
+    "updated_at": "2026-02-01T04:37:01.180187+00:00"
+  }
+]

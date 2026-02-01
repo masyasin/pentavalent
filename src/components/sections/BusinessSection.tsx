@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
 import useEmblaCarousel from 'embla-carousel-react';
+import { useNavigate } from 'react-router-dom';
 
 interface BusinessLine {
   id: string;
@@ -36,7 +37,8 @@ const BusinessSection: React.FC = () => {
       features_en: ['Ethical Products', 'Generic Drugs', 'Cold Chain System'],
       color: 'from-blue-600 to-blue-800',
       long_desc_id: 'Mendistribusikan produk farmasi resep dan non-resep kepada rumah sakit, apotek, klinik, dan fasilitas pelayanan kesehatan lainnya.',
-      long_desc_en: 'Distributing prescription and non-prescription pharmaceutical products to hospitals, pharmacies, clinics, and other healthcare facilities.'
+      long_desc_en: 'Distributing prescription and non-prescription pharmaceutical products to hospitals, pharmacies, clinics, and other healthcare facilities.',
+      path: '/business/pharmaceuticals'
     },
     {
       title_id: 'Alat Kesehatan & Produk Medis',
@@ -52,7 +54,8 @@ const BusinessSection: React.FC = () => {
       features_en: ['Hospital Equipment', 'Lab Diagnostics', 'Medical Consumables'],
       color: 'from-cyan-500 to-cyan-700',
       long_desc_id: 'Menyediakan berbagai alat kesehatan dan produk medis dengan pengelolaan distribusi yang sesuai standar mutu dan keamanan.',
-      long_desc_en: 'Providing various medical devices and products with distribution management that complies with quality and safety standards.'
+      long_desc_en: 'Providing various medical devices and products with distribution management that complies with quality and safety standards.',
+      path: '/business/medical-equipment'
     },
     {
       title_id: 'Produk Konsumen & Kesehatan',
@@ -68,9 +71,12 @@ const BusinessSection: React.FC = () => {
       features_en: ['OTC Medicines', 'Personal Care', 'Beauty & Skin'],
       color: 'from-emerald-500 to-emerald-700',
       long_desc_id: 'Distribusi produk kesehatan konsumen, OTC, personal care, dan produk kecantikan melalui jaringan ritel dan modern trade.',
-      long_desc_en: 'Distribution of consumer health products, OTC, personal care, and beauty products through retail and modern trade networks.'
+      long_desc_en: 'Distribution of consumer health products, OTC, personal care, and beauty products through retail and modern trade networks.',
+      path: '/business/consumer-goods'
     }
   ];
+
+  const navigate = useNavigate();
 
   if (loading) return null;
 
@@ -120,7 +126,10 @@ const BusinessSection: React.FC = () => {
                 ))}
               </div>
 
-              <button className="mt-auto group/btn flex items-center gap-3 text-[13px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-slate-900 transition-all duration-500">
+              <button
+                onClick={() => navigate(div.path)}
+                className="mt-auto group/btn flex items-center gap-3 text-[13px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-slate-900 transition-all duration-500 cursor-pointer"
+              >
                 DISCOVER CAPABILITIES
                 <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover/btn:bg-slate-900 group-hover/btn:text-white transition-all">
                   →
