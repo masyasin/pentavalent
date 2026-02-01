@@ -355,44 +355,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return { success: false, error: 'Authorization failed: This email is not registered in our system.' };
       }
 
-      // 2. PHASE 2: INVOKE RESET
+      // 2. PHASE 2: INVOKE RESET (Using our own API)
+      const response = await fetch('/api/request-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return { success: false, error: data.error || 'Failed to request password reset' };
+      }
+
+      // Success! The email has been sent by our API.
+      // We return a dummy token just to satisfy the UI state transition,
+      // or we can update the UI to just say "Check your email for the link".
+      return { success: true, reset_token: 'CHECK_EMAIL_LINK' };
+
+      /*
+      // OLD LOGIC
       const { data, error } = await supabase.functions.invoke('auth', {
         body: { action: 'request_reset', email },
       });
-
-      // NOTE: We ignore 'error' here if it's just about email sending, 
-      // because we want to use our own Gmail SMTP if the Edge Function fails to send but returns a token.
-      
-      const resetToken = data?.reset_token;
-
-      if (!resetToken) {
-         if (error || data?.error) {
-             return { success: false, error: data?.error || error || 'Failed to generate reset token.' };
-         }
-         return { success: false, error: 'System error: No reset token generated.' };
-      }
-
-      // 3. PHASE 3: SEND EMAIL VIA GMAIL SMTP (New Flow)
-      // Even if Supabase sent one (or failed), we send one using our reliable Gmail setup
-      try {
-        const emailRes = await fetch('/api/send-password-reset', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, token: resetToken })
-        });
-        
-        const emailData = await emailRes.json();
-        if (!emailRes.ok) {
-            console.error('Gmail Reset Send Error:', emailData);
-            // We don't fail the whole process if email fails, we return the token so user can manually proceed if needed (or fallback)
-            // But ideally we should warn.
-            return { success: true, reset_token: resetToken, error: `Token generated but email failed: ${emailData.error}` };
-        }
-      } catch (e) {
-        console.error('Gmail Reset Fetch Error:', e);
-      }
-
-      return { success: true, reset_token: resetToken };
+      ...
+      */
     } catch (error) {
       console.error('Password reset request error:', error);
       return { success: false, error: 'System busy. Please try again in a moment.' };
