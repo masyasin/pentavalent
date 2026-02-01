@@ -29,8 +29,8 @@ export default async function handler(req: any, res: any) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Pentavalent Admin",
-          email: "admin@pentavalent.co.id" // Anda bisa ganti ini dengan email apa saja, Brevo biasanya mengizinkan pengiriman awal dari email pendaftaran
+          name: "Pentavalent Security",
+          email: "banana196501@gmail.com" // WAJIB SAMA dengan email login Brevo (sebelum verifikasi domain)
         },
         to: [{ email: email }],
         subject: "[Pentavalent] Verification Code",
