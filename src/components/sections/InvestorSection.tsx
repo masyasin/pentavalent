@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
+import { MiniStockChart } from '../investor/TradingViewWidgets';
 
 interface InvestorDocument {
   id: string;
@@ -91,13 +92,16 @@ const InvestorSection: React.FC = () => {
             </h2>
           </div>
 
-          <div className="bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl flex items-center gap-10 group transition-all duration-500">
-            <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-all border border-white/10">
-              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          <div className="bg-slate-900 p-8 md:p-10 rounded-[2.5rem] shadow-2xl flex items-center gap-8 md:gap-10 group transition-all duration-500 overflow-hidden relative">
+            <div className="absolute inset-0 opacity-20 pointer-events-none">
+              <MiniStockChart symbol="PEVE" theme="dark" />
             </div>
-            <div>
-              <div className="text-4xl font-black text-white leading-none mb-2">PEVE</div>
-              <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">{t('investor.ticker.label')}</div>
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-all border border-white/10 relative z-10">
+              <svg className="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+            </div>
+            <div className="relative z-10">
+              <div className="text-3xl md:text-4xl font-black text-white leading-none mb-2 tracking-tighter">PEVE</div>
+              <div className="text-[9px] md:text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">{t('investor.ticker.label')}</div>
             </div>
           </div>
         </div>

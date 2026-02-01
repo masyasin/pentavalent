@@ -7,8 +7,8 @@ import PageSlider from '../../../components/common/PageSlider';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { supabase } from '../../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, Download, FileText, Calendar, ArrowUpRight, TrendingUp, PieChart, Activity, Users, BarChart3, Clock, Briefcase, ExternalLink, Shield, Info, MapPin, Heart, Package, Award } from 'lucide-react';
-import { StockSymbolOverview, StockPriceTicker } from '../../../components/investor/TradingViewWidgets';
+import { ChevronRight, Download, FileText, Calendar, ArrowUpRight, TrendingUp, PieChart, Activity, Users, BarChart3, Clock, Briefcase, ExternalLink, Shield, Info, MapPin, Heart, Package, Award, Building2 } from 'lucide-react';
+import { StockSymbolOverview, StockPriceTicker, TechnicalAnalysis, StockFinancials, FundamentalData, CompanyProfileWidget, SymbolInfo } from '../../../components/investor/TradingViewWidgets';
 
 interface InvestorDoc {
     id: string;
@@ -445,71 +445,179 @@ const InvestorPage: React.FC = () => {
 
                                         {getSlug() === 'informasi-saham' && (
                                             <div className="space-y-12">
+                                                {/* 1. Main Market Chart & Live Ticker */}
                                                 <div className="bg-white rounded-[3rem] border border-slate-100 p-8 md:p-12 shadow-xl shadow-slate-200/50">
-                                                    <div className="flex items-center justify-between mb-12">
-                                                        <h3 className="text-2xl font-black tracking-tight uppercase italic text-cyan-600">Trading Info</h3>
-                                                        <div className="flex gap-2">
-                                                            {['1D', '1W', '1M', '1Q', '1Y'].map(t => (
-                                                                <button key={t} className={`px-4 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all ${t === '1W' ? 'bg-cyan-600 text-white' : 'bg-slate-50 text-slate-400 hover:bg-cyan-500 hover:text-white'}`}>
-                                                                    {t}
-                                                                </button>
-                                                            ))}
+                                                    <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
+                                                        <div>
+                                                            <h3 className="text-2xl font-black tracking-tight uppercase italic text-cyan-600 mb-2">Market Performance</h3>
+                                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Real-time Trading Overview (IDX:PEVE)</p>
                                                         </div>
-                                                    </div>
-
-                                                    <div className="flex flex-col lg:flex-row gap-12">
-                                                        {/* Summary Table - Left Side */}
-                                                        <div className="lg:w-1/3 border border-slate-100 rounded-[2rem] p-8 bg-slate-50/50">
-                                                            <div className="space-y-4">
-                                                                {[
-                                                                    { label: 'Date', value: '30 January 2026' },
-                                                                    { label: 'Time', value: '16:16:49' },
-                                                                    { label: 'High', value: '595' },
-                                                                    { label: 'Low', value: '565' },
-                                                                    { label: 'Last', value: '570' },
-                                                                    { label: 'Value', value: '143.51B' },
-                                                                    { label: 'Volume', value: '248.8K' },
-                                                                    { label: 'Frequency', value: '87' },
-                                                                    { label: 'Market Cap', value: '1.76T' },
-                                                                ].map((row, idx) => (
-                                                                    <div key={idx} className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0 border-dashed">
-                                                                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{row.label}</span>
-                                                                        <span className="text-[13px] font-black text-slate-900">{row.value}</span>
-                                                                    </div>
-                                                                ))}
+                                                        <div className="flex gap-2">
+                                                            <div className="px-4 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase bg-cyan-600 text-white shadow-lg shadow-cyan-500/20">
+                                                                Live Chart
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                        {/* Real TradingView Chart - Right Side */}
-                                                        <div className="lg:w-2/3 h-[500px] rounded-[2rem] overflow-hidden border border-slate-100 shadow-inner bg-white">
-                                                            <StockSymbolOverview symbol="PEVE" theme="light" height={500} />
+                                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                                        {/* Main Chart */}
+                                                        <div className="lg:col-span-8 h-[550px] rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-inner bg-white">
+                                                            <StockSymbolOverview symbol="PEVE" theme="light" height={550} />
+                                                        </div>
+
+                                                        {/* Technical Analysis Side Gauge */}
+                                                        <div className="lg:col-span-4 flex flex-col gap-6">
+                                                            <div className="h-[430px] rounded-[2.5rem] overflow-hidden border border-slate-100 bg-slate-50/50 p-6 flex flex-col">
+                                                                <div className="flex items-center gap-2 mb-4">
+                                                                    <Activity size={16} className="text-cyan-600" />
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Technical Gauge</span>
+                                                                </div>
+                                                                <div className="flex-1 min-h-0">
+                                                                    <TechnicalAnalysis symbol="PEVE" theme="light" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="p-8 rounded-[2rem] bg-slate-900 text-white flex flex-col justify-center">
+                                                                <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-4">Current Price</div>
+                                                                <div className="flex items-baseline gap-2">
+                                                                    <span className="text-4xl font-black tracking-tighter">PEVE</span>
+                                                                </div>
+                                                                <div className="mt-4 w-full scale-110 origin-left">
+                                                                    <StockPriceTicker symbol="PEVE" theme="dark" />
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="mt-6 flex items-start gap-2 max-w-2xl mx-auto text-center justify-center opacity-60 hover:opacity-100 transition-opacity">
-                                                        <Info size={14} className="mt-0.5 text-slate-400" />
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                                            {language === 'id' ? 'Data bersifat informatif dan bukan rekomendasi investasi.' : 'Data is for informational purposes only and is not an investment recommendation.'}
+                                                    <div className="mt-8 pt-6 border-t border-slate-100 flex items-start gap-3 opacity-70">
+                                                        <Info size={16} className="text-cyan-600 shrink-0 mt-0.5" />
+                                                        <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.05em] leading-relaxed">
+                                                            {language === 'id'
+                                                                ? 'Disclaimer: Data bersifat informatif dan bukan merupakan rekomendasi atau ajakan untuk membeli/menjual instrumen keuangan apapun.'
+                                                                : 'Disclaimer: Data is for informational purposes only and does not constitute a recommendation or solicitation to buy or sell any financial instruments.'}
                                                         </p>
                                                     </div>
                                                 </div>
 
-                                                {/* Key Ratios Section */}
-                                                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                                                    {ratios.map((ratio, i) => (
-                                                        <div key={i} className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/50 group hover:wow-border-glow transition-all">
-                                                            <div className="w-12 h-12 rounded-2xl bg-slate-50 text-cyan-600 flex items-center justify-center mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-all">
-                                                                {getIcon(ratio.icon_name)}
+                                                {/* 2. Financial Performance & Key Ratios */}
+                                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                                    {/* Live Financial Widget */}
+                                                    <div className="lg:col-span-8 bg-white rounded-[3rem] border border-slate-100 p-10 shadow-xl shadow-slate-200/30">
+                                                        <div className="flex items-center gap-3 mb-10">
+                                                            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                                                <TrendingUp size={20} />
                                                             </div>
-                                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{ratio.label}</div>
-                                                            <div className="text-3xl font-black text-slate-900 mb-2">{ratio.value}</div>
-                                                            <div className="text-[11px] font-medium text-slate-400 italic">
-                                                                {language === 'id' ? ratio.description_id : ratio.description_en}
+                                                            <div>
+                                                                <h3 className="text-xl font-black text-slate-900">{language === 'id' ? 'Kinerja Finansial' : 'Financial Performance'}</h3>
+                                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Income Statement & Balance Sheet Snapshot</p>
                                                             </div>
                                                         </div>
-                                                    ))}
+                                                        <div className="h-[500px] w-full bg-slate-50/30 rounded-[2rem] overflow-hidden border border-slate-50">
+                                                            <StockFinancials symbol="PEVE" theme="light" />
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Key Ratios Column */}
+                                                    <div className="lg:col-span-4 space-y-6">
+                                                        {ratios.map((ratio, i) => (
+                                                            <div key={i} className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-lg shadow-slate-200/20 group hover:border-cyan-500/30 transition-all flex items-center justify-between">
+                                                                <div>
+                                                                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{ratio.label}</div>
+                                                                    <div className="text-3xl font-black text-slate-900">{ratio.value}</div>
+                                                                    <div className="text-[10px] font-medium text-slate-400 italic">
+                                                                        {language === 'id' ? ratio.description_id : ratio.description_en}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="w-12 h-12 rounded-2xl bg-slate-50 text-cyan-500 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all transform group-hover:rotate-6">
+                                                                    {getIcon(ratio.icon_name)}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 </div>
 
-                                                {/* Shareholder & Dividend Section */}
+                                                {/* 3. Key Statistics & Market Overview (Reliable Data) */}
+                                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                                    <div className="lg:col-span-8 bg-white rounded-[3rem] border border-slate-100 p-10 shadow-xl shadow-slate-200/30">
+                                                        <div className="flex items-center gap-3 mb-8">
+                                                            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                                                <BarChart3 size={20} />
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-xl font-black text-slate-900">{language === 'id' ? 'Statistik Kunci & Ringkasan Pasar' : 'Key Statistics & Market Overview'}</h3>
+                                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Market Valuation & Price Summary</p>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Symbol Info is much more reliable for IDX stocks */}
+                                                        <div className="bg-slate-50/50 rounded-[2rem] p-4 border border-slate-50 mb-8">
+                                                            <SymbolInfo symbol="PEVE" theme="light" />
+                                                        </div>
+
+                                                        {/* Direct Database Stats Grid */}
+                                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                            {ratios.map((ratio, i) => (
+                                                                <div key={i} className="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                                                                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{ratio.label}</div>
+                                                                    <div className="text-xl font-black text-slate-900">{ratio.value}</div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Side Gauge - Mini Technical Analysis */}
+                                                    <div className="lg:col-span-4 space-y-6">
+                                                        <div className="p-10 bg-slate-900 rounded-[3rem] text-white h-full flex flex-col justify-between overflow-hidden relative group">
+                                                            <div className="absolute -right-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl transition-all group-hover:bg-cyan-500/20"></div>
+                                                            <div className="relative z-10">
+                                                                <div className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-4">Investment Rating</div>
+                                                                <h4 className="text-2xl font-black mb-6">Technical Signal</h4>
+                                                                <div className="h-[280px] w-full">
+                                                                    <TechnicalAnalysis symbol="PEVE" theme="dark" />
+                                                                </div>
+                                                            </div>
+                                                            <div className="relative z-10 pt-6 border-t border-white/10 mt-auto">
+                                                                <p className="text-[9px] font-medium text-white/40 italic leading-relaxed">
+                                                                    * {language === 'id' ? 'Sinyal teknikal berdasarkan indikator rata-rata pergerakan real-time.' : 'Technical signal based on real-time moving average indicators.'}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* 4. Financial Statements & Data Analysis */}
+                                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                                    {/* Company Profile (Issuer Info) */}
+                                                    <div className="lg:col-span-5 bg-white rounded-[3rem] border border-slate-100 p-10 shadow-xl shadow-slate-200/30">
+                                                        <div className="flex items-center gap-3 mb-8">
+                                                            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+                                                                <Building2 size={20} />
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-xl font-black text-slate-900">{language === 'id' ? 'Profil Emiten' : 'Issuer Profile'}</h3>
+                                                            </div>
+                                                        </div>
+                                                        <div className="h-[430px] w-full bg-slate-50/10 rounded-[2rem] overflow-hidden border border-slate-50">
+                                                            <CompanyProfileWidget symbol="PEVE" theme="light" />
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Financial Statement Widget */}
+                                                    <div className="lg:col-span-7 bg-white rounded-[3rem] border border-slate-100 p-10 shadow-xl shadow-slate-200/30">
+                                                        <div className="flex items-center gap-3 mb-8">
+                                                            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                                                <TrendingUp size={20} />
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-xl font-black text-slate-900">{language === 'id' ? 'Laporan Keuangan' : 'Financial Statement'}</h3>
+                                                            </div>
+                                                        </div>
+                                                        <div className="h-[430px] w-full bg-slate-50/10 rounded-[2rem] overflow-hidden border border-slate-50">
+                                                            <StockFinancials symbol="PEVE" theme="light" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Shareholder & Dividend Section (Redesigned) */}
                                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                                                     {/* Shareholder Structure */}
                                                     <div className="p-10 rounded-[3rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/50">

@@ -22,53 +22,37 @@ export const StockSymbolOverview: React.FC<TradingViewWidgetProps> = ({
         container.current.innerHTML = '';
 
         const script = document.createElement("script");
-        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
+        script.src = "https://s3.tradingview.com/tv.js";
         script.type = "text/javascript";
-        script.async = true;
-        script.innerHTML = JSON.stringify({
-            "symbols": [
-                [
-                    "IDX",
-                    symbol
-                ]
-            ],
-            "chartOnly": false,
-            "width": "100%",
-            "height": height,
-            "locale": "en",
-            "colorTheme": theme,
-            "autosize": true,
-            "showVolume": false,
-            "showMA": false,
-            "hideDateRanges": false,
-            "hideMarketStatus": false,
-            "hideSymbolLogo": false,
-            "scalePosition": "right",
-            "scaleMode": "Normal",
-            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-            "fontSize": "10",
-            "noTimeScale": false,
-            "valuesTracking": "1",
-            "changeMode": "price-and-percent",
-            "chartType": "area",
-            "maLineColor": "#2962FF",
-            "maLineWidth": 1,
-            "maLength": 9,
-            "lineWidth": 2,
-            "lineColor": "#2962FF",
-            "topColor": "rgba(41, 98, 255, 0.3)",
-            "bottomColor": "rgba(41, 98, 255, 0)",
-            "dateFormat": "MMM dd, yyyy",
-            "timeHoursFormat": "12-hour"
-        });
-
+        script.onload = () => {
+            if (typeof (window as any).TradingView !== 'undefined' && container.current) {
+                new (window as any).TradingView.widget({
+                    "width": "100%",
+                    "height": height,
+                    "symbol": `IDX:${symbol}`,
+                    "interval": "D",
+                    "timezone": "Asia/Jakarta",
+                    "theme": theme,
+                    "style": "3",
+                    "locale": "en",
+                    "toolbar_bg": "#f1f3f6",
+                    "enable_publishing": false,
+                    "hide_top_toolbar": true,
+                    "save_image": false,
+                    "container_id": container.current.id
+                });
+            }
+        };
         container.current.appendChild(script);
     }, [symbol, theme, height]);
 
     return (
-        <div className="tradingview-widget-container" ref={container} style={{ height: '100%', width: '100%' }}>
-            <div className="tradingview-widget-container__widget"></div>
-        </div>
+        <div
+            id={`tradingview_${symbol}_${Math.random().toString(36).substr(2, 9)}`}
+            className="tradingview-widget-container"
+            ref={container}
+            style={{ height: '100%', width: '100%' }}
+        />
     );
 };
 
@@ -139,3 +123,173 @@ export const StockPriceTicker: React.FC<{ symbol: string; theme?: 'light' | 'dar
         </div>
     );
 };
+export const TechnicalAnalysis: React.FC<TradingViewWidgetProps> = ({
+    symbol,
+    theme = 'light'
+}) => {
+    const container = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!container.current) return;
+        container.current.innerHTML = '';
+
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js";
+        script.type = "text/javascript";
+        script.async = true;
+        script.innerHTML = JSON.stringify({
+            "interval": "1D",
+            "width": "100%",
+            "isTransparent": true,
+            "height": "100%",
+            "symbol": `IDX:${symbol}`,
+            "showIntervalTabs": true,
+            "locale": "en",
+            "colorTheme": theme
+        });
+
+        container.current.appendChild(script);
+    }, [symbol, theme]);
+
+    return (
+        <div className="tradingview-widget-container" ref={container} style={{ height: '100%', width: '100%' }}>
+            <div className="tradingview-widget-container__widget"></div>
+        </div>
+    );
+};
+
+export const StockFinancials: React.FC<TradingViewWidgetProps> = ({
+    symbol,
+    theme = 'light'
+}) => {
+    const container = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!container.current) return;
+        container.current.innerHTML = '';
+
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-financials.js";
+        script.type = "text/javascript";
+        script.async = true;
+        script.innerHTML = JSON.stringify({
+            "isTransparent": true,
+            "largeChartUrl": "",
+            "displayMode": "regular",
+            "width": "100%",
+            "height": "100%",
+            "colorTheme": theme,
+            "symbol": `IDX:${symbol}`,
+            "locale": "en"
+        });
+
+        container.current.appendChild(script);
+    }, [symbol, theme]);
+
+    return (
+        <div className="tradingview-widget-container" ref={container} style={{ height: '100%', width: '100%' }}>
+            <div className="tradingview-widget-container__widget"></div>
+        </div>
+    );
+};
+
+export const FundamentalData: React.FC<TradingViewWidgetProps> = ({
+    symbol,
+    theme = 'light'
+}) => {
+    const container = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!container.current) return;
+        container.current.innerHTML = '';
+
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-fundamental-data.js";
+        script.type = "text/javascript";
+        script.async = true;
+        script.innerHTML = JSON.stringify({
+            "isTransparent": true,
+            "largeChartUrl": "",
+            "displayMode": "regular",
+            "width": "100%",
+            "height": "100%",
+            "colorTheme": theme,
+            "symbol": `IDX:${symbol}`,
+            "locale": "en"
+        });
+
+        container.current.appendChild(script);
+    }, [symbol, theme]);
+
+    return (
+        <div className="tradingview-widget-container" ref={container} style={{ height: '100%', width: '100%' }}>
+            <div className="tradingview-widget-container__widget"></div>
+        </div>
+    );
+};
+
+export const CompanyProfileWidget: React.FC<TradingViewWidgetProps> = ({
+    symbol,
+    theme = 'light'
+}) => {
+    const container = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!container.current) return;
+        container.current.innerHTML = '';
+
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js";
+        script.type = "text/javascript";
+        script.async = true;
+        script.innerHTML = JSON.stringify({
+            "width": "100%",
+            "height": "100%",
+            "colorTheme": theme,
+            "isTransparent": true,
+            "symbol": `IDX:${symbol}`,
+            "locale": "en"
+        });
+
+        container.current.appendChild(script);
+    }, [symbol, theme]);
+
+    return (
+        <div className="tradingview-widget-container" ref={container} style={{ height: '100%', width: '100%' }}>
+            <div className="tradingview-widget-container__widget"></div>
+        </div>
+    );
+};
+
+export const SymbolInfo: React.FC<TradingViewWidgetProps> = ({
+    symbol,
+    theme = 'light'
+}) => {
+    const container = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!container.current) return;
+        container.current.innerHTML = '';
+
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js";
+        script.type = "text/javascript";
+        script.async = true;
+        script.innerHTML = JSON.stringify({
+            "symbol": `IDX:${symbol}`,
+            "width": "100%",
+            "locale": "en",
+            "colorTheme": theme,
+            "isTransparent": true
+        });
+
+        container.current.appendChild(script);
+    }, [symbol, theme]);
+
+    return (
+        <div className="tradingview-widget-container" ref={container} style={{ width: '100%' }}>
+            <div className="tradingview-widget-container__widget"></div>
+        </div>
+    );
+};
+
