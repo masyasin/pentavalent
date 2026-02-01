@@ -360,15 +360,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         body: { action: 'request_reset', email },
       });
 
-      if (error) {
-        return { success: false, error: 'Network communication failure. Please try again.' };
+      // NOTE: We ignore 'error' here if it's just about email sending, 
+      // because we want to use our own Gmail SMTP if the Edge Function fails to send but returns a token.
+      
+      const resetToken = data?.reset_token;
+
+      if (!resetToken) {
+         if (error || data?.error) {
+             return { success: false, error: data?.error || error || 'Failed to generate reset token.' };
+         }
+         return { success: false, error: 'System error: No reset token generated.' };
       }
 
-      if (data?.error) {
-        return { success: false, error: data.error };
+      // 3. PHASE 3: SEND EMAIL VIA GMAIL SMTP (New Flow)
+      // Even if Supabase sent one (or failed), we send one using our reliable Gmail setup
+      try {
+        const emailRes = await fetch('/api/send-password-reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, token: resetToken })
+        });
+        
+        const emailData = await emailRes.json();
+        if (!emailRes.ok) {
+            console.error('Gmail Reset Send Error:', emailData);
+            // We don't fail the whole process if email fails, we return the token so user can manually proceed if needed (or fallback)
+            // But ideally we should warn.
+            return { success: true, reset_token: resetToken, error: `Token generated but email failed: ${emailData.error}` };
+        }
+      } catch (e) {
+        console.error('Gmail Reset Fetch Error:', e);
       }
 
-      return { success: true, reset_token: data?.reset_token };
+      return { success: true, reset_token: resetToken };
     } catch (error) {
       console.error('Password reset request error:', error);
       return { success: false, error: 'System busy. Please try again in a moment.' };
@@ -490,7 +514,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (contentType && contentType.indexOf("application/json") !== -1) {
         const data = await response.json();
         if (!response.ok || data.error) {
-          return { success: false, error: data.error || `Error ${response.status}: Failed to send email` };
+          return { success: false, error: data.error || `Error ${response.status}: Failed to send email`, details: data.details };
         }
         return { success: true };
       } else {

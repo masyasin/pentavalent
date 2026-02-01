@@ -67,9 +67,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
         });
       } else {
         const msg = otpResult.error || 'Unable to send verification code.';
+        const details = otpResult.details ? ` (${otpResult.details})` : '';
         setStep('otp');
         // Fallback: Show OTP in UI if email fails
-        setOtpHint(`Email OTP tidak terkirim (${msg}). Gunakan kode berikut: ${code}`);
+        setOtpHint(`Email OTP tidak terkirim: ${msg}${details}. Gunakan kode berikut: ${code}`);
         toast.warning('Email OTP gagal dikirim', {
           description: `Gunakan kode berikut untuk verifikasi: ${code}`,
           duration: 12000,
