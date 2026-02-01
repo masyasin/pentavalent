@@ -41,16 +41,49 @@ export default async function handler(req: any, res: any) {
 
     // 2. Generate Reset Token via Admin API
     // This generates a link like: https://site.com?token=...&type=recovery
-    const { data, error } = await supabaseAdmin.auth.admin.generateLink({
+    let { data, error } = await supabaseAdmin.auth.admin.generateLink({
       type: 'recovery',
       email: email,
     });
 
     if (error) {
-      console.error('Supabase Generate Link Error:', error);
-      // Fallback: If user not found, we usually shouldn't tell to avoid enumeration,
-      // but for internal admin tools, it's better to be explicit.
-      return res.status(400).json({ error: error.message });
+        console.error('Supabase Generate Link Error:', error);
+        
+        // AUTO-REGISTER LOGIC:
+        // If error is "User not found", we try to create the user in Auth System
+        // because they exist in our Admin Dashboard (public.users) but not in Supabase Auth.
+        if (error.message.includes('User not found') || error.status === 404 || error.status === 400) {
+            console.log('User not found in Auth. Attempting to auto-register...');
+            
+            // Generate a random temp password
+            const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!';
+            
+            const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+                email: email,
+                password: tempPassword,
+                email_confirm: true // Auto confirm so they can login/reset
+            });
+
+            if (createError) {
+                 console.error('Failed to auto-register user:', createError);
+                 return res.status(400).json({ error: 'User not found and failed to auto-register.' });
+            }
+
+            console.log('User auto-registered successfully. Retrying generate link...');
+            
+            // Retry generate link
+            const retryResult = await supabaseAdmin.auth.admin.generateLink({
+                type: 'recovery',
+                email: email,
+            });
+
+            data = retryResult.data;
+            error = retryResult.error;
+        }
+
+        if (error) {
+             return res.status(400).json({ error: error.message });
+        }
     }
 
     if (!data || !data.properties || !data.properties.action_link) {
