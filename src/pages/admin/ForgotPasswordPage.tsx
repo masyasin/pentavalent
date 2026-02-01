@@ -80,9 +80,11 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
     e.preventDefault();
     setError('');
 
+    let tokenToUse = '';
+
     if (!isLinkRecovery) {
-        const fullToken = otp.join('');
-        if (fullToken.length < 6) {
+        tokenToUse = otp.join('');
+        if (tokenToUse.length < 6) {
           setError('Please enter the complete 6-digit reset token.');
           return;
         }
@@ -100,7 +102,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
 
     setIsLoading(true);
 
-    const result = await resetPassword(fullToken, newPassword);
+    const result = await resetPassword(tokenToUse, newPassword);
 
     if (result.success) {
       setStep('success');
