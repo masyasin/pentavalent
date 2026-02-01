@@ -32,7 +32,7 @@ const MainWebsite: React.FC = () => {
 
   const handleNavigate = (section: string) => {
     // External pages routing or absolute paths
-    if (section === 'faq' || section === 'sitemap' || section.startsWith('/')) {
+    if (section === 'faq' || section === 'sitemap' || section === 'contact' || section.startsWith('/')) {
       window.location.href = section.startsWith('/') ? section : `/${section}`;
       return;
     }

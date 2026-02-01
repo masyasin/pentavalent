@@ -252,7 +252,11 @@ const NewsDetail: React.FC = () => {
     };
 
     const handleNavigate = (section: string) => {
-        window.location.href = `/#${section}`;
+        if (section === 'contact' || section === 'faq' || section === 'sitemap') {
+            window.location.href = `/${section}`;
+        } else {
+            window.location.href = `/#${section}`;
+        }
     };
 
     if (loading) {

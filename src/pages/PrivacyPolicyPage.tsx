@@ -49,7 +49,11 @@ const PrivacyPolicyPage: React.FC = () => {
     };
 
     const handleNavigate = (section: string) => {
-        navigate(`/#${section}`);
+        if (section === 'contact' || section === 'faq' || section === 'sitemap') {
+            window.location.href = `/${section}`;
+        } else {
+            window.location.href = `/#${section}`;
+        }
     };
 
     const title = document ? (language === 'id' ? document.title_id : document.title_en) : (language === 'id' ? 'Kebijakan Privasi' : 'Privacy Policy');

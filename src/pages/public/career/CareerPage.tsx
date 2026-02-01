@@ -18,8 +18,10 @@ const CareerPage: React.FC = () => {
     const handleNavigate = (section: string) => {
         if (section === 'career') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (section === 'contact' || section === 'faq' || section === 'sitemap') {
+            window.location.href = `/${section}`;
         } else {
-            navigate(`/#${section}`);
+            window.location.href = `/#${section}`;
         }
     };
 

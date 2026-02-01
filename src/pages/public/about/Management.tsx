@@ -25,7 +25,10 @@ const Management: React.FC = () => {
     const [selectedMember, setSelectedMember] = useState<ManagementMember | null>(null);
 
     const handleNavigate = (section: string) => {
-        window.location.href = `/#${section}`;
+        if (section === 'contact') window.location.href = '/contact';
+        else if (section === 'faq') window.location.href = '/faq';
+        else if (section === 'sitemap') window.location.href = '/sitemap';
+        else window.location.href = `/#${section}`;
     };
 
     const [commissioners, setCommissioners] = useState<ManagementMember[]>([]);

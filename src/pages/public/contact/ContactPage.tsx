@@ -18,8 +18,10 @@ const ContactPage: React.FC = () => {
     const handleNavigate = (section: string) => {
         if (section === 'contact') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (section === 'faq' || section === 'sitemap') {
+            window.location.href = `/${section}`;
         } else {
-            navigate(`/#${section}`);
+            window.location.href = `/#${section}`;
         }
     };
 

@@ -57,6 +57,7 @@ const SitemapPage: React.FC = () => {
     const handleNavigation = (section: string) => {
         if (section === 'faq') window.location.href = '/faq';
         else if (section === 'sitemap') window.location.href = '/sitemap';
+        else if (section === 'contact') window.location.href = '/contact';
         else if (section === 'hero' || section === 'home') window.location.href = '/';
         else window.location.href = `/#${section}`;
     };

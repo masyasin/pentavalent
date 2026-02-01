@@ -71,6 +71,7 @@ const FAQPage: React.FC = () => {
     const handleNavigation = (section: string) => {
         if (section === 'faq') window.location.href = '/faq';
         else if (section === 'sitemap') window.location.href = '/sitemap';
+        else if (section === 'contact') window.location.href = '/contact';
         else if (section === 'hero' || section === 'home') window.location.href = '/';
         else window.location.href = `/#${section}`;
     };
@@ -199,7 +200,7 @@ const FAQPage: React.FC = () => {
                                 : 'Our support team is here to help. Contact us for more information.'}
                         </p>
                         <a
-                            href="mailto:info@pentavalent.co.id"
+                            href="/contact"
                             className="px-10 py-4 wow-button-gradient font-bold rounded-xl"
                         >
                             {language === 'id' ? 'Hubungi Kami' : 'Contact Us'}

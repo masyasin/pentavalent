@@ -170,7 +170,11 @@ const NewsPage: React.FC = () => {
     };
 
     const handleNavigate = (section: string) => {
-        navigate(`/#${section}`);
+        if (section === 'contact' || section === 'faq' || section === 'sitemap') {
+            window.location.href = `/${section}`;
+        } else {
+            window.location.href = `/#${section}`;
+        }
     };
 
     return (
