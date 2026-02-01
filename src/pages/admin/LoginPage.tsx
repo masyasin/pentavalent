@@ -21,6 +21,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [generatedOtp, setGeneratedOtp] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
+  const [otpHint, setOtpHint] = useState('');
   const otpInputs = React.useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -59,12 +60,20 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
 
       if (otpResult.success) {
         setStep('otp');
+        setOtpHint(''); // Clear hint if email sent successfully
         toast.info(`SECURITY CHECK: Verification code sent to ${email}`, {
           description: 'Please check your inbox (and spam folder) for the 6-digit code.',
           duration: 10000,
         });
       } else {
-        setError(otpResult.error || 'Identity verified, but failed to send security code.');
+        const msg = otpResult.error || 'Unable to send verification code.';
+        setStep('otp');
+        // Fallback: Show OTP in UI if email fails
+        setOtpHint(`Email OTP tidak terkirim (${msg}). Gunakan kode berikut: ${code}`);
+        toast.warning('Email OTP gagal dikirim', {
+          description: `Gunakan kode berikut untuk verifikasi: ${code}`,
+          duration: 12000,
+        });
       }
     }
     else {
@@ -320,6 +329,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
                   <h2 className="text-xl font-black text-white uppercase tracking-tighter italic">2FA Verification</h2>
                   <p className="text-blue-200/50 text-[10px] font-bold uppercase tracking-[0.2em]">Enter 6-digit code sent to your email</p>
                 </div>
+                {otpHint && (
+                  <div className="bg-white/10 border border-white/20 rounded-2xl p-4 text-center">
+                    <p className="text-xs font-bold text-blue-100">{otpHint}</p>
+                  </div>
+                )}
 
                 {error && (
                   <div id="otp-error-display" style={{ backgroundColor: '#dc2626', border: '1px solid #f87171', padding: '16px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', boxShadow: '0 0 20px rgba(220,38,38,0.4)', animation: 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both' }}>

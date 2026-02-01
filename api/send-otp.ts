@@ -1,4 +1,6 @@
 
+import nodemailer from 'nodemailer';
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -10,31 +12,32 @@ export default async function handler(req: any, res: any) {
     return res.status(400).json({ error: 'Email and code are required' });
   }
 
-  // NOTE: Gunakan BREVO_API_KEY di environment variables Vercel
-  // Dapatkan di: https://app.brevo.com/settings/keys/api
-  const BREVO_API_KEY = process.env.BREVO_API_KEY;
+  // NOTE: Gunakan environment variables untuk Gmail
+  // GMAIL_USER: email gmail Anda
+  // GMAIL_APP_PASSWORD: App Password dari Google Account (Bukan password email biasa)
+  // Dapatkan di: https://myaccount.google.com/apppasswords
+  const GMAIL_USER = process.env.GMAIL_USER || 'banana196501@gmail.com';
+  const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 
-  if (!BREVO_API_KEY) {
-    console.error('BREVO_API_KEY is missing');
-    return res.status(500).json({ error: 'Mail service configuration missing' });
+  if (!GMAIL_APP_PASSWORD) {
+    console.error('GMAIL_APP_PASSWORD is missing');
+    return res.status(500).json({ error: 'Mail service configuration missing (App Password)' });
   }
 
   try {
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'api-key': BREVO_API_KEY,
-        'content-type': 'application/json',
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: GMAIL_USER,
+        pass: GMAIL_APP_PASSWORD,
       },
-      body: JSON.stringify({
-        sender: {
-          name: "Pentavalent Security",
-          email: "banana196501@gmail.com" // WAJIB SAMA dengan email login Brevo (sebelum verifikasi domain)
-        },
-        to: [{ email: email }],
-        subject: "[Pentavalent] Verification Code",
-        htmlContent: `
+    });
+
+    const mailOptions = {
+      from: `"Pentavalent Security" <${GMAIL_USER}>`,
+      to: email,
+      subject: "[Pentavalent] Verification Code",
+      html: `
           <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; background-color: #f9fafb; border-radius: 24px; border: 1px solid #e5e7eb;">
             <div style="text-align: center; margin-bottom: 32px;">
               <h1 style="color: #0d2b5f; margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.025em;">Secure Verification</h1>
@@ -55,19 +58,12 @@ export default async function handler(req: any, res: any) {
             </div>
           </div>
         `,
-      }),
-    });
+    };
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error('Brevo Error:', data);
-      return res.status(400).json({ error: data.message || 'Failed to send email' });
-    }
-
+    await transporter.sendMail(mailOptions);
     return res.status(200).json({ success: true });
   } catch (err: any) {
-    console.error('Server side Error:', err);
-    return res.status(500).json({ error: 'Internal Server Error', details: err.message });
+    console.error('Gmail SMTP Error:', err);
+    return res.status(500).json({ error: 'Failed to send email via Gmail', details: err.message });
   }
 }
