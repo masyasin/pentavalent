@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
@@ -147,17 +148,20 @@ const BranchManager: React.FC = () => {
           .eq('id', editingBranch.id);
 
         if (error) throw error;
+        toast.success('Branch updated successfully');
       } else {
         const { error } = await supabase.from('branches').insert(branchData);
         if (error) throw error;
+        toast.success('Branch created successfully');
       }
 
       setShowModal(false);
       setEditingBranch(null);
       resetForm();
       fetchBranches();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving branch:', error);
+      toast.error(error.message || 'Error saving branch');
     }
   };
 
@@ -235,9 +239,11 @@ const BranchManager: React.FC = () => {
       const { error } = await supabase.from('branches').delete().eq('id', deleteDialog.id);
       if (error) throw error;
       setDeleteDialog({ isOpen: false, id: null, name: '' });
+      toast.success('Branch deleted successfully');
       fetchBranches();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting branch:', error);
+      toast.error(error.message || 'Error deleting branch');
     } finally {
       setLoading(false);
     }

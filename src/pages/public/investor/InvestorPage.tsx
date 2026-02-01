@@ -156,7 +156,7 @@ const InvestorPage: React.FC = () => {
                     .from('investor_calendar')
                     .select('*')
                     .order('event_date', { ascending: true });
-                if (cData) setCalendar(cData);
+                if (cData && cData.length > 0) setCalendar(cData);
                 else {
                     setCalendar([
                         { title_id: 'RUPS Tahunan 2024', title_en: 'Annual AGM 2024', event_date: '2025-04-22', event_type: 'Corporate' },

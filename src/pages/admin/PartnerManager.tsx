@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 import FileUpload from '../../components/admin/FileUpload';
@@ -100,18 +101,21 @@ const PartnerManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingPartner.id);
                 if (error) throw error;
+                toast.success('Partner updated successfully');
             } else {
                 const { error } = await supabase
                     .from('partners')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Partner anchored successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchPartners();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving partner:', error);
+            toast.error(error.message || 'Error saving partner');
         }
     };
 
@@ -155,9 +159,11 @@ const PartnerManager: React.FC = () => {
             const { error } = await supabase.from('partners').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Partner deleted successfully');
             fetchPartners();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting partner:', error);
+            toast.error(error.message || 'Error deleting partner');
         } finally {
             setLoading(false);
         }

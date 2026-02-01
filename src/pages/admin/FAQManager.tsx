@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import {
@@ -103,18 +104,21 @@ const FAQManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingFaq.id);
                 if (error) throw error;
+                toast.success('FAQ updated successfully');
             } else {
                 const { error } = await supabase
                     .from('faqs')
                     .insert([formData]);
                 if (error) throw error;
+                toast.success('FAQ published successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchFaqs();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving FAQ:', error);
+            toast.error(error.message || 'Error saving FAQ');
         } finally {
             setLoading(false);
         }
@@ -131,9 +135,11 @@ const FAQManager: React.FC = () => {
             const { error } = await supabase.from('faqs').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('FAQ removed successfully');
             fetchFaqs();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting FAQ:', error);
+            toast.error(error.message || 'Error deleting FAQ');
         } finally {
             setLoading(false);
         }

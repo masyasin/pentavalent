@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import FileUpload from './FileUpload';
@@ -91,9 +92,10 @@ const OrganizationManager: React.FC = () => {
             setIsModalOpen(false);
             setFormData({});
             fetchMembers();
-        } catch (error) {
+            toast.success('Management member saved successfully');
+        } catch (error: any) {
             console.error('Error saving member:', error);
-            alert('Failed to save member');
+            toast.error(error.message || 'Failed to save member');
         } finally {
             setSaving(false);
         }
@@ -109,9 +111,10 @@ const OrganizationManager: React.FC = () => {
             if (error) throw error;
             fetchMembers();
             setDeleteId(null);
-        } catch (error) {
+            toast.success('Management member deleted');
+        } catch (error: any) {
             console.error('Error deleting member:', error);
-            alert('Failed to delete member');
+            toast.error(error.message || 'Failed to delete member');
         }
     };
 

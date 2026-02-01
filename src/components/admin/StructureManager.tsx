@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { Plus, Trash2, User, GitFork, X, GripHorizontal, GripVertical, Sidebar, Type, UserSquare } from 'lucide-react';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
@@ -120,8 +121,10 @@ const StructureManager: React.FC = () => {
             fetchData();
             setIsModalOpen(false);
             resetForm();
-        } catch (error) {
+            toast.success('Node added to structure');
+        } catch (error: any) {
             console.error('Error adding node:', error);
+            toast.error(error.message || 'Error adding node');
         }
     };
 
@@ -140,9 +143,10 @@ const StructureManager: React.FC = () => {
             if (error) throw error;
             fetchData();
             setDeleteId(null);
-        } catch (error) {
+            toast.success('Node removed from structure');
+        } catch (error: any) {
             console.error('Error deleting node:', error);
-            alert('Failed to delete');
+            toast.error(error.message || 'Failed to delete');
         }
     };
 

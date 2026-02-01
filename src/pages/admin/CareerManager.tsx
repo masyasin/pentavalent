@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 import { translateText } from '../../lib/translation';
@@ -97,18 +98,21 @@ const CareerManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingCareer.id);
                 if (error) throw error;
+                toast.success('Career opportunity updated successfully');
             } else {
                 const { error } = await supabase
                     .from('careers')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Career opportunity created successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchCareers();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving career:', error);
+            toast.error(error.message || 'Error saving career');
         }
     };
 
@@ -156,9 +160,11 @@ const CareerManager: React.FC = () => {
             const { error } = await supabase.from('careers').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Career opportunity deleted successfully');
             fetchCareers();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting career:', error);
+            toast.error(error.message || 'Error deleting career');
         } finally {
             setLoading(false);
         }

@@ -19,10 +19,26 @@ const InvestorSection: React.FC = () => {
   const [documents, setDocuments] = useState<InvestorDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
+  const [calendar, setCalendar] = useState<any[]>([]);
 
   useEffect(() => {
     fetchDocuments();
+    fetchCalendar();
   }, []);
+
+  const fetchCalendar = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('investor_calendar')
+        .select('*')
+        .eq('is_active', true)
+        .order('event_date', { ascending: true })
+        .limit(2);
+      if (!error && data) setCalendar(data);
+    } catch (err) {
+      console.error('Error fetching calendar:', err);
+    }
+  };
 
   const fetchDocuments = async () => {
     try {
@@ -146,18 +162,24 @@ const InvestorSection: React.FC = () => {
           <div className="bg-white rounded-[3.5rem] p-12 md:p-20 border border-slate-100 shadow-2xl relative">
             <h3 className="text-4xl font-black mb-12 tracking-tighter text-slate-900">{t('investor.calendar.title')}</h3>
             <div className="space-y-10">
-              {[
-                { date: 'MAR 15', label: 'Financial Results Release', type: 'Earnings' },
-                { date: 'APR 22', label: 'Annual General Meeting', type: 'Corporate' }
-              ].map((event, i) => (
+              {(calendar.length > 0 ? calendar : [
+                { title_id: 'Rilis Hasil Keuangan', title_en: 'Financial Results Release', event_date: '2025-03-15', event_type: 'Earnings' },
+                { title_id: 'Rapat Umum Pemegang Saham', title_en: 'Annual General Meeting', event_date: '2025-04-22', event_type: 'Corporate' }
+              ]).map((event, i) => (
                 <div key={i} className="flex items-center gap-10 group border-b border-slate-50 pb-10 last:border-0 last:pb-0">
                   <div className="text-center w-24">
-                    <div className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">{event.date.split(' ')[0]}</div>
-                    <div className="text-3xl font-black text-slate-900">{event.date.split(' ')[1]}</div>
+                    <div className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">
+                      {new Date(event.event_date).toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}
+                    </div>
+                    <div className="text-3xl font-black text-slate-900">
+                      {new Date(event.event_date).getDate()}
+                    </div>
                   </div>
                   <div className="flex-1">
-                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{event.type}</div>
-                    <div className="text-xl font-bold text-slate-900 leading-tight group-hover:text-slate-600 transition-colors">{event.label}</div>
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{event.event_type}</div>
+                    <div className="text-xl font-bold text-slate-900 leading-tight group-hover:text-slate-600 transition-colors">
+                      {language === 'id' ? event.title_id : event.title_en}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -170,9 +192,9 @@ const InvestorSection: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { label_id: 'Profil Perusahaan', label_en: 'Company Profile', link: '/about/profile', icon: '🏢' },
-              { label_id: 'Laporan Keuangan', label_en: 'Financial Reports', link: '#', icon: '📊' },
+              { label_id: 'Laporan Keuangan', label_en: 'Financial Reports', link: '/investor/laporan-keuangan', icon: '📊' },
               { label_id: 'Tata Kelola GCG', label_en: 'Corporate Governance', link: '/about/legality-achievements', icon: '⚖️' },
-              { label_id: 'Pusat Berita', label_en: 'Media Center', link: '#news', icon: '📰' }
+              { label_id: 'Pusat Berita', label_en: 'Media Center', link: '/news', icon: '📰' }
             ].map((link, i) => (
               <a
                 key={i}

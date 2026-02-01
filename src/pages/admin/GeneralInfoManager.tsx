@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import RichTextEditor from '../../components/admin/RichTextEditor';
@@ -79,9 +80,11 @@ const GeneralInfoManager: React.FC = () => {
                     .eq('id', settings.id);
                 if (error) throw error;
                 setCompanyStats(newStats);
+                toast.success('Company statistics updated successfully');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving stats:', error);
+            toast.error(error.message || 'Error updating statistics');
         } finally {
             setSaving(false);
         }
@@ -136,11 +139,10 @@ const GeneralInfoManager: React.FC = () => {
                 .eq('id', info.id);
 
             if (error) throw error;
-            setStatus({ type: 'success', message: 'Corporate profile updated successfully!' });
-            setTimeout(() => setStatus(null), 3000);
+            toast.success('Corporate profile updated successfully!');
         } catch (error: any) {
             console.error('Error saving info:', error);
-            setStatus({ type: 'error', message: error.message || 'Failed to save information' });
+            toast.error(error.message || 'Error updating profile');
         } finally {
             setSaving(false);
         }

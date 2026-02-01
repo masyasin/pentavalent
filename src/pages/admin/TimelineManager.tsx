@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -85,18 +86,21 @@ const TimelineManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingEvent.id);
                 if (error) throw error;
+                toast.success('Historical record updated');
             } else {
                 const { error } = await supabase
                     .from('company_timeline')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Milestone archived successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchEvents();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving event:', error);
+            toast.error(error.message || 'Error saving event');
         }
     };
 
@@ -130,9 +134,11 @@ const TimelineManager: React.FC = () => {
             const { error } = await supabase.from('company_timeline').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Record purged from history');
             fetchEvents();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting event:', error);
+            toast.error(error.message || 'Error deleting event');
         } finally {
             setLoading(false);
         }

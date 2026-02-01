@@ -113,10 +113,8 @@ const NetworkSection: React.FC = () => {
     };
   }, [loading, branches]);
 
-  const mainHubs = branches.filter(b =>
-    ['Jakarta', 'Surabaya', 'Medan', 'Makassar', 'Semarang', 'Bandung'].includes(b.city)
-  );
-  const depots = branches.filter(b => !mainHubs.find(h => h.id === b.id));
+  const mainHubs = branches.filter(b => b.type === 'head_office');
+  const depots = branches.filter(b => b.type === 'branch' || b.type === 'depo');
 
   return (
     <section id="network" className="py-24 md:py-32 bg-slate-50 relative overflow-hidden text-slate-900">

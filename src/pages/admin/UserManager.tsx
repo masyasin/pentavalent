@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import {
     Plus, Edit2, Trash2, X, Save,
@@ -39,7 +40,6 @@ const UserManager: React.FC = () => {
         password: '',
     });
 
-    const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
     useEffect(() => {
         fetchUsers();
@@ -65,7 +65,6 @@ const UserManager: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        setStatus(null);
 
         try {
             if (editingUser) {
@@ -81,7 +80,7 @@ const UserManager: React.FC = () => {
 
                 if (updateError) throw updateError;
 
-                setStatus({ type: 'success', message: 'User updated successfully' });
+                toast.success('User updated successfully');
             } else {
                 // CREATE NEW USER
                 if (!formData.password || formData.password.length < 6) {
@@ -129,7 +128,7 @@ const UserManager: React.FC = () => {
                     }
                 }
 
-                setStatus({ type: 'success', message: 'User created successfully! They can now log in.' });
+                toast.success('User created successfully! They can now log in.');
             }
 
             setShowModal(false);
@@ -137,7 +136,7 @@ const UserManager: React.FC = () => {
             fetchUsers();
         } catch (error: any) {
             console.error('Error saving user:', error);
-            setStatus({ type: 'error', message: error.message || 'Failed to save user' });
+            toast.error(error.message || 'Failed to save user');
         } finally {
             setLoading(false);
         }
@@ -171,10 +170,11 @@ const UserManager: React.FC = () => {
             const { error } = await supabase.from('users').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('User deleted successfully');
             fetchUsers();
-            setStatus({ type: 'success', message: 'User deleted successfully' });
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting user:', error);
+            toast.error(error.message || 'Failed to delete user');
         } finally {
             setLoading(false);
         }
@@ -213,13 +213,6 @@ const UserManager: React.FC = () => {
                 </button>
             </div>
 
-            {status && (
-                <div className={`p-4 rounded-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-                    }`}>
-                    {status.type === 'success' ? <CheckCircle2 size={24} /> : <AlertCircle size={24} />}
-                    <span className="font-bold">{status.message}</span>
-                </div>
-            )}
 
             {/* Search & Filter */}
             <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center">

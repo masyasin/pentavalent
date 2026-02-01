@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import FileUpload from '../../components/admin/FileUpload';
@@ -109,18 +110,21 @@ const HeroSliderManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingSlide.id);
                 if (error) throw error;
+                toast.success('Visual asset updated successfully');
             } else {
                 const { error } = await supabase
                     .from('hero_slides')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Visual asset published successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchSlides();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving slide:', error);
+            toast.error(error.message || 'Error saving slide');
         }
     };
 
@@ -161,9 +165,11 @@ const HeroSliderManager: React.FC = () => {
             const { error } = await supabase.from('hero_slides').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Visual asset removed');
             fetchSlides();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting slide:', error);
+            toast.error(error.message || 'Error deleting slide');
         } finally {
             setLoading(false);
         }

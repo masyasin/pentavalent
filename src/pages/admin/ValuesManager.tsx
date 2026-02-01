@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -94,18 +95,21 @@ const ValuesManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingValue.id);
                 if (error) throw error;
+                toast.success('Core principle updated');
             } else {
                 const { error } = await supabase
                     .from('corporate_values')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Core principle established');
             }
 
             setShowModal(false);
             resetForm();
             fetchValues();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving value:', error);
+            toast.error(error.message || 'Error saving principle');
         }
     };
 
@@ -139,9 +143,11 @@ const ValuesManager: React.FC = () => {
             const { error } = await supabase.from('corporate_values').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Principle removed from DNA');
             fetchValues();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting value:', error);
+            toast.error(error.message || 'Error deleting principle');
         } finally {
             setLoading(false);
         }
@@ -257,8 +263,8 @@ const ValuesManager: React.FC = () => {
                                                 type="button"
                                                 onClick={() => setFormData({ ...formData, icon_name: item.name })}
                                                 className={`w-20 h-20 rounded-[1.75rem] flex items-center justify-center transition-all duration-500 ${formData.icon_name === item.name
-                                                        ? 'bg-blue-600 text-white shadow-2xl shadow-blue-200 rotate-12 scale-110'
-                                                        : 'bg-gray-50 text-gray-300 hover:bg-white hover:border-blue-100 border-2 border-transparent'
+                                                    ? 'bg-blue-600 text-white shadow-2xl shadow-blue-200 rotate-12 scale-110'
+                                                    : 'bg-gray-50 text-gray-300 hover:bg-white hover:border-blue-100 border-2 border-transparent'
                                                     }`}
                                             >
                                                 <Icon size={32} />

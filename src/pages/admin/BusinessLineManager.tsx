@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 import FileUpload from '../../components/admin/FileUpload';
@@ -9,20 +10,53 @@ import {
     X, Save, Layers, ArrowRight, Sparkles, RefreshCw, Maximize2, Minimize2, ChevronRight, ChevronLeft, Search
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
-
 interface BusinessLine {
     id: string;
     slug: string;
     title_id: string;
     title_en: string;
+    subtitle_id: string;
+    subtitle_en: string;
     description_id: string;
     description_en: string;
+    color_accent: string;
+    icon_name: string;
+    features: string[];
     images: string[];
-    image_url: string; // Keep for backward compatibility/thumbnail
+    image_url: string;
     sort_order: number;
     is_active: boolean;
     created_at: string;
 }
+
+const iconMap: Record<string, React.ReactNode> = {
+    pill: (
+        <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.642.316a6 6 0 01-3.86.517l-2.388-.477a2 2 0 00-1.022.547l-1.168 1.168a2 2 0 00-.547 1.022l-.477 2.387a2 2 0 002.137 2.137l2.387-.477a2 2 0 001.022-.547l1.168-1.168a2 2 0 00.547-1.022l.477-2.387a2 2 0 00-2.137-2.137l-2.387.477z" />
+        </svg>
+    ),
+    microscope: (
+        <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+        </svg>
+    ),
+    'shopping-bag': (
+        <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+    ),
+    truck: (
+        <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
+        </svg>
+    ),
+    activity: (
+        <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+    )
+};
 
 const BusinessLineManager: React.FC = () => {
     const { t, language } = useLanguage();
@@ -41,11 +75,16 @@ const BusinessLineManager: React.FC = () => {
         slug: '',
         title_id: '',
         title_en: '',
+        subtitle_id: '',
+        subtitle_en: '',
+        color_accent: 'from-blue-600 to-blue-800',
+        icon_name: 'pill',
         description_id: '',
         description_en: '',
         images: [] as string[],
         sort_order: 0,
         is_active: true,
+        features: [] as string[],
     });
 
     // Pagination & Search
@@ -78,15 +117,25 @@ const BusinessLineManager: React.FC = () => {
         try {
             const { data, error } = await supabase
                 .from('business_lines')
-                .select('*')
+                .select(`
+                    *,
+                    business_features (
+                        feature_id,
+                        feature_en,
+                        sort_order
+                    )
+                `)
                 .order('sort_order', { ascending: true });
 
             if (error) throw error;
 
-            // Map data to ensure images array is populated
+            // Map data to ensure images array is populated and features are extracted
             const formattedData = (data || []).map(item => ({
                 ...item,
-                images: item.images || (item.image_url ? [item.image_url] : [])
+                images: item.images || (item.image_url ? [item.image_url] : []),
+                features: item.business_features
+                    ? item.business_features.sort((a: any, b: any) => a.sort_order - b.sort_order).map((f: any) => f.feature_id)
+                    : []
             }));
 
             setLines(formattedData);
@@ -97,39 +146,76 @@ const BusinessLineManager: React.FC = () => {
         }
     };
 
+    const handleFeaturesChange = (value: string) => {
+        const features = value.split('\n').filter(f => f.trim() !== '');
+        setFormData(prev => ({ ...prev, features }));
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const slug = formData.slug || formData.title_en.toLowerCase().replace(/\s+/g, '-');
-
-            // Prepare payload
-            // Ensure image_url is set to the first image if available, for backward compatibility
             const primaryImage = formData.images.length > 0 ? formData.images[0] : null;
 
-            const data = {
-                ...formData,
+            const payload = {
                 slug,
-                image_url: primaryImage
+                title_id: formData.title_id,
+                title_en: formData.title_en,
+                subtitle_id: formData.subtitle_id,
+                subtitle_en: formData.subtitle_en,
+                description_id: formData.description_id,
+                description_en: formData.description_en,
+                color_accent: formData.color_accent,
+                icon_name: formData.icon_name,
+                images: formData.images,
+                image_url: primaryImage,
+                sort_order: formData.sort_order,
+                is_active: formData.is_active,
             };
+
+            let businessId = editingLine?.id;
 
             if (editingLine) {
                 const { error } = await supabase
                     .from('business_lines')
-                    .update(data)
+                    .update(payload)
                     .eq('id', editingLine.id);
                 if (error) throw error;
+                toast.success('Business line updated successfully');
             } else {
-                const { error } = await supabase
+                const { data, error } = await supabase
                     .from('business_lines')
-                    .insert(data);
+                    .insert(payload)
+                    .select()
+                    .single();
                 if (error) throw error;
+                businessId = data.id;
+                toast.success('Business line created successfully');
+            }
+
+            // Sync features
+            if (businessId) {
+                // Delete existing features
+                await supabase.from('business_features').delete().eq('business_line_id', businessId);
+
+                // Insert new ones
+                if (formData.features.length > 0) {
+                    const featuresPayload = formData.features.map((f, idx) => ({
+                        business_line_id: businessId,
+                        feature_id: f,
+                        feature_en: f, // For now keeping same or use translation logic
+                        sort_order: idx + 1
+                    }));
+                    await supabase.from('business_features').insert(featuresPayload);
+                }
             }
 
             setShowModal(false);
             resetForm();
             fetchLines();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving business line:', error);
+            toast.error(error.message || 'Error saving business line');
         }
     };
 
@@ -139,11 +225,16 @@ const BusinessLineManager: React.FC = () => {
             slug: '',
             title_id: '',
             title_en: '',
+            subtitle_id: '',
+            subtitle_en: '',
+            color_accent: 'from-blue-600 to-blue-800',
+            icon_name: 'pill',
             description_id: '',
             description_en: '',
             images: [],
             sort_order: 1,
             is_active: true,
+            features: [],
         });
     };
 
@@ -153,6 +244,10 @@ const BusinessLineManager: React.FC = () => {
             slug: item.slug,
             title_id: item.title_id,
             title_en: item.title_en,
+            subtitle_id: item.subtitle_id || '',
+            subtitle_en: item.subtitle_en || '',
+            color_accent: item.color_accent || 'from-blue-600 to-blue-800',
+            icon_name: item.icon_name || 'pill',
             description_id: item.description_id || '',
             description_en: item.description_en || '',
             images: item.images && item.images.length > 0
@@ -160,6 +255,7 @@ const BusinessLineManager: React.FC = () => {
                 : (item.image_url ? [item.image_url] : []),
             sort_order: item.sort_order || 1,
             is_active: item.is_active,
+            features: item.features || [],
         });
         setShowModal(true);
     };
@@ -175,9 +271,11 @@ const BusinessLineManager: React.FC = () => {
             const { error } = await supabase.from('business_lines').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Business line deleted successfully');
             fetchLines();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting business line:', error);
+            toast.error(error.message || 'Error deleting business line');
         } finally {
             setLoading(false);
         }
@@ -295,9 +393,17 @@ const BusinessLineManager: React.FC = () => {
                                     <div className="flex-1 space-y-6">
                                         <div className="flex justify-between items-start">
                                             <div className="space-y-2">
-                                                <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors">
-                                                    {language === 'id' ? item.title_id : item.title_en}
-                                                </h3>
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color_accent} flex items-center justify-center text-white shadow-lg`}>
+                                                        {iconMap[item.icon_name] || iconMap['pill']}
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors">
+                                                            {language === 'id' ? item.title_id : item.title_en}
+                                                        </h3>
+                                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">{language === 'id' ? item.subtitle_id : item.subtitle_en}</p>
+                                                    </div>
+                                                </div>
                                                 <div className="flex flex-wrap items-center gap-4">
                                                     <span className="text-[10px] font-black text-blue-600 bg-blue-50/50 px-3 py-1 rounded-lg uppercase tracking-widest italic">
                                                         Sequence Protocol #{item.sort_order}
@@ -471,6 +577,129 @@ const BusinessLineManager: React.FC = () => {
                                         </label>
                                         <span className="text-xs font-black uppercase tracking-widest text-gray-900">{formData.is_active ? 'LIVE & GLOBAL' : 'DRAFT SEQUENCE'}</span>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="space-y-4">
+                                    <label className="text-[11px] font-black text-blue-600 uppercase tracking-[0.2em] px-4 italic leading-none flex items-center gap-2">
+                                        <span className="w-6 h-1 bg-blue-600 rounded-full"></span> Subtitle (ID)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={formData.subtitle_id}
+                                        onChange={(e) => setFormData({ ...formData, subtitle_id: e.target.value })}
+                                        className="w-full px-8 py-6 bg-gray-50 border-none rounded-[2rem] focus:ring-4 focus:ring-blue-500/10 transition-all font-bold text-lg italic"
+                                        placeholder="Contoh: OBAT RESEP & NON-RESEP"
+                                    />
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center px-4">
+                                        <label className="text-[11px] font-black text-emerald-500 uppercase tracking-[0.2em] italic leading-none flex items-center gap-2">
+                                            <span className="w-6 h-1 bg-emerald-500 rounded-full"></span> Subtitle (EN)
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAutoTranslate(formData.subtitle_id, 'subtitle_en')}
+                                            disabled={!!translating}
+                                            className="text-blue-600 hover:text-black transition-colors flex items-center gap-2 group"
+                                        >
+                                            {translating === 'subtitle_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} className="group-hover:scale-125 transition-transform" />}
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Global Sync</span>
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={formData.subtitle_en}
+                                        onChange={(e) => setFormData({ ...formData, subtitle_en: e.target.value })}
+                                        className="w-full px-8 py-6 bg-gray-50 border-none rounded-[2rem] focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-lg italic"
+                                        placeholder="Example: PRESCRIPTION & NON-PRESCRIPTION"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="space-y-4">
+                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-4 italic leading-none">Color Theme (Accent)</label>
+                                    <select
+                                        value={formData.color_accent}
+                                        onChange={(e) => setFormData({ ...formData, color_accent: e.target.value })}
+                                        className="w-full px-8 py-6 bg-gray-50 border-none rounded-[2.5rem] focus:ring-4 focus:ring-blue-500/10 font-bold"
+                                    >
+                                        <option value="from-blue-600 to-blue-800">Blue Gradient (Pharma)</option>
+                                        <option value="from-cyan-500 to-cyan-700">Cyan Gradient (Medical)</option>
+                                        <option value="from-emerald-500 to-emerald-700">Emerald Gradient (Consumer)</option>
+                                        <option value="from-rose-500 to-rose-700">Rose Gradient</option>
+                                        <option value="from-amber-500 to-amber-700">Amber Gradient</option>
+                                        <option value="from-slate-400 to-slate-600">Slate Gradient (Generic)</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-4 italic leading-none">Icon Type</label>
+                                    <select
+                                        value={formData.icon_name}
+                                        onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
+                                        className="w-full px-8 py-6 bg-gray-50 border-none rounded-[2.5rem] focus:ring-4 focus:ring-blue-500/10 font-bold"
+                                    >
+                                        <option value="pill">Pill / Health</option>
+                                        <option value="microscope">Microscope / Lab</option>
+                                        <option value="shopping-bag">Shopping Bag / FMCG</option>
+                                        <option value="truck">Truck / Logistics</option>
+                                        <option value="activity">Activity / General</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between px-4">
+                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic flex items-center gap-2">
+                                        <span className="w-6 h-1 bg-gray-400 rounded-full"></span> Divisional Features (Capabilities)
+                                    </label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData(prev => ({ ...prev, features: [...prev.features, ''] }))}
+                                        className="text-blue-600 font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-transform bg-blue-50 px-4 py-2 rounded-xl"
+                                    >
+                                        <Plus size={14} /> Add Capability
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {formData.features.map((feature, idx) => (
+                                        <div key={idx} className="group/feature relative bg-gray-50 p-6 rounded-[2rem] border-2 border-transparent focus-within:border-blue-500/20 transition-all flex items-center gap-4">
+                                            <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-blue-600 text-xs font-black shrink-0">
+                                                {idx + 1}
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={feature}
+                                                onChange={(e) => {
+                                                    const newFeatures = [...formData.features];
+                                                    newFeatures[idx] = e.target.value;
+                                                    setFormData(prev => ({ ...prev, features: newFeatures }));
+                                                }}
+                                                className="flex-1 bg-transparent border-none outline-none font-bold text-gray-700 placeholder:text-gray-300"
+                                                placeholder="Enter capability..."
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const newFeatures = formData.features.filter((_, i) => i !== idx);
+                                                    setFormData(prev => ({ ...prev, features: newFeatures }));
+                                                }}
+                                                className="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 opacity-0 group-hover/feature:opacity-100 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {formData.features.length === 0 && (
+                                        <div className="md:col-span-2 py-12 text-center bg-gray-50 rounded-[3rem] border-4 border-dashed border-gray-100">
+                                            <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">No capabilities defined for this sequence</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

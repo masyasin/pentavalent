@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import RichTextEditor from '../../components/admin/RichTextEditor';
@@ -28,7 +29,6 @@ const LegalDocumentsManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [translating, setTranslating] = useState<string | null>(null);
-    const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [editingDoc, setEditingDoc] = useState<LegalDocument | null>(null);
     const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
@@ -72,9 +72,9 @@ const LegalDocumentsManager: React.FC = () => {
 
             if (error) throw error;
             setDocuments(data || []);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error fetching documents:', error);
-            setStatus({ type: 'error', message: 'Failed to fetch documents' });
+            toast.error('Failed to fetch documents');
         } finally {
             setLoading(false);
         }
@@ -93,7 +93,7 @@ const LegalDocumentsManager: React.FC = () => {
             setFormData({ ...formData, [targetField]: translated });
         } catch (error) {
             console.error('Translation failed:', error);
-            setStatus({ type: 'error', message: 'Translation failed' });
+            toast.error('Translation failed');
         } finally {
             setTranslating(null);
         }
@@ -102,7 +102,7 @@ const LegalDocumentsManager: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData.title_id || !formData.content_id) {
-            setStatus({ type: 'error', message: 'Please fill in all required fields' });
+            toast.error('Please fill in all required fields');
             return;
         }
 
@@ -129,7 +129,7 @@ const LegalDocumentsManager: React.FC = () => {
                     .eq('id', editingDoc.id);
 
                 if (error) throw error;
-                setStatus({ type: 'success', message: 'Document updated successfully!' });
+                toast.success('Document updated successfully!');
             } else {
                 // Create new
                 const { error } = await supabase
@@ -137,17 +137,16 @@ const LegalDocumentsManager: React.FC = () => {
                     .insert([formData]);
 
                 if (error) throw error;
-                setStatus({ type: 'success', message: 'Document created successfully!' });
+                toast.success('Document created successfully!');
             }
 
             setShowModal(false);
             setEditingDoc(null);
             resetForm();
             fetchDocuments();
-            setTimeout(() => setStatus(null), 3000);
         } catch (error: any) {
             console.error('Error saving document:', error);
-            setStatus({ type: 'error', message: error.message || 'Failed to save document' });
+            toast.error(error.message || 'Failed to save document');
         } finally {
             setSaving(false);
         }
@@ -184,11 +183,10 @@ const LegalDocumentsManager: React.FC = () => {
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchDocuments();
-            setStatus({ type: 'success', message: 'Document deleted successfully!' });
-            setTimeout(() => setStatus(null), 3000);
-        } catch (error) {
+            toast.success('Document deleted successfully!');
+        } catch (error: any) {
             console.error('Error deleting document:', error);
-            setStatus({ type: 'error', message: 'Failed to delete document' });
+            toast.error(error.message || 'Failed to delete document');
         } finally {
             setSaving(false);
         }
@@ -246,14 +244,6 @@ const LegalDocumentsManager: React.FC = () => {
                 </button>
             </div>
 
-            {/* Status Message */}
-            {status && (
-                <div className={`p-4 rounded-xl flex items-center gap-3 ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'
-                    }`}>
-                    {status.type === 'success' ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
-                    <span className="font-bold">{status.message}</span>
-                </div>
-            )}
 
             {/* Search Check */}
             <div className="relative max-w-xl">

@@ -282,6 +282,7 @@ const translations: Translations = {
   'admin.menu.news': { id: 'Berita & Media', en: 'News & Media' },
   'admin.menu.careers': { id: 'Karir', en: 'Careers' },
   'admin.menu.investor': { id: 'Dokumen Investor', en: 'Investor Docs' },
+  'admin.menu.calendar': { id: 'Kalender Investor', en: 'Investor Calendar' },
   'admin.menu.messages': { id: 'Pesan Masuk', en: 'Messages' },
   'admin.menu.applications': { id: 'Lamaran Pekerjaan', en: 'Job Applications' },
   'admin.menu.channels': { id: 'Pengaturan Saluran', en: 'Channel Settings' },

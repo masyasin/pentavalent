@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 import FileUpload from '../../components/admin/FileUpload';
@@ -96,18 +97,21 @@ const CertificationManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingCert.id);
                 if (error) throw error;
+                toast.success('Certification calibrated successfully');
             } else {
                 const { error } = await supabase
                     .from('certifications')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Certification anchored successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchCertifications();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving certification:', error);
+            toast.error(error.message || 'Error saving certification');
         }
     };
 
@@ -149,9 +153,11 @@ const CertificationManager: React.FC = () => {
             const { error } = await supabase.from('certifications').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Certification removed from ledger');
             fetchCertifications();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting certification:', error);
+            toast.error(error.message || 'Error deleting certification');
         } finally {
             setLoading(false);
         }

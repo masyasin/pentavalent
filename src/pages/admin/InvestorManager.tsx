@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import FileUpload from '../../components/admin/FileUpload';
@@ -104,18 +105,21 @@ const InvestorManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingDoc.id);
                 if (error) throw error;
+                toast.success('Document updated successfully');
             } else {
                 const { error } = await supabase
                     .from('investor_documents')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Document uploaded successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchDocuments();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving document:', error);
+            toast.error(error.message || 'Error saving document');
         }
     };
 
@@ -157,9 +161,11 @@ const InvestorManager: React.FC = () => {
             const { error } = await supabase.from('investor_documents').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Document deleted successfully');
             fetchDocuments();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting document:', error);
+            toast.error(error.message || 'Error deleting document');
         } finally {
             setLoading(false);
         }

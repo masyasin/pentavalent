@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import {
     Plus, Edit2, Trash2, Globe, Facebook,
@@ -75,18 +76,21 @@ const ChannelsManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingChannel.id);
                 if (error) throw error;
+                toast.success('Channel updated successfully');
             } else {
                 const { error } = await supabase
                     .from('social_channels')
                     .insert(formData);
                 if (error) throw error;
+                toast.success('Channel added successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchChannels();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving channel:', error);
+            toast.error(error.message || 'Error saving channel');
         }
     };
 
@@ -124,9 +128,11 @@ const ChannelsManager: React.FC = () => {
             const { error } = await supabase.from('social_channels').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Channel removed successfully');
             fetchChannels();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting channel:', error);
+            toast.error(error.message || 'Error deleting channel');
         } finally {
             setLoading(false);
         }

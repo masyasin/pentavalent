@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
 import FileUpload from '../../components/admin/FileUpload';
@@ -93,18 +94,21 @@ const ManagementManager: React.FC = () => {
                     .update(formData)
                     .eq('id', editingMember.id);
                 if (error) throw error;
+                toast.success('Management profile updated successfully');
             } else {
                 const { error } = await supabase
                     .from('management')
                     .insert({ ...formData, sort_order: members.length });
                 if (error) throw error;
+                toast.success('Management profile added successfully');
             }
 
             setShowModal(false);
             resetForm();
             fetchMembers();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving member:', error);
+            toast.error(error.message || 'Error saving member');
         }
     };
 
@@ -139,9 +143,11 @@ const ManagementManager: React.FC = () => {
             const { error } = await supabase.from('management').delete().eq('id', deleteDialog.id);
             if (error) throw error;
             setDeleteDialog({ isOpen: false, id: null, name: '' });
+            toast.success('Management profile deleted successfully');
             fetchMembers();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting member:', error);
+            toast.error(error.message || 'Error deleting member');
         } finally {
             setLoading(false);
         }

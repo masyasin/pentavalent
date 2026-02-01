@@ -62,6 +62,7 @@ export type AdminModule =
   | 'analytics'
   | 'faqs'
   | 'legal'
+  | 'calendar'
   | 'newsletter';
 
 // Role-based permissions matrix
@@ -125,6 +126,7 @@ const moduleAccess: Record<AdminModule, UserRole[]> = {
   analytics: ['super_admin', 'admin', 'viewer'],
   faqs: ['super_admin', 'admin', 'editor'],
   legal: ['super_admin', 'admin', 'editor'],
+  calendar: ['super_admin', 'admin', 'editor'],
   newsletter: ['super_admin', 'admin', 'editor', 'viewer'],
 };
 
