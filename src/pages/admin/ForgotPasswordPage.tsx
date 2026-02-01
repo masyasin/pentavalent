@@ -53,15 +53,8 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
     const result = await requestPasswordReset(email);
 
     if (result.success) {
-      if (result.reset_token) {
-        setResetToken(result.reset_token);
-        // Pre-fill OTP array if token exists (demo mode)
-        const digits = result.reset_token.split('').slice(0, 6);
-        const newOtp = [...otp];
-        digits.forEach((d, i) => newOtp[i] = d);
-        setOtp(newOtp);
-      }
-      setStep('reset');
+      setStep('email_sent');
+      toast.success('Email Sent', { description: 'Please check your inbox for the reset link.' });
     } else {
       const errorMsg = result.error || 'Failed to send reset email';
       setError(errorMsg);
