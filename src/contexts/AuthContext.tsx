@@ -388,19 +388,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const resetPassword = async (resetToken: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      // FLOW 1: If resetToken is actually a "session check" signal (from email link flow)
-      // When user comes from email link, Supabase client automatically establishes a session.
-      // We just need to update the user.
-      const { data: { session } } = await supabase.auth.getSession();
+      // FLOW 1: Check Active Session (Priority for Link Recovery)
+      let { data: { session } } = await supabase.auth.getSession();
       
+      // If no session, try to parse from URL hash manually (Last Resort)
+      if (!session && window.location.hash && window.location.hash.includes('access_token')) {
+          console.log('Attempting to recover session from URL hash...');
+          const { data } = await supabase.auth.getSession(); // Calling this often triggers the parser
+          session = data.session;
+      }
+
       if (session) {
          console.log('Session found (Recovery Flow). Updating password directly...');
          const { error } = await supabase.auth.updateUser({ password: newPassword });
          
          if (error) {
+            console.error('Update User Error:', error);
             return { success: false, error: error.message };
          }
          return { success: true };
+      }
+
+      // If we are here and resetToken is empty, it means we expected a session but didn't get one.
+      if (!resetToken) {
+          return { success: false, error: 'Unable to verify identity. Please click the reset link from your email again.' };
       }
 
       // FLOW 2: Manual Token (Legacy / Fallback) - Requires Edge Function
