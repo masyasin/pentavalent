@@ -22,25 +22,18 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
   const otpInputs = React.useRef<(HTMLInputElement | null)[]>([]);
 
   // Auto-detect hash token from URL (Supabase Recovery Flow)
+  const [isLinkRecovery, setIsLinkRecovery] = useState(false);
+
   useEffect(() => {
     const hash = window.location.hash;
     if (hash && hash.includes('access_token')) {
         // Parse token from hash
-        // #access_token=...&expires_at=...&refresh_token=...&token_type=bearer&type=recovery
         const params = new URLSearchParams(hash.replace('#', '?'));
         const accessToken = params.get('access_token');
         
         if (accessToken) {
             setStep('reset');
-            // We use the access token as the "reset token" for our UI logic,
-            // although Supabase usually handles this via `supabase.auth.updateUser` directly
-            // once the session is established.
-            // 
-            // IMPORTANT: When redirecting from email link, Supabase client automatically detects the hash
-            // and sets the session. So `useAuth().user` might actually be populated soon.
-            // But we are in the "Unauthenticated" view of AdminPage.
-            
-            // Let's store it temporarily or just let the user set the new password.
+            setIsLinkRecovery(true);
         }
     }
   }, []);
@@ -87,10 +80,12 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
     e.preventDefault();
     setError('');
 
-    const fullToken = otp.join('');
-    if (fullToken.length < 6) {
-      setError('Please enter the complete 6-digit reset token.');
-      return;
+    if (!isLinkRecovery) {
+        const fullToken = otp.join('');
+        if (fullToken.length < 6) {
+          setError('Please enter the complete 6-digit reset token.');
+          return;
+        }
     }
 
     if (newPassword !== confirmPassword) {
@@ -211,33 +206,49 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
                   </div>
                 )}
 
-                {/* Demo notice with token */}
-                <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
-                  <p className="text-[10px] text-yellow-200 font-bold">
-                    <strong className="text-yellow-400">DEMO MODE:</strong> Token pre-filled.
-                  </p>
-                </div>
-
-                <div className="group space-y-4">
-                  <label className="block text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em] mb-1.5 ml-1 text-center font-black">
-                    Verification Reset Token
-                  </label>
-                  <div className="flex justify-center gap-2 sm:gap-3 mb-8">
-                    {otp.map((digit, index) => (
-                      <input
-                        key={index}
-                        ref={(el) => (otpInputs.current[index] = el)}
-                        type="text"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleOtpChange(index, e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(index, e)}
-                        autoFocus={index === 0}
-                        className="w-10 sm:w-12 h-14 sm:h-16 bg-white/5 border-2 border-white/10 rounded-2xl text-center text-2xl font-black text-accent focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
-                      />
-                    ))}
+                {/* Demo notice with token - Only show if NOT link recovery */}
+                {!isLinkRecovery && (
+                  <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+                    <p className="text-[10px] text-yellow-200 font-bold">
+                      <strong className="text-yellow-400">DEMO MODE:</strong> Token pre-filled.
+                    </p>
                   </div>
-                </div>
+                )}
+                
+                {isLinkRecovery && (
+                  <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-xl flex items-center gap-3">
+                     <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                     </div>
+                     <div>
+                        <p className="text-xs font-black text-green-400 uppercase tracking-wide">Identity Verified</p>
+                        <p className="text-[10px] text-green-200/60 font-medium">You can now set your new password.</p>
+                     </div>
+                  </div>
+                )}
+
+                {!isLinkRecovery && (
+                  <div className="group space-y-4">
+                    <label className="block text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em] mb-1.5 ml-1 text-center font-black">
+                      Verification Reset Token
+                    </label>
+                    <div className="flex justify-center gap-2 sm:gap-3 mb-8">
+                      {otp.map((digit, index) => (
+                        <input
+                          key={index}
+                          ref={(el) => (otpInputs.current[index] = el)}
+                          type="text"
+                          maxLength={1}
+                          value={digit}
+                          onChange={(e) => handleOtpChange(index, e.target.value)}
+                          onKeyDown={(e) => handleKeyDown(index, e)}
+                          autoFocus={index === 0}
+                          className="w-10 sm:w-12 h-14 sm:h-16 bg-white/5 border-2 border-white/10 rounded-2xl text-center text-2xl font-black text-accent focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="group">
                   <label htmlFor="newPassword" className="block text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em] mb-1.5 ml-1">
