@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { UserRole } from '../../contexts/AuthContext';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
+import { logUserActivity } from '../../lib/security';
+import { useAuth, usePermission } from '../../contexts/AuthContext';
 
 interface AdminUser {
     id: string;
@@ -20,6 +22,11 @@ interface AdminUser {
 }
 
 const UserManager: React.FC = () => {
+    const { user: currentUser } = useAuth();
+    const canCreate = usePermission('create_users');
+    const canEdit = usePermission('edit_users');
+    const canDelete = usePermission('delete_users');
+
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
@@ -80,6 +87,7 @@ const UserManager: React.FC = () => {
 
                 if (updateError) throw updateError;
 
+                logUserActivity('UPDATE', 'USERS', `Updated user: ${formData.email} (Role: ${formData.role})`, currentUser?.email);
                 toast.success('User updated successfully');
             } else {
                 // CREATE NEW USER
@@ -126,6 +134,8 @@ const UserManager: React.FC = () => {
                         // but usually this happens if RLS is not set up correctly.
                         throw profileError;
                     }
+
+                    logUserActivity('CREATE', 'USERS', `Created new user: ${formData.email} (Role: ${formData.role})`, currentUser?.email);
                 }
 
                 toast.success('User created successfully! They can now log in.');
@@ -169,6 +179,7 @@ const UserManager: React.FC = () => {
             setLoading(true);
             const { error } = await supabase.from('users').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            logUserActivity('DELETE', 'USERS', `Deleted user: ${deleteDialog.name}`, currentUser?.email);
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             toast.success('User deleted successfully');
             fetchUsers();
@@ -201,16 +212,18 @@ const UserManager: React.FC = () => {
                     <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic">User Management</h2>
                     <p className="text-gray-500">Manage administrative access and permissions</p>
                 </div>
-                <button
-                    onClick={() => {
-                        resetForm();
-                        setShowModal(true);
-                    }}
-                    className="px-8 py-4 bg-gray-900 text-white rounded-2xl font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl uppercase tracking-widest text-sm"
-                >
-                    <Plus size={18} />
-                    Add New User
-                </button>
+                {canCreate && (
+                    <button
+                        onClick={() => {
+                            resetForm();
+                            setShowModal(true);
+                        }}
+                        className="px-8 py-4 bg-gray-900 text-white rounded-2xl font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl uppercase tracking-widest text-sm"
+                    >
+                        <Plus size={18} />
+                        Add New User
+                    </button>
+                )}
             </div>
 
 
@@ -281,18 +294,22 @@ const UserManager: React.FC = () => {
                                         </td>
                                         <td className="px-8 py-6 text-right">
                                             <div className="flex justify-end gap-2">
-                                                <button
-                                                    onClick={() => handleEdit(user)}
-                                                    className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
-                                                >
-                                                    <Edit2 size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(user.id, user.full_name || user.email)}
-                                                    className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
+                                                {canEdit && (
+                                                    <button
+                                                        onClick={() => handleEdit(user)}
+                                                        className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                                                    >
+                                                        <Edit2 size={16} />
+                                                    </button>
+                                                )}
+                                                {canDelete && (
+                                                    <button
+                                                        onClick={() => handleDelete(user.id, user.full_name || user.email)}
+                                                        className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

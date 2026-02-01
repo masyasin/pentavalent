@@ -8,6 +8,8 @@ import { Sparkles, RefreshCw, Maximize2, Minimize2, X, Newspaper, Trash2, Messag
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import ConfirmDialog from '../../components/admin/ConfirmDialog';
 import { toast } from 'sonner';
+import { logUserActivity } from '../../lib/security';
+import { useAuth, usePermission } from '../../contexts/AuthContext';
 
 interface NewsItem {
   id: string;
@@ -40,6 +42,11 @@ interface Comment {
 
 const NewsManager: React.FC = () => {
   const { t, language } = useLanguage();
+  const { user, hasPermission } = useAuth();
+  const canCreate = usePermission('create_content');
+  const canEdit = usePermission('edit_content');
+  const canDelete = usePermission('delete_content');
+
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [translating, setTranslating] = useState<string | null>(null);
@@ -139,6 +146,7 @@ const NewsManager: React.FC = () => {
 
         if (error) throw error;
         toast.success("News article updated successfully");
+        logUserActivity('UPDATE', 'NEWS', `Updated article: ${formData.title_id}`, user?.email);
       } else {
         const { error } = await supabase
           .from('news')
@@ -150,6 +158,7 @@ const NewsManager: React.FC = () => {
 
         if (error) throw error;
         toast.success("News article created successfully");
+        logUserActivity('CREATE', 'NEWS', `Created article: ${formData.title_id}`, user?.email);
       }
 
       setSubmitDialog(prev => ({ ...prev, isOpen: false }));
@@ -290,6 +299,7 @@ const NewsManager: React.FC = () => {
       setLoading(true);
       const { error } = await supabase.from('news').delete().eq('id', deleteDialog.id);
       if (error) throw error;
+      logUserActivity('DELETE', 'NEWS', `Deleted article: ${deleteDialog.title}`, user?.email);
       setDeleteDialog({ isOpen: false, id: null, title: '' });
       fetchNews();
     } catch (error) {
@@ -323,29 +333,31 @@ const NewsManager: React.FC = () => {
             {t('admin.news.subtitle')}
           </p>
         </div>
-        <button
-          onClick={() => {
-            setEditingNews(null);
-            setFormData({
-              title_id: '',
-              title_en: '',
-              slug: '',
-              excerpt_id: '',
-              excerpt_en: '',
-              content_id: '',
-              content_en: '',
-              featured_image: '',
-              images: [],
-              category: 'general',
-              is_published: false,
-            });
-            setShowModal(true);
-          }}
-          className="px-8 py-4 bg-blue-600 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl shadow-blue-100 uppercase tracking-widest text-xs"
-        >
-          <Plus size={18} />
-          {t('admin.news.add')}
-        </button>
+        {canCreate && (
+          <button
+            onClick={() => {
+              setEditingNews(null);
+              setFormData({
+                title_id: '',
+                title_en: '',
+                slug: '',
+                excerpt_id: '',
+                excerpt_en: '',
+                content_id: '',
+                content_en: '',
+                featured_image: '',
+                images: [],
+                category: 'general',
+                is_published: false,
+              });
+              setShowModal(true);
+            }}
+            className="px-8 py-4 bg-blue-600 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl shadow-blue-100 uppercase tracking-widest text-xs"
+          >
+            <Plus size={18} />
+            {t('admin.news.add')}
+          </button>
+        )}
       </div>
 
       {/* Filter & Search */}
@@ -442,20 +454,24 @@ const NewsManager: React.FC = () => {
                         >
                           <MessageSquare size={16} />
                         </button>
-                        <button
-                          onClick={() => handleEdit(item)}
-                          className="p-3 text-gray-400 hover:text-gray-900 hover:bg-white rounded-xl transition-all border border-transparent hover:border-gray-100 hover:shadow-sm"
-                          title="Edit Article"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.id, item.title_id)}
-                          className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
-                          title="Delete Article"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        {canEdit && (
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className="p-3 text-gray-400 hover:text-gray-900 hover:bg-white rounded-xl transition-all border border-transparent hover:border-gray-100 hover:shadow-sm"
+                            title="Edit Article"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                        )}
+                        {canDelete && (
+                          <button
+                            onClick={() => handleDelete(item.id, item.title_id)}
+                            className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                            title="Delete Article"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -468,50 +484,52 @@ const NewsManager: React.FC = () => {
 
       {/* Pagination */}
       {/* Pagination */}
-      {filteredNews.length > 0 && (
-        <div className="flex flex-col md:flex-row items-center justify-between p-4 gap-4">
-          <div className="flex items-center gap-4">
-            <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-              Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredNews.length)} of {filteredNews.length}
-            </div>
-            <select
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className="bg-gray-50 border-none rounded-lg text-xs font-bold text-gray-600 focus:ring-0 cursor-pointer py-1 pl-2 pr-8"
-            >
-              <option value={5}>5 per page</option>
-              <option value={10}>10 per page</option>
-              <option value={25}>25 per page</option>
-              <option value={50}>50 per page</option>
-            </select>
-          </div>
-
-          {totalPages > 1 && (
-            <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
-              <button
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <div className="flex items-center px-4 font-black text-xs text-gray-900">
-                {currentPage} / {totalPages}
+      {
+        filteredNews.length > 0 && (
+          <div className="flex flex-col md:flex-row items-center justify-between p-4 gap-4">
+            <div className="flex items-center gap-4">
+              <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredNews.length)} of {filteredNews.length}
               </div>
-              <button
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+              <select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="bg-gray-50 border-none rounded-lg text-xs font-bold text-gray-600 focus:ring-0 cursor-pointer py-1 pl-2 pr-8"
               >
-                <ChevronRight size={16} />
-              </button>
+                <option value={5}>5 per page</option>
+                <option value={10}>10 per page</option>
+                <option value={25}>25 per page</option>
+                <option value={50}>50 per page</option>
+              </select>
             </div>
-          )}
-        </div>
-      )}
+
+            {totalPages > 1 && (
+              <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <div className="flex items-center px-4 font-black text-xs text-gray-900">
+                  {currentPage} / {totalPages}
+                </div>
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-2 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+        )
+      }
 
       {/* Modal */}
       {

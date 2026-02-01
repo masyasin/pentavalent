@@ -8,6 +8,7 @@ import Footer from '../components/layout/Footer';
 import { Facebook, Twitter, Linkedin, Link2, Share2, Calendar, User, ArrowRight, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
+import { isMalicious, sanitizeInput, isDummyData } from '../lib/security';
 
 interface NewsItem {
     id: string;
@@ -156,10 +157,15 @@ const NewsDetail: React.FC = () => {
         e.preventDefault();
         if (!email) return;
 
+        if (isMalicious(email) || isDummyData(email.split('@')[0])) {
+            toast.error(language === 'id' ? 'Email Harus Valid' : 'Email Must Be Valid');
+            return;
+        }
+
         try {
             const { error } = await supabase
                 .from('newsletter_subscriptions')
-                .insert([{ email }]);
+                .insert([{ email: sanitizeInput(email) }]);
 
             if (error) {
                 if (error.code === '23505') {
@@ -192,15 +198,32 @@ const NewsDetail: React.FC = () => {
             return;
         }
 
+        const allFields = [commentData.name, commentData.email, commentData.message];
+        if (allFields.some(f => isMalicious(f))) {
+            toast.error(language === 'id' ? 'Konten Tidak Diizinkan' : 'Content Not Allowed');
+            return;
+        }
+
+        if (isDummyData(commentData.name) || isDummyData(commentData.message)) {
+            toast.error(language === 'id' ? 'Data Harus Valid' : 'Data Must Be Valid');
+            return;
+        }
+
+        const emailParts = commentData.email.split('@');
+        if (emailParts[0].length < 3 || isDummyData(emailParts[0])) {
+            toast.error(language === 'id' ? 'Email Harus Valid' : 'Email Must Be Valid');
+            return;
+        }
+
         setSubmittingComment(true);
         try {
             const { error } = await supabase
                 .from('news_comments')
                 .insert([{
                     news_id: article.id,
-                    user_name: commentData.name,
-                    email: commentData.email,
-                    content: commentData.message,
+                    user_name: sanitizeInput(commentData.name),
+                    email: sanitizeInput(commentData.email),
+                    content: sanitizeInput(commentData.message),
                     is_approved: true
                 }]);
 

@@ -4,6 +4,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { Shield, Users, TrendingUp, Building2, GraduationCap, Briefcase, AlertTriangle } from 'lucide-react';
+import { isMalicious, sanitizeInput, isDummyData } from '../../lib/security';
 
 interface Career {
   id: string;
@@ -93,6 +94,29 @@ const CareerSection: React.FC<CareerSectionProps> = ({ isPageMode = false }) => 
       return;
     }
 
+    const allFields = [formData.fullName, formData.email, formData.phone, formData.coverLetter];
+    if (allFields.some(f => isMalicious(f))) {
+      toast.error(language === 'id' ? 'Konten Tidak Diizinkan' : 'Content Not Allowed');
+      return;
+    }
+
+    if (isDummyData(formData.fullName)) {
+      toast.error(language === 'id' ? 'Nama Harus Valid' : 'Name Must Be Valid');
+      return;
+    }
+
+    const emailParts = formData.email.split('@');
+    if (emailParts[0].length < 3 || isDummyData(emailParts[0])) {
+      toast.error(language === 'id' ? 'Email Harus Valid' : 'Email Must Be Valid');
+      return;
+    }
+
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (phoneDigits.length < 8) {
+      toast.error(language === 'id' ? 'Nomor telepon minimal 8 angka' : 'Phone number must be at least 8 digits');
+      return;
+    }
+
     setSubmitting(true);
     try {
       const isGeneral = selectedCareer.id === 'GENERAL';
@@ -119,10 +143,10 @@ const CareerSection: React.FC<CareerSectionProps> = ({ isPageMode = false }) => 
         .from('job_applications')
         .insert({
           career_id: isGeneral ? null : selectedCareer.id,
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          cover_letter: formData.coverLetter,
+          full_name: sanitizeInput(formData.fullName),
+          email: sanitizeInput(formData.email),
+          phone: sanitizeInput(formData.phone),
+          cover_letter: sanitizeInput(formData.coverLetter),
           // cv_url: cvUrl // Uncomment this when column is ready
         });
 

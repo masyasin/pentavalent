@@ -105,10 +105,10 @@ const InvestorPage: React.FC = () => {
                 else {
                     // Fallback/Initial Render if DB empty
                     setRatios([
-                        { label: 'P/E Ratio', value: '12.4x', description_en: 'Price to Earnings', description_id: 'Rasio Harga/Laba', icon_name: 'Activity' },
-                        { label: 'EPS', value: '45.8', description_en: 'Earnings Per Share', description_id: 'Laba per Saham', icon_name: 'TrendingUp' },
-                        { label: 'PBV', value: '1.8x', description_en: 'Price to Book Value', description_id: 'Harga ke Nilai Buku', icon_name: 'FileText' },
-                        { label: 'ROE', value: '15.2%', description_en: 'Return on Equity', description_id: 'Pengembalian Ekuitas', icon_name: 'PieChart' },
+                        { label: 'P/E Ratio', value: '14.2x', description_en: 'Price to Earnings', description_id: 'Rasio Harga/Laba', icon_name: 'Activity' },
+                        { label: 'EPS', value: '52.4', description_en: 'Earnings Per Share', description_id: 'Laba per Saham', icon_name: 'TrendingUp' },
+                        { label: 'PBV', value: '2.1x', description_en: 'Price to Book Value', description_id: 'Harga ke Nilai Buku', icon_name: 'FileText' },
+                        { label: 'ROE', value: '16.8%', description_en: 'Return on Equity', description_id: 'Pengembalian Ekuitas', icon_name: 'PieChart' },
                     ]);
                 }
 
@@ -117,8 +117,8 @@ const InvestorPage: React.FC = () => {
                 if (sData && sData.length > 0) setShareholders(sData);
                 else {
                     setShareholders([
-                        { name: 'PT Penta Valent Group', percentage: 65.20, color_start: 'from-blue-600', color_end: 'to-cyan-500' },
-                        { name: 'Public / Masyarakat', percentage: 34.80, color_start: 'from-cyan-400', color_end: 'to-emerald-400' }
+                        { name: 'PT Penta Valent Group', percentage: 68.50, color_start: 'from-blue-600', color_end: 'to-cyan-500' },
+                        { name: 'Public / Masyarakat', percentage: 31.50, color_start: 'from-cyan-400', color_end: 'to-emerald-400' }
                     ]);
                 }
 
@@ -128,7 +128,7 @@ const InvestorPage: React.FC = () => {
                 else {
                     setDividends([
                         { year: 2023, amount: '15 IDR/Share' },
-                        { year: 2024, amount: '18 IDR/Share' }
+                        { year: 2024, amount: '22 IDR/Share' }
                     ]);
                 }
             }
@@ -143,9 +143,9 @@ const InvestorPage: React.FC = () => {
                 else {
                     // Fallback
                     setHighlights([
-                        { label_id: 'Pertumbuhan Pendapatan', label_en: 'Revenue Growth', value: '18.4%', growth: '+2.1%', icon_name: 'TrendingUp' },
-                        { label_id: 'Hasil Dividen', label_en: 'Dividend Yield', value: '4.2%', growth: '+0.5%', icon_name: 'PieChart' },
-                        { label_id: 'Laba Bersih', label_en: 'Net Profit', value: '350M', growth: '+12%', icon_name: 'Activity' }
+                        { label_id: 'Pertumbuhan Pendapatan', label_en: 'Revenue Growth', value: '21.5%', growth: '+3.4%', icon_name: 'TrendingUp' },
+                        { label_id: 'Hasil Dividen', label_en: 'Dividend Yield', value: '5.1%', growth: '+0.9%', icon_name: 'PieChart' },
+                        { label_id: 'Laba Bersih', label_en: 'Net Profit', value: '410M', growth: '+15%', icon_name: 'Activity' }
                     ]);
                 }
             }
@@ -159,8 +159,8 @@ const InvestorPage: React.FC = () => {
                 if (cData && cData.length > 0) setCalendar(cData);
                 else {
                     setCalendar([
-                        { title_id: 'RUPS Tahunan 2024', title_en: 'Annual AGM 2024', event_date: '2025-04-22', event_type: 'Corporate' },
-                        { title_id: 'Rilis Q1 2025', title_en: 'Q1 2025 Release', event_date: '2025-05-15', event_type: 'Earnings' }
+                        { title_id: 'RUPS Tahunan 2025', title_en: 'Annual AGM 2025', event_date: '2026-04-20', event_type: 'Corporate' },
+                        { title_id: 'Rilis Q1 2026', title_en: 'Q1 2026 Release', event_date: '2026-05-10', event_type: 'Earnings' }
                     ]);
                 }
             }

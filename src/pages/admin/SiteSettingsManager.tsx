@@ -9,6 +9,7 @@ import {
     Youtube, Link as LinkIcon, Image as ImageIcon,
     CheckCircle2, AlertCircle, RefreshCw, Type, Sparkles, Users
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface SiteSettings {
     id: string;
@@ -42,7 +43,6 @@ const SiteSettingsManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [translating, setTranslating] = useState<string | null>(null);
-    const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [showResetDialog, setShowResetDialog] = useState(false);
 
     useEffect(() => {
@@ -122,12 +122,10 @@ const SiteSettingsManager: React.FC = () => {
             setSettings({ ...settings, visitor_count: 0 });
 
             setShowResetDialog(false);
-            setStatus({ type: 'success', message: 'Visitor counter reset successfully!' });
-            setTimeout(() => setStatus(null), 3000);
-        } catch (error) {
+            toast.success('Visitor counter reset successfully!');
+        } catch (error: any) {
             console.error('Error resetting counter:', error);
-            setStatus({ type: 'error', message: 'Failed to reset counter. Please try again.' });
-            setTimeout(() => setStatus(null), 3000);
+            toast.error('Failed to reset counter: ' + (error.message || 'System error'));
         } finally {
             setSaving(false);
         }
@@ -138,7 +136,6 @@ const SiteSettingsManager: React.FC = () => {
         if (!settings) return;
 
         setSaving(true);
-        setStatus(null);
 
         try {
             const { error } = await supabase
@@ -149,11 +146,10 @@ const SiteSettingsManager: React.FC = () => {
                 });
 
             if (error) throw error;
-            setStatus({ type: 'success', message: 'Settings saved successfully!' });
-            setTimeout(() => setStatus(null), 3000);
+            toast.success('Settings saved successfully!');
         } catch (error: any) {
             console.error('Error saving settings:', error);
-            setStatus({ type: 'error', message: error.message || 'Failed to save settings' });
+            toast.error(error.message || 'Failed to save settings');
         } finally {
             setSaving(false);
         }
@@ -183,14 +179,6 @@ const SiteSettingsManager: React.FC = () => {
                     Save All Changes
                 </button>
             </div>
-
-            {status && (
-                <div className={`p-4 rounded-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-                    }`}>
-                    {status.type === 'success' ? <CheckCircle2 size={24} /> : <AlertCircle size={24} />}
-                    <span className="font-bold">{status.message}</span>
-                </div>
-            )}
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Core Identity */}

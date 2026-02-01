@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
@@ -7,6 +8,8 @@ import {
     CheckCircle2, XCircle, Clock, Search, Filter, ChevronRight, ChevronLeft
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
+import * as XLSX from 'xlsx';
+import { Download } from 'lucide-react';
 
 interface Application {
     id: string;
@@ -24,7 +27,7 @@ interface Application {
 }
 
 const ApplicationsManager: React.FC = () => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [applications, setApplications] = useState<Application[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -77,9 +80,11 @@ const ApplicationsManager: React.FC = () => {
                 .eq('id', id);
 
             if (error) throw error;
+            toast.success(`Application status updated to ${newStatus}`);
             fetchApplications();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error updating status:', error);
+            toast.error('Failed to update status: ' + (error.message || 'System error'));
         }
     };
 
@@ -97,12 +102,40 @@ const ApplicationsManager: React.FC = () => {
                 .eq('id', deleteDialog.id);
 
             if (error) throw error;
+            toast.success('Application expunged from talent pool');
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             fetchApplications();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting application:', error);
+            toast.error('Failed to expunge record: ' + (error.message || 'System error'));
         } finally {
             setLoading(false);
+        }
+    };
+
+    const exportToExcel = () => {
+        try {
+            const dataToExport = filteredApplications.map(app => ({
+                'Date': new Date(app.created_at).toLocaleString(),
+                'Candidate Name': app.full_name,
+                'Email': app.email,
+                'Phone': app.phone,
+                'Position': app.careers?.title || 'Unknown',
+                'Status': app.status.toUpperCase(),
+                'Resume URL': app.resume_url,
+                'Cover Letter': app.cover_letter
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Job Applications');
+
+            const filename = `TalentPool_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(workbook, filename);
+            toast.success('Candidates exported to Excel');
+        } catch (error) {
+            console.error('Error exporting to Excel:', error);
+            toast.error('Failed to export candidates');
         }
     };
 
@@ -147,6 +180,14 @@ const ApplicationsManager: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <button
+                        onClick={exportToExcel}
+                        disabled={loading || applications.length === 0}
+                        className="px-8 py-4 bg-emerald-50 text-emerald-600 rounded-[2rem] font-black uppercase text-[10px] tracking-widest hover:bg-emerald-600 hover:text-white transition-all border-2 border-emerald-100 flex items-center gap-2 disabled:opacity-50 h-[62px]"
+                    >
+                        <Download size={18} />
+                        {language === 'id' ? 'Ekspor Kandidat' : 'Export Candidates'}
+                    </button>
                     <div className="relative group w-full sm:w-72">
                         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                         <input
@@ -162,7 +203,7 @@ const ApplicationsManager: React.FC = () => {
                         <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            className="w-full pl-16 pr-12 py-5 bg-white border-2 border-gray-50 rounded-[2rem] focus:border-blue-500 transition-all font-black uppercase text-[10px] tracking-widest appearance-none shadow-sm cursor-pointer"
+                            className="w-full pl-16 pr-12 py-5 bg-white border-2 border-gray-50 rounded-[2rem] focus:border-blue-500 transition-all font-black uppercase text-[10px] tracking-widest appearance-none shadow-sm cursor-pointer h-[62px]"
                         >
                             <option value="all">Global Status</option>
                             <option value="pending">Pending</option>

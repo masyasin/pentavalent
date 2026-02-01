@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface ForgotPasswordPageProps {
   onBack: () => void;
@@ -16,6 +17,10 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // OTP State
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const otpInputs = React.useRef<(HTMLInputElement | null)[]>([]);
+
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -26,18 +31,50 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
     if (result.success) {
       if (result.reset_token) {
         setResetToken(result.reset_token);
+        // Pre-fill OTP array if token exists (demo mode)
+        const digits = result.reset_token.split('').slice(0, 6);
+        const newOtp = [...otp];
+        digits.forEach((d, i) => newOtp[i] = d);
+        setOtp(newOtp);
       }
       setStep('reset');
     } else {
-      setError(result.error || 'Failed to send reset email');
+      const errorMsg = result.error || 'Failed to send reset email';
+      setError(errorMsg);
+      toast.error('Recovery Failed', { description: errorMsg });
     }
 
     setIsLoading(false);
   };
 
+  const handleOtpChange = (index: number, value: string) => {
+    if (isNaN(Number(value))) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.substring(value.length - 1);
+    setOtp(newOtp);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      otpInputs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      otpInputs.current[index - 1]?.focus();
+    }
+  };
+
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const fullToken = otp.join('');
+    if (fullToken.length < 6) {
+      setError('Please enter the complete 6-digit reset token.');
+      return;
+    }
 
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match');
@@ -51,7 +88,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
 
     setIsLoading(true);
 
-    const result = await resetPassword(resetToken, newPassword);
+    const result = await resetPassword(fullToken, newPassword);
 
     if (result.success) {
       setStep('success');
@@ -94,13 +131,13 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
             {step === 'request' && (
               <form onSubmit={handleRequestReset} className="space-y-6">
                 {error && (
-                  <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 animate-shake">
-                    <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div id="reset-error-display" style={{ backgroundColor: '#dc2626', border: '1px solid #f87171', padding: '16px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', boxShadow: '0 0 20px rgba(220,38,38,0.4)' }}>
+                    <div style={{ width: '32px', height: '32px', backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <svg style={{ width: '16px', height: '16px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <p className="text-xs font-bold text-red-200">{error}</p>
+                    <p style={{ fontSize: '12px', fontWeight: '900', color: 'white', margin: 0 }}>{error}</p>
                   </div>
                 )}
 
@@ -152,8 +189,8 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
             {step === 'reset' && (
               <form onSubmit={handleResetPassword} className="space-y-5">
                 {error && (
-                  <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 animate-shake">
-                    <p className="text-xs font-bold text-red-200">{error}</p>
+                  <div className="p-4 bg-red-600 border border-red-400 rounded-xl flex items-center gap-3 animate-shake shadow-[0_0_20px_rgba(220,38,38,0.3)]">
+                    <p className="text-xs font-black text-white text-center w-full">{error}</p>
                   </div>
                 )}
 
@@ -164,19 +201,25 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
                   </p>
                 </div>
 
-                <div className="group">
-                  <label htmlFor="token" className="block text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em] mb-1.5 ml-1">
-                    Reset Token
+                <div className="group space-y-4">
+                  <label className="block text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em] mb-1.5 ml-1 text-center font-black">
+                    Verification Reset Token
                   </label>
-                  <input
-                    id="token"
-                    type="text"
-                    required
-                    value={resetToken}
-                    onChange={(e) => setResetToken(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono font-bold placeholder:text-blue-300/20 focus:outline-none focus:ring-4 focus:ring-accent/20 focus:border-accent/50 transition-all text-sm"
-                    placeholder="Enter token"
-                  />
+                  <div className="flex justify-center gap-2 sm:gap-3 mb-8">
+                    {otp.map((digit, index) => (
+                      <input
+                        key={index}
+                        ref={(el) => (otpInputs.current[index] = el)}
+                        type="text"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(index, e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(index, e)}
+                        autoFocus={index === 0}
+                        className="w-10 sm:w-12 h-14 sm:h-16 bg-white/5 border-2 border-white/10 rounded-2xl text-center text-2xl font-black text-accent focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 <div className="group">

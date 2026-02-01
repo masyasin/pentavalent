@@ -11,33 +11,32 @@ import CareerManager from './CareerManager';
 import PartnerManager from './PartnerManager';
 import CertificationManager from './CertificationManager';
 import InvestorManager from './InvestorManager';
-import CalendarManager from './CalendarManager';
-import BusinessLineManager from './BusinessLineManager';
-import SiteSettingsManager from './SiteSettingsManager';
-import HeroSliderManager from './HeroSliderManager';
-import PageBannersManager from './PageBannersManager';
+
+import WebsiteManager from './WebsiteManager';
+import RecruitmentManager from './RecruitmentManager';
+import WebsiteContentManager from './WebsiteContentManager';
 import SeoManager from './SeoManager';
 import CompanyProfileManager from './CompanyProfileManager';
 import UserManager from './UserManager';
 import ProfilePage from './ProfilePage';
 import ApplicationsManager from './ApplicationsManager';
-import MenuManager from './MenuManager';
-import ChannelsManager from './ChannelsManager';
 import FAQManager from './FAQManager';
 import AnalyticsManager from './AnalyticsManager';
-import LegalDocumentsManager from './LegalDocumentsManager';
+
 import LoginPage from './LoginPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import NewsletterManager from './NewsletterManager';
+import SecurityLogsManager from './SecurityLogsManager';
+import UserActivityManager from './UserActivityManager';
 
 // Admin Pages Component with Auth Check and Routing
 const AdminContent: React.FC = () => {
-  const { isAuthenticated, isLoading, canAccessModule } = useAuth();
+  const { isAuthenticated, isInitializing, canAccessModule } = useAuth();
   const [authView, setAuthView] = useState<'login' | 'forgot'>('login');
   const location = useLocation();
 
-  // Show loading state
-  if (isLoading) {
+  // Show loading state ONLY during initial boot
+  if (isInitializing) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -79,27 +78,21 @@ const AdminContent: React.FC = () => {
     <AdminLayout>
       <Routes>
         <Route path="dashboard" element={<ProtectedRoute module="dashboard"><Dashboard /></ProtectedRoute>} />
-        <Route path="news" element={<ProtectedRoute module="news"><NewsManager /></ProtectedRoute>} />
+        <Route path="content/*" element={<ProtectedRoute module="content"><WebsiteContentManager /></ProtectedRoute>} />
+        <Route path="recruitment/*" element={<ProtectedRoute module="recruitment"><RecruitmentManager /></ProtectedRoute>} />
         <Route path="messages" element={<ProtectedRoute module="messages"><MessagesManager /></ProtectedRoute>} />
-        <Route path="careers" element={<ProtectedRoute module="careers"><CareerManager /></ProtectedRoute>} />
         <Route path="investor" element={<ProtectedRoute module="investor"><InvestorManager /></ProtectedRoute>} />
-        <Route path="calendar" element={<ProtectedRoute module="calendar"><CalendarManager /></ProtectedRoute>} />
-        <Route path="hero" element={<ProtectedRoute module="hero"><HeroSliderManager /></ProtectedRoute>} />
-        <Route path="page_banners" element={<ProtectedRoute module="hero"><PageBannersManager /></ProtectedRoute>} />
-        <Route path="seo" element={<ProtectedRoute module="seo"><SeoManager /></ProtectedRoute>} />
+        <Route path="security_logs" element={<ProtectedRoute module="security_logs"><SecurityLogsManager /></ProtectedRoute>} />
+        <Route path="audit_logs" element={<ProtectedRoute module="audit_logs"><UserActivityManager /></ProtectedRoute>} />
         <Route path="analytics" element={<ProtectedRoute module="analytics"><AnalyticsManager /></ProtectedRoute>} />
-        <Route path="newsletter" element={<ProtectedRoute module="newsletter"><NewsletterManager /></ProtectedRoute>} />
+
 
         {/* Company Profile with Sub-routes */}
         <Route path="company/*" element={<ProtectedRoute module="company"><CompanyProfileManager /></ProtectedRoute>} />
 
-        <Route path="settings" element={<ProtectedRoute module="settings"><SiteSettingsManager /></ProtectedRoute>} />
-        <Route path="users" element={<ProtectedRoute module="users"><UserManager /></ProtectedRoute>} />
-        <Route path="menus" element={<ProtectedRoute module="menus"><MenuManager /></ProtectedRoute>} />
-        <Route path="applications" element={<ProtectedRoute module="applications"><ApplicationsManager /></ProtectedRoute>} />
-        <Route path="channels" element={<ProtectedRoute module="channels"><ChannelsManager /></ProtectedRoute>} />
-        <Route path="faqs" element={<ProtectedRoute module="faqs"><FAQManager /></ProtectedRoute>} />
-        <Route path="legal" element={<ProtectedRoute module="legal"><LegalDocumentsManager /></ProtectedRoute>} />
+        {/* Website Settings with Sub-routes */}
+        <Route path="website/*" element={<ProtectedRoute module="website"><WebsiteManager /></ProtectedRoute>} />
+
 
         <Route path="profile" element={<ProfilePage />} />
         <Route path="change_password" element={<ProfilePage />} />

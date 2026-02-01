@@ -74,7 +74,19 @@ const BusinessSection: React.FC = () => {
       if (error) throw error;
 
       if (data && data.length > 0) {
-        setDivisions(data.map(item => ({
+        // Filter only the 3 main business lines for Homepage
+        const mainSlugs = ['distribusi-alkes', 'distribusi-farmasi', 'produk-konsumen'];
+
+        const filteredData = data.filter(item => mainSlugs.includes(item.slug));
+
+        // Custom sort to ensure order: Pharma, Medical Devices, Consumer
+        // Or user preferred order? Usually Pharma is first or center.
+        // Let's sort by ID or predefined order.
+        const sortedData = filteredData.sort((a, b) => {
+          return mainSlugs.indexOf(a.slug) - mainSlugs.indexOf(b.slug);
+        });
+
+        setDivisions(sortedData.map(item => ({
           ...item,
           features: item.business_features
             ? item.business_features

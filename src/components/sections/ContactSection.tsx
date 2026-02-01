@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
 import { Info, Lock } from 'lucide-react';
+import { isMalicious, sanitizeInput, isDummyData, logSecurityEvent } from '../../lib/security';
 
 interface ContactSectionProps {
   isPageMode?: boolean;
@@ -31,6 +32,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
     setUserCaptcha('');
   };
 
+  const validatePhone = (value: string) => {
+    // Only allow digits, spaces, +, -, and ()
+    return value.replace(/[^\d\s\+\-\(\)]/g, '');
+  };
+
   React.useEffect(() => {
     generateCaptcha();
   }, []);
@@ -44,6 +50,51 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
       return;
     }
 
+    // New Data Validations
+    const allFields = [
+      { name: 'name', value: formData.name },
+      { name: 'subject', value: formData.subject },
+      { name: 'message', value: formData.message },
+      { name: 'email', value: formData.email }
+    ];
+
+    for (const field of allFields) {
+      if (isMalicious(field.value)) {
+        logSecurityEvent('MALICIOUS_ATTEMPT', field.name, field.value);
+        setSubmitError(language === 'id' ? 'Konten Tidak Diizinkan' : 'Content Not Allowed');
+        return;
+      }
+    }
+
+    if (isDummyData(formData.name)) {
+      logSecurityEvent('SPAM_FILTERED', 'name', formData.name);
+      setSubmitError(language === 'id' ? 'Nama Harus Valid' : 'Name Must Be Valid');
+      return;
+    }
+
+    if (isDummyData(formData.subject)) {
+      setSubmitError(language === 'id' ? 'Subjek Harus Valid' : 'Subject Must Be Valid');
+      return;
+    }
+
+    if (isDummyData(formData.message)) {
+      logSecurityEvent('SPAM_FILTERED', 'message', formData.message);
+      setSubmitError(language === 'id' ? 'Pesan Harus Valid' : 'Message Must Be Valid');
+      return;
+    }
+
+    const emailParts = formData.email.split('@');
+    if (emailParts[0].length < 3 || isDummyData(emailParts[0])) {
+      setSubmitError(language === 'id' ? 'Email Harus Valid' : 'Email Must Be Valid');
+      return;
+    }
+
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (phoneDigits.length < 8) {
+      setSubmitError(language === 'id' ? 'Nomor telepon minimal 8 angka' : 'Phone number must be at least 8 digits');
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError('');
 
@@ -51,11 +102,12 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
       const { error } = await supabase
         .from('contact_messages')
         .insert({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message,
+          name: sanitizeInput(formData.name),
+          email: sanitizeInput(formData.email),
+          phone: sanitizeInput(formData.phone),
+          subject: sanitizeInput(formData.subject),
+          consultation_type: sanitizeInput(formData.subject), // Saving the category as consultation_type
+          message: sanitizeInput(formData.message),
         });
 
       if (error) throw error;
@@ -177,7 +229,14 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
                       <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
                       {t('contact.form.phone_label')}
                     </label>
-                    <input type="tel" placeholder={t('contact.form.phone_placeholder')} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-indigo-500/5 focus:bg-white focus:border-indigo-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300 shadow-sm" />
+                    <input
+                      required
+                      type="tel"
+                      placeholder={t('contact.form.phone_placeholder')}
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: validatePhone(e.target.value) })}
+                      className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-8 focus:ring-indigo-500/5 focus:bg-white focus:border-indigo-500/30 outline-none font-bold text-slate-900 transition-all placeholder:text-slate-300 shadow-sm"
+                    />
                   </div>
                   <div className="space-y-2.5">
                     <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
@@ -305,8 +364,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
             </button>
           </div>
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 };
 

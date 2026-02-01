@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { supabase } from '../../lib/supabase';
+
+interface Advantage {
+  id: string;
+  title_id: string;
+  title_en: string;
+  description_id: string;
+  description_en: string;
+  icon: string;
+}
 
 const AboutSection: React.FC = () => {
   const { language } = useLanguage();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 40 });
+  const [advantages, setAdvantages] = useState<Advantage[]>([]);
 
   const images = [
     "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000", // Warehouse
@@ -13,6 +24,25 @@ const AboutSection: React.FC = () => {
     "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000", // Pharma/Lab
     "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1000"  // Meeting/Business
   ];
+
+  useEffect(() => {
+    fetchAdvantages();
+  }, []);
+
+  const fetchAdvantages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('advantages')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      setAdvantages(data || []);
+    } catch (error) {
+      console.error('Error fetching advantages:', error);
+    }
+  };
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -27,7 +57,7 @@ const AboutSection: React.FC = () => {
   }, [emblaApi]);
 
   return (
-    <section id="why-penta" className="py-24 md:py-32 bg-white relative overflow-hidden">
+    <section id="why-penta" className="py-24 md:py-32 bg-white relative overflow-hidden text-left">
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         {/* Why Penta Valent - Differentiators Section */}
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
@@ -40,53 +70,23 @@ const AboutSection: React.FC = () => {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{language === 'id' ? 'Kompetitif Kami' : 'Our Excellence'}</span>
             </h2>
             <div className="space-y-6">
-              {[
-                {
-                  title_id: 'Skala Jaringan Nasional',
-                  title_en: 'National Network Scale',
-                  desc_id: 'Didukung 34 cabang dan depo strategis untuk jangkauan seluruh Indonesia.',
-                  desc_en: 'Supported by 34 strategic branches and depots for nationwide reach.',
-                  icon: '🌐'
-                },
-                {
-                  title_id: 'Sistem Operasional Digital',
-                  title_en: 'Digital Operational System',
-                  desc_id: 'Infrastruktur logistik modern dengan monitoring real-time terintegrasi.',
-                  desc_en: 'Modern logistics infrastructure with integrated real-time monitoring.',
-                  icon: '⚙️'
-                },
-                {
-                  title_id: 'Kepatuhan Kualitas Mutlak',
-                  title_en: 'Absolute Quality Compliance',
-                  desc_id: 'Sertifikasi penuh CDOB, CDAKB, dan ISO 9001:2015 menjamin keamanan produk.',
-                  desc_en: 'Full CDOB, CDAKB, and ISO 9001:2015 certifications ensure product safety.',
-                  icon: '⚖️'
-                },
-                {
-                  title_id: 'Rekam Jejak Teruji',
-                  title_en: 'Proven Track Record',
-                  desc_id: 'Kepercayaan berkelanjutan melayani puluhan ribu outlet sejak 1968.',
-                  desc_en: 'Enduring trust serving tens of thousands of outlets since 1968.',
-                  icon: '📈'
-                }
-              ]
-                .map((item, i) => (
-                  <div key={i} className="group/diff p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-500">
-                    <div className="flex items-start gap-6">
-                      <div className="text-3xl bg-white w-14 h-14 rounded-xl flex items-center justify-center shadow-inner group-hover/diff:scale-110 transition-transform">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-black text-slate-900 mb-1 transition-colors">
-                          {language === 'id' ? item.title_id : item.title_en}
-                        </h4>
-                        <p className="text-[15px] text-slate-500 font-medium leading-relaxed">
-                          {language === 'id' ? item.desc_id : item.desc_en}
-                        </p>
-                      </div>
+              {advantages.map((item, i) => (
+                <div key={item.id} className="group/diff p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-500">
+                  <div className="flex items-start gap-6">
+                    <div className="text-3xl bg-white w-14 h-14 rounded-xl flex items-center justify-center shadow-inner group-hover/diff:scale-110 transition-transform">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-black text-slate-900 mb-1 transition-colors">
+                        {language === 'id' ? item.title_id : item.title_en}
+                      </h4>
+                      <p className="text-[15px] text-slate-500 font-medium leading-relaxed">
+                        {language === 'id' ? item.description_id : item.description_en}
+                      </p>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           </div>
 

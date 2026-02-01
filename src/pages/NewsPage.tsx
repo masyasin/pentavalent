@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import { Search, Filter, Calendar, ArrowRight, ChevronLeft, ChevronRight, Newspaper } from 'lucide-react';
+import { isMalicious, isDummyData, logSecurityEvent } from '../lib/security';
 
 interface NewsItem {
     id: string;
@@ -268,7 +269,20 @@ const NewsPage: React.FC = () => {
                                 placeholder={language === 'id' ? 'Cari berita, pengumuman, atau laporan...' : 'Search news, announcements, or reports...'}
                                 value={searchTerm}
                                 onChange={(e) => {
-                                    setSearchTerm(e.target.value);
+                                    const value = e.target.value;
+
+                                    if (value.length > 3) {
+                                        if (isMalicious(value)) {
+                                            logSecurityEvent('SEARCH_MALICIOUS', 'news_search', value);
+                                            return;
+                                        }
+                                        if (isDummyData(value) && value.length > 10) {
+                                            logSecurityEvent('SEARCH_SPAM', 'news_search', value);
+                                            return;
+                                        }
+                                    }
+
+                                    setSearchTerm(value);
                                     setCurrentPage(1);
                                 }}
                                 className="w-full py-4 md:py-6 pr-8 bg-transparent text-lg font-bold text-slate-900 placeholder:text-slate-300 outline-none"

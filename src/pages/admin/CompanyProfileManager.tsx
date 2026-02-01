@@ -8,9 +8,11 @@ import BusinessLineManager from './BusinessLineManager';
 import CertificationManager from './CertificationManager';
 import BranchManager from './BranchManager';
 import PartnerManager from './PartnerManager';
+import AdvantagesManager from './AdvantagesManager';
 import StructureManager from '../../components/admin/StructureManager';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Users, History, Heart, Info, Layers, Award, MapPin, Handshake, Network } from 'lucide-react';
+import LegalDocumentsManager from './LegalDocumentsManager';
+import { Users, History, Heart, Info, Layers, Award, MapPin, Handshake, Network, Zap, Scale } from 'lucide-react';
 
 const CompanyProfileManager: React.FC = () => {
     const location = useLocation();
@@ -23,10 +25,12 @@ const CompanyProfileManager: React.FC = () => {
         { id: 'management', label: t('admin.company.tabs.management'), icon: Users, description: 'Board of Directors & Leadership' },
         { id: 'timeline', label: t('admin.company.tabs.history'), icon: History, description: 'Corporate Journey & Milestones' },
         { id: 'values', label: t('admin.company.tabs.values'), icon: Heart, description: 'Core principles & Culture' },
+        { id: 'advantages', label: t('admin.company.tabs.advantages'), icon: Zap, description: 'Competitive Strengths' },
         { id: 'services', label: t('admin.company.tabs.services'), icon: Layers, description: 'Products & Service categories' },
         { id: 'certifications', label: t('admin.company.tabs.quality'), icon: Award, description: 'Certifications & Standards' },
         { id: 'partners', label: t('admin.company.tabs.partners'), icon: Handshake, description: 'Strategic Alliances' },
         { id: 'branches', label: t('admin.company.tabs.branches'), icon: MapPin, description: 'Office Locations' },
+        { id: 'legal', label: t('admin.company.tabs.legal'), icon: Scale, description: 'Legal Documents' },
     ] as const;
 
     // Extract current tab from URL
@@ -67,10 +71,12 @@ const CompanyProfileManager: React.FC = () => {
                     <Route path="management" element={<ManagementManager />} />
                     <Route path="timeline" element={<TimelineManager />} />
                     <Route path="values" element={<ValuesManager />} />
+                    <Route path="advantages" element={<AdvantagesManager />} />
                     <Route path="services" element={<BusinessLineManager />} />
                     <Route path="certifications" element={<CertificationManager />} />
                     <Route path="partners" element={<PartnerManager />} />
                     <Route path="branches" element={<BranchManager />} />
+                    <Route path="legal" element={<LegalDocumentsManager />} />
 
                     {/* Redirect root to general */}
                     <Route path="/" element={<Navigate to="general" replace />} />

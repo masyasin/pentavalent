@@ -6,6 +6,7 @@ import { Search, ChevronDown, ChevronRight, HelpCircle, MessageCircle } from 'lu
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import PageBanner from '../../components/common/PageBanner';
+import { isMalicious, isDummyData, logSecurityEvent } from '../../lib/security';
 
 interface FAQ {
     id: string;
@@ -101,7 +102,20 @@ const FAQPage: React.FC = () => {
                         placeholder={language === 'id' ? 'Cari pertanyaan...' : 'Search questions...'}
                         className="w-full pl-16 pr-6 py-4 md:py-6 bg-white border-2 border-gray-100 rounded-[2rem] text-lg font-bold shadow-xl shadow-gray-100/50 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 transition-all outline-none"
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (value.length > 3) {
+                                if (isMalicious(value)) {
+                                    logSecurityEvent('SEARCH_MALICIOUS', 'faq_search', value);
+                                    return;
+                                }
+                                if (isDummyData(value) && value.length > 10) {
+                                    logSecurityEvent('SEARCH_SPAM', 'faq_search', value);
+                                    return;
+                                }
+                            }
+                            setSearchTerm(value);
+                        }}
                     />
                 </div>
 

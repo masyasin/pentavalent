@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Mail, Phone, Calendar, Trash2, Search, Filter, CheckCircle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { toast } from 'sonner';
+import * as XLSX from 'xlsx';
+import { Download, Mail, Phone, Calendar, Trash2, Search, Filter, CheckCircle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { logUserActivity } from '../../lib/security';
+import { useAuth, usePermission } from '../../contexts/AuthContext';
 
 interface Message {
   id: string;
@@ -10,6 +14,7 @@ interface Message {
   email: string;
   phone: string;
   subject: string;
+  consultation_type?: string;
   message: string;
   is_read: boolean;
   created_at: string;
@@ -17,6 +22,9 @@ interface Message {
 
 const MessagesManager: React.FC = () => {
   const { t } = useLanguage();
+  const { user, hasPermission } = useAuth();
+  const canDelete = usePermission('delete_content');
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
@@ -41,7 +49,11 @@ const MessagesManager: React.FC = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      console.log('MessagesManager: Fetched messages', data);
+      if (error) {
+        console.error('MessagesManager: Error fetching', error);
+        throw error;
+      }
       setMessages(data || []);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -65,22 +77,57 @@ const MessagesManager: React.FC = () => {
   };
 
   const handleDelete = (id: string, name: string) => {
+    console.log('MessagesManager: Requesting delete for', id);
     setDeleteDialog({ isOpen: true, id, name });
   };
 
   const confirmDelete = async () => {
     if (!deleteDialog.id) return;
     try {
-      setLoading(true);
+      console.log('MessagesManager: Deleting ID', deleteDialog.id);
       const { error } = await supabase.from('contact_messages').delete().eq('id', deleteDialog.id);
       if (error) throw error;
+
+      logUserActivity('DELETE', 'MESSAGES', `Deleted message from: ${deleteDialog.name}`, user?.email);
+      toast.success(t('admin.messages.delete_success') || 'Message deleted permanently');
       setSelectedMessage(null);
       setDeleteDialog({ isOpen: false, id: null, name: '' });
-      fetchMessages();
+
+      // Delay fetch to allow Supabase to propagate changes
+      setTimeout(() => {
+        fetchMessages();
+      }, 500);
     } catch (error) {
       console.error('Error deleting message:', error);
+      toast.error(t('admin.messages.delete_error') || 'Failed to delete message. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const exportToExcel = () => {
+    try {
+      const dataToExport = filteredMessages.map(msg => ({
+        'Date': new Date(msg.created_at).toLocaleString(),
+        'Name': msg.name,
+        'Email': msg.email,
+        'Phone': msg.phone || 'N/A',
+        'Subject': msg.subject || 'No subject',
+        'Consultation Type': msg.consultation_type || 'General',
+        'Message': msg.message,
+        'Status': msg.is_read ? 'Read' : 'Unread'
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Contact Messages');
+
+      const filename = `InboxExport_${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(workbook, filename);
+      toast.success('Inbox exported successfully');
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      toast.error('Failed to export inbox');
     }
   };
 
@@ -120,6 +167,14 @@ const MessagesManager: React.FC = () => {
               : t('admin.messages.subtitle_all_read')}
           </p>
         </div>
+        <button
+          onClick={exportToExcel}
+          disabled={loading || messages.length === 0}
+          className="px-8 py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-emerald-600 hover:text-white transition-all border border-emerald-100 flex items-center gap-3 shadow-sm disabled:opacity-50"
+        >
+          <Download size={18} />
+          {t('admin.messages.export_excel') || 'Export Inbox to Excel'}
+        </button>
       </div>
 
       <div className="grid lg:grid-cols-12 gap-8 items-start">
@@ -262,6 +317,11 @@ const MessagesManager: React.FC = () => {
                             </span>
                           </div>
                         </div>
+                        {selectedMessage.consultation_type && (
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-widest">
+                            {selectedMessage.consultation_type}
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex flex-wrap gap-4 pt-2">
@@ -278,13 +338,15 @@ const MessagesManager: React.FC = () => {
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => handleDelete(selectedMessage.id, selectedMessage.name)}
-                      className="p-4 text-red-100 bg-red-600 hover:bg-black hover:text-white rounded-2xl transition-all shadow-xl shadow-red-100 self-start group"
-                      title="Delete Conversation"
-                    >
-                      <Trash2 size={24} className="group-hover:rotate-12 transition-transform" />
-                    </button>
+                    {canDelete && (
+                      <button
+                        onClick={() => handleDelete(selectedMessage.id, selectedMessage.name)}
+                        className="p-4 text-red-100 bg-red-600 hover:bg-black hover:text-white rounded-2xl transition-all shadow-xl shadow-red-100 self-start group"
+                        title="Delete Conversation"
+                      >
+                        <Trash2 size={24} className="group-hover:rotate-12 transition-transform" />
+                      </button>
+                    )}
                   </div>
                 </div>
 

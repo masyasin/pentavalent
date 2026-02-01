@@ -9,6 +9,10 @@ import {
     Calendar, Briefcase, ChevronRight, ChevronLeft, X, Save, AlertCircle, Sparkles, RefreshCw, Maximize2, Minimize2
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
+import { logUserActivity } from '../../lib/security';
+import { useAuth, usePermission } from '../../contexts/AuthContext';
+import * as XLSX from 'xlsx';
+import { Download } from 'lucide-react';
 
 interface Career {
     id: string;
@@ -27,6 +31,11 @@ interface Career {
 
 const CareerManager: React.FC = () => {
     const { t } = useLanguage();
+    const { user, hasPermission } = useAuth();
+    const canCreate = usePermission('create_content');
+    const canEdit = usePermission('edit_content');
+    const canDelete = usePermission('delete_content');
+
     const [careers, setCareers] = useState<Career[]>([]);
     const [loading, setLoading] = useState(true);
     const [translating, setTranslating] = useState<string | null>(null);
@@ -99,12 +108,14 @@ const CareerManager: React.FC = () => {
                     .eq('id', editingCareer.id);
                 if (error) throw error;
                 toast.success('Career opportunity updated successfully');
+                logUserActivity('UPDATE', 'CAREER', `Updated job: ${formData.title}`, user?.email);
             } else {
                 const { error } = await supabase
                     .from('careers')
                     .insert(formData);
                 if (error) throw error;
                 toast.success('Career opportunity created successfully');
+                logUserActivity('CREATE', 'CAREER', `Created job: ${formData.title}`, user?.email);
             }
 
             setShowModal(false);
@@ -159,6 +170,7 @@ const CareerManager: React.FC = () => {
             setLoading(true);
             const { error } = await supabase.from('careers').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            logUserActivity('DELETE', 'CAREER', `Deleted job: ${deleteDialog.name}`, user?.email);
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             toast.success('Career opportunity deleted successfully');
             fetchCareers();
@@ -167,6 +179,31 @@ const CareerManager: React.FC = () => {
             toast.error(error.message || 'Error deleting career');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const exportToExcel = () => {
+        try {
+            const dataToExport = careers.map(item => ({
+                'Job Title': item.title,
+                'Department': item.department,
+                'Location': item.location,
+                'Type': item.employment_type.replace('_', ' ').toUpperCase(),
+                'Deadline': item.deadline || 'No Deadline',
+                'Status': item.is_active ? 'ACTIVE' : 'CLOSED',
+                'Created At': new Date(item.created_at).toLocaleString()
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Careers');
+
+            const filename = `CareersList_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(workbook, filename);
+            toast.success('Careers list exported');
+        } catch (error) {
+            console.error('Error exporting careers:', error);
+            toast.error('Failed to export careers');
         }
     };
 
@@ -182,16 +219,28 @@ const CareerManager: React.FC = () => {
                         {t('admin.careers.subtitle')}
                     </p>
                 </div>
-                <button
-                    onClick={() => {
-                        resetForm();
-                        setShowModal(true);
-                    }}
-                    className="px-8 py-4 bg-blue-600 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl shadow-blue-100 uppercase tracking-widest text-xs"
-                >
-                    <Plus size={18} />
-                    {t('admin.careers.add')}
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={exportToExcel}
+                        disabled={loading || careers.length === 0}
+                        className="px-8 py-4 bg-emerald-50 text-emerald-600 rounded-[2rem] font-black uppercase text-[10px] tracking-widest hover:bg-emerald-600 hover:text-white transition-all border-2 border-emerald-100 flex items-center gap-2 disabled:opacity-50"
+                    >
+                        <Download size={18} />
+                        {t('admin.common.export') || 'Export'}
+                    </button>
+                    {canCreate && (
+                        <button
+                            onClick={() => {
+                                resetForm();
+                                setShowModal(true);
+                            }}
+                            className="px-8 py-4 bg-blue-600 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl shadow-blue-100 uppercase tracking-widest text-xs"
+                        >
+                            <Plus size={18} />
+                            {t('admin.careers.add')}
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Filter & Search */}
@@ -273,18 +322,22 @@ const CareerManager: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <button
-                                                        onClick={() => handleEdit(career)}
-                                                        className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
-                                                    >
-                                                        <Edit2 size={20} />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDelete(career.id, career.title)}
-                                                        className="p-4 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-[1.25rem] transition-all"
-                                                    >
-                                                        <Trash2 size={20} />
-                                                    </button>
+                                                    {canEdit && (
+                                                        <button
+                                                            onClick={() => handleEdit(career)}
+                                                            className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
+                                                        >
+                                                            <Edit2 size={20} />
+                                                        </button>
+                                                    )}
+                                                    {canDelete && (
+                                                        <button
+                                                            onClick={() => handleDelete(career.id, career.title)}
+                                                            className="p-4 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-[1.25rem] transition-all"
+                                                        >
+                                                            <Trash2 size={20} />
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

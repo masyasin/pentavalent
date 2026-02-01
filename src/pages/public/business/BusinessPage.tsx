@@ -331,7 +331,7 @@ const BusinessPage: React.FC = () => {
                     .from('business_lines')
                     .select('*')
                     .eq('slug', slug)
-                    .single();
+                    .maybeSingle();
 
                 if (error) throw error;
 

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface LoginPageProps {
   onForgotPassword: () => void;
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
-  const { login } = useAuth();
+  const { login, finalizeLogin, resendOtp, sendEmailOtp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState({ n1: 0, n2: 0 });
@@ -14,6 +15,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // 2FA / OTP State
+  const [step, setStep] = useState<'login' | 'otp'>('login');
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [generatedOtp, setGeneratedOtp] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+  const otpInputs = React.useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
     generateCaptcha();
@@ -42,12 +50,91 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
 
     const result = await login(email, password);
 
-    if (!result.success) {
-      setError(result.error || 'Login failed');
+    if (result.success) {
+      // 2. PHASE 2: Trigger REAL Email OTP via Vercel + Resend
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      setGeneratedOtp(code);
+
+      const otpResult = await sendEmailOtp(email, code);
+
+      if (otpResult.success) {
+        setStep('otp');
+        toast.info(`SECURITY CHECK: Verification code sent to ${email}`, {
+          description: 'Please check your inbox (and spam folder) for the 6-digit code.',
+          duration: 10000,
+        });
+      } else {
+        setError(otpResult.error || 'Identity verified, but failed to send security code.');
+      }
+    }
+    else {
+      const errorMsg = result.error || 'Login failed';
+      setError(errorMsg);
+      toast.error('Access Denied', { description: errorMsg });
       generateCaptcha();
     }
 
     setIsLoading(false);
+  };
+
+  const handleOtpChange = (index: number, value: string) => {
+    if (isNaN(Number(value))) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.substring(value.length - 1);
+    setOtp(newOtp);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      otpInputs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      otpInputs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    const fullOtp = otp.join('');
+
+    if (fullOtp.length < 6) {
+      setError('Please enter the complete 6-digit verification code.');
+      return;
+    }
+
+    setIsVerifying(true);
+
+    // Simulate verification delay
+    setTimeout(() => {
+      if (fullOtp === generatedOtp) {
+        toast.success('Security Clearance Granted', {
+          description: 'Accessing administrative infrastructure...',
+        });
+        // CRITICAL: Officially move from TEMP to REAL storage
+        finalizeLogin();
+        // Redirect will happen via AuthContext state update or page reload if preferred
+        // window.location.reload(); // Not needed if finalizeLogin updates state
+      } else {
+        setError('Incorrect verification code. Access denied.');
+        setIsVerifying(false);
+      }
+    }, 1500);
+  };
+
+  const handleResendOtp = async () => {
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(code);
+
+    const result = await resendOtp(email, code);
+    if (result.success) {
+      toast.success('Code Resent', { description: 'Check your email for a new 6-digit code' });
+    } else {
+      toast.error('Failed to resend code');
+    }
   };
 
   return (
@@ -76,153 +163,218 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
           <p className="text-blue-200/50 text-[10px] font-black uppercase tracking-[0.4em]">Secure Enterprise Access</p>
         </div>
 
-        {/* Premium Login Card */}
+        {/* Premium Login/OTP Card */}
         <div className="bg-white/10 backdrop-blur-3xl rounded-[2rem] border border-white/10 shadow-[0_32px_64px_-15px_rgba(0,0,0,0.5)] overflow-hidden">
           <div className="p-6 sm:p-8">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {error && (
-                <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 animate-shake">
-                  <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <p className="text-xs font-bold text-red-200">{error}</p>
-                </div>
-              )}
-
-              <div className="space-y-4">
-                <div className="group space-y-2">
-                  <label htmlFor="email" className="block text-[11px] font-black text-blue-200/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-                    Authorization ID (Email)
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <svg className="w-4 h-4 text-blue-300 group-focus-within:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            {step === 'login' ? (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div id="login-error-display" style={{ backgroundColor: '#dc2626', border: '1px solid #f87171', padding: '16px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', boxShadow: '0 0 20px rgba(220,38,38,0.4)' }}>
+                    <div style={{ width: '32px', height: '32px', backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <svg style={{ width: '16px', height: '16px', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <input
-                      id="email"
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-white/5 border border-white/20 rounded-xl pl-12 pr-4 py-4 text-white font-bold placeholder:text-blue-300/20 focus:outline-none focus:ring-8 focus:ring-accent/5 focus:border-accent/50 transition-all text-sm shadow-inner"
-                      placeholder="Enter Admin Email"
-                    />
+                    <p style={{ fontSize: '12px', fontWeight: '900', color: 'white', margin: 0 }}>{error}</p>
                   </div>
-                </div>
+                )}
 
-                <div className="group space-y-2">
-                  <label htmlFor="password" className="block text-[11px] font-black text-blue-200/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                    Security Credential
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <svg className="w-4 h-4 text-blue-300 group-focus-within:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                    </div>
-                    <input
-                      id="password"
-                      type={showPassword ? 'text' : 'password'}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-white/5 border border-white/20 rounded-xl pl-12 pr-12 py-4 text-white font-bold placeholder:text-blue-300/20 focus:outline-none focus:ring-8 focus:ring-blue-500/5 focus:border-accent/50 transition-all text-sm shadow-inner"
-                      placeholder="••••••••"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-accent transition-colors"
-                    >
-                      {showPassword ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Styled Math Captcha Elite */}
-                <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10 relative group/captcha overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent pointer-events-none"></div>
-                  <div className="flex flex-col sm:flex-row items-center gap-6 relative z-10">
-                    <div className="flex-shrink-0 text-center sm:text-left flex flex-col items-center sm:items-start gap-2">
-                      <p className="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Grid Verification</p>
-                      <div className="flex items-center gap-3">
-                        <div className="text-2xl font-black text-white tracking-tighter tabular-nums bg-white/5 px-6 py-3 rounded-2xl border-2 border-white/10 shadow-2xl min-w-[120px] text-center">
-                          {captcha.n1} <span className="text-accent">+</span> {captcha.n2}
-                        </div>
-                        <button
-                          type="button"
-                          onClick={generateCaptcha}
-                          className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-all text-blue-300 border border-white/10 active:scale-90"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                        </button>
+                <div className="space-y-4">
+                  <div className="group space-y-2">
+                    <label htmlFor="email" className="block text-[11px] font-black text-blue-200/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+                      Authorization ID (Email)
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg className="w-4 h-4 text-blue-300 group-focus-within:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
                       </div>
-                    </div>
-                    <div className="flex-1 w-full flex flex-col gap-2">
-                      <label htmlFor="captcha" className="block text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em] text-center sm:text-left">Result</label>
                       <input
-                        id="captcha"
-                        type="number"
+                        id="email"
+                        type="email"
                         required
-                        value={captchaInput}
-                        onChange={(e) => setCaptchaInput(e.target.value)}
-                        className="w-full bg-white/10 border-2 border-white/20 rounded-2xl px-6 py-4 text-white font-black text-2xl placeholder:text-white/10 focus:outline-none focus:border-accent focus:ring-8 focus:ring-accent/10 transition-all text-center h-[64px] shadow-inner"
-                        placeholder="?"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full bg-white/5 border border-white/20 rounded-xl pl-12 pr-4 py-4 text-white font-bold placeholder:text-blue-300/20 focus:outline-none focus:ring-8 focus:ring-accent/5 focus:border-accent/50 transition-all text-sm shadow-inner"
+                        placeholder="Enter Admin Email"
                       />
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div className="flex items-center justify-between px-1">
-                <label className="flex items-center gap-2 cursor-pointer group">
-                  <div className="relative">
-                    <input type="checkbox" className="sr-only" />
-                    <div className="w-4 h-4 border-2 border-white/20 rounded group-hover:border-accent transition-colors"></div>
-                    <svg className="w-2.5 h-2.5 text-accent absolute top-0.5 left-0.5 opacity-0 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
+                  <div className="group space-y-2">
+                    <label htmlFor="password" className="block text-[11px] font-black text-blue-200/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                      Security Credential
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg className="w-4 h-4 text-blue-300 group-focus-within:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <input
+                        id="password"
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full bg-white/5 border border-white/20 rounded-xl pl-12 pr-12 py-4 text-white font-bold placeholder:text-blue-300/20 focus:outline-none focus:ring-8 focus:ring-blue-500/5 focus:border-accent/50 transition-all text-sm shadow-inner"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-300 hover:text-accent transition-colors"
+                      >
+                        {showPassword ? (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
-                  <span className="text-xs font-bold text-blue-200/70 hover:text-white transition-colors">Remember</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={onForgotPassword}
-                  className="text-xs font-black text-accent hover:text-white uppercase tracking-widest transition-colors"
-                >
-                  Recovery
-                </button>
-              </div>
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full relative group/btn touch-active active:scale-[0.98] transition-all"
-              >
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-xl blur opacity-25 group-hover/btn:opacity-60 transition duration-1000 group-hover/btn:duration-200"></div>
-                <div className="relative w-full py-5 bg-[#0D2B5F] text-white font-black rounded-xl flex items-center justify-center gap-3 border border-white/20 group-hover/btn:border-accent/50 transition-all uppercase tracking-[0.4em] overflow-hidden text-[11px] shadow-2xl">
-                  {isLoading ? (
-                    <>
-                      <div className="w-5 h-5 border-4 border-white/20 border-t-accent rounded-full animate-spin"></div>
-                      <span>Authenticating</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Initialize Access</span>
-                      <svg className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                    </>
-                  )}
+                  {/* Styled Math Captcha Elite */}
+                  <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10 relative group/captcha overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent pointer-events-none"></div>
+                    <div className="flex flex-col sm:flex-row items-center gap-6 relative z-10">
+                      <div className="flex-shrink-0 text-center sm:text-left flex flex-col items-center sm:items-start gap-2">
+                        <p className="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Grid Verification</p>
+                        <div className="flex items-center gap-3">
+                          <div className="text-2xl font-black text-white tracking-tighter tabular-nums bg-white/5 px-6 py-3 rounded-2xl border-2 border-white/10 shadow-2xl min-w-[120px] text-center">
+                            {captcha.n1} <span className="text-accent">+</span> {captcha.n2}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={generateCaptcha}
+                            className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-all text-blue-300 border border-white/10 active:scale-90"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex-1 w-full flex flex-col gap-2">
+                        <label htmlFor="captcha" className="block text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em] text-center sm:text-left">Result</label>
+                        <input
+                          id="captcha"
+                          type="number"
+                          required
+                          value={captchaInput}
+                          onChange={(e) => setCaptchaInput(e.target.value)}
+                          className="w-full bg-white/10 border-2 border-white/20 rounded-2xl px-6 py-4 text-white font-black text-2xl placeholder:text-white/10 focus:outline-none focus:border-accent focus:ring-8 focus:ring-accent/10 transition-all text-center h-[64px] shadow-inner"
+                          placeholder="?"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </button>
-            </form>
+
+                <div className="flex items-center justify-between px-1">
+                  <label className="flex items-center gap-2 cursor-pointer group">
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" />
+                      <div className="w-4 h-4 border-2 border-white/20 rounded group-hover:border-accent transition-colors"></div>
+                      <svg className="w-2.5 h-2.5 text-accent absolute top-0.5 left-0.5 opacity-0 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
+                    </div>
+                    <span className="text-xs font-bold text-blue-200/70 hover:text-white transition-colors">Remember</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={onForgotPassword}
+                    className="text-xs font-black text-accent hover:text-white uppercase tracking-widest transition-colors"
+                  >
+                    Recovery
+                  </button>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full relative group/btn touch-active active:scale-[0.98] transition-all"
+                >
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-xl blur opacity-25 group-hover/btn:opacity-60 transition duration-1000 group-hover/btn:duration-200"></div>
+                  <div className="relative w-full py-5 bg-[#0D2B5F] text-white font-black rounded-xl flex items-center justify-center gap-3 border border-white/20 group-hover/btn:border-accent/50 transition-all uppercase tracking-[0.4em] overflow-hidden text-[11px] shadow-2xl">
+                    {isLoading ? (
+                      <>
+                        <div className="w-5 h-5 border-4 border-white/20 border-t-accent rounded-full animate-spin"></div>
+                        <span>Authenticating</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Initialize Access</span>
+                        <svg className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                      </>
+                    )}
+                  </div>
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleVerifyOtp} className="space-y-8 py-4">
+                <div className="text-center space-y-2">
+                  <div className="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-accent/30 text-accent animate-bounce">
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                  </div>
+                  <h2 className="text-xl font-black text-white uppercase tracking-tighter italic">2FA Verification</h2>
+                  <p className="text-blue-200/50 text-[10px] font-bold uppercase tracking-[0.2em]">Enter 6-digit code sent to your email</p>
+                </div>
+
+                {error && (
+                  <div id="otp-error-display" style={{ backgroundColor: '#dc2626', border: '1px solid #f87171', padding: '16px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', boxShadow: '0 0 20px rgba(220,38,38,0.4)', animation: 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both' }}>
+                    <p style={{ fontSize: '12px', fontWeight: '900', color: 'white', margin: 0, textAlign: 'center', width: '100%' }}>{error}</p>
+                  </div>
+                )}
+
+                <div className="flex justify-center gap-3">
+                  {otp.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => (otpInputs.current[index] = el)}
+                      type="text"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleOtpChange(index, e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(index, e)}
+                      autoFocus={index === 0}
+                      className="w-10 sm:w-12 h-14 sm:h-16 bg-white/5 border-2 border-white/10 rounded-2xl text-center text-2xl font-black text-accent focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
+                    />
+                  ))}
+                </div>
+
+                <div className="space-y-4 pt-4">
+                  <button
+                    type="submit"
+                    disabled={isVerifying}
+                    className="w-full relative group/btn"
+                  >
+                    <div className="absolute -inset-1 bg-gradient-to-r from-accent to-blue-600 rounded-xl blur opacity-25 group-hover/btn:opacity-60 transition duration-1000"></div>
+                    <div className="relative w-full py-4 bg-[#0D2B5F] text-white font-black rounded-xl flex items-center justify-center gap-3 border border-white/10 group-hover/btn:border-accent/50 transition-all uppercase tracking-[0.3em] overflow-hidden text-[10px]">
+                      {isVerifying ? (
+                        <>
+                          <div className="w-4 h-4 border-3 border-white/20 border-t-accent rounded-full animate-spin"></div>
+                          <span>Verifying Identity</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Verify & Access</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                        </>
+                      )}
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setStep('login')}
+                    className="w-full text-[10px] font-black text-blue-200/30 hover:text-white uppercase tracking-[0.3em] transition-colors"
+                  >
+                    Back to Login
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
 
@@ -241,4 +393,3 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
 };
 
 export default LoginPage;
-
