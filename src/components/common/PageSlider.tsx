@@ -33,47 +33,80 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
 
     useEffect(() => {
         const fetchSlides = async () => {
-            // Remove hash if present, but keep leading slash to match database format
-            const cleanPath = pagePath.replace('#', '');
+            // Normalize path: remove hash, remove trailing slash, ensure leading slash
+            let cleanPath = pagePath.replace('#', '');
+            if (cleanPath.endsWith('/') && cleanPath.length > 1) {
+                cleanPath = cleanPath.slice(0, -1);
+            }
+            if (!cleanPath.startsWith('/')) {
+                cleanPath = '/' + cleanPath;
+            }
 
             const { data, error } = await supabase
                 .from('page_banners')
                 .select('*')
-                .eq('page_path', cleanPath)
+                .or(`page_path.eq.${cleanPath},page_path.eq.${cleanPath}/`)
                 .eq('is_active', true)
                 .order('sort_order', { ascending: true });
 
-            if (!error && data) {
+            if (!error && data && data.length > 0) {
                 setSlides(data);
+            } else {
+                // Fallback slide if none found in DB
+                setSlides([{
+                    id: 'fallback',
+                    title_id: breadcrumbLabel,
+                    title_en: breadcrumbLabel,
+                    subtitle_id: parentLabel || '',
+                    subtitle_en: parentLabel || '',
+                    image_url: 'https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=2070&auto=format&fit=crop'
+                }]);
             }
         };
         fetchSlides();
-    }, [pagePath]);
+    }, [pagePath, breadcrumbLabel, parentLabel]);
 
     useEffect(() => {
         if (!emblaApi) return;
-        emblaApi.on('select', () => {
+        
+        const onSelect = () => {
             setSelectedIndex(emblaApi.selectedScrollSnap());
-        });
+        };
+
+        emblaApi.on('select', onSelect);
+        emblaApi.on('reInit', onSelect);
+        
+        // Initial set
+        onSelect();
+
+        return () => {
+            emblaApi.off('select', onSelect);
+            emblaApi.off('reInit', onSelect);
+        };
     }, [emblaApi]);
 
     if (slides.length === 0) return null;
 
     return (
-        <section className="relative h-[55dvh] min-h-[500px] lg:h-[70vh] lg:min-h-[600px] w-full overflow-hidden bg-slate-950">
+        <section className="relative h-[45dvh] min-h-[350px] md:h-[55dvh] md:min-h-[500px] lg:h-[70vh] lg:min-h-[600px] w-full overflow-hidden bg-slate-900">
             {/* Embla Viewport */}
             <div className="h-full w-full embla" ref={emblaRef}>
                 <div className="flex h-full w-full">
                     {slides.map((slide, index) => (
-                        <div key={slide.id} className="relative flex-[0_0_100%] h-full w-full overflow-hidden">
+                        <div key={slide.id} className="relative flex-[0_0_100%] h-full w-full overflow-hidden bg-slate-900">
                             {/* Image with Advanced Overlays */}
                             <div className="absolute inset-0 z-0">
                                 <img
                                     src={slide.image_url}
                                     alt={language === 'id' ? slide.title_id : slide.title_en}
-                                    className={`w-full h-full object-cover transition-all duration-[8000ms] ${selectedIndex === index ? 'scale-110 opacity-80' : 'scale-100 opacity-0'}`}
+                                    className={`w-full h-full object-cover transition-all duration-[8000ms] ease-out ${selectedIndex === index ? 'scale-110 opacity-100' : 'scale-100 opacity-0'}`}
+                                    loading="eager"
+                                    style={{ 
+                                        willChange: 'transform, opacity',
+                                        objectPosition: 'center 30%'
+                                    }}
                                 />
-                                <div className="absolute inset-0 bg-slate-950/30 z-10"></div>
+                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/40 to-slate-950/20 z-10"></div>
                             </div>
 
                             {/* Content */}
@@ -171,7 +204,7 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
             )}
 
             {/* Bottom Interface Fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent z-10"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-20 md:h-40 bg-gradient-to-t from-white to-transparent z-10"></div>
         </section>
     );
 };
