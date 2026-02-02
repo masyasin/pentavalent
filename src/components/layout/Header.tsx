@@ -32,6 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
   const [menus, setMenus] = useState<NavMenu[]>([]);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [settings, setSettings] = useState<any>(null);
+  const [searchIndex, setSearchIndex] = useState<any[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -39,6 +40,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
 
   const fetchData = async () => {
     try {
+      // Fetch Header Menus
       const { data: menuData, error: menuError } = await supabase
         .from('nav_menus')
         .select('*')
@@ -57,21 +59,148 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
       if (!settingsError) {
         setSettings(settingsData);
       }
+
+      // Fetch all searchable content
+      const [newsRes, businessRes, investorRes, managementRes, careerRes, certRes, eventRes, highlightRes] = await Promise.all([
+        supabase.from('news').select('id, title_id, title_en, slug, category').eq('is_published', true),
+        supabase.from('business_lines').select('id, title_id, title_en, slug'),
+        supabase.from('investor_documents').select('id, title_id, title_en, document_type, year, file_url').eq('is_published', true),
+        supabase.from('management').select('id, name, position_id, position_en').eq('is_active', true),
+        supabase.from('careers').select('id, title, department, location').eq('is_active', true),
+        supabase.from('certifications').select('id, name').eq('is_active', true),
+        supabase.from('investor_calendar').select('id, title_id, title_en, event_date').eq('is_active', true),
+        supabase.from('investor_highlights').select('id, label_id, label_en').eq('is_active', true)
+      ]);
+
+      const index: any[] = [];
+
+      // Add Menus
+      if (menuData) {
+        menuData.forEach(m => {
+          index.push({
+            type: language === 'id' ? 'Menu' : 'Navigation',
+            label: language === 'id' ? m.label_id : m.label_en,
+            id: m.path,
+            icon: 'M4 6h16M4 12h16M4 18h16',
+            path: m.path
+          });
+        });
+      }
+
+      // Add News
+      if (newsRes.data) {
+        newsRes.data.forEach(n => {
+          index.push({
+            type: language === 'id' ? 'Berita' : 'News',
+            label: language === 'id' ? n.title_id : n.title_en,
+            id: n.id,
+            icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM7 8h4m-4 4h8m-8 4h8',
+            path: `/news/${n.slug}`
+          });
+        });
+      }
+
+      // Add Business
+      if (businessRes.data) {
+        businessRes.data.forEach(b => {
+          index.push({
+            type: language === 'id' ? 'Bisnis' : 'Business',
+            label: language === 'id' ? b.title_id : b.title_en,
+            id: b.id,
+            icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+            path: b.slug.startsWith('/') ? b.slug : `/business/${b.slug}`
+          });
+        });
+      }
+
+      // Add Investor Documents
+      if (investorRes.data) {
+        investorRes.data.forEach(d => {
+          index.push({
+            type: language === 'id' ? 'Laporan' : 'Report',
+            label: `${language === 'id' ? d.title_id : d.title_en} (${d.year})`,
+            id: d.id,
+            icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+            path: d.file_url,
+            isExternal: d.file_url.startsWith('http') || d.file_url === '#'
+          });
+        });
+      }
+
+      // Add Management
+      if (managementRes.data) {
+        managementRes.data.forEach(m => {
+          index.push({
+            type: language === 'id' ? 'Manajemen' : 'Management',
+            label: m.name,
+            id: m.id,
+            icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+            path: '/about/management'
+          });
+        });
+      }
+
+      // Add Careers
+      if (careerRes.data) {
+        careerRes.data.forEach(c => {
+          index.push({
+            type: language === 'id' ? 'Karir' : 'Career',
+            label: `${c.title} - ${c.location}`,
+            id: c.id,
+            icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+            path: '/careers'
+          });
+        });
+      }
+
+      // Add Certifications
+      if (certRes.data) {
+        certRes.data.forEach(c => {
+          index.push({
+            type: language === 'id' ? 'Sertifikasi' : 'Certification',
+            label: c.name,
+            id: c.id,
+            icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+            path: '/about/legality-achievements'
+          });
+        });
+      }
+
+      // Add Events
+      if (eventRes.data) {
+        eventRes.data.forEach(e => {
+          index.push({
+            type: language === 'id' ? 'Agenda' : 'Event',
+            label: language === 'id' ? e.title_id : e.title_en,
+            id: e.id,
+            icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+            path: '/investor/rups'
+          });
+        });
+      }
+
+      // Add Investor Highlights
+      if (highlightRes.data) {
+        highlightRes.data.forEach(h => {
+          index.push({
+            type: language === 'id' ? 'Indikator' : 'Highlight',
+            label: language === 'id' ? h.label_id : h.label_en,
+            id: h.id,
+            icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+            path: '/investor/ringkasan-investor'
+          });
+        });
+      }
+
+      setSearchIndex(index);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  // Autocomplete Data based on dynamic menus
-  const searchItems = menus.map(menu => ({
-    type: 'Menu',
-    label: language === 'id' ? menu.label_id : menu.label_en,
-    id: menu.path.replace('#', '').replace('/', ''),
-    icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-  }));
-
+  // Filtered Results based on searchIndex
   const filteredResults = searchQuery
-    ? searchItems.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
+    ? searchIndex.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()) || item.type.toLowerCase().includes(searchQuery.toLowerCase()))
     : [];
 
   useEffect(() => {
@@ -110,6 +239,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
       window.open(path, '_blank');
     }
     setIsMobileMenuOpen(false);
+    setIsSearchOpen(false);
     setActiveDropdown(null);
   };
 
@@ -286,10 +416,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 <button
                   onClick={() => setIsSearchOpen(true)}
-                  className={`hidden sm:flex p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
+                  className={`flex p-2 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
                   aria-label="Search"
                 >
-                  <Search size={22} strokeWidth={2.5} />
+                  <Search className="w-5 h-5 sm:w-5.5 sm:h-5.5" strokeWidth={2.5} />
                 </button>
 
                 <button
@@ -418,81 +548,171 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
       </div >
 
       {/* Search Modal Spotlight */}
-      < div className={`fixed inset-0 z-[200] transition-all duration-300 ${isSearchOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
-        {/* Backdrop */}
-        < div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setIsSearchOpen(false)}></div >
+      <AnimatePresence>
+        {isSearchOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1000] flex items-start justify-center pt-[10vh] sm:pt-[15vh] px-4"
+          >
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" 
+              onClick={() => setIsSearchOpen(false)}
+            ></motion.div>
 
-        {/* Modal */}
-        < div className={`absolute top-[15%] left-1/2 -translate-x-1/2 w-[90%] max-w-2xl bg-white rounded-3xl shadow-2xl border border-white/20 overflow-hidden transition-all duration-300 ${isSearchOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-4 scale-95 opacity-0'}`}>
-          {/* Search Input Area */}
-          < div className="relative border-b border-slate-100 p-6 flex items-center gap-4" >
-            <Search className="flex-shrink-0 text-slate-400" size={24} />
-            <input
-              type="text"
-              autoFocus={isSearchOpen}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={language === 'id' ? "Cari halaman, layanan, atau informasi..." : "Search for pages, services, or information..."}
-              className="w-full text-xl font-bold bg-transparent border-none outline-none text-slate-900 placeholder:text-slate-300 h-full"
-            />
-            <button onClick={() => setIsSearchOpen(false)} className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:bg-slate-100 transition-colors">
-              <X size={18} />
-            </button>
-          </div >
-
-          {/* Results or Suggestions */}
-          < div className="max-h-[60vh] overflow-y-auto p-4 bg-slate-50/50" >
-            {
-              searchQuery ? (
-                filteredResults.length > 0 ? (
-                  <div className="space-y-2">
-                    <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 py-2">Results</h5>
-                    {filteredResults.map(item => (
-                      <button key={item.id} onClick={() => { onNavigate(item.id); setIsSearchOpen(false); }} className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-cyan-200 hover:shadow-lg hover:shadow-cyan-500/10 transition-all text-left group">
-                        <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center group-hover:wow-button-gradient group-hover:text-white transition-colors">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} /></svg>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-slate-900 group-hover:wow-icon-gradient inline-block transition-colors">{item.label}</h4>
-                          <p className="text-[11.5px] text-slate-400 font-bold uppercase tracking-wide">{item.type}</p>
-                        </div>
-                        <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                          <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="py-12 text-center text-slate-400">
-                    <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                    <p className="font-bold">No results found for "{searchQuery}"</p>
-                  </div>
-                )
-              ) : (
-                <div className="space-y-4">
-                  <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4">Suggested</h5>
-                  {/* Static quick links */}
-                  <div className="grid grid-cols-2 gap-3 px-2">
-                    {menus
-                      .filter(m => !m.parent_id && m.location !== 'footer')
-                      .slice(0, 4)
-                      .map(item => (
-                        <button
-                          key={item.id}
-                          onClick={() => { handleLinkClick(item.path); setIsSearchOpen(false); }}
-                          className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-md transition-all text-left"
-                        >
-                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
-                            {language === 'id' ? item.label_id : item.label_en}
-                          </span>
-                        </button>
-                      ))}
-                  </div>
+            {/* Modal Container */}
+            <motion.div 
+              initial={{ y: -20, opacity: 0, scale: 0.95 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: -20, opacity: 0, scale: 0.95 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] border border-white/20 overflow-hidden flex flex-col max-h-[75vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Search Input Area */}
+              <div className="relative border-b border-slate-100 p-6 sm:p-8 flex items-center gap-4 bg-white z-20">
+                <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-primary flex-shrink-0">
+                  <Search size={24} strokeWidth={2.5} />
                 </div>
-              )}
-          </div >
-        </div >
-      </div >
+                <input
+                  type="text"
+                  autoFocus
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={language === 'id' ? "Cari berita, laporan, bisnis..." : "Search news, reports, business..."}
+                  className="w-full text-lg sm:text-xl font-bold bg-transparent border-none outline-none text-slate-900 placeholder:text-slate-300 h-full"
+                />
+                <button 
+                  onClick={() => setIsSearchOpen(false)} 
+                  className="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl hover:bg-slate-100 transition-colors"
+                >
+                  <X size={20} strokeWidth={2.5} />
+                </button>
+              </div>
+
+              {/* Results or Suggestions Area */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50/30 custom-scrollbar">
+                {searchQuery ? (
+                  filteredResults.length > 0 ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between px-4 py-2">
+                        <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                          {language === 'id' ? 'Hasil Pencarian' : 'Search Results'}
+                        </h5>
+                        <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                          {filteredResults.length}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-2">
+                        {filteredResults.map(item => (
+                          <button 
+                            key={item.id} 
+                            onClick={() => { 
+                              if (item.isExternal) {
+                                window.open(item.path, '_blank');
+                              } else {
+                                handleLinkClick(item.path); 
+                              }
+                              setIsSearchOpen(false); 
+                            }} 
+                            className="w-full flex items-center gap-4 p-4 rounded-3xl bg-white border border-slate-100 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all text-left group"
+                          >
+                            <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                              </svg>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm sm:text-base font-black text-slate-900 group-hover:text-primary transition-colors truncate">
+                                {item.label}
+                              </h4>
+                              <p className="text-[10px] sm:text-[11px] text-slate-400 font-black uppercase tracking-widest mt-0.5">
+                                {item.type}
+                              </p>
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-primary/10 group-hover:text-primary transition-all flex-shrink-0">
+                              <ArrowRight size={14} strokeWidth={3} />
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-20 text-center animate-in fade-in zoom-in duration-500">
+                      <div className="w-20 h-20 bg-slate-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-slate-300">
+                        <Search size={40} strokeWidth={1.5} />
+                      </div>
+                      <h3 className="text-xl font-black text-slate-900 mb-2 italic">
+                        {language === 'id' ? 'Tidak Ditemukan' : 'No Results Found'}
+                      </h3>
+                      <p className="text-slate-400 text-sm font-medium">
+                        {language === 'id' ? `Tidak ada hasil untuk "${searchQuery}"` : `No matches for "${searchQuery}"`}
+                      </p>
+                    </div>
+                  )
+                ) : (
+                  <div className="space-y-8 py-4">
+                    <div className="space-y-4">
+                      <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-4">
+                        {language === 'id' ? 'Tautan Cepat' : 'Quick Access'}
+                      </h5>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 px-2">
+                        {menus
+                          .filter(m => !m.parent_id && m.location !== 'footer')
+                          .slice(0, 4)
+                          .map(item => (
+                            <button
+                              key={item.id}
+                              onClick={() => { handleLinkClick(item.path); setIsSearchOpen(false); }}
+                              className="flex items-center gap-4 p-5 bg-white border border-slate-100 rounded-[1.5rem] hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all text-left group"
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                <ArrowRight size={16} strokeWidth={3} />
+                              </div>
+                              <span className="text-xs font-black uppercase tracking-widest text-slate-700 group-hover:text-primary transition-colors">
+                                {language === 'id' ? item.label_id : item.label_en}
+                              </span>
+                            </button>
+                          ))}
+                      </div>
+                    </div>
+
+                    {/* Popular Categories */}
+                    <div className="space-y-4">
+                      <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-4">
+                        {language === 'id' ? 'Kategori Populer' : 'Popular Categories'}
+                      </h5>
+                      <div className="flex flex-wrap gap-2 px-2">
+                        {['News', 'Business', 'Report', 'Investor'].map((cat) => (
+                          <button
+                            key={cat}
+                            onClick={() => setSearchQuery(cat)}
+                            className="px-5 py-2.5 rounded-full bg-white border border-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-primary hover:text-primary transition-all shadow-sm"
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Footer Hint */}
+              <div className="p-4 bg-white border-t border-slate-50 text-center">
+                <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em]">
+                  {language === 'id' ? 'Tekan ESC untuk menutup' : 'Press ESC to close'}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
