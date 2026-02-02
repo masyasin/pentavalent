@@ -818,7 +818,7 @@ const InvestorPage: React.FC = () => {
                                                                         <div className="text-[9px] md:text-[11px] font-black text-cyan-600 uppercase tracking-[0.25em] mb-2 md:mb-3 truncate">
                                                                             {doc.document_type.replace(/_/g, ' ')} • {doc.year} {doc.quarter ? `• ${doc.quarter}` : ''}
                                                                         </div>
-                                                                        <h4 className="text-sm md:text-3xl font-black text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 md:gap-4 flex-wrap leading-tight italic tracking-tight">
+                                                                        <h4 className="text-sm md:text-3xl font-black text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 md:gap-4 flex-wrap leading-tight md:italic tracking-tight">
                                                                             {language === 'id' ? doc.title_id : doc.title_en}
 
                                                                             <div className="flex gap-2">

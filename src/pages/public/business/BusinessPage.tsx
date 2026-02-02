@@ -581,7 +581,7 @@ const BusinessPage: React.FC = () => {
                                     Business Division
                                 </div>
 
-                                <h2 className="text-4xl md:text-5xl font-black mb-10 text-slate-900 tracking-tighter leading-tight italic">
+                                <h2 className="text-3xl md:text-5xl font-black mb-10 text-slate-900 tracking-tighter leading-tight md:italic">
                                     {language === 'id' ? businessData.title_id : businessData.title_en}
                                 </h2>
 
@@ -944,7 +944,7 @@ const BusinessPage: React.FC = () => {
                                                             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-cyan-500/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-cyan-400 border border-cyan-400/30 w-fit">
                                                                 {language === 'id' ? 'Visualisasi Pasar' : 'Market Visualization'}
                                                             </div>
-                                                            <h4 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
+                                                            <h4 className="text-xl md:text-5xl font-black text-white md:italic tracking-tighter uppercase leading-none">
                                                                 {language === 'id' ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.label : TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.labelEn}
                                                             </h4>
                                                             <p className="text-white/70 max-w-md text-sm md:text-base leading-relaxed font-medium">
@@ -1067,7 +1067,7 @@ const BusinessPage: React.FC = () => {
                                                                 <div className="md:hidden"><FileText size={24} /></div>
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <div className="font-black text-slate-900 text-sm md:text-2xl group-hover:text-cyan-600 transition-colors leading-tight italic uppercase tracking-tight truncate">{file.label}</div>
+                                                                <div className="font-black text-slate-900 text-sm md:text-2xl group-hover/file:text-cyan-600 transition-colors leading-tight md:italic uppercase tracking-tight truncate">{file.label}</div>
                                                                 <div className="text-[9px] md:text-[11px] font-black text-slate-400 uppercase tracking-widest mt-2 flex items-center gap-3">
                                                                     <span className="px-3 py-1 bg-slate-100 rounded-full text-slate-600 group-hover:bg-cyan-50 group-hover:text-cyan-700 transition-colors border border-slate-200 group-hover:border-cyan-100">{file.type}</span>
                                                                     <span>•</span>
@@ -1112,7 +1112,7 @@ const BusinessPage: React.FC = () => {
                             viewport={{ once: true }}
                             className="space-y-10 mt-24"
                         >
-                            <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase italic px-4 flex items-center gap-6">
+                            <h3 className="text-2xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase md:italic px-4 flex items-center gap-6">
                                 <span className="w-16 h-1.5 bg-cyan-500 rounded-full"></span>
                                 Operational <span className="text-cyan-500">Excellence</span>
                             </h3>
