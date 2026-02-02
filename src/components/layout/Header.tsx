@@ -121,10 +121,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
           : 'bg-transparent py-4'
           }`}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto">
-          <div className="flex items-center justify-between relative z-10 h-full gap-2 xl:gap-4">
-            {/* Logo Column - Balanced and centered between edge and menu */}
-            <div className="flex-1 flex items-center justify-start xl:justify-center min-w-0">
+        <div className="w-full px-5 sm:px-6 lg:px-8 mx-auto">
+          <div className="flex items-center justify-between relative z-10 h-14 sm:h-16 lg:h-20 gap-2">
+            {/* Logo Column */}
+            <div className="flex-1 flex items-center justify-start min-w-0">
               <div
                 className="cursor-pointer group flex-shrink-0"
                 onClick={() => {
@@ -132,13 +132,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               >
-                <div className="transition-all duration-700 flex items-center justify-center py-1">
+                <div className="flex items-center justify-start py-1">
                   <img
                     src={settings?.logo_url || "/logo-icon.png"}
                     alt="Penta Valent"
                     width="200"
                     height="64"
-                    className={`${isScrolled ? 'h-8 sm:h-10 lg:h-14' : 'h-10 sm:h-12 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
+                    className={`${isScrolled ? 'h-9 sm:h-10 lg:h-14' : 'h-11 sm:h-12 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-105 relative z-10`}
                   />
                 </div>
               </div>
@@ -267,7 +267,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             </nav>
 
             {/* Actions Column - Symmetric with logo side */}
-            <div className="flex-1 flex items-center justify-center gap-2 xl:gap-3 min-w-0">
+            <div className="flex-1 flex items-center justify-end xl:justify-center gap-2 xl:gap-3 min-w-0">
               <div className={`hidden lg:flex items-center rounded-full p-1 border transition-all duration-500 flex-shrink-0 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
                 {['id', 'en'].map((lang) => (
                   <button
@@ -293,12 +293,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 </button>
 
                 <button
-                  className={`xl:hidden p-2.5 sm:p-3 rounded-full transition-all duration-500 touch-active ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
+                  className={`xl:hidden p-2 rounded-full transition-all duration-500 touch-active ${isScrolled ? 'text-primary bg-slate-50' : 'text-white bg-white/10'}`}
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   aria-label="Toggle Menu"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M8 18h12"} />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
                   </svg>
                 </button>
               </div>
@@ -319,10 +319,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
         <div className="absolute inset-0 bg-primary/20 backdrop-blur-md" onClick={() => setIsMobileMenuOpen(false)}></div>
         <div className={`absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white shadow-4xl transition-transform duration-500 ease-out transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex flex-col h-full">
-            <div className="p-6 flex items-center justify-between border-b border-gray-100">
-              <img src="/logo-icon.png" alt="Penta Valent - Healthcare & Beyond" className="h-8 w-auto" />
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-3 bg-gray-50 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-2xl transition-all touch-active active:scale-95">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+            <div className="p-5 flex items-center justify-between border-b border-slate-100">
+              <img src={settings?.logo_url || "/logo-icon.png"} alt="Penta Valent" className="h-7 w-auto" />
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-slate-50 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all touch-active active:scale-95">
+                <X size={20} strokeWidth={2.5} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto py-6">
