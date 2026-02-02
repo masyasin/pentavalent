@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { supabase } from '../../lib/supabase';
+import { Download, FileText, TrendingUp, Shield, Briefcase, Info } from 'lucide-react';
 
 interface GCGPrinciple {
     id: string;
@@ -375,15 +376,15 @@ const GCGSection: React.FC = () => {
                                         {language === 'id' ? policy.description_id : policy.description_en}
                                     </p>
 
-                                    <div className="flex items-center justify-between pt-6 border-t border-slate-50">
-                                        <div className="flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-widest">
-                                            <span>{language === 'id' ? 'Unduh Dokumen' : 'Download Document'}</span>
-                                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                                            </svg>
+                                    <div className="flex items-center justify-between pt-8 border-t border-slate-50 mt-auto">
+                                        <div className="flex flex-col gap-1">
+                                            <div className="flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-[0.2em]">
+                                                <span>{language === 'id' ? 'Unduh PDF' : 'Download PDF'}</span>
+                                            </div>
+                                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-slate-600 transition-colors">Digital Document</span>
                                         </div>
-                                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5m0 0l5-5m-5 5V3" /></svg>
+                                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-xl group-hover:bg-blue-600 group-hover:shadow-blue-500/40 transition-all duration-500 active:scale-90">
+                                            <Download size={20} className="md:size-6" />
                                         </div>
                                     </div>
                                 </a>

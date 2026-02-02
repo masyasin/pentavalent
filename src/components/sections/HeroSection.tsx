@@ -77,7 +77,7 @@ const HeroSlideItem: React.FC<{
                 height={1080}
                 className="w-full h-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
-                fetchPriority={index === 0 ? "high" : "auto"}
+                fetchpriority={index === 0 ? "high" : "auto"}
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, 100vw"
                 onError={() => {

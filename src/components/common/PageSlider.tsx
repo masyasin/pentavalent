@@ -121,7 +121,7 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                     }}
                                     className={`w-full h-full object-cover transition-transform duration-[10000ms] ease-out ${selectedIndex === index ? 'scale-110' : 'scale-100'}`}
                                     loading={index === 0 ? "eager" : "lazy"}
-                                    fetchPriority={index === 0 ? "high" : "auto"}
+                                    fetchpriority={index === 0 ? "high" : "auto"}
                                     decoding="async"
                                     sizes="(max-width: 768px) 100vw, 100vw"
                                     style={{ 

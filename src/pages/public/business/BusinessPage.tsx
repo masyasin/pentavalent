@@ -7,8 +7,8 @@ import { useLanguage } from '../../../contexts/LanguageContext';
 import { supabase } from '../../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    ChevronLeft, ChevronRight, TrendingUp, Search, X, Package, ShieldCheck, Zap, Activity, Users, Globe, Building2, Target, ArrowRight, Heart, Smile, Sparkles, Stethoscope, Leaf, Briefcase, Pill, Server, Handshake, CheckCircle2,
-    Hospital, Building, Ambulance, ClipboardList, ShoppingBag, Store, ShoppingCart, Scissors, Gem, Warehouse, Home, Truck, Boxes, Coffee, Droplet, MapPin
+    ChevronLeft, ChevronRight, ChevronDown, TrendingUp, Search, X, Package, ShieldCheck, Zap, Activity, Users, Globe, Building2, Target, ArrowRight, Heart, Smile, Sparkles, Stethoscope, Leaf, Briefcase, Pill, Server, Handshake, CheckCircle2,
+    Hospital, Building, Ambulance, ClipboardList, ShoppingBag, Store, ShoppingCart, Scissors, Gem, Warehouse, Home, Truck, Boxes, Coffee, Droplet, MapPin, FileText, Download
 } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -185,6 +185,7 @@ const BusinessPage: React.FC = () => {
     const [settings, setSettings] = useState<any>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [activeTargetTab, setActiveTargetTab] = useState<string | null>('Farmasi');
+    const [isTargetDropdownOpen, setIsTargetDropdownOpen] = useState(false);
 
     // Embla for Bottom Gallery
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' }, [Autoplay({ delay: 5000, stopOnInteraction: true })]);
@@ -232,8 +233,8 @@ const BusinessPage: React.FC = () => {
         return '';
     };
 
-    const getIcon = (name: string) => {
-        const props = { className: "w-full h-full" };
+    const getIcon = (name: string, size: number = 24) => {
+        const props = { size };
         switch (name.toLowerCase()) {
             case 'globe': return <Globe {...props} />;
             case 'briefcase': return <Briefcase {...props} />;
@@ -265,6 +266,7 @@ const BusinessPage: React.FC = () => {
             case 'truck': return <Truck {...props} />;
             case 'boxes': return <Boxes {...props} />;
             case 'coffee': return <Coffee {...props} />;
+            case 'target': return <Target {...props} />;
             default: return <CheckCircle2 {...props} />;
         }
     };
@@ -820,11 +822,11 @@ const BusinessPage: React.FC = () => {
                                             const { icon: IconComponent, color } = getFeatureIconAndColor(feature);
 
                                             return (
-                                                <div key={idx} className="flex flex-col items-center gap-3 p-4 rounded-3xl bg-white border border-slate-100 shadow-sm hover:border-cyan-200 hover:shadow-lg transition-all group/feat">
+                                                <div key={idx} className="flex flex-row md:flex-col items-center gap-4 md:gap-3 p-4 rounded-3xl bg-white border border-slate-100 shadow-sm hover:border-cyan-200 hover:shadow-lg transition-all group/feat">
                                                     <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-lg ${color} group-hover:scale-110 transition-transform duration-300`}>
                                                         <IconComponent size={20} strokeWidth={2.5} />
                                                     </div>
-                                                    <p className="font-bold text-slate-700 text-xs text-center leading-snug">{feature}</p>
+                                                    <p className="font-bold text-slate-700 text-xs text-left md:text-center leading-snug">{feature}</p>
                                                 </div>
                                             );
                                         })}
@@ -834,24 +836,80 @@ const BusinessPage: React.FC = () => {
                                 {/* Interactive Target Market Detail - Enhanced Tabs */}
                                 {location.pathname.includes('target-market') && (
                                     <div className="mt-16 space-y-10">
-                                        <div className="flex flex-col gap-6">
+                                        <div className="flex flex-col gap-6 items-center lg:items-start text-center lg:text-left w-full">
                                             <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-white">
-                                                    <Users size={16} />
+                                                <div className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-white shrink-0">
+                                                    <Target size={16} />
                                                 </div>
-                                                {language === 'id' ? 'Kategori Target Pasar' : 'Target Market Categories'}
+                                                {language === 'id' ? 'Target Pasar' : 'Target Market'}
                                             </h3>
-                                            <div className="flex overflow-x-auto pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:flex-wrap gap-3 relative z-[101] scrollbar-hide">
+                                            
+                                            {/* Mobile: Custom Sweet Dropdown Selection */}
+                                            <div className="block lg:hidden w-full max-w-[280px] px-4 relative z-[110]">
+                                                <button
+                                                    onClick={() => setIsTargetDropdownOpen(!isTargetDropdownOpen)}
+                                                    className="w-full bg-white border-2 border-slate-100 text-slate-700 py-3.5 px-6 rounded-full font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-between shadow-xl shadow-slate-200/50 active:scale-95 transition-all border-b-4 border-b-slate-200/50"
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-5 h-5 text-cyan-500">
+                                                            {getIcon(TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.icon || 'Target')}
+                                                        </div>
+                                                        {language === 'id' 
+                                                            ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.label 
+                                                            : TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.labelEn}
+                                                    </div>
+                                                    <ChevronDown size={14} className={`transition-transform duration-500 ${isTargetDropdownOpen ? 'rotate-180' : ''}`} />
+                                                </button>
+
+                                                <AnimatePresence>
+                                                    {isTargetDropdownOpen && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                                            animate={{ opacity: 1, y: 8, scale: 1 }}
+                                                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                                            className="absolute top-full left-4 right-4 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden z-[120] py-2"
+                                                        >
+                                                            {TARGET_MARKET_DETAILS.map((tab) => (
+                                                                <button
+                                                                    key={tab.id}
+                                                                    onClick={() => {
+                                                                        setActiveTargetTab(tab.id);
+                                                                        setIsTargetDropdownOpen(false);
+                                                                    }}
+                                                                    className={`w-full px-6 py-4 text-left flex items-center gap-4 transition-all ${
+                                                                        activeTargetTab === tab.id 
+                                                                        ? 'bg-slate-900 text-white' 
+                                                                        : 'text-slate-600 hover:bg-slate-50'
+                                                                    }`}
+                                                                >
+                                                                    <div className={`w-4 h-4 ${activeTargetTab === tab.id ? 'text-cyan-400' : 'text-cyan-500'}`}>
+                                                                        {getIcon(tab.icon)}
+                                                                    </div>
+                                                                    <span className="text-[9px] font-black uppercase tracking-widest">
+                                                                        {language === 'id' ? tab.label : tab.labelEn}
+                                                                    </span>
+                                                                    {activeTargetTab === tab.id && (
+                                                                        <motion.div layoutId="active-dot" className="ml-auto w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                                                                    )}
+                                                                </button>
+                                                            ))}
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+
+                                            {/* Desktop: Filter Chips Selection */}
+                                            <div className="hidden lg:flex flex-wrap gap-3 relative z-[101] w-full">
                                                 {TARGET_MARKET_DETAILS.map((tab) => (
                                                     <button
                                                         key={tab.id}
                                                         onClick={() => setActiveTargetTab(tab.id)}
-                                                        className={`relative overflow-hidden px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 flex items-center gap-3 active:scale-95 whitespace-nowrap touch-manipulation cursor-pointer shadow-sm hover:shadow-md ${activeTargetTab === tab.id
-                                                            ? 'bg-cyan-500 text-white shadow-xl shadow-cyan-200 -translate-y-1'
-                                                            : 'bg-white border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-600'
+                                                        className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2 active:scale-95 whitespace-nowrap touch-manipulation cursor-pointer ${activeTargetTab === tab.id
+                                                            ? 'bg-slate-900 text-white shadow-lg shadow-slate-200 -translate-y-0.5'
+                                                            : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                                                             }`}
                                                     >
-                                                        <div className={`w-4 h-4 ${activeTargetTab === tab.id ? 'text-white' : 'text-cyan-500'}`}>
+                                                        <div className={`w-3.5 h-3.5 shrink-0 ${activeTargetTab === tab.id ? 'text-cyan-400' : 'text-slate-400'}`}>
                                                             {getIcon(tab.icon)}
                                                         </div>
                                                         {language === 'id' ? tab.label : tab.labelEn}
@@ -871,8 +929,8 @@ const BusinessPage: React.FC = () => {
                                                     transition={{ duration: 0.3 }}
                                                     className="space-y-12"
                                                 >
-                                                    {/* Category Header Card */}
-                                                    <div className="relative h-64 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl group bg-slate-900 border border-slate-800">
+                                                    {/* Category Header Card - Hidden on Mobile */}
+                                                    <div className="hidden md:flex relative h-64 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl group bg-slate-900 border border-slate-800">
                                                         <img
                                                             src={TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.bg}
                                                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60"
@@ -895,21 +953,33 @@ const BusinessPage: React.FC = () => {
                                                         </div>
                                                     </div>
 
+                                                    {/* Mobile Title - Visible only on mobile */}
+                                                    <div className="md:hidden flex flex-col items-center gap-2">
+                                                        <div className="h-1 w-12 bg-cyan-500 rounded-full mb-2"></div>
+                                                        <h4 className="text-2xl font-black text-slate-900 italic tracking-tight uppercase">
+                                                            {language === 'id' ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.label : TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.labelEn}
+                                                        </h4>
+                                                        <p className="text-slate-500 text-xs font-medium px-4">
+                                                            {language === 'id' ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.description : TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.descriptionEn}
+                                                        </p>
+                                                    </div>
+
                                                     {/* Outlet Coverage Grid */}
                                                     <div className="space-y-6">
                                                         <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-4">
                                                             {language === 'id' ? 'Cakupan Outlet & Instansi' : 'Outlet & Institution Coverage'}
                                                         </h4>
-                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                                                             {TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.items.map((item, idx) => (
                                                                 <div
                                                                     key={idx}
-                                                                    className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:border-cyan-200 transition-all group/item text-left justify-start"
+                                                                    className="flex items-center gap-3 md:gap-4 p-4 md:p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:border-cyan-200 transition-all group/item text-left justify-start"
                                                                 >
-                                                                    <div className="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-500 group-hover/item:bg-cyan-500 group-hover/item:text-white transition-all duration-300 shrink-0">
-                                                                        {React.cloneElement(getIcon(item.icon) as React.ReactElement, { size: 24 })}
+                                                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-500 group-hover/item:bg-cyan-500 group-hover/item:text-white transition-all duration-300 shrink-0">
+                                                                        <div className="hidden md:block">{getIcon(item.icon, 20)}</div>
+                                                                        <div className="md:hidden">{getIcon(item.icon, 18)}</div>
                                                                     </div>
-                                                                    <span className="font-black text-slate-800 text-[11px] uppercase tracking-tight leading-tight">{item.name}</span>
+                                                                    <span className="font-black text-slate-800 text-[9px] md:text-[11px] uppercase tracking-tight leading-tight">{item.name}</span>
                                                                 </div>
                                                             ))}
                                                         </div>
@@ -938,13 +1008,13 @@ const BusinessPage: React.FC = () => {
                         isSpecialBusinessPage && (
                             <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
                                 {/* Metrics Card */}
-                                <div className="lg:col-span-8 bg-slate-900 p-10 rounded-[3rem] text-white overflow-hidden relative shadow-2xl shadow-slate-900/20">
+                                <div className="lg:col-span-8 bg-slate-900 p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] text-white overflow-hidden relative shadow-2xl shadow-slate-900/20">
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                                     <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
                                         <div className="space-y-10 flex-1">
                                             <h3 className="text-sm font-black text-white/40 uppercase tracking-[0.3em]">Performance Metrics</h3>
 
-                                            <div className="flex flex-wrap gap-12">
+                                            <div className="flex flex-wrap gap-6 md:gap-12">
                                                 {(businessData.stats && businessData.stats.length > 0 ? businessData.stats : [
                                                     { value: '5000+', label: language === 'id' ? 'Produk Aktif' : 'Active Products' },
                                                     { value: '12000+', label: language === 'id' ? 'Outlet Terlayani' : 'Outlets Served' },
@@ -985,21 +1055,32 @@ const BusinessPage: React.FC = () => {
                                                     { label: 'E-Catalogue 2025', size: '12.5 MB', type: 'PDF' },
                                                     { label: 'Company Profile', size: '8.2 MB', type: 'PDF' }
                                                 ].map((file, i) => (
-                                                    <button key={i} className="w-full flex flex-col p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50 border border-slate-100 hover:border-cyan-100 transition-all group/file text-left relative overflow-hidden">
-                                                        <div className="flex items-center gap-4 w-full">
-                                                            <div className="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-rose-500 shadow-sm group-hover/file:scale-110 transition-transform">
-                                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                                    <motion.button
+                                                        key={i}
+                                                        whileHover={{ scale: 1.01, x: 5 }}
+                                                        whileTap={{ scale: 0.97 }}
+                                                        className="w-full flex flex-col p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-2xl hover:border-cyan-200 transition-all duration-500 group/file text-left relative overflow-hidden"
+                                                    >
+                                                        <div className="flex items-center gap-4 md:gap-8 w-full relative z-10">
+                                                            <div className="w-14 h-14 md:w-20 md:h-20 rounded-[1.5rem] md:rounded-[2rem] bg-slate-50 text-rose-500 flex items-center justify-center group-hover:bg-rose-500 group-hover:text-white transition-all shadow-inner shrink-0 group-hover:rotate-6">
+                                                                <div className="hidden md:block"><FileText size={32} /></div>
+                                                                <div className="md:hidden"><FileText size={24} /></div>
                                                             </div>
-                                                            <div>
-                                                                <div className="font-bold text-slate-900 text-sm group-hover/file:text-cyan-700 transition-colors">{file.label}</div>
-                                                                <div className="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider mt-1">{file.type} • {file.size}</div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="font-black text-slate-900 text-sm md:text-2xl group-hover:text-cyan-600 transition-colors leading-tight italic uppercase tracking-tight truncate">{file.label}</div>
+                                                                <div className="text-[9px] md:text-[11px] font-black text-slate-400 uppercase tracking-widest mt-2 flex items-center gap-3">
+                                                                    <span className="px-3 py-1 bg-slate-100 rounded-full text-slate-600 group-hover:bg-cyan-50 group-hover:text-cyan-700 transition-colors border border-slate-200 group-hover:border-cyan-100">{file.type}</span>
+                                                                    <span>•</span>
+                                                                    <span>{file.size}</span>
+                                                                </div>
                                                             </div>
-                                                            <div className="ml-auto opacity-0 group-hover/file:opacity-100 transition-opacity -translate-x-2 group-hover/file:translate-x-0">
-                                                                <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                                            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-xl group-hover:bg-cyan-500 group-hover:shadow-cyan-500/40 transition-all duration-500 shrink-0 active:scale-90">
+                                                                <div className="hidden md:block"><Download size={24} /></div>
+                                                                <div className="md:hidden"><Download size={18} /></div>
                                                             </div>
                                                         </div>
-                                                        <div className="absolute bottom-0 left-0 h-1 bg-cyan-500 w-0 group-hover:w-full transition-all duration-500"></div>
-                                                    </button>
+                                                        <div className="absolute bottom-0 left-0 h-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 w-0 group-hover:w-full transition-all duration-700"></div>
+                                                    </motion.button>
                                                 ))}
                                             </div>
                                         </div>
@@ -1079,7 +1160,7 @@ const BusinessPage: React.FC = () => {
                 {/* Competitive Advantages Section - Conditional Rendering for Strategy Page */}
                 {
                     advantages.length > 0 && (
-                        <div className="space-y-16 mt-24 md:mt-32">
+                        <div className="space-y-16 mt-16 md:mt-32">
                             <div className="relative text-center max-w-3xl mx-auto">
                                 <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-cyan-50 rounded-full text-[10px] font-black uppercase tracking-widest text-cyan-600 mb-6 border border-cyan-100">
                                     <TrendingUp size={12} />
@@ -1101,7 +1182,7 @@ const BusinessPage: React.FC = () => {
 
                             {location.pathname.includes('strategi-usaha') ? (
                                 /* Clean & Professional Enterprise Infographic Flow */
-                                <div className="relative py-32 px-4 overflow-visible">
+                                <div className="relative py-16 md:py-32 px-4 overflow-visible">
                                     {/* Background Timeline Path */}
                                     <div className="absolute top-[50%] left-0 w-full h-[2px] bg-slate-200 hidden lg:block -translate-y-1/2">
                                         <motion.div
@@ -1174,7 +1255,7 @@ const BusinessPage: React.FC = () => {
                                             whileInView={{ opacity: 1, y: 0 }}
                                             transition={{ delay: idx * 0.1 }}
                                             viewport={{ once: true }}
-                                            className="group flex flex-col p-10 rounded-[3rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:border-cyan-200 hover:-translate-y-3 transition-all duration-500 relative overflow-hidden"
+                                            className="group flex flex-col p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:border-cyan-200 hover:-translate-y-3 transition-all duration-500 relative overflow-hidden"
                                         >
                                             {/* Decorative Background Blob */}
                                             <div className={`absolute top-0 right-0 w-48 h-48 bg-gradient-to-br ${getColor(idx)} rounded-bl-[100%] opacity-5 group-hover:scale-150 transition-transform duration-700`}></div>
@@ -1212,40 +1293,42 @@ const BusinessPage: React.FC = () => {
                         className="fixed inset-0 z-[9999] bg-slate-950/98 backdrop-blur-2xl flex items-center justify-center"
                         onClick={() => setSelectedImage(null)}
                     >
-                        {/* Close UI */}
-                        <div className="absolute top-0 left-0 right-0 p-6 flex justify-end items-center z-[10001]">
-                            <motion.button
-                                initial={{ y: -20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                className="group flex items-center gap-3 px-6 py-3 bg-white hover:bg-rose-500 rounded-full shadow-2xl transition-all duration-300 active:scale-95"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setSelectedImage(null);
-                                }}
-                            >
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 group-hover:text-white transition-colors">
-                                    {language === 'id' ? 'Tutup Gambar' : 'Close Image'}
-                                </span>
-                                <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-white/20 flex items-center justify-center text-slate-900 group-hover:text-white transition-all">
-                                    <X size={18} />
-                                </div>
-                            </motion.button>
-                        </div>
-
                         {/* Image Container */}
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0, rotateX: 10 }}
                             animate={{ scale: 1, opacity: 1, rotateX: 0 }}
                             exit={{ scale: 0.9, opacity: 0, rotateX: -10 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="relative w-[95vw] h-[90vh] flex items-center justify-center select-none"
+                            className="relative w-full h-full flex items-center justify-center p-4 md:p-20 select-none"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <img
-                                src={selectedImage}
-                                alt="Enlarged visualization"
-                                className="max-w-full max-h-full object-contain rounded-xl shadow-[0_40px_100px_rgba(0,0,0,0.6)] cursor-default transition-all"
-                            />
+                            <div className="relative max-w-full max-h-full">
+                                {/* Close UI - Now closer to the image */}
+                                <div className="absolute -top-12 right-0 md:-top-16 md:-right-16 z-[10001]">
+                                    <motion.button
+                                        initial={{ scale: 0.5, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        className="group flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 bg-white/90 backdrop-blur-md hover:bg-rose-500 rounded-full shadow-2xl transition-all duration-300 active:scale-95 border border-white/20"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedImage(null);
+                                        }}
+                                    >
+                                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 group-hover:text-white transition-colors">
+                                            {language === 'id' ? 'Tutup' : 'Close'}
+                                        </span>
+                                        <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-slate-100 group-hover:bg-white/20 flex items-center justify-center text-slate-900 group-hover:text-white transition-all">
+                                            <X size={14} className="md:size-[18px]" />
+                                        </div>
+                                    </motion.button>
+                                </div>
+
+                                <img
+                                    src={selectedImage}
+                                    alt="Enlarged visualization"
+                                    className="max-w-full max-h-[80vh] object-contain rounded-xl shadow-[0_40px_100px_rgba(0,0,0,0.6)] cursor-default transition-all"
+                                />
+                            </div>
                         </motion.div>
 
                         {/* Background Close Hint */}

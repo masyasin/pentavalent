@@ -7,7 +7,7 @@ import PageSlider from '../../../components/common/PageSlider';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { supabase } from '../../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, Download, FileText, Calendar, ArrowUpRight, TrendingUp, PieChart, Activity, Users, BarChart3, Clock, Briefcase, ExternalLink, Shield, Info, MapPin, Heart, Package, Award, Building2 } from 'lucide-react';
+import { ChevronRight, Download, FileText, Calendar, ArrowUpRight, TrendingUp, PieChart, Activity, Users, BarChart3, Clock, Briefcase, ExternalLink, Shield, Info, MapPin, Heart, Package, Award, Building2, LayoutDashboard, BookOpen } from 'lucide-react';
 import { StockSymbolOverview, StockPriceTicker, TechnicalAnalysis, StockFinancials, FundamentalData, CompanyProfileWidget, SymbolInfo } from '../../../components/investor/TradingViewWidgets';
 
 interface InvestorDoc {
@@ -799,69 +799,82 @@ const InvestorPage: React.FC = () => {
                                                             return b.year - a.year;
                                                         })
                                                         .map((doc) => (
-                                                            <div key={doc.id} className="group p-6 md:p-8 bg-white border border-slate-100 rounded-[1.5rem] md:rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden relative">
+                                                            <motion.a
+                                                                key={doc.id}
+                                                                href={doc.file_url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                whileHover={{ scale: 1.01, x: 5 }}
+                                                                whileTap={{ scale: 0.97 }}
+                                                                className="group p-6 md:p-10 bg-white border border-slate-100 rounded-[2rem] md:rounded-[3rem] hover:shadow-2xl hover:shadow-slate-200 transition-all flex items-center justify-between gap-4 md:gap-10 overflow-hidden relative duration-500"
+                                                            >
                                                                 <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                                <div className="flex items-center gap-4 md:gap-6">
-                                                                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-slate-50 text-cyan-600 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-sm shrink-0">
-                                                                        <FileText size={24} className="md:w-7 md:h-7" />
+                                                                <div className="flex items-center gap-4 md:gap-12 flex-1 min-w-0">
+                                                                    <div className="w-14 h-14 md:w-24 md:h-24 rounded-[1.5rem] md:rounded-[2.5rem] bg-slate-50 text-cyan-600 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-inner shrink-0 group-hover:rotate-6">
+                                                                        <div className="hidden md:block"><FileText size={40} /></div>
+                                                                        <div className="md:hidden"><FileText size={28} /></div>
                                                                     </div>
                                                                     <div className="flex-1 min-w-0">
-                                                                        <div className="text-[9px] md:text-[10px] font-black text-cyan-600 uppercase tracking-widest mb-1 truncate">
+                                                                        <div className="text-[9px] md:text-[11px] font-black text-cyan-600 uppercase tracking-[0.25em] mb-2 md:mb-3 truncate">
                                                                             {doc.document_type.replace(/_/g, ' ')} • {doc.year} {doc.quarter ? `• ${doc.quarter}` : ''}
                                                                         </div>
-                                                                        <h4 className="text-base md:text-xl font-bold text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 flex-wrap">
+                                                                        <h4 className="text-sm md:text-3xl font-black text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 md:gap-4 flex-wrap leading-tight italic tracking-tight">
                                                                             {language === 'id' ? doc.title_id : doc.title_en}
 
-                                                                            {getSlug() === 'laporan-keuangan' && (
-                                                                                <span className={`text-[10px] px-2 py-0.5 rounded border uppercase tracking-wider ${(doc.document_type === 'annual_report' || doc.document_type === 'audit_report')
-                                                                                    ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
-                                                                                    : 'bg-amber-50 text-amber-600 border-amber-200'
-                                                                                    }`}>
-                                                                                    {(doc.document_type === 'annual_report' || doc.document_type === 'audit_report')
-                                                                                        ? 'Audited'
-                                                                                        : 'Unaudited'}
-                                                                                </span>
-                                                                            )}
+                                                                            <div className="flex gap-2">
+                                                                                {getSlug() === 'laporan-keuangan' && (
+                                                                                    <span className={`text-[8px] md:text-[10px] px-3 py-1 rounded-full border-2 font-black uppercase tracking-widest ${(doc.document_type === 'annual_report' || doc.document_type === 'audit_report')
+                                                                                        ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                                                                                        : 'bg-amber-50 text-amber-600 border-amber-100'
+                                                                                        }`}>
+                                                                                        {(doc.document_type === 'annual_report' || doc.document_type === 'audit_report')
+                                                                                            ? 'Audited'
+                                                                                            : 'Unaudited'}
+                                                                                    </span>
+                                                                                )}
 
-                                                                            {getSlug() === 'rups' && (
-                                                                                <span className={`text-[10px] px-2 py-0.5 rounded border uppercase tracking-wider ${doc.document_type === 'rups_annual'
-                                                                                    ? 'bg-blue-50 text-blue-600 border-blue-200'
-                                                                                    : 'bg-orange-50 text-orange-600 border-orange-200'
-                                                                                    }`}>
-                                                                                    {doc.document_type === 'rups_annual' ? 'RUPST' : 'RUPS-LB'}
-                                                                                </span>
-                                                                            )}
+                                                                                {getSlug() === 'rups' && (
+                                                                                    <span className={`text-[8px] md:text-[10px] px-3 py-1 rounded-full border-2 font-black uppercase tracking-widest ${doc.document_type === 'rups_annual'
+                                                                                        ? 'bg-blue-50 text-blue-600 border-blue-100'
+                                                                                        : 'bg-orange-50 text-orange-600 border-orange-100'
+                                                                                        }`}>
+                                                                                        {doc.document_type === 'rups_annual' ? 'RUPST' : 'RUPS-LB'}
+                                                                                    </span>
+                                                                                )}
 
-                                                                            {getSlug() === 'keterbukaan-informasi' && (
-                                                                                <span className={`text-[10px] px-2 py-0.5 rounded border uppercase tracking-wider ${
-                                                                                    // Badge Colors Logic
-                                                                                    doc.document_type === 'ojk_disclosure' ? 'bg-purple-50 text-purple-600 border-purple-200' :
-                                                                                        doc.document_type === 'corporate_action' ? 'bg-blue-50 text-blue-600 border-blue-200' :
-                                                                                            doc.document_type === 'management_change' ? 'bg-rose-50 text-rose-600 border-rose-200' :
-                                                                                                'bg-slate-50 text-slate-600 border-slate-200' // bei_announcement
-                                                                                    }`}>
-                                                                                    {(() => {
-                                                                                        switch (doc.document_type) {
-                                                                                            case 'ojk_disclosure': return 'Keterbukaan Informasi OJK';
-                                                                                            case 'corporate_action': return 'Aksi Korporasi';
-                                                                                            case 'management_change': return 'Perubahan Manajemen';
-                                                                                            default: return 'Pengumuman Bursa';
-                                                                                        }
-                                                                                    })()}
-                                                                                </span>
-                                                                            )}
+                                                                                {getSlug() === 'keterbukaan-informasi' && (
+                                                                                    <span className={`text-[8px] md:text-[10px] px-3 py-1 rounded-full border-2 font-black uppercase tracking-widest ${
+                                                                                        // Badge Colors Logic
+                                                                                        doc.document_type === 'ojk_disclosure' ? 'bg-purple-50 text-purple-600 border-purple-100' :
+                                                                                            doc.document_type === 'corporate_action' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                                                                                doc.document_type === 'management_change' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                                                                                                    'bg-slate-50 text-slate-600 border-slate-100' // bei_announcement
+                                                                                        }`}>
+                                                                                        {(() => {
+                                                                                            switch (doc.document_type) {
+                                                                                                case 'ojk_disclosure': return 'Keterbukaan Informasi OJK';
+                                                                                                case 'corporate_action': return 'Aksi Korporasi';
+                                                                                                case 'management_change': return 'Perubahan Manajemen';
+                                                                                                default: return 'Pengumuman Bursa';
+                                                                                            }
+                                                                                        })()}
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
                                                                         </h4>
                                                                     </div>
                                                                 </div>
-                                                                <a
-                                                                    href={doc.file_url}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-xl md:rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cyan-500 transition-all shadow-lg w-full md:w-auto max-md:min-h-[44px]"
-                                                                >
-                                                                    <Download size={16} /> {t('investor.docs.download')}
-                                                                </a>
-                                                            </div>
+
+                                                                <div className="flex flex-col items-center gap-2 md:gap-3 group-hover:scale-110 transition-transform duration-500 shrink-0">
+                                                                    <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-xl group-hover:bg-cyan-500 group-hover:shadow-cyan-500/40 transition-all duration-500 active:scale-90">
+                                                                        <div className="hidden md:block"><Download size={32} /></div>
+                                                                        <div className="md:hidden"><Download size={24} /></div>
+                                                                    </div>
+                                                                    <span className="text-[8px] md:text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 group-hover:text-cyan-600 transition-colors">
+                                                                        {language === 'id' ? 'Unduh PDF' : 'Download PDF'}
+                                                                    </span>
+                                                                </div>
+                                                            </motion.a>
                                                         ))}
 
                                                     {documents.filter(doc => {
@@ -933,29 +946,43 @@ const InvestorPage: React.FC = () => {
                                 <div className="lg:col-span-4">
                                     <div className="sticky top-32 space-y-10">
                                         {/* Sub Navigation */}
-                                        <div className="p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
-                                            <h3 className="text-lg md:text-xl font-black mb-6 md:mb-8">{t('investor.nav.title')}</h3>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-4">
+                                        <div className="p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border border-slate-100 bg-white shadow-xl shadow-slate-200/40 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                                            <h3 className="text-xl font-black mb-8 text-slate-900 flex items-center gap-3">
+                                                <div className="w-1.5 h-6 bg-cyan-500 rounded-full"></div>
+                                                {t('investor.nav.title')}
+                                            </h3>
+                                            <div className="grid grid-cols-1 gap-3 relative z-10">
                                                 {[
-                                                    'ringkasan-investor', 'informasi-saham', 'laporan-keuangan',
-                                                    'prospektus', 'rups', 'keterbukaan-informasi'
-                                                ].map((s) => (
-                                                    <a
-                                                        key={s}
-                                                        href={`/investor/${s}`}
-                                                        className={`group flex items-center justify-between p-4 md:p-5 rounded-xl md:rounded-2xl transition-all duration-300 relative overflow-hidden ${getSlug() === s
-                                                            ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
-                                                            : 'hover:bg-cyan-50 text-slate-600 border border-slate-50 md:border-none hover:border-cyan-100'
+                                                    { slug: 'ringkasan-investor', icon: (size: number) => <LayoutDashboard size={size} /> },
+                                                    { slug: 'informasi-saham', icon: (size: number) => <TrendingUp size={size} /> },
+                                                    { slug: 'laporan-keuangan', icon: (size: number) => <FileText size={size} /> },
+                                                    { slug: 'prospektus', icon: (size: number) => <BookOpen size={size} /> },
+                                                    { slug: 'rups', icon: (size: number) => <Users size={size} /> },
+                                                    { slug: 'keterbukaan-informasi', icon: (size: number) => <Info size={size} /> }
+                                                ].map((item) => (
+                                                    <motion.a
+                                                        key={item.slug}
+                                                        href={`/investor/${item.slug}`}
+                                                        whileHover={{ x: 5 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        className={`group flex items-center gap-4 p-4 md:p-5 rounded-2xl md:rounded-[1.5rem] transition-all duration-500 relative ${getSlug() === item.slug
+                                                            ? 'bg-slate-900 text-white shadow-2xl shadow-slate-900/20'
+                                                            : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                                                             }`}
                                                     >
-                                                        {/* Active/Hover Indicator */}
-                                                        <div className={`absolute left-0 top-0 bottom-0 w-1 bg-white transition-all duration-300 ${getSlug() === s ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 group-hover:bg-cyan-500'}`}></div>
-
-                                                        <span className={`font-bold text-xs md:text-sm tracking-tight relative z-10 ${getSlug() === s ? 'text-white' : 'group-hover:text-cyan-700'}`}>
-                                                            {getTitle(s, language)}
+                                                        <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center transition-all duration-500 ${getSlug() === item.slug
+                                                            ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/40 rotate-6'
+                                                            : 'bg-slate-100 text-slate-400 group-hover:bg-white group-hover:text-cyan-500 group-hover:shadow-md group-hover:-rotate-3'
+                                                            }`}>
+                                                            <div className="hidden md:block">{item.icon(20)}</div>
+                                                            <div className="md:hidden">{item.icon(18)}</div>
+                                                        </div>
+                                                        <span className={`font-black text-[10px] md:text-[11px] uppercase tracking-[0.15em] flex-1 ${getSlug() === item.slug ? 'text-white' : ''}`}>
+                                                            {getTitle(item.slug, language)}
                                                         </span>
-                                                        <ChevronRight size={14} className={`md:w-4 md:h-4 transition-transform duration-300 ${getSlug() === s ? 'translate-x-0' : 'group-hover:translate-x-1 group-hover:text-cyan-600'}`} />
-                                                    </a>
+                                                        <ChevronRight size={14} className={`transition-all duration-500 ${getSlug() === item.slug ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-cyan-500'}`} />
+                                                    </motion.a>
                                                 ))}
                                             </div>
                                         </div>

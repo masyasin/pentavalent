@@ -156,7 +156,7 @@ const CompanyProfile: React.FC = () => {
                 parentLabel={language === 'id' ? 'Tentang Kami' : 'About Us'}
             />
 
-            <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32">
+            <main className="max-w-7xl mx-auto px-6 py-12 md:py-20 relative z-10 -mt-24 md:-mt-32">
                 {/* Premium "Penta Valent by Number" Section - Artistic & Sweet Layout */}
                 <div className="relative mb-32 group">
                     {/* Background Decorative Glows */}
@@ -168,7 +168,7 @@ const CompanyProfile: React.FC = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
 
                             {/* Left: Artistic Visual Composition - Expanded for Balance */}
-                            <div className="lg:col-span-6 relative min-h-[750px] flex items-center justify-center p-8 lg:p-16">
+                            <div className="lg:col-span-6 relative flex items-center justify-center p-6 md:p-8 lg:p-16 lg:min-h-[750px]">
                                 <div className="relative w-full h-full max-w-lg lg:max-w-xl">
                                     {/* Main Masked Building - Dynamic from Admin */}
                                     <motion.div
@@ -227,7 +227,7 @@ const CompanyProfile: React.FC = () => {
                             </div>
 
                             {/* Right: Sweeter Stats & Detail Section - Perfectly Centered */}
-                            <div className="lg:col-span-6 flex flex-col justify-center p-12 lg:p-24 text-left">
+                            <div className="lg:col-span-6 flex flex-col justify-center p-8 md:p-12 lg:p-24 text-left">
                                 <motion.div
                                     initial={{ opacity: 0, x: 50 }}
                                     whileInView={{ opacity: 1, x: 0 }}
@@ -277,20 +277,20 @@ const CompanyProfile: React.FC = () => {
                                     </div>
 
                                     {/* IPO Accent Box - Perfectly Compact & Aligned */}
-                                    <div className="relative group/ipo overflow-hidden p-10 rounded-[3.5rem] bg-slate-50/50 border border-slate-100/50 transition-all duration-500 hover:shadow-2xl hover:bg-white hover:scale-[1.02] max-w-2xl">
-                                        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-start gap-12">
-                                            <div className="flex items-center gap-8">
-                                                <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center shadow-xl border border-slate-50 group-hover/ipo:rotate-12 transition-transform duration-500">
-                                                    <TrendingUp size={36} className="text-primary" />
+                                    <div className="relative group/ipo overflow-hidden p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] bg-slate-50/50 border border-slate-100/50 transition-all duration-500 hover:shadow-2xl hover:bg-white hover:scale-[1.02] max-w-2xl">
+                                        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-start gap-6 md:gap-12">
+                                            <div className="flex items-center gap-4 md:gap-8">
+                                                <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl md:rounded-[2rem] flex items-center justify-center shadow-xl border border-slate-50 group-hover/ipo:rotate-12 transition-transform duration-500">
+                                                    <TrendingUp size={28} className="text-primary md:w-9 md:h-9" />
                                                 </div>
                                                 <div className="text-left">
-                                                    <div className="text-[10px] font-black text-primary uppercase tracking-[0.5em] mb-2 leading-none">Market Status</div>
-                                                    <h3 className="text-2xl lg:text-3xl font-black text-slate-900 italic tracking-tighter">
+                                                    <div className="text-[9px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.5em] mb-1 md:mb-2 leading-none">Market Status</div>
+                                                    <h3 className="text-xl lg:text-3xl font-black text-slate-900 italic tracking-tighter leading-tight">
                                                         {language === 'id' ? 'Saham Terdaftar (IPO) 2023' : 'Publicly Listed (IPO) 2023'}
                                                     </h3>
                                                 </div>
                                             </div>
-                                            <div className="px-10 py-4 bg-slate-900 rounded-[1.5rem] text-[11px] font-black text-blue-400 uppercase tracking-[0.5em] shadow-2xl">
+                                            <div className="px-6 md:px-10 py-3 md:py-4 bg-slate-900 rounded-xl md:rounded-[1.5rem] text-[9px] md:text-[11px] font-black text-blue-400 uppercase tracking-[0.3em] md:tracking-[0.5em] shadow-2xl">
                                                 IDX: PEVE
                                             </div>
                                         </div>

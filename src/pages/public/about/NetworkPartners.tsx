@@ -5,7 +5,7 @@ import Footer from '../../../components/layout/Footer';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { supabase } from '../../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Network, Globe, MapPin, Building2, ExternalLink, ShieldCheck, Zap, ArrowRight, Layers, X, Phone } from 'lucide-react';
+import { Network, Globe, MapPin, Building2, ExternalLink, ShieldCheck, Zap, ArrowRight, Layers, X, Phone, ChevronDown } from 'lucide-react';
 
 // Leaflet imports
 import L from 'leaflet';
@@ -345,20 +345,20 @@ const NetworkPartners: React.FC = () => {
 
                                         <div className="relative z-10 flex flex-col lg:flex-row gap-8 h-[700px] max-md:h-auto max-md:gap-4">
                                             {/* Left: Region Navigator */}
-                                            <div className="w-full lg:w-[350px] bg-slate-50/80 backdrop-blur-xl rounded-[3rem] border border-slate-200 flex flex-col overflow-hidden max-md:rounded-2xl">
+                                            <div className="w-full lg:w-[350px] bg-slate-50/80 backdrop-blur-xl rounded-[3rem] border border-slate-200 flex flex-col overflow-hidden max-md:rounded-2xl relative group/navigator">
                                                 <div className="p-8 border-b border-slate-200 max-md:p-4">
                                                     <h3 className="text-xl font-black text-slate-900 uppercase italic tracking-tighter max-md:text-base">Region Navigator</h3>
                                                     <p className="text-slate-400 text-[9px] font-black uppercase tracking-[0.3em] mt-1">Select Tactical Zone</p>
                                                 </div>
 
-                                                <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4 max-md:max-h-[300px]">
+                                                <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4 max-md:max-h-[450px] relative pb-24">
                                                     {[
                                                         { id: 1, title: 'REGION-1', cities: ['Banda Aceh', 'Batam', 'Medan', 'Pekanbaru', 'Padang', 'Jambi', 'Palembang', 'Lampung'] },
                                                         { id: 2, title: 'REGION-2', cities: ['Jakarta-1', 'Jakarta-2', 'Tangerang', 'Bogor', 'Bandung', 'Tasikmalaya', 'Cirebon', 'Pontianak'] },
                                                         { id: 3, title: 'REGION-3', cities: ['Semarang', 'Tegal', 'Purwokerto', 'Solo', 'Jogjakarta', 'Banjarmasin', 'Denpasar', 'Mataram', 'Kupang'] },
                                                         { id: 4, title: 'REGION-4', cities: ['Surabaya', 'Kediri', 'Malang', 'Jember', 'Samarinda', 'Makasar', 'Palu', 'Kendari', 'Manado'] }
                                                     ].map((region) => (
-                                                        <div key={region.id} className={`rounded-3xl transition-all duration-500 overflow-hidden ${activeRegion === region.id ? 'bg-primary/10 border-primary/30 border' : 'bg-white border border-slate-100 hover:bg-slate-50'}`}>
+                                                        <div key={region.id} className={`rounded-3xl transition-all duration-500 overflow-hidden ${activeRegion === region.id ? 'bg-primary/10 border-primary/30 border shadow-inner' : 'bg-white border border-slate-100 hover:bg-slate-50'}`}>
                                                             <button
                                                                 onClick={() => setActiveRegion(region.id)}
                                                                 className="w-full p-6 text-left flex items-center justify-between max-md:p-4"
@@ -435,6 +435,19 @@ const NetworkPartners: React.FC = () => {
                                                         </div>
                                                     ))}
                                                 </div>
+
+                                                {/* Visual Scroll Hint - Gradient Fade */}
+                                                <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none z-20 rounded-b-[3rem] flex items-end justify-center pb-6">
+                                                    <motion.div
+                                                        animate={{ y: [0, 5, 0] }}
+                                                        transition={{ duration: 2, repeat: Infinity }}
+                                                        className="flex flex-col items-center gap-1 opacity-40 group-hover/navigator:opacity-80 transition-opacity"
+                                                    >
+                                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500">Scroll for more</span>
+                                                        <ChevronDown size={12} className="text-primary" />
+                                                    </motion.div>
+                                                </div>
+                                            </div>
                                             </div>
 
                                             {/* Right: Real Leaflet Map (Free Replacement) */}
@@ -465,6 +478,19 @@ const NetworkPartners: React.FC = () => {
                                                     }
                                                     .leaflet-container {
                                                         background: #f8fafc !important;
+                                                    }
+                                                    .custom-scrollbar::-webkit-scrollbar {
+                                                        width: 4px;
+                                                    }
+                                                    .custom-scrollbar::-webkit-scrollbar-track {
+                                                        background: transparent;
+                                                    }
+                                                    .custom-scrollbar::-webkit-scrollbar-thumb {
+                                                        background: rgba(34, 211, 238, 0.2);
+                                                        border-radius: 10px;
+                                                    }
+                                                    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                                                        background: rgba(34, 211, 238, 0.5);
                                                     }
                                                 `}</style>
                                             </div>
