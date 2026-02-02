@@ -88,6 +88,14 @@ const BusinessSection: React.FC = () => {
 
         setDivisions(sortedData.map(item => ({
           ...item,
+          // Ensure colors are vibrant for Homepage
+          color_accent: item.slug === 'distribusi-farmasi' 
+            ? 'from-blue-600 to-indigo-600' // Better Pharma color
+            : item.slug === 'distribusi-alkes'
+            ? 'from-cyan-500 to-blue-600'
+            : item.slug === 'produk-konsumen'
+            ? 'from-emerald-500 to-teal-600'
+            : item.color_accent,
           features: item.business_features
             ? item.business_features
               .sort((a: any, b: any) => a.sort_order - b.sort_order)
@@ -126,7 +134,8 @@ const BusinessSection: React.FC = () => {
           {divisions.map((div, i) => (
             <div
               key={i}
-              className="group relative bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-2xl hover:shadow-4xl transition-all duration-700 hover:-translate-y-4 flex flex-col items-center text-center max-md:rounded-[2rem] max-md:p-8 max-md:w-full max-md:min-h-auto"
+              onClick={() => navigate(`/business/${div.slug}`)}
+              className="group cursor-pointer relative bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-2xl hover:shadow-4xl transition-all duration-700 hover:-translate-y-4 flex flex-col items-center text-center max-md:rounded-[2rem] max-md:p-8 max-md:w-full max-md:min-h-auto"
             >
               <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${div.color_accent} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-t-[3rem] max-md:rounded-t-[2rem]`}></div>
 
