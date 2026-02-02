@@ -9,12 +9,14 @@ import ChannelsManager from './ChannelsManager';
 import SeoManager from './SeoManager';
 import UserManager from './UserManager';
 import { Settings, Menu, Image, Layout, Share2, Search, Users } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const WebsiteManager: React.FC = () => {
+    const { canAccessModule } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
-    const tabs = [
+    const allTabs = [
         { id: 'settings', label: 'Site Setting', icon: Settings, description: 'Global identity & contact info' },
         { id: 'menus', label: 'Menu Manager', icon: Menu, description: 'Navigation structure' },
         { id: 'sliders', label: 'Banner Slider', icon: Image, description: 'Homepage hero sliders' },
@@ -24,6 +26,14 @@ const WebsiteManager: React.FC = () => {
         { id: 'seo', label: 'SEO Settings', icon: Search, description: 'Search Engine Optimization' },
         { id: 'users', label: 'User Management', icon: Users, description: 'Manage admin users' },
     ] as const;
+
+    // Filter tabs based on module access if the ID is also a module name
+    // Or just show all if no specific restriction is needed per tab
+    const tabs = allTabs.filter(tab => {
+        if (tab.id === 'users') return canAccessModule('users');
+        if (tab.id === 'settings') return canAccessModule('settings');
+        return true; // Other tabs follow website module access
+    });
 
     // Extract current tab from URL
     // URL structure: /admin/website/:tab

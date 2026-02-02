@@ -4,16 +4,24 @@ import { Newspaper, Mail, HelpCircle } from 'lucide-react';
 import NewsManager from './NewsManager';
 import NewsletterManager from './NewsletterManager';
 import FAQManager from './FAQManager';
+import { useAuth } from '../../contexts/AuthContext';
 
 const WebsiteContentManager: React.FC = () => {
+    const { canAccessModule } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
-    const tabs = [
+    const allTabs = [
         { id: 'news', label: 'News & Media', icon: Newspaper, description: 'Manage articles and press releases' },
         { id: 'newsletter', label: 'Newsletter', icon: Mail, description: 'Manage subscribers and campaigns' },
         { id: 'faqs', label: 'FAQ', icon: HelpCircle, description: 'Frequently Asked Questions' },
     ] as const;
+
+    const tabs = allTabs.filter(tab => {
+        // Example: Only show news if user has access to content module
+        // You can add more specific module checks here if needed
+        return true; 
+    });
 
     // Extract current tab from URL
     const currentPath = location.pathname.split('/admin/content/')[1] || 'news';

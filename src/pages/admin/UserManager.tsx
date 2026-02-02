@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
-import {
-    Plus, Edit2, Trash2, X, Save,
-    Search, Shield, User as UserIcon,
-    Mail, CheckCircle2, AlertCircle, RefreshCw,
-    MoreVertical, Eye, EyeOff
-} from 'lucide-react';
-import { UserRole, PermissionAction } from '../../contexts/AuthContext';
+import { Plus, Edit2, Trash2, X, Save, Search, Shield, User as UserIcon, Mail, CheckCircle2, AlertCircle, RefreshCw, MoreVertical, Eye, EyeOff } from 'lucide-react';
+import { UserRole, PermissionAction, AdminModule } from '../../contexts/AuthContext';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { logUserActivity } from '../../lib/security';
 import { useAuth, usePermission } from '../../contexts/AuthContext';
@@ -22,7 +17,7 @@ interface AdminUser {
     permissions?: Record<string, PermissionAction[]>;
 }
 
-const ADMIN_MODULES: { id: string; name: string }[] = [
+const ADMIN_MODULES: { id: AdminModule; name: string }[] = [
     { id: 'dashboard', name: 'Dashboard' },
     { id: 'website', name: 'Website (Banners/Gallery)' },
     { id: 'company', name: 'Profil Perusahaan' },
@@ -87,18 +82,32 @@ const UserManager: React.FC = () => {
         }
     };
 
-    const togglePermission = (moduleId: string, action: PermissionAction) => {
+    const togglePermission = (moduleId: AdminModule, action: PermissionAction) => {
         const currentPermissions = { ...(formData.permissions || {}) };
         const modulePermissions = [...(currentPermissions[moduleId] || [])];
 
         if (modulePermissions.includes(action)) {
-            currentPermissions[moduleId] = modulePermissions.filter(a => a !== action);
+            // Remove permission
+            const updated = modulePermissions.filter(a => a !== action);
+            
+            // If we're removing 'view', remove everything else too
+            if (action === 'view') {
+                currentPermissions[moduleId] = [];
+            } else {
+                currentPermissions[moduleId] = updated;
+            }
         } else {
-            currentPermissions[moduleId] = [...modulePermissions, action];
+            // Add permission
+            // If we're adding any CRUD action, ensure 'view' is also added
+            if (action !== 'view' && !modulePermissions.includes('view')) {
+                currentPermissions[moduleId] = [...modulePermissions, 'view', action];
+            } else {
+                currentPermissions[moduleId] = [...modulePermissions, action];
+            }
         }
 
         // Clean up empty modules
-        if (currentPermissions[moduleId].length === 0) {
+        if (!currentPermissions[moduleId] || currentPermissions[moduleId].length === 0) {
             delete currentPermissions[moduleId];
         }
 
@@ -202,7 +211,10 @@ const UserManager: React.FC = () => {
 
     const handleEdit = (user: AdminUser) => {
         setEditingUser(user);
-        setFormData(user);
+        setFormData({
+            ...user,
+            permissions: user.permissions || {},
+        });
         setShowModal(true);
     };
 
@@ -430,17 +442,37 @@ const UserManager: React.FC = () => {
                                         <div className="space-y-4">
                                             {ADMIN_MODULES.map((module) => (
                                                 <div key={module.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-4 bg-white rounded-2xl border border-gray-100">
-                                                    <span className="font-bold text-sm text-gray-700">{module.name}</span>
+                                                    <div className="flex items-center gap-3">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => togglePermission(module.id, 'view')}
+                                                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${
+                                                                formData.permissions?.[module.id]?.includes('view')
+                                                                    ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200'
+                                                                    : 'bg-gray-50 border-gray-100 text-gray-300 hover:border-gray-300'
+                                                            }`}
+                                                            title="Toggle Module Access (Read Only)"
+                                                        >
+                                                            <Eye size={18} />
+                                                        </button>
+                                                        <span className={`font-bold text-sm transition-colors ${
+                                                            formData.permissions?.[module.id]?.includes('view') ? 'text-gray-900' : 'text-gray-300'
+                                                        }`}>
+                                                            {module.name}
+                                                        </span>
+                                                    </div>
+                                                    
                                                     <div className="flex gap-2">
-                                                        {(['view', 'create', 'edit', 'delete'] as PermissionAction[]).map((action) => (
+                                                        {(['create', 'edit', 'delete'] as PermissionAction[]).map((action) => (
                                                             <button
                                                                 key={action}
                                                                 type="button"
+                                                                disabled={!formData.permissions?.[module.id]?.includes('view')}
                                                                 onClick={() => togglePermission(module.id, action)}
-                                                                className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter transition-all border ${
+                                                                className={`px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-tighter transition-all border ${
                                                                     formData.permissions?.[module.id]?.includes(action)
-                                                                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200'
-                                                                        : 'bg-gray-50 border-gray-100 text-gray-400 hover:border-gray-300'
+                                                                        ? 'bg-gray-900 border-gray-900 text-white shadow-lg'
+                                                                        : 'bg-gray-50 border-gray-100 text-gray-400 hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed'
                                                                 }`}
                                                             >
                                                                 {action}
