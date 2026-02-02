@@ -43,6 +43,7 @@ const UserManager: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
+    const [viewOnly, setViewOnly] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; id: string | null; name: string }>({
@@ -199,6 +200,7 @@ const UserManager: React.FC = () => {
 
     const resetForm = () => {
         setEditingUser(null);
+        setViewOnly(false);
         setFormData({
             email: '',
             full_name: '',
@@ -211,6 +213,17 @@ const UserManager: React.FC = () => {
 
     const handleEdit = (user: AdminUser) => {
         setEditingUser(user);
+        setViewOnly(false);
+        setFormData({
+            ...user,
+            permissions: user.permissions || {},
+        });
+        setShowModal(true);
+    };
+
+    const handleView = (user: AdminUser) => {
+        setEditingUser(user);
+        setViewOnly(true);
         setFormData({
             ...user,
             permissions: user.permissions || {},
@@ -343,10 +356,18 @@ const UserManager: React.FC = () => {
                                         </td>
                                         <td className="px-8 py-6 text-right">
                                             <div className="flex justify-end gap-2">
+                                                <button
+                                                    onClick={() => handleView(user)}
+                                                    className="p-3 bg-gray-50 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all"
+                                                    title="View Permissions"
+                                                >
+                                                    <Eye size={16} />
+                                                </button>
                                                 {canEdit && (
                                                     <button
                                                         onClick={() => handleEdit(user)}
                                                         className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                                                        title="Edit User"
                                                     >
                                                         <Edit2 size={16} />
                                                     </button>
@@ -355,6 +376,7 @@ const UserManager: React.FC = () => {
                                                     <button
                                                         onClick={() => handleDelete(user.id, user.full_name || user.email)}
                                                         className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                                                        title="Delete User"
                                                     >
                                                         <Trash2 size={16} />
                                                     </button>
@@ -379,9 +401,11 @@ const UserManager: React.FC = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic">
-                                        {editingUser ? 'Modify Access' : 'Create Access'}
+                                        {viewOnly ? 'View Access' : editingUser ? 'Modify Access' : 'Create Access'}
                                     </h3>
-                                    <p className="text-gray-500 mt-1">Configure permissions for administrative user</p>
+                                    <p className="text-gray-500 mt-1">
+                                        {viewOnly ? 'Viewing permissions for administrative user' : 'Configure permissions for administrative user'}
+                                    </p>
                                 </div>
                             </div>
                             <button onClick={() => setShowModal(false)} className="w-12 h-12 flex items-center justify-center hover:bg-white rounded-full transition-all text-gray-400 hover:text-gray-900"><X size={32} /></button>
@@ -396,7 +420,7 @@ const UserManager: React.FC = () => {
                                         <input
                                             type="email"
                                             required
-                                            disabled={!!editingUser}
+                                            disabled={!!editingUser || viewOnly}
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                             className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold disabled:opacity-50"
@@ -411,9 +435,10 @@ const UserManager: React.FC = () => {
                                         <input
                                             type="text"
                                             required
+                                            disabled={viewOnly}
                                             value={formData.full_name}
                                             onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                                            className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold"
+                                            className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold disabled:opacity-50"
                                         />
                                     </div>
                                 </div>
@@ -422,8 +447,9 @@ const UserManager: React.FC = () => {
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">System Permissions (Role)</label>
                                     <select
                                         value={formData.role}
+                                        disabled={viewOnly}
                                         onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
-                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold uppercase tracking-tighter italic"
+                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold uppercase tracking-tighter italic disabled:opacity-50"
                                     >
                                         <option value="viewer">Viewer (Read Only)</option>
                                         <option value="editor">Editor (Content Management)</option>
@@ -449,11 +475,12 @@ const UserManager: React.FC = () => {
                                                     <div className="flex items-center gap-4">
                                                         <button
                                                             type="button"
+                                                            disabled={viewOnly}
                                                             onClick={() => togglePermission(module.id, 'view')}
                                                             className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all border-2 ${
                                                                 formData.permissions?.[module.id]?.includes('view')
                                                                     ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200'
-                                                                    : 'bg-white border-gray-200 text-gray-400 hover:border-blue-400 hover:text-blue-500'
+                                                                    : 'bg-white border-gray-200 text-gray-400 hover:border-blue-400 hover:text-blue-500 disabled:opacity-50'
                                                             }`}
                                                             title="Toggle Module Access (Read Only)"
                                                         >
@@ -476,7 +503,7 @@ const UserManager: React.FC = () => {
                                                             <button
                                                                 key={action}
                                                                 type="button"
-                                                                disabled={!formData.permissions?.[module.id]?.includes('view')}
+                                                                disabled={!formData.permissions?.[module.id]?.includes('view') || viewOnly}
                                                                 onClick={() => togglePermission(module.id, action)}
                                                                 className={`flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-tight transition-all border-2 ${
                                                                     formData.permissions?.[module.id]?.includes(action)
@@ -533,16 +560,18 @@ const UserManager: React.FC = () => {
                                     onClick={() => setShowModal(false)}
                                     className="flex-1 px-10 py-5 border-2 border-gray-100 text-gray-400 font-black rounded-3xl hover:bg-gray-50 transition-all uppercase tracking-widest"
                                 >
-                                    Discard
+                                    {viewOnly ? 'Close' : 'Discard'}
                                 </button>
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="flex-[2] px-10 py-5 bg-gray-900 text-white font-black rounded-3xl hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 uppercase tracking-[0.2em]"
-                                >
-                                    {loading ? <RefreshCw className="animate-spin" size={24} /> : <Save size={24} />}
-                                    {editingUser ? 'Save Changes' : 'Publish User'}
-                                </button>
+                                {!viewOnly && (
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="flex-[2] px-10 py-5 bg-gray-900 text-white font-black rounded-3xl hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 uppercase tracking-[0.2em]"
+                                    >
+                                        {loading ? <RefreshCw className="animate-spin" size={24} /> : <Save size={24} />}
+                                        {editingUser ? 'Save Changes' : 'Publish User'}
+                                    </button>
+                                )}
                             </div>
                         </form>
                     </div>
