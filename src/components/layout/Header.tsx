@@ -495,39 +495,50 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   const isActive = activeSection === menuPath || (activeSection === 'beranda' && (menuPath === '' || menuPath === 'home' || menuPath === 'hero'));
 
                   return (
-                    <div key={menu.id} className="space-y-2">
+                    <div key={menu.id} className="space-y-1">
                       <button
                         onClick={() => hasChildren ? setActiveDropdown(isOpen ? null : menu.id) : handleLinkClick(menu.path)}
-                        className={`w-full text-left px-6 py-5 rounded-[2rem] text-[15px] font-black capitalize tracking-wide transition-all flex items-center justify-between border ${isActive
-                          ? 'bg-slate-900 text-white border-slate-900 shadow-xl shadow-slate-900/20'
-                          : 'text-slate-600 bg-slate-50 border-slate-100 hover:bg-white hover:border-primary/30'}`}
+                        className={`w-full text-left px-5 py-4 rounded-2xl transition-all duration-300 flex items-center justify-between group ${isActive
+                          ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
+                          : 'text-slate-700 hover:bg-slate-50'}`}
                       >
-                        <span>{menuLabel}</span>
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isActive ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-primary/10 group-hover:text-primary'}`}>
+                            {menu.label_en.toLowerCase().includes('home') ? <Layout size={20} /> : 
+                             menu.label_en.toLowerCase().includes('about') ? <Building2 size={20} /> :
+                             menu.label_en.toLowerCase().includes('business') ? <Target size={20} /> :
+                             menu.label_en.toLowerCase().includes('investor') ? <TrendingUp size={20} /> :
+                             menu.label_en.toLowerCase().includes('news') ? <Newspaper size={20} /> :
+                             menu.label_en.toLowerCase().includes('career') ? <Briefcase size={20} /> :
+                             <ArrowRight size={20} />}
+                          </div>
+                          <span className="text-[15px] font-bold capitalize tracking-tight">{menuLabel}</span>
+                        </div>
                         {hasChildren ? (
-                          <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isOpen ? 'rotate-180 text-primary' : 'opacity-30'}`} />
+                          <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isOpen ? 'rotate-180 text-primary' : 'opacity-20'}`} />
                         ) : (
-                          <ArrowRight size={16} className="opacity-20" />
+                          <ArrowRight size={18} className={`transition-transform duration-300 ${isActive ? 'translate-x-1 opacity-100' : 'opacity-10 group-hover:opacity-100'}`} />
                         )}
                       </button>
 
-                      {/* Mobile Dropdown - Upgraded */}
+                      {/* Mobile Dropdown - Modern Style */}
                       <AnimatePresence>
                         {hasChildren && isOpen && (
                           <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden pl-4 pr-2 space-y-2"
+                            className="overflow-hidden pl-14 pr-2 pb-2 space-y-1"
                           >
                             {children.map(child => (
                               <button
                                 key={child.id}
                                 onClick={() => handleLinkClick(child.path)}
-                                className="w-full text-left px-6 py-4 rounded-2xl text-[13px] font-bold capitalize tracking-normal text-slate-500 bg-white border border-slate-50 hover:border-primary/20 hover:text-primary transition-all flex items-center justify-between group"
+                                className="w-full text-left px-4 py-3.5 rounded-xl text-[14px] font-medium capitalize text-slate-500 hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-between group/sub"
                               >
                                 <span>{language === 'id' ? child.label_id : child.label_en}</span>
-                                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
-                                  <ArrowRight size={12} />
+                                <div className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center opacity-0 group-hover/sub:opacity-100 transition-all">
+                                  <ArrowRight size={12} className="text-primary" />
                                 </div>
                               </button>
                             ))}
@@ -556,12 +567,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 
                 <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
                   <span className={`text-xs font-black uppercase tracking-widest ${language === 'id' ? 'text-white' : 'text-slate-400'}`}>
-                    Indonesia
+                    ID
                   </span>
                 </div>
                 <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
                   <span className={`text-xs font-black uppercase tracking-widest ${language === 'en' ? 'text-white' : 'text-slate-400'}`}>
-                    English
+                    EN
                   </span>
                 </div>
               </div>
