@@ -388,18 +388,43 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const resetPassword = async (resetToken: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      // FLOW 1: Check Active Session (Priority for Link Recovery)
+      // FLOW 1: Check Active Session
       let { data: { session } } = await supabase.auth.getSession();
       
-      // If no session, try to parse from URL hash manually (Last Resort)
-      if (!session && window.location.hash && window.location.hash.includes('access_token')) {
-          console.log('Attempting to recover session from URL hash...');
-          const { data } = await supabase.auth.getSession(); // Calling this often triggers the parser
-          session = data.session;
+      // FLOW 1.5: Force Update via Direct API Call (Bypass SDK Session Issue)
+      // If we have an access token (JWT) but no session, we can call the Auth API directly.
+      if (!session && resetToken && resetToken.startsWith('ey')) {
+           console.log('No session detected, but valid JWT found. Attempting direct API update...');
+           
+           const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
+               method: 'PUT',
+               headers: {
+                   'Authorization': `Bearer ${resetToken}`,
+                   'Content-Type': 'application/json',
+                   'apikey': supabaseKey // anon key
+               },
+               body: JSON.stringify({ password: newPassword })
+           });
+
+           const data = await response.json();
+
+           if (!response.ok) {
+               console.error('Direct API Update Failed:', data);
+               return { success: false, error: data.msg || data.error_description || 'Failed to update password' };
+           }
+
+           console.log('Direct API Update Success!');
+           return { success: true };
+      }
+
+      // If we still have no session, try one last check
+      if (!session) {
+          // If resetToken is a JWT, maybe we can use it?
+          // supabase.auth.updateUser() relies on the internal session state.
       }
 
       if (session) {
-         console.log('Session found (Recovery Flow). Updating password directly...');
+         console.log('Session found. Updating password...');
          const { error } = await supabase.auth.updateUser({ password: newPassword });
          
          if (error) {
@@ -409,12 +434,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
          return { success: true };
       }
 
-      // If we are here and resetToken is empty, it means we expected a session but didn't get one.
+      // If no session and token is JWT (Link Flow failed), show specific error
+      if (resetToken && resetToken.startsWith('ey')) {
+           return { success: false, error: 'Session expired. Please click the reset link again.' };
+      }
+      
+      // If no session and empty token
       if (!resetToken) {
-          return { success: false, error: 'Unable to verify identity. Please click the reset link from your email again.' };
+           return { success: false, error: 'Unable to verify identity. Please click the reset link from your email again.' };
       }
 
-      // FLOW 2: Manual Token (Legacy / Fallback) - Requires Edge Function
+      // FLOW 2: Manual Token (Legacy 6-digit OTP)
       const { data, error } = await supabase.functions.invoke('auth', {
         body: { action: 'reset_password', token: resetToken, new_password: newPassword },
       });

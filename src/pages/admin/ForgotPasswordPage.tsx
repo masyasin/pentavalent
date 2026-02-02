@@ -88,6 +88,13 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
           setError('Please enter the complete 6-digit reset token.');
           return;
         }
+    } else {
+        // If link recovery, extract the access token from URL again to be safe
+        const hash = window.location.hash;
+        if (hash && hash.includes('access_token')) {
+             const params = new URLSearchParams(hash.replace('#', '?'));
+             tokenToUse = params.get('access_token') || '';
+        }
     }
 
     if (newPassword !== confirmPassword) {
