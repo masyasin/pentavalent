@@ -19,14 +19,21 @@ export const logUserActivity = async (action: string, module: string, details: s
         const storedUser = localStorage.getItem('peve_admin_user');
         const user = storedUser ? JSON.parse(storedUser) : null;
 
-        await supabase.from('user_activity_logs').insert({
+        const payload: any = {
             action: action,
             module: module,
             details: details,
             email: userEmail || user?.email,
-            user_id: user?.id,
             user_agent: navigator.userAgent
-        });
+        };
+
+        // Only include user_id if it exists and looks like a UUID or we've updated the table to TEXT
+        // To be safe against 400 errors, we only include it if it's not null
+        if (user?.id) {
+            payload.user_id = user.id;
+        }
+
+        await supabase.from('user_activity_logs').insert(payload);
     } catch (err) {
         console.error('Failed to log user activity:', err);
     }
