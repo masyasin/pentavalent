@@ -139,12 +139,12 @@ const MainWebsite: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white w-full relative">
+    <div className="min-h-screen bg-white w-full relative max-md:overflow-x-hidden">
       <Header activeSection={currentSection} onNavigate={handleNavigate} />
 
-      <main className="w-full relative">
+      <main className="w-full relative max-md:overflow-x-hidden">
         {/* Global Luxury Decorative Elements */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden max-md:hidden">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] animate-blob transition-all duration-1000"></div>
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[150px] animate-blob animation-delay-4000"></div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-gradient-radial from-slate-50/50 to-transparent opacity-30"></div>

@@ -57,30 +57,30 @@ const AboutSection: React.FC = () => {
   }, [emblaApi]);
 
   return (
-    <section id="why-penta" className="py-24 md:py-32 bg-white relative overflow-hidden text-left">
-      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
+    <section id="why-penta" className="py-24 md:py-32 bg-white relative overflow-hidden text-left max-md:py-16 max-md:overflow-x-hidden">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10 max-md:px-4">
         {/* Why Penta Valent - Differentiators Section */}
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
-          <div className="lg:w-1/2">
-            <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[13px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center max-md:gap-10">
+          <div className="lg:w-1/2 max-md:w-full">
+            <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[13px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10 max-md:mb-4 max-md:text-[10px]">
               {language === 'id' ? 'Kenapa Penta Valent' : 'Why Penta Valent'}
             </span>
-            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-10 tracking-tighter uppercase leading-none">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-10 tracking-tighter uppercase leading-none max-md:text-3xl max-md:mb-6">
               {language === 'id' ? 'Keunggulan' : 'Reasons behind'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{language === 'id' ? 'Kompetitif Kami' : 'Our Excellence'}</span>
             </h2>
-            <div className="space-y-6">
+            <div className="space-y-6 max-md:space-y-4">
               {advantages.map((item, i) => (
-                <div key={item.id} className="group/diff p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-500">
-                  <div className="flex items-start gap-6">
-                    <div className="text-3xl bg-white w-14 h-14 rounded-xl flex items-center justify-center shadow-inner group-hover/diff:scale-110 transition-transform">
+                <div key={item.id} className="group/diff p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-500 max-md:p-4 max-md:w-full">
+                  <div className="flex items-start gap-6 max-md:gap-4">
+                    <div className="text-3xl bg-white w-14 h-14 rounded-xl flex items-center justify-center shadow-inner group-hover/diff:scale-110 transition-transform max-md:w-10 max-md:h-10 max-md:text-xl max-md:shrink-0">
                       {item.icon}
                     </div>
                     <div>
-                      <h4 className="text-lg font-black text-slate-900 mb-1 transition-colors">
+                      <h4 className="text-lg font-black text-slate-900 mb-1 transition-colors max-md:text-base">
                         {language === 'id' ? item.title_id : item.title_en}
                       </h4>
-                      <p className="text-[15px] text-slate-500 font-medium leading-relaxed">
+                      <p className="text-[15px] text-slate-500 font-medium leading-relaxed max-md:text-sm">
                         {language === 'id' ? item.description_id : item.description_en}
                       </p>
                     </div>
@@ -90,12 +90,12 @@ const AboutSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:w-1/2 relative">
-            <div className="absolute inset-0 bg-primary/5 rounded-[4rem] blur-3xl p-10 transform translate-x-10 translate-y-10"></div>
-            <div className="relative rounded-[3rem] overflow-hidden border border-slate-100 shadow-2xl aspect-[4/5] bg-white">
-              <div className="absolute inset-0 z-10 pointer-events-none rounded-[3rem] ring-1 ring-inset ring-black/5"></div>
+          <div className="lg:w-1/2 relative max-md:w-full">
+            <div className="absolute inset-0 bg-primary/5 rounded-[4rem] blur-3xl p-10 transform translate-x-10 translate-y-10 max-md:hidden"></div>
+            <div className="relative rounded-[3rem] overflow-hidden border border-slate-100 shadow-2xl aspect-[4/5] bg-white max-md:rounded-[2rem] max-md:aspect-video">
+              <div className="absolute inset-0 z-10 pointer-events-none rounded-[3rem] ring-1 ring-inset ring-black/5 max-md:rounded-[2rem]"></div>
               <div className="h-full" ref={emblaRef}>
-                <div className="flex h-full">
+                <div className="flex h-full max-md:flex-row">
                   {images.map((src, idx) => (
                     <div className="flex-[0_0_100%] min-w-0 h-full relative" key={idx}>
                       <img

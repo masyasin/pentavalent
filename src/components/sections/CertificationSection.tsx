@@ -79,34 +79,34 @@ const CertificationSection: React.FC = () => {
   };
 
   return (
-    <section id="certifications" className="py-24 md:py-32 lg:py-48 bg-gradient-to-br from-slate-50 via-white to-cyan-50/30 relative overflow-hidden">
+    <section id="certifications" className="py-24 md:py-32 lg:py-48 bg-gradient-to-br from-slate-50 via-white to-cyan-50/30 relative overflow-hidden max-md:py-16 max-md:overflow-x-hidden">
       {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-cyan-100/30 to-blue-100/30 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-100/20 to-purple-100/20 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-cyan-100/30 to-blue-100/30 rounded-full blur-3xl max-md:hidden"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-100/20 to-purple-100/20 rounded-full blur-3xl max-md:hidden"></div>
 
-      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          <div className="lg:w-[40%] flex-shrink-0">
-            <span className="inline-block px-5 py-2 bg-accent/5 text-accent rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-accent/10">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10 max-md:px-4">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 max-md:gap-10">
+          <div className="lg:w-[40%] flex-shrink-0 max-md:w-full">
+            <span className="inline-block px-5 py-2 bg-accent/5 text-accent rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-accent/10 max-md:mb-4 max-md:text-[10px]">
               {language === 'id' ? 'Kepatuhan & Tata Kelola' : 'Compliance & Governance'}
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-5xl xl:text-[56px] font-black py-2 mb-10 text-slate-900 tracking-tighter leading-[1.05]">
+            <h2 className="text-4xl md:text-5xl lg:text-5xl xl:text-[56px] font-black py-2 mb-10 text-slate-900 tracking-tighter leading-[1.05] max-md:text-3xl max-md:mb-6">
               {language === 'id' ? 'Tata Kelola' : 'Corporate'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{language === 'id' ? 'Perusahaan yang Baik' : 'Governance'}</span>
             </h2>
-            <div className="space-y-6">
+            <div className="space-y-6 max-md:space-y-4">
               {[
                 { id: 'Etika & Integritas Profesional', en: 'Professional Ethics & Integrity', badge: 'GCG' },
                 { id: 'Pengendalian Risiko Internal', en: 'Internal Risk Management', badge: 'Audit' },
                 { id: 'Transparansi Digital Terpadu', en: 'Integrated Digital Transparency', badge: 'Compliance' }
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner border border-emerald-100 transition-all">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                <div key={i} className="flex items-center gap-4 group max-md:w-full">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner border border-emerald-100 transition-all max-md:w-8 max-md:h-8 max-md:shrink-0">
+                    <svg className="w-5 h-5 max-md:w-4 max-md:h-4 max-md:shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-black text-slate-700 uppercase tracking-tight">{language === 'id' ? item.id : item.en}</span>
+                      <span className="text-sm font-black text-slate-700 uppercase tracking-tight max-md:text-xs">{language === 'id' ? item.id : item.en}</span>
                       <span className="px-2 py-0.5 bg-slate-900/5 text-slate-400 text-[8px] font-black rounded-md border border-slate-900/10 group-hover:bg-blue-600/10 group-hover:text-blue-600 group-hover:border-blue-600/20 transition-all">
                         {item.badge}
                       </span>
@@ -117,37 +117,37 @@ const CertificationSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:w-[60%] flex items-center justify-center">
-            <div className="relative w-full max-w-2xl group">
+          <div className="lg:w-[60%] flex items-center justify-center max-md:w-full">
+            <div className="relative w-full max-w-2xl group max-md:w-full">
               {/* Premium Glassmorphism Box */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 rounded-[3rem] opacity-20 blur-xl group-hover:opacity-40 transition-all duration-700"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 rounded-[3rem] opacity-20 blur-xl group-hover:opacity-40 transition-all duration-700 max-md:rounded-[2rem]"></div>
 
-              <div className="relative p-10 md:p-14 bg-white/80 backdrop-blur-2xl rounded-[3rem] border border-white/40 shadow-2xl overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-100/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+              <div className="relative p-10 md:p-14 bg-white/80 backdrop-blur-2xl rounded-[3rem] border border-white/40 shadow-2xl overflow-hidden max-md:rounded-[2rem] max-md:p-8 max-md:w-full">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-100/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 max-md:hidden"></div>
 
                 <div className="relative z-10 flex flex-col items-center text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2rem] flex items-center justify-center text-white mb-8 shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/10">
-                    <svg className="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-20 h-20 bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2rem] flex items-center justify-center text-white mb-8 shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/10 max-md:w-16 max-md:h-16 max-md:rounded-2xl max-md:mb-6">
+                    <svg className="w-10 h-10 text-cyan-400 max-md:w-8 max-md:h-8 max-md:shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   </div>
 
-                  <blockquote className="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter leading-tight italic mb-8">
+                  <blockquote className="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter leading-tight italic mb-8 max-md:text-xl max-md:mb-6">
                     {language === 'id'
                       ? '"Komitmen teguh pada standar tertinggi kepatuhan dan integritas korporasi."'
                       : '"An unwavering commitment to the highest standards of corporate compliance and integrity."'}
                   </blockquote>
 
-                  <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mb-10"></div>
+                  <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mb-10 max-md:mb-8"></div>
 
                   <button
                     onClick={() => {
                       window.location.href = '/about/legality-achievements';
                     }}
-                    className="group/btn px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center gap-4 hover:bg-slate-800 transition-all shadow-xl shadow-slate-200"
+                    className="group/btn px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center gap-4 hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 max-md:w-full max-md:min-h-[44px] max-md:py-4 max-md:justify-center max-md:text-[10px]"
                   >
                     {language === 'id' ? 'Tata Kelola Perusahaan' : 'Corporate Governance'}
-                    <svg className="w-4 h-4 group-hover/btn:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 group-hover/btn:translate-x-2 transition-transform max-md:shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </button>
@@ -158,19 +158,19 @@ const CertificationSection: React.FC = () => {
         </div>
 
         {/* Premium Global Standards Footer */}
-        <div className="mt-20 md:mt-28 pt-12 border-t border-slate-200/60">
-          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 lg:gap-12">
+        <div className="mt-20 md:mt-28 pt-12 border-t border-slate-200/60 max-md:mt-12 max-md:pt-8">
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 lg:gap-12 max-md:gap-3">
             {['ISO 9001:2015', 'CDOB (BPOM)', 'CDAKB (KEMENKES)', 'GDP Certified'].map((standard, i) => (
               <div
                 key={i}
-                className="group relative px-6 py-3 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-cyan-200 transition-all duration-500 cursor-default overflow-hidden"
+                className="group relative px-6 py-3 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-cyan-200 transition-all duration-500 cursor-default overflow-hidden max-md:px-4 max-md:py-2 max-md:rounded-xl"
               >
                 {/* Subtle gradient background on hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-50 to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                <div className="relative z-10 flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-cyan-500 opacity-40 group-hover:opacity-100 transition-opacity"></div>
-                  <span className="text-xs md:text-sm font-black text-slate-500 group-hover:text-slate-900 uppercase tracking-[0.15em] transition-colors whitespace-nowrap">
+                <div className="relative z-10 flex items-center gap-3 max-md:gap-2">
+                  <div className="w-2 h-2 rounded-full bg-cyan-500 opacity-40 group-hover:opacity-100 transition-opacity max-md:w-1.5 max-md:h-1.5 max-md:shrink-0"></div>
+                  <span className="text-xs md:text-sm font-black text-slate-500 group-hover:text-slate-900 uppercase tracking-[0.15em] transition-colors whitespace-nowrap max-md:text-[9px]">
                     {standard}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ const CertificationSection: React.FC = () => {
             ))}
           </div>
 
-          <p className="text-center mt-10 text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] opacity-60">
+          <p className="text-center mt-10 text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] opacity-60 max-md:mt-6 max-md:text-[8px] max-md:tracking-widest">
             Penta Valent Global Quality Standards & Compliance
           </p>
         </div>

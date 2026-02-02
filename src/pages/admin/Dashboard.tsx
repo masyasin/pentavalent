@@ -159,30 +159,30 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="space-y-10 pb-20 animate-in fade-in duration-700">
+    <div className="space-y-10 pb-20 animate-in fade-in duration-700 max-md:space-y-6 max-md:pb-10 max-md:overflow-x-hidden">
       {/* Welcome Header */}
-      <div className="relative overflow-hidden bg-gray-900 rounded-[3rem] p-10 text-white shadow-2xl">
+      <div className="relative overflow-hidden bg-gray-900 rounded-[3rem] p-10 text-white shadow-2xl max-md:rounded-[2rem] max-md:p-6">
         <div className="relative z-10 md:flex items-center justify-between">
-          <div className="space-y-4 text-left">
+          <div className="space-y-4 text-left max-md:space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/10">
-              <Clock size={14} className="text-blue-400" />
+              <Clock size={14} className="text-blue-400 max-md:shrink-0" />
               <span className="text-[10px] font-black uppercase tracking-widest text-blue-100">{t('admin.dashboard.system_overview')}</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic uppercase leading-none">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic uppercase leading-none max-md:text-3xl">
               {t('admin.dashboard.welcome')} <br />
               <span className="text-blue-400">Penta Valent</span>
             </h2>
-            <p className="text-gray-400 max-w-md font-medium">
+            <p className="text-gray-400 max-w-md font-medium max-md:text-sm">
               {t('admin.dashboard.subtitle')}
             </p>
           </div>
-          <div className="mt-8 md:mt-0 flex gap-4">
-            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/company/branches')}>
-              <p className="text-3xl font-black text-blue-400 mb-1">{stats.branches}</p>
+          <div className="mt-8 md:mt-0 flex gap-4 max-md:flex-col max-md:gap-3">
+            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer max-md:px-4 max-md:py-4 max-md:rounded-2xl max-md:w-full" onClick={() => navigate('/admin/company/branches')}>
+              <p className="text-3xl font-black text-blue-400 mb-1 max-md:text-2xl">{stats.branches}</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{t('admin.dashboard.stat.branches')}</p>
             </div>
-            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/company/certifications')}>
-              <p className="text-3xl font-black text-emerald-400 mb-1">{stats.certs}</p>
+            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer max-md:px-4 max-md:py-4 max-md:rounded-2xl max-md:w-full" onClick={() => navigate('/admin/company/certifications')}>
+              <p className="text-3xl font-black text-emerald-400 mb-1 max-md:text-2xl">{stats.certs}</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{t('admin.dashboard.stat.certs')}</p>
             </div>
           </div>
@@ -193,26 +193,26 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 max-md:gap-4 max-md:grid-cols-2">
         {statCards.map((stat) => (
           <button
             key={stat.id}
             onClick={() => navigate(stat.path)}
-            className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500 text-center relative overflow-hidden active:scale-95"
+            className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500 text-center relative overflow-hidden active:scale-95 max-md:rounded-3xl max-md:p-5 max-md:w-full max-md:min-h-auto"
           >
-            <div className="flex flex-col h-full justify-between items-center space-y-4">
-              <div className={`p-4 rounded-2xl ${stat.lightColor} group-hover:scale-110 transition-transform`}>
-                <stat.icon size={24} />
+            <div className="flex flex-col h-full justify-between items-center space-y-4 max-md:space-y-2">
+              <div className={`p-4 rounded-2xl ${stat.lightColor} group-hover:scale-110 transition-transform max-md:p-3 max-md:rounded-xl`}>
+                <stat.icon size={24} className="max-md:w-5 max-md:h-5 max-md:shrink-0" />
               </div>
               <div>
-                <h3 className="text-3xl font-black text-gray-900 leading-none mb-1">{stat.value}</h3>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{stat.label}</p>
+                <h3 className="text-3xl font-black text-gray-900 leading-none mb-1 max-md:text-xl">{stat.value}</h3>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest max-md:text-[8px]">{stat.label}</p>
               </div>
-              <p className="text-[9px] font-bold text-gray-300 uppercase tracking-widest group-hover:text-blue-500 transition-colors">
+              <p className="text-[9px] font-bold text-gray-300 uppercase tracking-widest group-hover:text-blue-500 transition-colors max-md:hidden">
                 {stat.description}
               </p>
             </div>
-            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity max-md:hidden">
               <ArrowRight size={16} className="text-blue-500" />
             </div>
             <div className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full bg-gradient-to-r ${stat.color} transition-all duration-700`} />
@@ -221,27 +221,27 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Content & Activity Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-md:gap-6">
         {/* Recent Messages */}
-        <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left">
-          <div className="p-8 border-b border-gray-50 flex items-center justify-between">
+        <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left max-md:rounded-[2rem]">
+          <div className="p-8 border-b border-gray-50 flex items-center justify-between max-md:p-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600">
-                <MessageSquare size={20} />
+              <div className="w-10 h-10 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 max-md:shrink-0">
+                <MessageSquare size={20} className="max-md:w-5 max-md:h-5" />
               </div>
-              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">{t('admin.dashboard.recent_messages')}</h3>
+              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic max-md:text-base">{t('admin.dashboard.recent_messages')}</h3>
             </div>
             <button
               onClick={() => navigate('/admin/messages')}
-              className="text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold"
+              className="text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold max-md:min-h-[44px]"
             >
-              {t('admin.dashboard.view_all')} <ArrowRight size={12} />
+              {t('admin.dashboard.view_all')} <ArrowRight size={12} className="max-md:shrink-0" />
             </button>
           </div>
-          <div className="p-4 space-y-1">
+          <div className="p-4 space-y-1 max-md:p-2">
             {recentMessages.length === 0 ? (
-              <div className="py-20 text-center">
-                <MessageSquare className="mx-auto text-gray-100 mb-4" size={48} />
+              <div className="py-20 text-center max-md:py-10">
+                <MessageSquare className="mx-auto text-gray-100 mb-4 max-md:w-10 max-md:h-10" size={48} />
                 <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_messages')}</p>
               </div>
             ) : (
@@ -249,23 +249,23 @@ const Dashboard: React.FC = () => {
                 <button
                   key={msg.id}
                   onClick={() => navigate('/admin/messages')}
-                  className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group"
+                  className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group max-md:p-3"
                 >
-                  <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0 relative">
+                  <div className="flex gap-4 max-md:gap-3">
+                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0 relative max-md:w-10 max-md:h-10">
                       {msg.name.charAt(0)}
                       {!msg.is_read && <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-white rounded-full"></span>}
                     </div>
                     <div>
-                      <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic">{msg.name}</p>
-                      <p className="text-xs text-gray-500 truncate max-w-[200px]">{msg.subject}</p>
-                      <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium">
+                      <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic max-md:text-xs">{msg.name}</p>
+                      <p className="text-xs text-gray-500 truncate max-w-[200px] max-md:max-w-[150px] max-md:text-[10px]">{msg.subject}</p>
+                      <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium max-md:text-[8px]">
                         {new Date(msg.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </p>
                     </div>
                   </div>
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity p-2">
-                    <ExternalLink size={14} className="text-blue-500" />
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity p-2 max-md:opacity-100">
+                    <ExternalLink size={14} className="text-blue-500 max-md:w-3 max-md:h-3" />
                   </div>
                 </button>
               ))
@@ -274,25 +274,25 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Recent Applications */}
-        <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left">
-          <div className="p-8 border-b border-gray-50 flex items-center justify-between">
+        <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left max-md:rounded-[2rem]">
+          <div className="p-8 border-b border-gray-50 flex items-center justify-between max-md:p-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
-                <FileText size={20} />
+              <div className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 max-md:shrink-0">
+                <FileText size={20} className="max-md:w-5 max-md:h-5" />
               </div>
-              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">{t('admin.dashboard.talent_pipeline')}</h3>
+              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic max-md:text-base">{t('admin.dashboard.talent_pipeline')}</h3>
             </div>
             <button
               onClick={() => navigate('/admin/applications')}
-              className="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold"
+              className="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold max-md:min-h-[44px]"
             >
-              {t('admin.dashboard.view_all')} <ArrowRight size={12} />
+              {t('admin.dashboard.view_all')} <ArrowRight size={12} className="max-md:shrink-0" />
             </button>
           </div>
-          <div className="p-4 space-y-1">
+          <div className="p-4 space-y-1 max-md:p-2">
             {recentApplications.length === 0 ? (
-              <div className="py-20 text-center">
-                <FileText className="mx-auto text-gray-100 mb-4" size={48} />
+              <div className="py-20 text-center max-md:py-10">
+                <FileText className="mx-auto text-gray-100 mb-4 max-md:w-10 max-md:h-10" size={48} />
                 <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_apps')}</p>
               </div>
             ) : (
@@ -300,24 +300,24 @@ const Dashboard: React.FC = () => {
                 <button
                   key={app.id}
                   onClick={() => navigate('/admin/applications')}
-                  className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group"
+                  className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group max-md:p-3"
                 >
-                  <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0">
+                  <div className="flex gap-4 max-md:gap-3">
+                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0 max-md:w-10 max-md:h-10">
                       {app.full_name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic">{app.full_name}</p>
+                      <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic max-md:text-xs">{app.full_name}</p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <Briefcase size={10} className="text-emerald-400" />
-                        <p className="text-[11px] text-gray-500 font-bold uppercase tracking-tighter">{app.careers?.title}</p>
+                        <Briefcase size={10} className="text-emerald-400 max-md:shrink-0" />
+                        <p className="text-[11px] text-gray-500 font-bold uppercase tracking-tighter max-md:text-[9px] truncate max-md:max-w-[100px]">{app.careers?.title}</p>
                       </div>
-                      <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium">
+                      <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium max-md:text-[8px]">
                         {new Date(app.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </p>
                     </div>
                   </div>
-                  <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest h-fit ${app.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                  <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest h-fit max-md:px-1.5 max-md:py-0.5 ${app.status === 'pending' ? 'bg-amber-100 text-amber-700' :
                     app.status === 'reviewed' ? 'bg-blue-100 text-blue-700' :
                       app.status === 'accepted' ? 'bg-emerald-100 text-emerald-700' :
                         'bg-rose-100 text-rose-700'
@@ -332,41 +332,41 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Bottom Quick Links */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-        <button onClick={() => navigate('/admin/settings')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
-          <div className="w-12 h-12 bg-blue-50 rounded-[1.25rem] flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
-            <RefreshCw size={24} />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-md:gap-3 max-md:grid-cols-1">
+        <button onClick={() => navigate('/admin/settings')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+          <div className="w-12 h-12 bg-blue-50 rounded-[1.25rem] flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+            <RefreshCw size={24} className="max-md:w-5 max-md:h-5" />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.identity')}</p>
-            <p className="text-xs font-bold text-gray-800">{t('admin.menu.settings')}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.identity')}</p>
+            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.settings')}</p>
           </div>
         </button>
-        <button onClick={() => navigate('/admin/hero')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
-          <div className="w-12 h-12 bg-rose-50 rounded-[1.25rem] flex items-center justify-center text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner">
-            <LayoutDashboard size={24} />
+        <button onClick={() => navigate('/admin/hero')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+          <div className="w-12 h-12 bg-rose-50 rounded-[1.25rem] flex items-center justify-center text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+            <LayoutDashboard size={24} className="max-md:w-5 max-md:h-5" />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.media')}</p>
-            <p className="text-xs font-bold text-gray-800">{t('admin.menu.hero')}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.media')}</p>
+            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.hero')}</p>
           </div>
         </button>
-        <button onClick={() => navigate('/admin/company')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-indigo-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
-          <div className="w-12 h-12 bg-indigo-50 rounded-[1.25rem] flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-inner">
-            <Building2 size={24} />
+        <button onClick={() => navigate('/admin/company')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-indigo-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+          <div className="w-12 h-12 bg-indigo-50 rounded-[1.25rem] flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+            <Building2 size={24} className="max-md:w-5 max-md:h-5" />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.identity')}</p>
-            <p className="text-xs font-bold text-gray-800">Corp Identity</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.identity')}</p>
+            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">Corp Identity</p>
           </div>
         </button>
-        <button onClick={() => navigate('/admin/seo')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95">
-          <div className="w-12 h-12 bg-emerald-50 rounded-[1.25rem] flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
-            <Globe size={24} />
+        <button onClick={() => navigate('/admin/seo')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+          <div className="w-12 h-12 bg-emerald-50 rounded-[1.25rem] flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+            <Globe size={24} className="max-md:w-5 max-md:h-5" />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('admin.dashboard.marketing')}</p>
-            <p className="text-xs font-bold text-gray-800">{t('admin.menu.seo')}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.marketing')}</p>
+            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.seo')}</p>
           </div>
         </button>
       </div>

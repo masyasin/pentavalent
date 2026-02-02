@@ -117,47 +117,47 @@ const NetworkSection: React.FC = () => {
   const depots = branches.filter(b => b.type === 'branch' || b.type === 'depo');
 
   return (
-    <section id="network" className="py-24 md:py-32 bg-slate-50 relative overflow-hidden text-slate-900">
-      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+    <section id="network" className="py-24 md:py-32 bg-slate-50 relative overflow-hidden text-slate-900 max-md:py-16 max-md:overflow-x-hidden">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10 max-md:px-4">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 max-md:gap-10">
 
           {/* Left: Content & Stats */}
-          <div className="lg:w-[40%]">
-            <div className="inline-flex items-center gap-3 px-5 py-2 bg-white rounded-full shadow-sm border border-slate-100 mb-8">
-              <span className="relative flex h-2 w-2">
+          <div className="lg:w-[40%] max-md:w-full">
+            <div className="inline-flex items-center gap-3 px-5 py-2 bg-white rounded-full shadow-sm border border-slate-100 mb-8 max-md:mb-4 max-md:px-4 max-md:py-1.5">
+              <span className="relative flex h-2 w-2 max-md:shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
               </span>
-              <span className="text-[13px] font-black text-slate-500 uppercase tracking-widest">{language === 'id' ? 'Jaringan Logistik Nasional' : 'National Logistics Network'}</span>
+              <span className="text-[13px] font-black text-slate-500 uppercase tracking-widest max-md:text-[10px]">{language === 'id' ? 'Jaringan Logistik Nasional' : 'National Logistics Network'}</span>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tighter leading-[1.05] uppercase">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tighter leading-[1.05] uppercase max-md:text-3xl max-md:mb-6">
               {language === 'id' ? 'Cakupan &' : 'National'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 italic pr-4">{language === 'id' ? 'Akses Seluruh Indonesia' : 'Coverage & Access'}</span>
             </h2>
 
-            <p className="text-slate-500 text-lg font-medium leading-relaxed mb-12">
+            <p className="text-slate-500 text-lg font-medium leading-relaxed mb-12 max-md:text-sm max-md:mb-8">
               {language === 'id'
                 ? 'Didukung oleh infrastruktur modern yang menghubungkan pusat-pusat ekonomi utama dengan wilayah regional di seluruh nusantara.'
                 : 'Supported by modern infrastructure connecting major economic centers with regional areas throughout the archipelago.'}
             </p>
 
-            <div className="grid grid-cols-2 gap-6 mb-12">
-              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group">
-                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-4 transition-transform group-hover:scale-110">
-                  <Building2 size={24} />
+            <div className="grid grid-cols-2 gap-6 mb-12 max-md:grid-cols-1 max-md:gap-4 max-md:mb-8">
+              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto">
+                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-4 transition-transform group-hover:scale-110 max-md:w-10 max-md:h-10 max-md:shrink-0">
+                  <Building2 size={24} className="max-md:w-5 max-md:h-5" />
                 </div>
-                <div className="text-3xl font-black text-slate-900 mb-1">{mainHubs.length}</div>
-                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight">
+                <div className="text-3xl font-black text-slate-900 mb-1 max-md:text-2xl">{mainHubs.length}</div>
+                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight max-md:text-[10px]">
                   {language === 'id' ? 'Hub Utama (Tier 1)' : 'Main Strategic Hubs'}
                 </div>
               </div>
-              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group">
-                <div className="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center text-cyan-600 mb-4 transition-transform group-hover:scale-110">
-                  <Truck size={24} />
+              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto">
+                <div className="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center text-cyan-600 mb-4 transition-transform group-hover:scale-110 max-md:w-10 max-md:h-10 max-md:shrink-0">
+                  <Truck size={24} className="max-md:w-5 max-md:h-5" />
                 </div>
-                <div className="text-3xl font-black text-slate-900 mb-1">{depots.length}</div>
-                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight">
+                <div className="text-3xl font-black text-slate-900 mb-1 max-md:text-2xl">{depots.length}</div>
+                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight max-md:text-[10px]">
                   {language === 'id' ? 'Cabang & Depo' : 'Regional Branches'}
                 </div>
               </div>
@@ -165,20 +165,20 @@ const NetworkSection: React.FC = () => {
 
             <button
               onClick={() => navigate('/about/network-partners')}
-              className="group/btn inline-flex items-center gap-4 text-[13px] font-black uppercase tracking-[0.3em] text-slate-900 hover:text-blue-600 transition-all border border-slate-200 px-8 py-4 rounded-2xl hover:bg-white"
+              className="group/btn inline-flex items-center gap-4 text-[13px] font-black uppercase tracking-[0.3em] text-slate-900 hover:text-blue-600 transition-all border border-slate-200 px-8 py-4 rounded-2xl hover:bg-white max-md:w-full max-md:justify-center max-md:min-h-[44px] max-md:px-4 max-md:py-3 max-md:text-[11px]"
             >
               {language === 'id' ? 'Lihat Seluruh Jaringan' : 'View Full Network'}
-              <Globe size={16} className="group-hover/btn:rotate-180 transition-transform duration-1000" />
+              <Globe size={16} className="group-hover/btn:rotate-180 transition-transform duration-1000 max-md:shrink-0 max-md:w-4 max-md:h-4" />
             </button>
           </div>
 
           {/* Right: Interactive Live Map */}
-          <div className="lg:w-[60%] relative">
-            <div className="relative h-[400px] md:h-[600px] bg-white rounded-[3rem] border border-white shadow-2xl overflow-hidden group">
+          <div className="lg:w-[60%] relative max-md:w-full">
+            <div className="relative h-[400px] md:h-[600px] bg-white rounded-[3rem] border border-white shadow-2xl overflow-hidden group max-md:h-[300px] max-md:rounded-[2rem]">
               {/* Visual Loading State */}
               {loading && (
                 <div className="absolute inset-0 z-20 bg-slate-50 flex items-center justify-center">
-                  <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                  <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full max-md:w-6 max-md:h-6"></div>
                 </div>
               )}
 
@@ -186,10 +186,10 @@ const NetworkSection: React.FC = () => {
               <div ref={mapRef} className="absolute inset-0 w-full h-full z-10" />
 
               {/* Map Floating UI Overlay */}
-              <div className="absolute bottom-8 right-8 z-20 pointer-events-none">
-                <div className="bg-slate-900/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                  <span className="text-[9px] font-black text-white uppercase tracking-widest">Live Interactive Grid</span>
+              <div className="absolute bottom-8 right-8 z-20 pointer-events-none max-md:bottom-4 max-md:right-4">
+                <div className="bg-slate-900/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3 max-md:px-3 max-md:py-1.5">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse max-md:shrink-0"></div>
+                  <span className="text-[9px] font-black text-white uppercase tracking-widest max-md:text-[8px]">Live Interactive Grid</span>
                 </div>
               </div>
             </div>

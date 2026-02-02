@@ -108,57 +108,59 @@ const BusinessSection: React.FC = () => {
   if (loading && divisions.length === 0) return null;
 
   return (
-    <section id="business" className="py-24 md:py-48 bg-slate-50 relative overflow-hidden">
-      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
+    <section id="business" className="py-24 md:py-48 bg-slate-50 relative overflow-hidden max-md:py-16 max-md:overflow-x-hidden">
+      <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10 max-md:px-4">
         {/* Header Section */}
-        <div className="text-center max-w-4xl mx-auto mb-16 md:mb-24">
-          <span className="inline-block px-5 py-2 bg-slate-900/5 text-slate-900 rounded-sm text-[13px] font-bold tracking-[0.3em] uppercase mb-8 border border-slate-900/10">
+        <div className="text-center max-w-4xl mx-auto mb-16 md:mb-24 max-md:mb-12">
+          <span className="inline-block px-5 py-2 bg-slate-900/5 text-slate-900 rounded-sm text-[13px] font-bold tracking-[0.3em] uppercase mb-8 border border-slate-900/10 max-md:mb-4 max-md:text-[10px]">
             {language === 'id' ? 'Lini Usaha Utama' : 'Main Business Lines'}
           </span>
-          <h2 className="text-4xl md:text-7xl font-black text-slate-900 mb-0 tracking-tighter uppercase">
+          <h2 className="text-4xl md:text-7xl font-black text-slate-900 mb-0 tracking-tighter uppercase max-md:text-3xl">
             {language === 'id' ? 'Bidang Operasional &' : 'Operational Fields &'} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic pr-4">{language === 'id' ? 'Layanan Terpadu' : 'Integrated Services'}</span>
           </h2>
         </div>
 
         {/* 3 Columns Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid lg:grid-cols-3 gap-8 md:gap-12 max-md:grid-cols-1 max-md:gap-6">
           {divisions.map((div, i) => (
             <div
               key={i}
-              className="group relative bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-2xl hover:shadow-4xl transition-all duration-700 hover:-translate-y-4 flex flex-col items-center text-center"
+              className="group relative bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-2xl hover:shadow-4xl transition-all duration-700 hover:-translate-y-4 flex flex-col items-center text-center max-md:rounded-[2rem] max-md:p-8 max-md:w-full max-md:min-h-auto"
             >
-              <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${div.color_accent} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-t-[3rem]`}></div>
+              <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${div.color_accent} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-t-[3rem] max-md:rounded-t-[2rem]`}></div>
 
-              <div className={`w-24 h-24 bg-gradient-to-br ${div.color_accent} rounded-[2rem] flex items-center justify-center text-white mb-10 shadow-2xl group-hover:rotate-12 group-hover:scale-110 transition-all duration-500`}>
-                {iconMap[div.icon_name] || iconMap['pill']}
+              <div className={`w-24 h-24 bg-gradient-to-br ${div.color_accent} rounded-[2rem] flex items-center justify-center text-white mb-10 shadow-2xl group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 max-md:w-16 max-md:h-16 max-md:rounded-2xl max-md:mb-6 max-md:shrink-0`}>
+                <div className="max-md:w-10 max-md:h-10 flex items-center justify-center">
+                  {iconMap[div.icon_name] || iconMap['pill']}
+                </div>
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 tracking-tight leading-tight transition-all">
+              <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 tracking-tight leading-tight transition-all max-md:text-xl">
                 {language === 'id' ? div.title_id : div.title_en}
               </h3>
 
-              <p className="text-slate-500 text-[15px] font-bold leading-relaxed mb-8 px-4 uppercase tracking-tighter">
+              <p className="text-slate-500 text-[15px] font-bold leading-relaxed mb-8 px-4 uppercase tracking-tighter max-md:text-xs max-md:mb-6">
                 {language === 'id' ? div.subtitle_id : div.subtitle_en}
               </p>
 
-              <div className="w-full flex flex-col gap-4 mb-10">
+              <div className="w-full flex flex-col gap-4 mb-10 max-md:gap-2 max-md:mb-8">
                 {div.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100/50 group-hover:bg-white group-hover:border-slate-200 transition-all">
-                    <div className="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-900 text-[10px] font-black">
+                  <div key={idx} className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100/50 group-hover:bg-white group-hover:border-slate-200 transition-all max-md:p-3 max-md:rounded-xl">
+                    <div className="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-900 text-[10px] font-black max-md:shrink-0">
                       ✓
                     </div>
-                    <span className="text-sm font-bold text-slate-600">{feature}</span>
+                    <span className="text-sm font-bold text-slate-600 max-md:text-xs">{feature}</span>
                   </div>
                 ))}
               </div>
 
               <button
                 onClick={() => navigate(`/business/${div.slug}`)}
-                className="mt-auto group/btn flex items-center gap-3 text-[13px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-slate-900 transition-all duration-500 cursor-pointer"
+                className="mt-auto group/btn flex items-center gap-3 text-[13px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-slate-900 transition-all duration-500 cursor-pointer max-md:w-full max-md:justify-center max-md:min-h-[44px] max-md:text-[11px]"
               >
                 DISCOVER CAPABILITIES
-                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover/btn:bg-slate-900 group-hover/btn:text-white transition-all">
+                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover/btn:bg-slate-900 group-hover/btn:text-white transition-all max-md:shrink-0">
                   →
                 </div>
               </button>

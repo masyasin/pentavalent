@@ -221,62 +221,62 @@ const ProfilePage: React.FC = () => {
                                 <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Change Password</h3>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-6 max-md:space-y-4">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Current Password</label>
-                                    <div className="relative">
+                                    <div className="relative flex items-center max-md:w-full">
                                         <input
                                             type={showCurPass ? "text" : "password"}
                                             required
                                             value={currentPassword}
                                             onChange={(e) => setCurrentPassword(e.target.value)}
-                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-50 transition-all"
+                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-50 transition-all max-md:text-base max-md:py-3"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowCurPass(!showCurPass)}
-                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors"
+                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors max-md:min-h-[44px] max-md:flex max-md:items-center max-md:px-2"
                                         >
-                                            {showCurPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            {showCurPass ? <EyeOff size={18} className="max-md:shrink-0 max-md:w-5 max-md:h-5" /> : <Eye size={18} className="max-md:shrink-0 max-md:w-5 max-md:h-5" />}
                                         </button>
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">New Password</label>
-                                    <div className="relative">
+                                    <div className="relative flex items-center max-md:w-full">
                                         <input
                                             type={showNewPass ? "text" : "password"}
                                             required
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
-                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-50 transition-all font-mono"
+                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-50 transition-all font-mono max-md:text-base max-md:py-3"
                                             placeholder="Min 6 characters"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowNewPass(!showNewPass)}
-                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors"
+                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors max-md:min-h-[44px] max-md:flex max-md:items-center max-md:px-2"
                                         >
-                                            {showNewPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            {showNewPass ? <EyeOff size={18} className="max-md:shrink-0 max-md:w-5 max-md:h-5" /> : <Eye size={18} className="max-md:shrink-0 max-md:w-5 max-md:h-5" />}
                                         </button>
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Confirm New Password</label>
-                                    <div className="relative">
+                                    <div className="relative flex items-center max-md:w-full">
                                         <input
                                             type={showConPass ? "text" : "password"}
                                             required
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
-                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-50 transition-all font-mono"
+                                            className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-50 transition-all font-mono max-md:text-base max-md:py-3"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowConPass(!showConPass)}
-                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors"
+                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors max-md:min-h-[44px] max-md:flex max-md:items-center max-md:px-2"
                                         >
-                                            {showConPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            {showConPass ? <EyeOff size={18} className="max-md:shrink-0 max-md:w-5 max-md:h-5" /> : <Eye size={18} className="max-md:shrink-0 max-md:w-5 max-md:h-5" />}
                                         </button>
                                     </div>
                                 </div>

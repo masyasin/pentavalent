@@ -61,25 +61,29 @@ const SnapshotSection: React.FC = () => {
     };
 
     return (
-        <section className="relative z-30 -mt-10 md:-mt-20 px-6">
+        <section className="relative z-30 -mt-10 md:-mt-20 px-6 max-md:-mt-6 max-md:px-4 max-md:overflow-x-hidden">
             <div className="max-w-[1700px] mx-auto">
-                <div className={`grid grid-cols-2 ${stats.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-4 md:gap-8`}>
+                <div className={`grid grid-cols-2 ${stats.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-4 md:gap-8 max-md:grid-cols-1 max-md:gap-4`}>
                     {stats.map((stat, i) => {
                         const iconData = getIcon(stat.icon);
                         return (
                             <div
                                 key={i}
-                                className="bg-white/90 backdrop-blur-2xl p-8 md:p-12 rounded-2xl md:rounded-[3rem] shadow-2xl border border-white/50 group hover:-translate-y-2 transition-all duration-500"
+                                className="bg-white/90 backdrop-blur-2xl p-8 md:p-12 rounded-2xl md:rounded-[3rem] shadow-2xl border border-white/50 group hover:-translate-y-2 transition-all duration-500 max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto"
                             >
-                                <div className="flex flex-col items-center text-center">
-                                    <div className={`w-16 h-16 ${iconData.color} rounded-2xl flex items-center justify-center transition-all duration-500 mb-6 shadow-inner group-hover:scale-110 group-hover:rotate-6`}>
-                                        {iconData.icon}
+                                <div className="flex flex-col items-center text-center max-md:flex-row max-md:text-left max-md:gap-4">
+                                    <div className={`w-16 h-16 ${iconData.color} rounded-2xl flex items-center justify-center transition-all duration-500 mb-6 shadow-inner group-hover:scale-110 group-hover:rotate-6 max-md:w-12 max-md:h-12 max-md:rounded-xl max-md:mb-0 max-md:shrink-0`}>
+                                        <div className="max-md:scale-75">
+                                            {iconData.icon}
+                                        </div>
                                     </div>
-                                    <div className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 mb-2 tracking-tighter">
-                                        {stat.value}
-                                    </div>
-                                    <div className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">
-                                        {language === 'id' ? stat.label_id : stat.label_en}
+                                    <div>
+                                        <div className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 mb-2 tracking-tighter max-md:text-2xl max-md:mb-0">
+                                            {stat.value}
+                                        </div>
+                                        <div className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] max-md:text-[8px] max-md:tracking-widest">
+                                            {language === 'id' ? stat.label_id : stat.label_en}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

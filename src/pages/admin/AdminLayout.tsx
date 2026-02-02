@@ -52,10 +52,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex overflow-hidden">
+    <div className="min-h-screen bg-gray-100 flex overflow-hidden max-md:overflow-x-hidden">
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-[100] bg-gray-900 transition-all duration-300 transform lg:translate-x-0 ${sidebarOpen ? 'w-64 translate-x-0' : 'w-64 lg:w-0 -translate-x-full lg:translate-x-0'
-        } overflow-hidden`}>
+        } overflow-hidden max-md:w-full`}>
         <div className="w-64 h-full flex flex-col">
           <div className="flex items-center justify-between p-6 border-b border-gray-800">
             <div className="flex items-center gap-3">
@@ -75,8 +75,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${currentPath === item.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
                   }`}
               >
-                <div className="relative">
-                  <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="relative flex-shrink-0">
+                  <svg className="w-5 h-5 flex-shrink-0 max-md:w-5 max-md:h-5 max-md:shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                   </svg>
                 </div>
@@ -106,20 +106,20 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
       {/* Content Area */}
       <div className={`flex-1 flex flex-col min-w-0 relative h-screen transition-all duration-300 ${sidebarOpen ? 'lg:pl-64' : 'lg:pl-0'}`}>
-        <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 z-[80]">
-          <div className="h-20 flex items-center justify-between px-8">
-            <div className="flex items-center gap-6">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-gray-500 hover:bg-gray-50 rounded-xl transition-all">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+        <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 z-[80] max-md:h-auto">
+          <div className="h-20 flex items-center justify-between px-8 max-md:px-4 max-md:h-16">
+            <div className="flex items-center gap-6 max-md:gap-3">
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-gray-500 hover:bg-gray-50 rounded-xl transition-all max-md:min-h-[44px] max-md:flex max-md:items-center">
+                <svg className="w-6 h-6 max-md:shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
-              <h1 className="text-2xl font-black text-gray-900 tracking-tighter italic">
+              <h1 className="text-2xl font-black text-gray-900 tracking-tighter italic max-md:text-lg truncate">
                 {t(`admin.menu.${currentPath}`) || currentPath.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </h1>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 max-md:gap-2">
               {/* Language Switcher */}
-              <div className="flex bg-gray-100 p-1 rounded-xl">
+              <div className="flex bg-gray-100 p-1 rounded-xl max-md:hidden">
                 <button
                   onClick={() => setLanguage('id')}
                   className={`px-3 py-1.5 rounded-lg text-[10px] font-black transition-all ${language === 'id' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
@@ -134,20 +134,20 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 </button>
               </div>
 
-              <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${getRoleBadgeColor(user?.role || '')}`}>
+              <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest max-md:hidden ${getRoleBadgeColor(user?.role || '')}`}>
                 {user?.role?.replace('_', ' ')}
               </span>
 
               <div className="relative">
-                <button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center gap-4 group p-1 pr-3 rounded-2xl hover:bg-gray-50 transition-all">
-                  <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg group-hover:scale-105 transition-transform">
+                <button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center gap-4 group p-1 pr-3 rounded-2xl hover:bg-gray-50 transition-all max-md:pr-1 max-md:min-h-[44px]">
+                  <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg group-hover:scale-105 transition-transform max-md:w-8 max-md:h-8 max-md:text-sm max-md:shrink-0">
                     {user?.full_name?.charAt(0) || 'U'}
                   </div>
                   <div className="hidden md:block text-left">
                     <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic leading-none">{user?.full_name}</p>
                     <p className="text-[10px] text-gray-400 font-medium mt-1 uppercase tracking-widest leading-none">{t('admin.settings')}</p>
                   </div>
-                  <svg className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`w-4 h-4 text-gray-400 transition-transform duration-300 max-md:shrink-0 ${showUserMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
@@ -158,7 +158,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                     <div className="fixed inset-0 z-30" onClick={() => setShowUserMenu(false)} />
 
                     {/* Menu Dropdown */}
-                    <div className="absolute right-0 mt-3 w-64 bg-white rounded-3xl shadow-2xl border border-gray-100 py-3 z-[100] animate-in fade-in slide-in-from-top-2">
+                    <div className="absolute right-0 mt-3 w-64 bg-white rounded-3xl shadow-2xl border border-gray-100 py-3 z-[100] animate-in fade-in slide-in-from-top-2 max-md:w-[calc(100vw-2rem)] max-md:right-[-0.5rem]">
                       <div className="px-6 py-4 border-b border-gray-50">
                         <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic">{user?.full_name}</p>
                         <p className="text-[10px] text-gray-400 font-medium mt-1 truncate">{user?.email}</p>
