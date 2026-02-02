@@ -115,6 +115,15 @@ const BusinessSection: React.FC = () => {
 
   if (loading && divisions.length === 0) return null;
 
+  const getTargetLink = (slug: string) => {
+    switch (slug) {
+      case 'distribusi-alkes': return '/business/medical-equipment';
+      case 'distribusi-farmasi': return '/business/pharmaceuticals';
+      case 'produk-konsumen': return '/business/consumer-goods';
+      default: return `/business/${slug}`;
+    }
+  };
+
   return (
     <section id="business" className="py-24 md:py-48 bg-slate-50 relative overflow-hidden max-md:py-16 max-md:overflow-x-hidden">
       <div className="max-w-[1700px] mx-auto px-6 md:px-12 lg:px-16 relative z-10 max-md:px-4">
@@ -134,7 +143,7 @@ const BusinessSection: React.FC = () => {
           {divisions.map((div, i) => (
             <div
               key={i}
-              onClick={() => navigate(`/business/${div.slug}`)}
+              onClick={() => navigate(getTargetLink(div.slug))}
               className="group cursor-pointer relative bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 shadow-2xl hover:shadow-4xl transition-all duration-700 hover:-translate-y-4 flex flex-col items-center text-center max-md:rounded-[2rem] max-md:p-8 max-md:w-full max-md:min-h-auto"
             >
               <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${div.color_accent} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-t-[3rem] max-md:rounded-t-[2rem]`}></div>
@@ -165,7 +174,10 @@ const BusinessSection: React.FC = () => {
               </div>
 
               <button
-                onClick={() => navigate(`/business/${div.slug}`)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(getTargetLink(div.slug));
+                }}
                 className="mt-auto group/btn flex items-center gap-3 text-[13px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-slate-900 transition-all duration-500 cursor-pointer max-md:w-full max-md:justify-center max-md:min-h-[44px] max-md:text-[11px]"
               >
                 DISCOVER CAPABILITIES
