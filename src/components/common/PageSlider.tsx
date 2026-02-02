@@ -102,38 +102,35 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                     onError={(e) => {
                                         e.currentTarget.src = "https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=2070&auto=format&fit=crop";
                                     }}
-                                    className={`w-full h-full object-cover brightness-[1.15] md:brightness-100 transition-transform duration-[8000ms] ease-out ${selectedIndex === index ? 'scale-110' : 'scale-100'}`}
+                                    className={`w-full h-full object-cover transition-transform duration-[10000ms] ease-out ${selectedIndex === index ? 'scale-110' : 'scale-100'}`}
                                     loading="eager"
                                     style={{ 
-                                        willChange: 'transform, opacity',
-                                        objectPosition: 'center 30%',
-                                        opacity: selectedIndex === index ? 1 : 0,
-                                        transition: 'opacity 1s ease-out, transform 8s ease-out'
+                                        willChange: 'transform',
+                                        objectPosition: 'center 30%'
                                     }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/10 to-transparent z-10"></div>
-                                <div className="absolute inset-0 bg-slate-950/10 z-10 md:hidden"></div>
+                                <div className="absolute inset-0 bg-slate-950/20 z-10"></div>
                             </div>
 
                             {/* Content */}
-                            <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-6">
-                                <div className="max-w-5xl mx-auto space-y-8">
+                            <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-6 pt-24 md:pt-32">
+                                <div className="max-w-5xl mx-auto space-y-4 md:space-y-6">
                                     <AnimatePresence mode="wait">
                                         {selectedIndex === index && (
                                             <motion.div
-                                                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                                                initial={{ opacity: 0, y: 20, scale: 0.98 }}
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                exit={{ opacity: 0, y: -30, scale: 1.05 }}
-                                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                                                className="space-y-6"
+                                                exit={{ opacity: 0, y: -20, scale: 1.02 }}
+                                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                                                className="space-y-4 md:space-y-6"
                                             >
                                                 <div className="inline-flex items-center gap-3 px-5 py-2 bg-primary/20 backdrop-blur-xl border border-primary/30 rounded-full mb-2">
                                                     <span className="relative flex h-2 w-2">
                                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                                                         <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                                                     </span>
-                                                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white">
-                                                        {breadcrumbLabel}
+                                                    <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white">
+                                                        {parentLabel || breadcrumbLabel}
                                                     </span>
                                                 </div>
 
