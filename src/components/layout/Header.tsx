@@ -124,7 +124,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
         <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="flex items-center justify-between relative z-10 h-full gap-2 xl:gap-4">
             {/* Logo Column - Balanced and centered between edge and menu */}
-            <div className="flex-1 flex items-center justify-center min-w-0">
+            <div className="flex-1 flex items-center justify-start xl:justify-center min-w-0">
               <div
                 className="cursor-pointer group flex-shrink-0"
                 onClick={() => {
@@ -138,7 +138,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                     alt="Penta Valent"
                     width="200"
                     height="64"
-                    className={`${isScrolled ? 'h-10 lg:h-14' : 'h-12 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
+                    className={`${isScrolled ? 'h-8 sm:h-10 lg:h-14' : 'h-10 sm:h-12 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
                   />
                 </div>
               </div>
@@ -286,14 +286,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 <button
                   onClick={() => setIsSearchOpen(true)}
-                  className={`p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
+                  className={`hidden sm:flex p-2.5 rounded-full border transition-all duration-500 ${isScrolled ? 'border-slate-200 bg-slate-50 text-slate-400 hover:text-primary' : 'border-white/20 bg-white/10 text-white/70 hover:text-white hover:border-white/40'}`}
                   aria-label="Search"
                 >
                   <Search size={22} strokeWidth={2.5} />
                 </button>
 
                 <button
-                  className={`xl:hidden p-3 rounded-full transition-all duration-500 touch-active ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
+                  className={`xl:hidden p-2.5 sm:p-3 rounded-full transition-all duration-500 touch-active ${isScrolled ? 'text-primary bg-slate-50 hover:bg-slate-100' : 'text-white bg-white/10 hover:bg-white/20'}`}
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   aria-label="Toggle Menu"
                 >
@@ -326,6 +326,26 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto py-6">
+              {/* Mobile Search Bar */}
+              <div className="px-6 mb-8">
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
+                  </div>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setIsSearchOpen(true);
+                    }}
+                    placeholder={language === 'id' ? 'Cari...' : 'Search...'}
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
+                  />
+                </div>
+              </div>
+
               <nav className="space-y-1.5 px-6">
                 {parentMenus.map((menu) => {
                   const children = getChildMenus(menu.id);
