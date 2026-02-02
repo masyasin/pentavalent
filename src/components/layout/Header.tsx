@@ -552,12 +552,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             </div>
             <div className="p-6 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm">
               <div 
-                className="relative bg-slate-100 rounded-2xl p-1 flex items-center cursor-pointer overflow-hidden border border-slate-200"
+                className="relative bg-slate-200/50 rounded-2xl p-1.5 flex items-center cursor-pointer overflow-hidden border border-slate-200"
                 onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
               >
                 {/* Switch Slider Mobile */}
                 <motion.div 
-                  className="absolute top-1 bottom-1 w-[calc(50%-4px)] wow-button-gradient rounded-xl shadow-md z-0"
+                  className="absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-slate-900 rounded-xl shadow-lg z-0"
                   initial={false}
                   animate={{ 
                     x: language === 'id' ? 0 : '100%',
@@ -566,12 +566,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 />
                 
                 <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
-                  <span className={`text-xs font-black uppercase tracking-widest ${language === 'id' ? 'text-white' : 'text-slate-400'}`}>
+                  <span className={`text-[13px] font-black uppercase tracking-[0.2em] ${language === 'id' ? 'text-white' : 'text-slate-500'}`}>
                     ID
                   </span>
                 </div>
                 <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
-                  <span className={`text-xs font-black uppercase tracking-widest ${language === 'en' ? 'text-white' : 'text-slate-400'}`}>
+                  <span className={`text-[13px] font-black uppercase tracking-[0.2em] ${language === 'en' ? 'text-white' : 'text-slate-500'}`}>
                     EN
                   </span>
                 </div>
