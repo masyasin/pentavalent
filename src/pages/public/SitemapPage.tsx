@@ -5,10 +5,13 @@ import { motion } from 'framer-motion';
 import { Map, ArrowRight, Building2, Target, Users, Globe, ShieldCheck, TrendingUp, Activity, FileText, FileSearch, Info, Mail, MapPin, ChevronRight, Layout, Newspaper, Briefcase, HelpCircle, Shield, FileCheck } from 'lucide-react';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
+import PageSlider from '../../components/common/PageSlider';
+import { useLocation } from 'react-router-dom';
 
 const SitemapPage: React.FC = () => {
     const { language, t } = useLanguage();
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -89,8 +92,15 @@ const SitemapPage: React.FC = () => {
         <div className="min-h-screen bg-slate-50">
             <Header onNavigate={() => {}} activeSection="sitemap" />
             
-            <main className="pt-32 pb-20">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <main>
+                <PageSlider
+                    pagePath={pathname}
+                    breadcrumbLabel={language === 'id' ? 'Peta Situs' : 'Sitemap'}
+                    parentLabel={language === 'id' ? 'Informasi' : 'Information'}
+                />
+
+                <div className="py-20 md:py-32">
+                    <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     {/* Header Section */}
                     <div className="mb-16 text-center">
                         <motion.div
