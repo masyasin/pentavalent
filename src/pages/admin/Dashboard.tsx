@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import {
   LayoutDashboard, Users, Newspaper, Briefcase,
   MessageSquare, FileText, Globe, Award,
@@ -24,6 +25,7 @@ interface Stats {
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { canAccessModule } = useAuth();
   const [stats, setStats] = useState<Stats>({
     branches: 0,
     partners: 0,
@@ -87,9 +89,9 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const statCards = [
+  const allStatCards = [
     {
-      id: 'news',
+      id: 'content',
       label: t('admin.dashboard.stat.news'),
       value: stats.news,
       icon: Newspaper,
@@ -109,7 +111,7 @@ const Dashboard: React.FC = () => {
       path: '/admin/messages'
     },
     {
-      id: 'applications',
+      id: 'recruitment',
       label: t('admin.dashboard.stat.applications'),
       value: stats.applications,
       icon: FileText,
@@ -119,7 +121,7 @@ const Dashboard: React.FC = () => {
       path: '/admin/recruitment/applications'
     },
     {
-      id: 'careers',
+      id: 'recruitment',
       label: t('admin.dashboard.stat.active_jobs'),
       value: stats.careers,
       icon: Briefcase,
@@ -129,7 +131,7 @@ const Dashboard: React.FC = () => {
       path: '/admin/recruitment/careers'
     },
     {
-      id: 'partners',
+      id: 'company',
       label: t('admin.dashboard.stat.partners'),
       value: stats.partners,
       icon: Users,
@@ -149,6 +151,8 @@ const Dashboard: React.FC = () => {
       path: '/admin/investor'
     },
   ];
+
+  const statCards = allStatCards.filter(card => canAccessModule(card.id as any));
 
   if (loading) {
     return (
@@ -223,152 +227,164 @@ const Dashboard: React.FC = () => {
       {/* Content & Activity Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-md:gap-6">
         {/* Recent Messages */}
-        <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left max-md:rounded-[2rem]">
-          <div className="p-8 border-b border-gray-50 flex items-center justify-between max-md:p-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 max-md:shrink-0">
-                <MessageSquare size={20} className="max-md:w-5 max-md:h-5" />
+        {canAccessModule('messages') && (
+          <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left max-md:rounded-[2rem]">
+            <div className="p-8 border-b border-gray-50 flex items-center justify-between max-md:p-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 max-md:shrink-0">
+                  <MessageSquare size={20} className="max-md:w-5 max-md:h-5" />
+                </div>
+                <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic max-md:text-base">{t('admin.dashboard.recent_messages')}</h3>
               </div>
-              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic max-md:text-base">{t('admin.dashboard.recent_messages')}</h3>
+              <button
+                onClick={() => navigate('/admin/messages')}
+                className="text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold max-md:min-h-[44px]"
+              >
+                {t('admin.dashboard.view_all')} <ArrowRight size={12} className="max-md:shrink-0" />
+              </button>
             </div>
-            <button
-              onClick={() => navigate('/admin/messages')}
-              className="text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold max-md:min-h-[44px]"
-            >
-              {t('admin.dashboard.view_all')} <ArrowRight size={12} className="max-md:shrink-0" />
-            </button>
-          </div>
-          <div className="p-4 space-y-1 max-md:p-2">
-            {recentMessages.length === 0 ? (
-              <div className="py-20 text-center max-md:py-10">
-                <MessageSquare className="mx-auto text-gray-100 mb-4 max-md:w-10 max-md:h-10" size={48} />
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_messages')}</p>
-              </div>
-            ) : (
-              recentMessages.map((msg) => (
-                <button
-                  key={msg.id}
-                  onClick={() => navigate('/admin/messages')}
-                  className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group max-md:p-3"
-                >
-                  <div className="flex gap-4 max-md:gap-3">
-                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0 relative max-md:w-10 max-md:h-10">
-                      {msg.name.charAt(0)}
-                      {!msg.is_read && <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-white rounded-full"></span>}
+            <div className="p-4 space-y-1 max-md:p-2">
+              {recentMessages.length === 0 ? (
+                <div className="py-20 text-center max-md:py-10">
+                  <MessageSquare className="mx-auto text-gray-100 mb-4 max-md:w-10 max-md:h-10" size={48} />
+                  <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_messages')}</p>
+                </div>
+              ) : (
+                recentMessages.map((msg) => (
+                  <button
+                    key={msg.id}
+                    onClick={() => navigate('/admin/messages')}
+                    className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group max-md:p-3"
+                  >
+                    <div className="flex gap-4 max-md:gap-3">
+                      <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0 relative max-md:w-10 max-md:h-10">
+                        {msg.name.charAt(0)}
+                        {!msg.is_read && <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-white rounded-full"></span>}
+                      </div>
+                      <div>
+                        <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic max-md:text-xs">{msg.name}</p>
+                        <p className="text-xs text-gray-500 truncate max-w-[200px] max-md:max-w-[150px] max-md:text-[10px]">{msg.subject}</p>
+                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium max-md:text-[8px]">
+                          {new Date(msg.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic max-md:text-xs">{msg.name}</p>
-                      <p className="text-xs text-gray-500 truncate max-w-[200px] max-md:max-w-[150px] max-md:text-[10px]">{msg.subject}</p>
-                      <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium max-md:text-[8px]">
-                        {new Date(msg.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                      </p>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity p-2 max-md:opacity-100">
+                      <ExternalLink size={14} className="text-blue-500 max-md:w-3 max-md:h-3" />
                     </div>
-                  </div>
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity p-2 max-md:opacity-100">
-                    <ExternalLink size={14} className="text-blue-500 max-md:w-3 max-md:h-3" />
-                  </div>
-                </button>
-              ))
-            )}
+                  </button>
+                ))
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Recent Applications */}
-        <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left max-md:rounded-[2rem]">
-          <div className="p-8 border-b border-gray-50 flex items-center justify-between max-md:p-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 max-md:shrink-0">
-                <FileText size={20} className="max-md:w-5 max-md:h-5" />
+        {canAccessModule('recruitment') && (
+          <div className="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden text-left max-md:rounded-[2rem]">
+            <div className="p-8 border-b border-gray-50 flex items-center justify-between max-md:p-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 max-md:shrink-0">
+                  <FileText size={20} className="max-md:w-5 max-md:h-5" />
+                </div>
+                <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic max-md:text-base">{t('admin.dashboard.talent_pipeline')}</h3>
               </div>
-              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic max-md:text-base">{t('admin.dashboard.talent_pipeline')}</h3>
+              <button
+                onClick={() => navigate('/admin/applications')}
+                className="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold max-md:min-h-[44px]"
+              >
+                {t('admin.dashboard.view_all')} <ArrowRight size={12} className="max-md:shrink-0" />
+              </button>
             </div>
-            <button
-              onClick={() => navigate('/admin/applications')}
-              className="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2 font-bold max-md:min-h-[44px]"
-            >
-              {t('admin.dashboard.view_all')} <ArrowRight size={12} className="max-md:shrink-0" />
-            </button>
-          </div>
-          <div className="p-4 space-y-1 max-md:p-2">
-            {recentApplications.length === 0 ? (
-              <div className="py-20 text-center max-md:py-10">
-                <FileText className="mx-auto text-gray-100 mb-4 max-md:w-10 max-md:h-10" size={48} />
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_apps')}</p>
-              </div>
-            ) : (
-              recentApplications.map((app) => (
-                <button
-                  key={app.id}
-                  onClick={() => navigate('/admin/applications')}
-                  className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group max-md:p-3"
-                >
-                  <div className="flex gap-4 max-md:gap-3">
-                    <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0 max-md:w-10 max-md:h-10">
-                      {app.full_name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic max-md:text-xs">{app.full_name}</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <Briefcase size={10} className="text-emerald-400 max-md:shrink-0" />
-                        <p className="text-[11px] text-gray-500 font-bold uppercase tracking-tighter max-md:text-[9px] truncate max-md:max-w-[100px]">{app.careers?.title}</p>
+            <div className="p-4 space-y-1 max-md:p-2">
+              {recentApplications.length === 0 ? (
+                <div className="py-20 text-center max-md:py-10">
+                  <FileText className="mx-auto text-gray-100 mb-4 max-md:w-10 max-md:h-10" size={48} />
+                  <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{t('admin.dashboard.no_apps')}</p>
+                </div>
+              ) : (
+                recentApplications.map((app) => (
+                  <button
+                    key={app.id}
+                    onClick={() => navigate('/admin/applications')}
+                    className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-all flex items-start justify-between group max-md:p-3"
+                  >
+                    <div className="flex gap-4 max-md:gap-3">
+                      <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 font-black shrink-0 max-md:w-10 max-md:h-10">
+                        {app.full_name.charAt(0)}
                       </div>
-                      <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium max-md:text-[8px]">
-                        {new Date(app.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                      </p>
+                      <div>
+                        <p className="text-sm font-black text-gray-900 uppercase tracking-tighter italic max-md:text-xs">{app.full_name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <Briefcase size={10} className="text-emerald-400 max-md:shrink-0" />
+                          <p className="text-[11px] text-gray-500 font-bold uppercase tracking-tighter max-md:text-[9px] truncate max-md:max-w-[100px]">{app.careers?.title}</p>
+                        </div>
+                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-medium max-md:text-[8px]">
+                          {new Date(app.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest h-fit max-md:px-1.5 max-md:py-0.5 ${app.status === 'pending' ? 'bg-amber-100 text-amber-700' :
-                    app.status === 'reviewed' ? 'bg-blue-100 text-blue-700' :
-                      app.status === 'accepted' ? 'bg-emerald-100 text-emerald-700' :
-                        'bg-rose-100 text-rose-700'
-                    }`}>
-                    {app.status}
-                  </span>
-                </button>
-              ))
-            )}
+                    <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest h-fit max-md:px-1.5 max-md:py-0.5 ${app.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                      app.status === 'reviewed' ? 'bg-blue-100 text-blue-700' :
+                        app.status === 'accepted' ? 'bg-emerald-100 text-emerald-700' :
+                          'bg-rose-100 text-rose-700'
+                      }`}>
+                      {app.status}
+                    </span>
+                  </button>
+                ))
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Bottom Quick Links */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-md:gap-3 max-md:grid-cols-1">
-        <button onClick={() => navigate('/admin/settings')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
-          <div className="w-12 h-12 bg-blue-50 rounded-[1.25rem] flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
-            <RefreshCw size={24} className="max-md:w-5 max-md:h-5" />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.identity')}</p>
-            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.settings')}</p>
-          </div>
-        </button>
-        <button onClick={() => navigate('/admin/hero')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
-          <div className="w-12 h-12 bg-rose-50 rounded-[1.25rem] flex items-center justify-center text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
-            <LayoutDashboard size={24} className="max-md:w-5 max-md:h-5" />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.media')}</p>
-            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.hero')}</p>
-          </div>
-        </button>
-        <button onClick={() => navigate('/admin/company')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-indigo-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
-          <div className="w-12 h-12 bg-indigo-50 rounded-[1.25rem] flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
-            <Building2 size={24} className="max-md:w-5 max-md:h-5" />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.identity')}</p>
-            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">Corp Identity</p>
-          </div>
-        </button>
-        <button onClick={() => navigate('/admin/seo')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
-          <div className="w-12 h-12 bg-emerald-50 rounded-[1.25rem] flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
-            <Globe size={24} className="max-md:w-5 max-md:h-5" />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.marketing')}</p>
-            <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.seo')}</p>
-          </div>
-        </button>
+        {canAccessModule('settings') && (
+          <button onClick={() => navigate('/admin/settings')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+            <div className="w-12 h-12 bg-blue-50 rounded-[1.25rem] flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+              <RefreshCw size={24} className="max-md:w-5 max-md:h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.identity')}</p>
+              <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.settings')}</p>
+            </div>
+          </button>
+        )}
+        {canAccessModule('website') && (
+          <button onClick={() => navigate('/admin/hero')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+            <div className="w-12 h-12 bg-rose-50 rounded-[1.25rem] flex items-center justify-center text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+              <LayoutDashboard size={24} className="max-md:w-5 max-md:h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.media')}</p>
+              <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.hero')}</p>
+            </div>
+          </button>
+        )}
+        {canAccessModule('company') && (
+          <button onClick={() => navigate('/admin/company')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-indigo-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+            <div className="w-12 h-12 bg-indigo-50 rounded-[1.25rem] flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+              <Building2 size={24} className="max-md:w-5 max-md:h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.identity')}</p>
+              <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">Corp Identity</p>
+            </div>
+          </button>
+        )}
+        {canAccessModule('seo') && (
+          <button onClick={() => navigate('/admin/seo')} className="bg-white p-6 rounded-[2.2rem] border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all flex items-center gap-4 group active:scale-95 max-md:p-4 max-md:rounded-2xl max-md:w-full max-md:min-h-[44px]">
+            <div className="w-12 h-12 bg-emerald-50 rounded-[1.25rem] flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner max-md:w-10 max-md:h-10 max-md:shrink-0">
+              <Globe size={24} className="max-md:w-5 max-md:h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 max-md:text-[8px]">{t('admin.dashboard.marketing')}</p>
+              <p className="text-xs font-bold text-gray-800 max-md:text-[10px]">{t('admin.menu.seo')}</p>
+            </div>
+          </button>
+        )}
       </div>
     </div>
   );

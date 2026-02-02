@@ -503,17 +503,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Super admin has all permissions
     if (user.role === 'super_admin') return true;
 
-    // Check dynamic permissions first
-    if (user.permissions) {
+    // Check dynamic permissions first (Strict Mode)
+    // If permissions object exists and is not empty, it's the source of truth
+    if (user.permissions && Object.keys(user.permissions).length > 0) {
       // Check for global 'all' permissions
       if (user.permissions.all?.includes(permission as PermissionAction)) return true;
       
       // Check for module-specific permissions
       if (module !== 'all' && user.permissions[module]?.includes(permission as PermissionAction)) return true;
+
+      // If we have dynamic permissions but haven't returned true yet, 
+      // it means this specific action is denied.
+      return false;
     }
 
-    // Fallback to static role-based permissions for backward compatibility
-    // Permission type strings usually contain underscores like 'view_dashboard'
+    // Fallback to static role-based permissions only if no dynamic permissions exist
     if (typeof permission === 'string' && permission.includes('_')) {
         return rolePermissions[user.role]?.includes(permission as Permission) || false;
     }
@@ -527,15 +531,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Super admin has access to everything
     if (user.role === 'super_admin') return true;
 
-    // Check dynamic permissions
-    if (user.permissions) {
-        // If module exists in permissions and has any action, user can access it
+    // Check dynamic permissions first (Strict Mode)
+    if (user.permissions && Object.keys(user.permissions).length > 0) {
+        // If module exists in permissions and has 'view' (or any action), user can access it
         if (user.permissions[module] && user.permissions[module].length > 0) return true;
+        
         // Or if user has global view access
         if (user.permissions.all?.includes('view')) return true;
+
+        // If dynamic permissions exist but module is not found, deny access
+        return false;
     }
 
-    // Fallback to static module access
+    // Fallback to static module access only if no dynamic permissions exist
     return moduleAccess[module]?.includes(user.role) || false;
   };
   const finalizeLogin = () => {
