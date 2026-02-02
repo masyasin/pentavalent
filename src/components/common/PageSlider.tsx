@@ -99,14 +99,20 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                 <img
                                     src={slide.image_url}
                                     alt={language === 'id' ? slide.title_id : slide.title_en}
-                                    className={`w-full h-full object-cover transition-all duration-[8000ms] ease-out ${selectedIndex === index ? 'scale-110 opacity-100' : 'scale-100 opacity-0'}`}
+                                    onError={(e) => {
+                                        e.currentTarget.src = "https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=2070&auto=format&fit=crop";
+                                    }}
+                                    className={`w-full h-full object-cover brightness-[1.15] md:brightness-100 transition-transform duration-[8000ms] ease-out ${selectedIndex === index ? 'scale-110' : 'scale-100'}`}
                                     loading="eager"
                                     style={{ 
                                         willChange: 'transform, opacity',
-                                        objectPosition: 'center 30%'
+                                        objectPosition: 'center 30%',
+                                        opacity: selectedIndex === index ? 1 : 0,
+                                        transition: 'opacity 1s ease-out, transform 8s ease-out'
                                     }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/40 to-slate-950/20 z-10"></div>
+                                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/10 to-transparent z-10"></div>
+                                <div className="absolute inset-0 bg-slate-950/10 z-10 md:hidden"></div>
                             </div>
 
                             {/* Content */}

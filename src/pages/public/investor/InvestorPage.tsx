@@ -331,38 +331,44 @@ const InvestorPage: React.FC = () => {
                                                                 title_id: 'Farmasi', title_en: 'Pharmaceuticals',
                                                                 icon: <Activity size={32} />, color: 'from-blue-500 to-cyan-400',
                                                                 desc_id: 'Solusi rantai pasok lengkap untuk obat-obatan esensial.',
-                                                                desc_en: 'End-to-end supply chain solutions for essential medicines.'
+                                                                desc_en: 'End-to-end supply chain solutions for essential medicines.',
+                                                                link: 'pharmaceuticals'
                                                             },
                                                             {
                                                                 title_id: 'Alat Kesehatan', title_en: 'Medical Devices',
                                                                 icon: <Heart size={32} />, color: 'from-cyan-400 to-emerald-400',
                                                                 desc_id: 'Teknologi diagnostik & klinis mutakhir.',
-                                                                desc_en: 'Cutting-edge diagnostic & clinical technologies.'
+                                                                desc_en: 'Cutting-edge diagnostic & clinical technologies.',
+                                                                link: 'medical-equipment'
                                                             },
                                                             {
                                                                 title_id: 'Consumer Health', title_en: 'Consumer & Beauty',
                                                                 icon: <Package size={32} />, color: 'from-emerald-400 to-teal-500',
                                                                 desc_id: 'Produk gaya hidup sehat & perawatan diri premium.',
-                                                                desc_en: 'Premium healthy lifestyle & personal care products.'
+                                                                desc_en: 'Premium healthy lifestyle & personal care products.',
+                                                                link: 'consumer-goods'
                                                             }
                                                         ].map((scope, i) => (
-                                                            <div key={i} className="group relative p-8 rounded-[2.5rem] bg-white border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 hover:-translate-y-2">
+                                                            <a href={`/business/${scope.link}`} key={i} className="group relative p-8 rounded-[2.5rem] bg-white border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 hover:-translate-y-2">
                                                                 <div className={`absolute top-0 right-0 w-64 h-64 bg-gradient-to-br ${scope.color} opacity-0 group-hover:opacity-5 rounded-full blur-3xl -mr-16 -mt-16 transition-opacity duration-500`}></div>
 
                                                                 <div className="relative z-10">
                                                                     <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${scope.color} text-white flex items-center justify-center mb-8 shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
                                                                         {scope.icon}
                                                                     </div>
-                                                                    <h4 className="text-xl font-black text-slate-900 mb-3">{language === 'id' ? scope.title_id : scope.title_en}</h4>
+                                                                    <h4 className="text-xl font-black text-slate-900 mb-3 group-hover:text-cyan-600 transition-colors">{language === 'id' ? scope.title_id : scope.title_en}</h4>
                                                                     <p className="text-sm text-slate-500 font-medium leading-relaxed">
                                                                         {language === 'id' ? scope.desc_id : scope.desc_en}
                                                                     </p>
                                                                 </div>
 
-                                                                <div className="absolute bottom-8 right-8 text-slate-200 group-hover:text-cyan-500 transition-colors transform group-hover:translate-x-1">
+                                                                <div className="absolute bottom-8 right-8 text-slate-200 group-hover:text-cyan-500 transition-all transform group-hover:translate-x-1 group-hover:-translate-y-1">
                                                                     <ArrowUpRight size={24} />
                                                                 </div>
-                                                            </div>
+
+                                                                {/* Hover Bottom Bar */}
+                                                                <div className={`absolute bottom-0 left-0 h-1.5 bg-gradient-to-r ${scope.color} transition-all duration-500 w-0 group-hover:w-full`}></div>
+                                                            </a>
                                                         ))}
                                                     </div>
                                                 </div>
@@ -793,17 +799,17 @@ const InvestorPage: React.FC = () => {
                                                             return b.year - a.year;
                                                         })
                                                         .map((doc) => (
-                                                            <div key={doc.id} className="group p-8 bg-white border border-slate-100 rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden relative">
+                                                            <div key={doc.id} className="group p-6 md:p-8 bg-white border border-slate-100 rounded-[1.5rem] md:rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden relative">
                                                                 <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                                <div className="flex items-center gap-6">
-                                                                    <div className="w-16 h-16 rounded-2xl bg-slate-50 text-cyan-600 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-sm">
-                                                                        <FileText size={28} />
+                                                                <div className="flex items-center gap-4 md:gap-6">
+                                                                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-slate-50 text-cyan-600 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-sm shrink-0">
+                                                                        <FileText size={24} className="md:w-7 md:h-7" />
                                                                     </div>
-                                                                    <div>
-                                                                        <div className="text-[10px] font-black text-cyan-600 uppercase tracking-widest mb-1">
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <div className="text-[9px] md:text-[10px] font-black text-cyan-600 uppercase tracking-widest mb-1 truncate">
                                                                             {doc.document_type.replace(/_/g, ' ')} • {doc.year} {doc.quarter ? `• ${doc.quarter}` : ''}
                                                                         </div>
-                                                                        <h4 className="text-xl font-bold text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 flex-wrap">
+                                                                        <h4 className="text-base md:text-xl font-bold text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 flex-wrap">
                                                                             {language === 'id' ? doc.title_id : doc.title_en}
 
                                                                             {getSlug() === 'laporan-keuangan' && (
@@ -851,7 +857,7 @@ const InvestorPage: React.FC = () => {
                                                                     href={doc.file_url}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
-                                                                    className="flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cyan-500 transition-all shadow-lg"
+                                                                    className="flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-xl md:rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cyan-500 transition-all shadow-lg w-full md:w-auto max-md:min-h-[44px]"
                                                                 >
                                                                     <Download size={16} /> {t('investor.docs.download')}
                                                                 </a>
@@ -927,9 +933,9 @@ const InvestorPage: React.FC = () => {
                                 <div className="lg:col-span-4">
                                     <div className="sticky top-32 space-y-10">
                                         {/* Sub Navigation */}
-                                        <div className="p-10 rounded-[2.5rem] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
-                                            <h3 className="text-xl font-black mb-8">{t('investor.nav.title')}</h3>
-                                            <div className="space-y-4">
+                                        <div className="p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+                                            <h3 className="text-lg md:text-xl font-black mb-6 md:mb-8">{t('investor.nav.title')}</h3>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-4">
                                                 {[
                                                     'ringkasan-investor', 'informasi-saham', 'laporan-keuangan',
                                                     'prospektus', 'rups', 'keterbukaan-informasi'
@@ -937,10 +943,18 @@ const InvestorPage: React.FC = () => {
                                                     <a
                                                         key={s}
                                                         href={`/investor/${s}`}
-                                                        className={`flex items-center justify-between p-5 rounded-2xl transition-all ${getSlug() === s ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/30' : 'hover:bg-slate-50 text-slate-600'}`}
+                                                        className={`group flex items-center justify-between p-4 md:p-5 rounded-xl md:rounded-2xl transition-all duration-300 relative overflow-hidden ${getSlug() === s
+                                                            ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
+                                                            : 'hover:bg-cyan-50 text-slate-600 border border-slate-50 md:border-none hover:border-cyan-100'
+                                                            }`}
                                                     >
-                                                        <span className="font-bold text-sm tracking-tight">{getTitle(s, language)}</span>
-                                                        <ChevronRight size={16} />
+                                                        {/* Active/Hover Indicator */}
+                                                        <div className={`absolute left-0 top-0 bottom-0 w-1 bg-white transition-all duration-300 ${getSlug() === s ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 group-hover:bg-cyan-500'}`}></div>
+
+                                                        <span className={`font-bold text-xs md:text-sm tracking-tight relative z-10 ${getSlug() === s ? 'text-white' : 'group-hover:text-cyan-700'}`}>
+                                                            {getTitle(s, language)}
+                                                        </span>
+                                                        <ChevronRight size={14} className={`md:w-4 md:h-4 transition-transform duration-300 ${getSlug() === s ? 'translate-x-0' : 'group-hover:translate-x-1 group-hover:text-cyan-600'}`} />
                                                     </a>
                                                 ))}
                                             </div>
@@ -948,21 +962,21 @@ const InvestorPage: React.FC = () => {
 
                                         {/* Calendar Sidebar (Only show on relevant pages) */}
                                         {(getSlug() === 'rups' || getSlug() === 'ringkasan-investor') && (
-                                            <div className="p-10 rounded-[2.5rem] border border-slate-100 bg-slate-50/50">
-                                                <div className="flex items-center justify-between mb-8">
-                                                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest italic">{t('investor.calendar.upcoming')}</h3>
-                                                    <Calendar size={20} className="text-cyan-500" />
+                                            <div className="p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 bg-slate-50/50">
+                                                <div className="flex items-center justify-between mb-6 md:mb-8">
+                                                    <h3 className="text-xs md:text-sm font-black text-slate-400 uppercase tracking-widest italic">{t('investor.calendar.upcoming')}</h3>
+                                                    <Calendar size={18} className="text-cyan-500 md:w-5 md:h-5" />
                                                 </div>
-                                                <div className="space-y-8">
+                                                <div className="space-y-6 md:space-y-8">
                                                     {calendar.map((event, i) => (
                                                         <div key={i} className="flex gap-4">
-                                                            <div className="w-12 text-center">
-                                                                <div className="text-lg font-black text-slate-900 leading-none">{new Date(event.event_date).getDate()}</div>
-                                                                <div className="text-[10px] font-black text-cyan-600 uppercase">{new Date(event.event_date).toLocaleString('default', { month: 'short' })}</div>
+                                                            <div className="w-10 md:w-12 text-center shrink-0">
+                                                                <div className="text-base md:text-lg font-black text-slate-900 leading-none">{new Date(event.event_date).getDate()}</div>
+                                                                <div className="text-[9px] md:text-[10px] font-black text-cyan-600 uppercase">{new Date(event.event_date).toLocaleString('default', { month: 'short' })}</div>
                                                             </div>
                                                             <div className="flex-1">
-                                                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{event.event_type}</div>
-                                                                <div className="text-[13px] font-bold text-slate-800 leading-tight">{language === 'id' ? event.title_id : event.title_en}</div>
+                                                                <div className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{event.event_type}</div>
+                                                                <div className="text-xs md:text-[13px] font-bold text-slate-800 leading-tight">{language === 'id' ? event.title_id : event.title_en}</div>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -971,17 +985,17 @@ const InvestorPage: React.FC = () => {
                                         )}
 
                                         {/* Sidebar CTA */}
-                                        <div className="p-10 rounded-[2.5rem] bg-slate-900 text-white relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
-                                                <Briefcase size={120} />
+                                        <div className="p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] bg-slate-900 text-white relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-6 md:p-8 opacity-10 group-hover:scale-110 transition-transform">
+                                                <Briefcase size={100} className="md:w-[120px] md:h-[120px]" />
                                             </div>
-                                            <h3 className="text-2xl font-black mb-6 relative z-10">{t('investor.contact.title')}</h3>
-                                            <p className="text-slate-300 mb-8 relative z-10 font-medium italic text-sm">
+                                            <h3 className="text-xl md:text-2xl font-black mb-4 md:mb-6 relative z-10">{t('investor.contact.title')}</h3>
+                                            <p className="text-slate-300 mb-6 md:mb-8 relative z-10 font-medium italic text-xs md:text-sm">
                                                 {t('investor.contact.desc')}
                                             </p>
                                             <div className="space-y-4 relative z-10">
-                                                <a href="mailto:ir@pentavalent.co.id" className="flex items-center justify-between p-5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-2xl transition-all group/mail">
-                                                    <span className="font-bold text-xs tracking-widest uppercase">{t('investor.contact.button')}</span>
+                                                <a href="mailto:ir@pentavalent.co.id" className="flex items-center justify-between p-4 md:p-5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl md:rounded-2xl transition-all group/mail">
+                                                    <span className="font-bold text-[10px] md:text-xs tracking-widest uppercase">{t('investor.contact.button')}</span>
                                                     <ExternalLink size={14} />
                                                 </a>
                                             </div>

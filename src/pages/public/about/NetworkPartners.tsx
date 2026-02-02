@@ -40,6 +40,52 @@ const PartnerCard: React.FC<{
 }> = ({ partner, index, language }) => {
     const [imgError, setImgError] = useState(false);
 
+    const CardContent = (
+        <div className="group relative bg-white rounded-[2.5rem] p-4 flex flex-col items-center text-center transition-all duration-700 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.1)] hover:-translate-y-2 border border-slate-100/80 overflow-hidden h-full">
+            {/* Logo Box - Clean & Minimalist */}
+            <div className="w-full aspect-[16/10] bg-slate-50/30 rounded-[2rem] flex items-center justify-center relative mb-6 overflow-hidden border border-slate-50 group/logo">
+                {partner.logo_url && !imgError ? (
+                    <img
+                        src={partner.logo_url}
+                        alt={partner.name}
+                        onError={() => setImgError(true)}
+                        className="w-[85%] h-[85%] object-contain relative z-10 transition-transform duration-700 group-hover:scale-110"
+                    />
+                ) : (
+                    <div className="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center text-primary font-black text-xl shadow-md relative z-10">
+                        {partner.name.slice(0, 2).toUpperCase()}
+                    </div>
+                )}
+            </div>
+
+            {/* Content - Clean & Proportional */}
+            <div className="px-4 pb-6 flex flex-col flex-grow items-center w-full">
+                <h3 className="text-lg md:text-xl font-black text-slate-800 mb-3 uppercase italic tracking-tight leading-tight min-h-[2.5rem] flex items-center justify-center group-hover:text-primary transition-colors">
+                    {partner.name}
+                </h3>
+
+                <p className="text-slate-400 font-medium text-[13px] leading-relaxed mb-6 line-clamp-3">
+                    {language === 'id' ? partner.description_id : partner.description_en}
+                </p>
+
+                {partner.website && (
+                    <div className="mt-auto flex flex-col items-center gap-1">
+                        <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-primary transition-all duration-500">
+                            DISCOVER MORE
+                            <svg className="w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </div>
+                        <div className="w-0 h-[1.5px] bg-primary group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                )}
+            </div>
+
+            {/* Subtle Hover Accent */}
+            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        </div>
+    );
+
     return (
         <motion.div
             key={partner.id}
@@ -49,49 +95,13 @@ const PartnerCard: React.FC<{
             transition={{ delay: index * 0.1 }}
             className="group h-full"
         >
-            <div className="group relative bg-white rounded-[2.5rem] p-4 flex flex-col items-center text-center transition-all duration-700 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 border border-slate-100/80 overflow-hidden h-full">
-                {/* Logo Box - Clean & Minimalist */}
-                <div className="w-full aspect-[16/10] bg-slate-50/30 rounded-[2rem] flex items-center justify-center relative mb-6 overflow-hidden border border-slate-50 group/logo">
-                    {partner.logo_url && !imgError ? (
-                        <img
-                            src={partner.logo_url}
-                            alt={partner.name}
-                            onError={() => setImgError(true)}
-                            className="w-[85%] h-[85%] object-contain relative z-10 transition-transform duration-700 group-hover:scale-110"
-                        />
-                    ) : (
-                        <div className="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center text-primary font-black text-xl shadow-md relative z-10">
-                            {partner.name.slice(0, 2).toUpperCase()}
-                        </div>
-                    )}
-                </div>
-
-                {/* Content - Clean & Proportional */}
-                <div className="px-4 pb-6 flex flex-col flex-grow items-center w-full">
-                    <h3 className="text-lg md:text-xl font-black text-slate-800 mb-3 uppercase italic tracking-tight leading-tight min-h-[2.5rem] flex items-center justify-center">
-                        {partner.name}
-                    </h3>
-
-                    <p className="text-slate-400 font-medium text-[13px] leading-relaxed mb-6 line-clamp-3">
-                        {language === 'id' ? partner.description_id : partner.description_en}
-                    </p>
-
-                    {partner.website && (
-                        <button
-                            onClick={() => window.open(partner.website, '_blank')}
-                            className="mt-auto group/btn flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-slate-300 group-hover:text-primary transition-all duration-500"
-                        >
-                            DISCOVER MORE
-                            <svg className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                        </button>
-                    )}
-                </div>
-
-                {/* Subtle Hover Accent */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </div>
+            {partner.website ? (
+                <a href={partner.website} target="_blank" rel="noopener noreferrer" className="block h-full cursor-pointer">
+                    {CardContent}
+                </a>
+            ) : (
+                CardContent
+            )}
         </motion.div>
     );
 };

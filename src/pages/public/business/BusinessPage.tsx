@@ -406,9 +406,40 @@ const BusinessPage: React.FC = () => {
     }, [location.pathname, language]);
 
     const activeGalleryImages = React.useMemo(() => {
+        const fallbackImages: Record<string, string[]> = {
+            'distribusi-farmasi': [
+                'https://images.unsplash.com/photo-1587854680352-936b22b91030?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=1200'
+            ],
+            'produk-konsumen': [
+                'https://images.unsplash.com/photo-1516594798245-443f1f738723?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1200'
+            ],
+            'distribusi-alkes': [
+                'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=1200'
+            ],
+            'target-pasar': [
+                'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1516594798245-443f1f738723?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&q=80&w=1200'
+            ]
+        };
+
         if (!businessData) return [];
-        // User requested to show ALL images for target market, not filtered by category
-        if (location.pathname.includes('target-market')) return businessData.images;
+        const slug = businessData.slug;
+        
+        // If images from DB are empty, use fallback
+        if (!businessData.images || businessData.images.length === 0) {
+            return fallbackImages[slug] || [
+                'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=1200'
+            ];
+        }
 
         return businessData.images;
     }, [businessData, location.pathname]);
@@ -954,17 +985,20 @@ const BusinessPage: React.FC = () => {
                                                     { label: 'E-Catalogue 2025', size: '12.5 MB', type: 'PDF' },
                                                     { label: 'Company Profile', size: '8.2 MB', type: 'PDF' }
                                                 ].map((file, i) => (
-                                                    <button key={i} className="w-full flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50 border border-slate-100 hover:border-cyan-100 transition-all group/file text-left">
-                                                        <div className="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-rose-500 shadow-sm group-hover/file:scale-110 transition-transform">
-                                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                                    <button key={i} className="w-full flex flex-col p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50 border border-slate-100 hover:border-cyan-100 transition-all group/file text-left relative overflow-hidden">
+                                                        <div className="flex items-center gap-4 w-full">
+                                                            <div className="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-rose-500 shadow-sm group-hover/file:scale-110 transition-transform">
+                                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                                            </div>
+                                                            <div>
+                                                                <div className="font-bold text-slate-900 text-sm group-hover/file:text-cyan-700 transition-colors">{file.label}</div>
+                                                                <div className="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider mt-1">{file.type} • {file.size}</div>
+                                                            </div>
+                                                            <div className="ml-auto opacity-0 group-hover/file:opacity-100 transition-opacity -translate-x-2 group-hover/file:translate-x-0">
+                                                                <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <div className="font-bold text-slate-900 text-sm group-hover/file:text-cyan-700 transition-colors">{file.label}</div>
-                                                            <div className="text-[11.5px] font-bold text-slate-400 uppercase tracking-wider mt-1">{file.type} • {file.size}</div>
-                                                        </div>
-                                                        <div className="ml-auto opacity-0 group-hover/file:opacity-100 transition-opacity -translate-x-2 group-hover/file:translate-x-0">
-                                                            <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                                                        </div>
+                                                        <div className="absolute bottom-0 left-0 h-1 bg-cyan-500 w-0 group-hover:w-full transition-all duration-500"></div>
                                                     </button>
                                                 ))}
                                             </div>

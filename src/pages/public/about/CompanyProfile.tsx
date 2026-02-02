@@ -172,23 +172,26 @@ const CompanyProfile: React.FC = () => {
                                 <div className="relative w-full h-full max-w-lg lg:max-w-xl">
                                     {/* Main Masked Building - Dynamic from Admin */}
                                     <motion.div
-                                        initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
-                                        whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                                        className="relative z-20 w-full aspect-[4/5] rounded-[4rem] overflow-hidden shadow-2xl border-8 border-white group/img bg-slate-100"
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        viewport={{ once: true, margin: "-50px" }}
+                                        transition={{ duration: 1, ease: "easeOut" }}
+                                        className="relative z-20 w-full aspect-[4/5] rounded-[3rem] md:rounded-[4rem] overflow-hidden shadow-2xl border-4 md:border-8 border-white group/img bg-slate-200"
                                     >
                                         <img
                                             src={info?.image_url || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000"}
                                             alt="Corporate Majesty"
+                                            onError={(e) => {
+                                                e.currentTarget.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2000";
+                                            }}
                                             className="w-full h-full object-cover transition-transform duration-[3000ms] group-hover/img:scale-110"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent"></div>
 
                                         {/* Floating Glass Label */}
-                                        <div className="absolute bottom-8 left-8 right-8 p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 transform translate-y-4 group-hover/img:translate-y-0 transition-transform duration-700">
-                                            <div className="text-[10px] font-black text-cyan-200 uppercase tracking-[0.3em] mb-1">Corporate Visual</div>
-                                            <div className="text-xl font-black text-white italic tracking-tighter">PT PENTA VALENT Tbk</div>
+                                        <div className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 p-4 md:p-6 bg-white/20 backdrop-blur-md rounded-2xl md:rounded-3xl border border-white/30">
+                                            <div className="text-[8px] md:text-[10px] font-black text-cyan-100 uppercase tracking-[0.3em] mb-1">Corporate Visual</div>
+                                            <div className="text-base md:text-xl font-black text-white italic tracking-tighter">PT PENTA VALENT Tbk</div>
                                         </div>
                                     </motion.div>
 
@@ -242,17 +245,17 @@ const CompanyProfile: React.FC = () => {
                                     </h2>
 
                                     {/* Pure & Absolute Stats Grid - No Overlap Version */}
-                                    <div className="relative mb-20 bg-transparent py-4 text-left">
-                                        <div className="grid grid-cols-2 gap-x-16 gap-y-20 lg:gap-x-24 lg:gap-y-36">
+                                    <div className="relative mb-12 md:mb-20 bg-transparent py-4 text-left">
+                                        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:gap-x-16 md:gap-y-20 lg:gap-x-24 lg:gap-y-36">
                                             {[
                                                 { value: '2023', label_id: 'Melantai di Bursa', label_en: 'Publicly Listed' },
                                                 { value: '34', label_id: 'Cabang Nasional', label_en: 'National Branches' },
-                                                { value: '25.000+', label_id: 'Outlet Farmasi', label_en: 'Pharma Outlets' },
+                                                { value: '21.000+', label_id: 'Outlet Farmasi', label_en: 'Pharma Outlets' },
                                                 { value: '14.000+', label_id: 'Outlet Konsumsi', label_en: 'Consumer Outlets' }
                                             ].map((stat: any, idx: number) => (
                                                 <div key={idx} className="text-left group relative">
                                                     {/* Soft Glow Background */}
-                                                    <div className="absolute -inset-x-8 -inset-y-10 bg-blue-50/0 group-hover:bg-blue-50/40 rounded-[2.5rem] transition-all duration-700 -z-10 blur-2xl"></div>
+                                                    <div className="absolute -inset-x-4 -inset-y-6 md:-inset-x-8 md:-inset-y-10 bg-blue-50/0 group-hover:bg-blue-50/40 rounded-[2.5rem] transition-all duration-700 -z-10 blur-2xl"></div>
 
                                                     <motion.div
                                                         initial={{ opacity: 0, y: 20 }}
@@ -261,10 +264,10 @@ const CompanyProfile: React.FC = () => {
                                                         transition={{ delay: idx * 0.1, duration: 0.8 }}
                                                         className="relative z-10"
                                                     >
-                                                        <div className="text-4xl lg:text-6xl font-black text-slate-900 tracking-tighter leading-none italic mb-5 group-hover:text-primary transition-all duration-500 transform group-hover:translate-x-2">
+                                                        <div className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter leading-none italic mb-3 md:mb-5 group-hover:text-primary transition-all duration-500 transform group-hover:translate-x-2">
                                                             <AnimatedNumber value={stat.value} />
                                                         </div>
-                                                        <div className="text-[9px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-[0.4em] leading-tight opacity-80 group-hover:opacity-100 group-hover:text-slate-600 transition-all">
+                                                        <div className="text-[8px] md:text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] md:tracking-[0.4em] leading-tight opacity-80 group-hover:opacity-100 group-hover:text-slate-600 transition-all">
                                                             {language === 'id' ? stat.label_id : stat.label_en}
                                                         </div>
                                                     </motion.div>

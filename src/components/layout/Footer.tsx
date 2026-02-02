@@ -309,7 +309,18 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3 max-md:mb-4 max-md:justify-center"><span className="w-1 h-4 bg-blue-500 rounded-full"></span>{t('footer.column.corporate')}</h4>
             <ul className="space-y-4 pl-4 border-l border-white/5 max-md:pl-0 max-md:border-l-0 max-md:flex max-md:flex-col max-md:items-center max-md:space-y-3">
               {corporateMenus.map((link) => (
-                <li key={link.id} className="max-md:w-full max-md:text-center"><button onClick={() => handleLinkClick(link.path)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left max-md:w-full max-md:justify-center max-md:min-h-[44px]"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 wow-text-primary max-md:hidden">→</span>{language === 'id' ? link.label_id : link.label_en}</button></li>
+                <li key={link.id} className="max-md:w-full max-md:text-center">
+                  <button
+                    onClick={() => handleLinkClick(link.path)}
+                    className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white transition-all duration-300 flex flex-col items-start gap-1 group text-left max-md:w-full max-md:items-center max-md:justify-center max-md:min-h-[44px]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 bg-blue-500 h-[2px] max-md:hidden"></span>
+                      {language === 'id' ? link.label_id : link.label_en}
+                    </div>
+                    <div className="w-0 h-[1.5px] bg-blue-500 group-hover:w-full transition-all duration-500 max-md:h-[1px]"></div>
+                  </button>
+                </li>
               ))}
             </ul>
           </div>
@@ -319,7 +330,18 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3 max-md:mb-4 max-md:justify-center"><span className="w-1 h-4 bg-cyan-500 rounded-full"></span>{t('footer.column.stakeholders')}</h4>
             <ul className="space-y-4 pl-4 border-l border-white/5 max-md:pl-0 max-md:border-l-0 max-md:flex max-md:flex-col max-md:items-center max-md:space-y-3">
               {stakeholderMenus.map((link) => (
-                <li key={link.id} className="max-md:w-full max-md:text-center"><button onClick={() => handleLinkClick(link.path)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left max-md:w-full max-md:justify-center max-md:min-h-[44px]"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 wow-text-primary max-md:hidden">→</span>{language === 'id' ? link.label_id : link.label_en}</button></li>
+                <li key={link.id} className="max-md:w-full max-md:text-center">
+                  <button
+                    onClick={() => handleLinkClick(link.path)}
+                    className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white transition-all duration-300 flex flex-col items-start gap-1 group text-left max-md:w-full max-md:items-center max-md:justify-center max-md:min-h-[44px]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 bg-cyan-500 h-[2px] max-md:hidden"></span>
+                      {language === 'id' ? link.label_id : link.label_en}
+                    </div>
+                    <div className="w-0 h-[1.5px] bg-cyan-500 group-hover:w-full transition-all duration-500 max-md:h-[1px]"></div>
+                  </button>
+                </li>
               ))}
             </ul>
           </div>

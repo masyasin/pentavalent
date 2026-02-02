@@ -21,15 +21,9 @@ const TargetMarketSlider: React.FC<TargetMarketSliderProps> = ({
     language
 }) => {
     // Initialize Embla with specific settings for this component instance
-    // Initialize Embla with specific settings for this component instance
-    const autoplay = useMemo(
-        () => Autoplay({ delay: 4000, stopOnInteraction: false, playOnInit: false }),
-        []
-    );
-
     const [emblaRef, emblaApi] = useEmblaCarousel(
         { loop: true, align: 'center', skipSnaps: false },
-        [autoplay]
+        [Autoplay({ delay: 4000, stopOnInteraction: false })]
     );
 
     const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
@@ -59,23 +53,6 @@ const TargetMarketSlider: React.FC<TargetMarketSliderProps> = ({
 
     useEffect(() => {
         if (!emblaApi) return;
-        if (!images || images.length === 0) return;
-
-        // Defer play to next tick to ensure Embla is fully ready
-        const timer = setTimeout(() => {
-            if (!emblaApi) return;
-            const autoplayPlugin = emblaApi.plugins().autoplay;
-            if (autoplayPlugin && typeof autoplayPlugin.play === 'function') {
-                autoplayPlugin.play();
-            }
-        }, 0);
-
-        return () => clearTimeout(timer);
-    }, [emblaApi, images]);
-
-
-    useEffect(() => {
-        if (!emblaApi) return;
 
         onSelect();
         emblaApi.on('select', onSelect);
@@ -88,7 +65,19 @@ const TargetMarketSlider: React.FC<TargetMarketSliderProps> = ({
     }, [emblaApi, onSelect]);
 
     // Filter out failed images so they don't take up space
-    const validImages = images.filter(url => !failedImages.has(url));
+    const validImages = useMemo(() => {
+        const filtered = images.filter(url => !failedImages.has(url));
+        if (filtered.length === 0) {
+            // High quality fallback images if all else fails
+            return [
+                'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1516594798245-443f1f738723?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=1200',
+                'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1200'
+            ];
+        }
+        return filtered;
+    }, [images, failedImages]);
 
     return (
         <div key={activeTab} className="space-y-6 pt-10 border-t border-slate-100">
@@ -120,11 +109,10 @@ const TargetMarketSlider: React.FC<TargetMarketSliderProps> = ({
                                     className="flex-[0_0_80%] md:flex-[0_0_35%] min-w-0 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] relative"
                                     key={`${activeTab}-${idx}`}
                                     style={{
-                                        transform: `scale(${isActive ? 1.1 : 0.8})`,
-                                        opacity: isActive ? 1 : 0.4,
+                                        transform: `scale(${isActive ? 1.05 : 0.85})`,
+                                        opacity: isActive ? 1 : 0.5,
                                         zIndex: isActive ? 50 : 10,
-                                        marginLeft: '-5%',
-                                        marginRight: '-5%'
+                                        padding: '0 10px'
                                     }}
                                 >
                                     <div

@@ -200,13 +200,13 @@ const VisionMission: React.FC = () => {
                         </motion.div>
 
                         {/* Values Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                             {[
                                 {
                                     id: '1',
                                     title_id: 'Fokus Pelanggan',
                                     title_en: 'Customer Focus',
-                                    image: '/images/values/customer-focus.png',
+                                    image: 'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&q=80&w=800',
                                     gradient: 'from-cyan-500 to-blue-600',
                                     bg: 'bg-gradient-to-br from-cyan-50 to-blue-50',
                                     border: 'border-cyan-100'
@@ -215,7 +215,7 @@ const VisionMission: React.FC = () => {
                                     id: '2',
                                     title_id: 'Integritas',
                                     title_en: 'Integrity',
-                                    image: '/images/values/integrity.png',
+                                    image: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800',
                                     gradient: 'from-blue-500 to-indigo-600',
                                     bg: 'bg-gradient-to-br from-blue-50 to-indigo-50',
                                     border: 'border-blue-100'
@@ -224,7 +224,7 @@ const VisionMission: React.FC = () => {
                                     id: '3',
                                     title_id: 'Kerjasama Tim',
                                     title_en: 'Teamwork',
-                                    image: '/images/values/teamwork.png',
+                                    image: 'https://images.unsplash.com/photo-1522071823991-b9671f9d7f1f?auto=format&fit=crop&q=80&w=800',
                                     gradient: 'from-cyan-500 to-teal-600',
                                     bg: 'bg-gradient-to-br from-cyan-50 to-teal-50',
                                     border: 'border-cyan-100'
@@ -233,7 +233,7 @@ const VisionMission: React.FC = () => {
                                     id: '4',
                                     title_id: 'Ketangkasan',
                                     title_en: 'Agility',
-                                    image: '/images/values/agility.png',
+                                    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800',
                                     gradient: 'from-blue-600 to-purple-600',
                                     bg: 'bg-gradient-to-br from-blue-50 to-purple-50',
                                     border: 'border-blue-100'
@@ -249,23 +249,26 @@ const VisionMission: React.FC = () => {
                                         className="group relative"
                                     >
                                         {/* Card */}
-                                        <div className={`relative rounded-2xl bg-white border ${val.border} shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden`}>
+                                        <div className={`relative rounded-2xl md:rounded-[2rem] bg-white border ${val.border} shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden`}>
                                             {/* Gradient Overlay on Hover */}
                                             <div className={`absolute inset-0 ${val.bg} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
 
                                             {/* Image Container */}
-                                            <div className="relative aspect-square overflow-hidden">
+                                            <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
                                                 <img
                                                     src={val.image}
                                                     alt={val.title_id}
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                    onError={(e) => {
+                                                        e.currentTarget.src = "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800";
+                                                    }}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                                 />
                                             </div>
 
                                             {/* Text Label Overlay (Added for clarity & bilingual support) */}
-                                            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent pt-12">
-                                                <h3 className="text-white text-xl font-black italic tracking-tight">{val.title_id}</h3>
-                                                <p className="text-white/60 text-xs font-bold uppercase tracking-widest">{val.title_en}</p>
+                                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent pt-12">
+                                                <h3 className="text-white text-base md:text-2xl font-black italic tracking-tighter leading-none mb-1">{val.title_id}</h3>
+                                                <p className="text-white/60 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">{val.title_en}</p>
                                             </div>
                                         </div>
                                     </motion.div>
