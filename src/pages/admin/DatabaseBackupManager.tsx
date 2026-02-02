@@ -14,12 +14,49 @@ const DatabaseBackupManager: React.FC = () => {
         setLoading(true);
         try {
             const tables = [
-                'users', 'news', 'careers', 'branches', 'partners', 
-                'messages', 'job_applications', 'site_settings', 
-                'user_activity_logs', 'security_logs'
+                // Core Auth & Logging
+                'users', 
+                'user_activity_logs', 
+                'security_logs',
+                
+                // Website Content & Settings
+                'site_settings',
+                'nav_menus',
+                'hero_slides',
+                
+                // Company & About
+                'company_timeline',
+                'corporate_values',
+                'management',
+                'certifications',
+                
+                // Business & Partners
+                'business_lines',
+                'business_features',
+                'business_stats',
+                'business_images',
+                'partners',
+                'branches',
+                
+                // News & Media
+                'news',
+                'news_comments',
+                'newsletter_subscribers',
+                
+                // Careers & Applications
+                'careers',
+                'job_applications',
+                
+                // Investor Relations
+                'investor_documents',
+                'investor_financials',
+                'investor_stock',
+                'investor_highlights',
+                'investor_calendar',
+                'rups_schedules'
             ];
 
-            let sqlOutput = `-- PENTA VALENT DATABASE BACKUP\n`;
+            let sqlOutput = `-- PENTA VALENT COMPREHENSIVE DATABASE BACKUP\n`;
             sqlOutput += `-- Generated on: ${new Date().toLocaleString()}\n`;
             sqlOutput += `-- Administrator: ${user?.email || 'System'}\n\n`;
             sqlOutput += `SET statement_timeout = 0;\nSET lock_timeout = 0;\nSET client_encoding = 'UTF8';\n\n`;
@@ -126,7 +163,7 @@ const DatabaseBackupManager: React.FC = () => {
                         </div>
                         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tables Detected</span>
-                            <span className="text-gray-900 font-bold text-xs">10 Modules</span>
+                            <span className="text-gray-900 font-bold text-xs">28 Modules Detected</span>
                         </div>
                         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Last Operation</span>
@@ -134,11 +171,26 @@ const DatabaseBackupManager: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100 flex items-start gap-4">
-                        <AlertCircle className="text-amber-500 shrink-0" size={20} />
-                        <p className="text-[11px] text-amber-700 font-medium leading-relaxed">
-                            Backup files contain sensitive organizational data. Ensure you store downloaded SQL files in a secure, encrypted environment.
-                        </p>
+                    <div className="space-y-4">
+                        <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100 flex items-start gap-4">
+                            <Database className="text-blue-500 shrink-0" size={20} />
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-blue-800 uppercase tracking-widest">Scope Informasi</p>
+                                <p className="text-[10px] text-blue-700 font-medium leading-relaxed">
+                                    Mencakup konten website, struktur menu, profil perusahaan, investor relations, karir, dan log audit.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100 flex items-start gap-4">
+                            <AlertCircle className="text-amber-500 shrink-0" size={20} />
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-amber-800 uppercase tracking-widest">Catatan Teknis</p>
+                                <p className="text-[10px] text-amber-700 font-medium leading-relaxed">
+                                    Backup ini fokus pada <strong>Data (Row Content)</strong>. Trigger, Functions, dan RLS Policies harus dikelola langsung melalui dashboard Supabase.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
