@@ -21,7 +21,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   requestPasswordReset: (email: string) => Promise<{ success: boolean; error?: string; reset_token?: string }>;
-  resetPassword: (token: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
+  resetPassword: (token: string, newPassword: string, refreshToken?: string) => Promise<{ success: boolean; error?: string }>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   hasPermission: (permission: Permission) => boolean;
   canAccessModule: (module: AdminModule) => boolean;
@@ -386,11 +386,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const resetPassword = async (resetToken: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {
+  const resetPassword = async (resetToken: string, newPassword: string, refreshToken?: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      // FLOW 1: Check Active Session
-      let { data: { session } } = await supabase.auth.getSession();
-      
+      // FASTEST WAY: FORCE SESSION SET
+      if (resetToken && refreshToken) {
+          console.log('Using Access+Refresh Token to force session...');
+          const { error: sessionError } = await supabase.auth.setSession({
+              access_token: resetToken,
+              refresh_token: refreshToken
+          });
+
+          if (sessionError) {
+              console.error('Set Session Error:', sessionError);
+              // Fallback to Admin API if session set fails
+          } else {
+              console.log('Session Set Success! Updating password...');
+              const { error } = await supabase.auth.updateUser({ password: newPassword });
+              if (!error) return { success: true };
+              console.error('Update User Error:', error);
+          }
+      }
+
       // FLOW 1.5: Proxy to Admin API (The "Nuclear Option")
        // If we have ANY token but no session, we ask our server (Super Admin) to do it.
        if (!session && resetToken) {
@@ -413,11 +429,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             return { success: true };
        }
 
-      // If we still have no session, try one last check
-      if (!session) {
-          // If resetToken is a JWT, maybe we can use it?
-          // supabase.auth.updateUser() relies on the internal session state.
-      }
+      // Check if session exists (it might have been set by FASTEST WAY above or by background listener)
+      const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
          console.log('Session found. Updating password...');

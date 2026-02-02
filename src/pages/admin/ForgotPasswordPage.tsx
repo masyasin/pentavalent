@@ -81,6 +81,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
     setError('');
 
     let tokenToUse = '';
+    let refreshTokenToUse = '';
 
     if (!isLinkRecovery) {
         tokenToUse = otp.join('');
@@ -89,11 +90,12 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
           return;
         }
     } else {
-        // If link recovery, extract the access token from URL again to be safe
+        // If link recovery, extract the access token AND refresh token
         const hash = window.location.hash;
-        if (hash && hash.includes('access_token')) {
+        if (hash) {
              const params = new URLSearchParams(hash.replace('#', '?'));
              tokenToUse = params.get('access_token') || '';
+             refreshTokenToUse = params.get('refresh_token') || '';
         }
     }
 
@@ -109,7 +111,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
 
     setIsLoading(true);
 
-    const result = await resetPassword(tokenToUse, newPassword);
+    const result = await resetPassword(tokenToUse, newPassword, refreshTokenToUse);
 
     if (result.success) {
       setStep('success');
