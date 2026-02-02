@@ -682,21 +682,21 @@ const InvestorPage: React.FC = () => {
                                         {/* DOCUMENT LIST RENDERING FOR OTHER SLUGS */}
                                         {(['laporan-keuangan', 'prospektus', 'rups', 'keterbukaan-informasi'].includes(getSlug())) && (
                                             <div className="space-y-8">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-3">
+                                                <div className="flex flex-col lg:flex-row items-center justify-between mb-8 gap-6 max-md:gap-4">
+                                                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-3 w-full lg:w-auto">
                                                         {getSlug() === 'rups' ? <Clock size={16} /> : <FileText size={16} />}
                                                         {getSlug() === 'rups'
                                                             ? (language === 'id' ? 'Riwayat & Jadwal' : 'History & Schedule')
                                                             : (language === 'id' ? 'Arsip Dokumen' : 'Document Archive')
                                                         }
                                                     </h3>
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="flex items-center gap-4 bg-white px-5 py-3 rounded-xl border border-slate-200 shadow-sm">
-                                                            <span className="text-sm font-bold text-slate-500">Filter Year:</span>
+                                                    <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto max-md:gap-3">
+                                                        <div className="flex items-center gap-4 bg-white px-5 py-3 rounded-xl border border-slate-200 shadow-sm w-full sm:w-auto max-md:px-4 max-md:py-2.5">
+                                                            <span className="text-sm font-bold text-slate-500 whitespace-nowrap">Year:</span>
                                                             <select
                                                                 value={selectedYear}
                                                                 onChange={(e) => setSelectedYear(e.target.value)}
-                                                                className="bg-transparent font-bold text-base text-slate-800 border-none outline-none cursor-pointer hover:text-cyan-600 transition-colors pr-8"
+                                                                className="bg-transparent font-bold text-base text-slate-800 border-none outline-none cursor-pointer hover:text-cyan-600 transition-colors flex-1 min-w-[100px] max-md:text-sm"
                                                             >
                                                                 <option value="All Years">All Years</option>
                                                                 {[...new Set(documents.map(d => d.year))].sort((a, b) => b - a).map(year => (
@@ -706,12 +706,12 @@ const InvestorPage: React.FC = () => {
                                                         </div>
 
                                                         {['laporan-keuangan', 'keterbukaan-informasi', 'prospektus', 'rups'].includes(getSlug()) && (
-                                                            <div className="flex items-center gap-4 bg-white px-5 py-3 rounded-xl border border-slate-200 shadow-sm">
-                                                                <span className="text-sm font-bold text-slate-500">Filter Type:</span>
+                                                            <div className="flex items-center gap-4 bg-white px-5 py-3 rounded-xl border border-slate-200 shadow-sm w-full sm:w-auto max-md:px-4 max-md:py-2.5">
+                                                                <span className="text-sm font-bold text-slate-500 whitespace-nowrap">Type:</span>
                                                                 <select
                                                                     value={selectedCategory}
                                                                     onChange={(e) => setSelectedCategory(e.target.value)}
-                                                                    className="bg-transparent font-bold text-base text-slate-800 border-none outline-none cursor-pointer hover:text-cyan-600 transition-colors pr-8"
+                                                                    className="bg-transparent font-bold text-base text-slate-800 border-none outline-none cursor-pointer hover:text-cyan-600 transition-colors flex-1 min-w-[120px] max-md:text-sm"
                                                                 >
                                                                     <option value="All Categories">All Categories</option>
 
