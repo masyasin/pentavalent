@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Shield, AlertTriangle, Clock, Trash2, Search, Filter, Globe, Monitor, ChevronLeft, ChevronRight, Ban } from 'lucide-react';
+import { Shield, AlertTriangle, Clock, Trash2, Search, Filter, Globe, Monitor, ChevronLeft, ChevronRight, Ban, X } from 'lucide-react';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
 import { Download } from 'lucide-react';
@@ -327,9 +327,9 @@ const SecurityLogsManager: React.FC = () => {
                             </div>
                             <button
                                 onClick={() => setSelectedLog(null)}
-                                className="w-10 h-10 bg-black/10 hover:bg-black/20 rounded-full flex items-center justify-center transition-all"
+                                className="w-10 h-10 bg-black/5 hover:bg-black/10 rounded-full flex items-center justify-center transition-all"
                             >
-                                <Trash2 className="rotate-45" size={20} />
+                                <X size={20} />
                             </button>
                         </div>
 

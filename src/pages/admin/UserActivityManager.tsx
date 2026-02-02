@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Clock, Trash2, Search, Filter, Mail, Monitor, ChevronLeft, ChevronRight, Activity, Tag, User } from 'lucide-react';
+import { Clock, Trash2, Search, Filter, Mail, Monitor, ChevronLeft, ChevronRight, Activity, Tag, User, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth, usePermission } from '../../contexts/AuthContext';
 import * as XLSX from 'xlsx';
@@ -346,9 +346,9 @@ const UserActivityManager: React.FC = () => {
                             </div>
                             <button
                                 onClick={() => setSelectedLog(null)}
-                                className="w-10 h-10 bg-black/5 or hover:bg-black/10 rounded-full flex items-center justify-center transition-all"
+                                className="w-10 h-10 bg-black/5 hover:bg-black/10 rounded-full flex items-center justify-center transition-all"
                             >
-                                <Trash2 className="rotate-45" size={20} />
+                                <X size={20} />
                             </button>
                         </div>
 
