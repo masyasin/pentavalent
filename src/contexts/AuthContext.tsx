@@ -392,8 +392,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       let { data: { session } } = await supabase.auth.getSession();
       
       // FLOW 1.5: Proxy to Admin API (The "Nuclear Option")
-       // If we have an access token (JWT) but no session, we ask our server (Super Admin) to do it.
-       if (!session && resetToken && resetToken.startsWith('ey')) {
+       // If we have ANY token but no session, we ask our server (Super Admin) to do it.
+       if (!session && resetToken) {
             console.log('No session detected. Delegating to Admin API (api/confirm-reset)...');
             
             const response = await fetch('/api/confirm-reset', {
@@ -429,27 +429,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
          }
          return { success: true };
       }
-
-      // If no session and token is JWT (Link Flow failed), show specific error
-      if (resetToken && resetToken.startsWith('ey')) {
-           return { success: false, error: 'Session expired. Please click the reset link again.' };
-      }
       
       // If no session and empty token
       if (!resetToken) {
            return { success: false, error: 'Unable to verify identity. Please click the reset link from your email again.' };
       }
 
-      // FLOW 2: Manual Token (Legacy 6-digit OTP)
-      const { data, error } = await supabase.functions.invoke('auth', {
-        body: { action: 'reset_password', token: resetToken, new_password: newPassword },
-      });
-
-      if (error || data?.error) {
-        return { success: false, error: data?.error || 'Incorrect or expired reset token. Access denied.' };
-      }
-
-      return { success: true };
+      return { success: false, error: 'Unexpected state during reset.' };
     } catch (error) {
       console.error('Password reset error:', error);
       return { success: false, error: 'Transmission error during reset. Try again.' };
