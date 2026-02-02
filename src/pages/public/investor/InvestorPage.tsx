@@ -234,7 +234,7 @@ const InvestorPage: React.FC = () => {
                                 <motion.h1
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter"
+                                    className="text-3xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter"
                                 >
                                     {language === 'id' ? pageContent?.title_id : pageContent?.title_en}
                                 </motion.h1>
@@ -281,8 +281,8 @@ const InvestorPage: React.FC = () => {
                                                                 {language === 'id' ? 'Profil Sekilas' : 'Company at a Glance'}
                                                             </span>
                                                         </div>
-                                                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
-                                                            {language === 'id' ? 'Mitra Distribusi Kesehatan' : 'Healthcare Distribution'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 italic">{language === 'id' ? 'Terpercaya' : 'Partner'}</span>
+                                                        <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+                                                            {language === 'id' ? 'Mitra Distribusi Kesehatan' : 'Healthcare Distribution'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 md:italic">{language === 'id' ? 'Terpercaya' : 'Partner'}</span>
                                                         </h2>
                                                         <p className="text-lg text-slate-500 leading-relaxed font-medium max-w-2xl">
                                                             {language === 'id'
@@ -441,7 +441,7 @@ const InvestorPage: React.FC = () => {
                                                                         <TrendingUp size={10} /> {h.growth}
                                                                     </div>
                                                                 </div>
-                                                                <h3 className="text-4xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-cyan-600 transition-colors">{h.value}</h3>
+                                                                <h3 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-cyan-600 transition-colors">{h.value}</h3>
                                                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                                                                     {language === 'id' ? h.label_id : h.label_en}
                                                                 </p>
@@ -666,7 +666,7 @@ const InvestorPage: React.FC = () => {
                                                             <TrendingUp className="text-cyan-400" /> {language === 'id' ? 'Hasil Dividen' : 'Dividend Yield'}
                                                         </h3>
                                                         <div className="relative z-10">
-                                                            <div className="text-6xl font-black text-cyan-400 mb-4">4.2%</div>
+                                                            <div className="text-4xl md:text-6xl font-black text-cyan-400 mb-4">4.2%</div>
                                                             <p className="text-slate-400 text-sm leading-relaxed mb-8 max-w-sm">
                                                                 {language === 'id'
                                                                     ? 'Kami secara konsisten membagikan dividen sebagai bentuk apresiasi atas kepercayaan pemegang saham kami selama 3 tahun terakhir.'

@@ -611,7 +611,7 @@ const BusinessPage: React.FC = () => {
                                             <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-1">
                                                 <ShieldCheck size={20} />
                                             </div>
-                                            <p className="text-lg font-bold text-slate-700 italic leading-relaxed">
+                                            <p className="text-lg font-bold text-slate-700 md:italic leading-relaxed">
                                                 "{language === 'id' ? text.id : text.en}"
                                             </p>
                                         </div>
@@ -644,7 +644,7 @@ const BusinessPage: React.FC = () => {
                                                 <div className="relative z-10">
                                                     <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-4 block">Target 2025</span>
                                                     <div className="flex items-baseline gap-2 mb-2">
-                                                        <span className="text-6xl font-black text-white italic tracking-tighter">
+                                                        <span className="text-4xl md:text-6xl font-black text-white md:italic tracking-tighter">
                                                             <CountUp end={17} />%
                                                         </span>
                                                         <motion.div
@@ -675,7 +675,7 @@ const BusinessPage: React.FC = () => {
                                                 <div className="relative z-10">
                                                     <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-4 block">Target 2025</span>
                                                     <div className="flex items-baseline gap-2 mb-2">
-                                                        <span className="text-6xl font-black italic tracking-tighter">
+                                                        <span className="text-4xl md:text-6xl font-black md:italic tracking-tighter">
                                                             <CountUp end={40} />%
                                                         </span>
                                                         <motion.div
@@ -693,7 +693,7 @@ const BusinessPage: React.FC = () => {
                                         {/* Performance Text with Modern Border */}
                                         <div className="p-8 md:p-10 bg-slate-50 rounded-[2.5rem] border-l-8 border-cyan-500 shadow-inner relative">
                                             <div className="absolute top-6 right-8 text-cyan-100 font-black text-6xl select-none">"</div>
-                                            <p className="text-slate-700 text-lg md:text-xl font-bold italic leading-relaxed relative z-10">
+                                            <p className="text-slate-700 text-lg md:text-xl font-bold md:italic leading-relaxed relative z-10">
                                                 {language === 'id'
                                                     ? 'PEVE menunjukkan kinerja positif dengan tren pertumbuhan penjualan dan laba bersih yang stabil, meskipun kondisi ekonomi belum sepenuhnya kondusif.'
                                                     : 'PEVE shows positive performance with stable sales and net profit growth trends, even though economic conditions are not yet fully conducive.'
@@ -1021,7 +1021,7 @@ const BusinessPage: React.FC = () => {
                                                     { value: '150+', label: language === 'id' ? 'Prinsipal Partner' : 'Principal Partners' }
                                                 ]).map((stat, idx) => (
                                                     <div key={idx} className="relative group">
-                                                        <div className="text-4xl xl:text-5xl font-black text-cyan-400 tracking-tighter italic mb-2 group-hover:scale-105 transition-transform origin-left">
+                                                        <div className="text-3xl md:text-4xl xl:text-5xl font-black text-cyan-400 tracking-tighter md:italic mb-2 group-hover:scale-105 transition-transform origin-left">
                                                             {stat.value}
                                                         </div>
                                                         <p className="text-xs font-black text-white/60 uppercase tracking-widest leading-loose">
