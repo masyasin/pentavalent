@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginPageProps {
   onForgotPassword: () => void;
@@ -8,6 +9,7 @@ interface LoginPageProps {
 
 const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
   const { login, finalizeLogin, resendOtp, sendEmailOtp } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState({ n1: 0, n2: 0 });
@@ -126,8 +128,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
         });
         // CRITICAL: Officially move from TEMP to REAL storage
         finalizeLogin();
-        // Redirect will happen via AuthContext state update or page reload if preferred
-        // window.location.reload(); // Not needed if finalizeLogin updates state
+        // Force navigate to dashboard to ensure smooth transition
+        navigate('/admin/dashboard');
       } else {
         setError('Incorrect verification code. Access denied.');
         setIsVerifying(false);
