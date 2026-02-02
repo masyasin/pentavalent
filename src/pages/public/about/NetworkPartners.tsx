@@ -269,19 +269,19 @@ const NetworkPartners: React.FC = () => {
                 parentLabel={language === 'id' ? 'Tentang Kami' : 'About Us'}
             />
 
-            <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 -mt-24 md:-mt-32 max-md:px-4 max-md:py-10 max-md:-mt-16 max-md:overflow-x-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 max-md:gap-6">
                     <div className="lg:col-span-12">
                         {/* Tab Navigation - Premium Dashboard Style */}
-                        <div className="flex justify-center mb-16 relative z-10">
-                            <div className="bg-white p-2 rounded-[2.5rem] flex items-center gap-2 shadow-2xl shadow-slate-200 border border-slate-100">
+                        <div className="flex justify-center mb-16 relative z-10 max-md:mb-8">
+                            <div className="bg-white p-2 rounded-[2.5rem] flex items-center gap-2 shadow-2xl shadow-slate-200 border border-slate-100 max-md:rounded-2xl max-md:w-full max-md:p-1">
                                 <button
                                     onClick={() => setActiveTab('branches')}
-                                    className={`px-10 py-5 rounded-[1.8rem] font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-500 relative overflow-hidden group ${activeTab === 'branches' ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
+                                    className={`px-10 py-5 rounded-[1.8rem] font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-500 relative overflow-hidden group max-md:px-4 max-md:py-3 max-md:rounded-xl max-md:flex-1 ${activeTab === 'branches' ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <MapPin size={16} className={activeTab === 'branches' ? 'text-primary' : 'text-slate-300'} />
-                                        {language === 'id' ? 'Distribution Network' : 'Network Map'}
+                                    <div className="flex items-center justify-center gap-3 max-md:gap-2">
+                                        <MapPin size={16} className={`${activeTab === 'branches' ? 'text-primary' : 'text-slate-300'} max-md:shrink-0 max-md:w-4 max-md:h-4`} />
+                                        <span className="max-md:text-[8px] whitespace-nowrap">{language === 'id' ? 'Network Map' : 'Network Map'}</span>
                                     </div>
                                     {activeTab === 'branches' && (
                                         <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-1 bg-primary" />
@@ -289,11 +289,11 @@ const NetworkPartners: React.FC = () => {
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('partners')}
-                                    className={`px-10 py-5 rounded-[1.8rem] font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-500 relative overflow-hidden group ${activeTab === 'partners' ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
+                                    className={`px-10 py-5 rounded-[1.8rem] font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-500 relative overflow-hidden group max-md:px-4 max-md:py-3 max-md:rounded-xl max-md:flex-1 ${activeTab === 'partners' ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <Globe size={16} className={activeTab === 'partners' ? 'text-primary' : 'text-slate-300'} />
-                                        {language === 'id' ? 'Prinsipals' : 'Global Principals'}
+                                    <div className="flex items-center justify-center gap-3 max-md:gap-2">
+                                        <Globe size={16} className={`${activeTab === 'partners' ? 'text-primary' : 'text-slate-300'} max-md:shrink-0 max-md:w-4 max-md:h-4`} />
+                                        <span className="max-md:text-[8px] whitespace-nowrap">{language === 'id' ? 'Principals' : 'Principals'}</span>
                                     </div>
                                     {activeTab === 'partners' && (
                                         <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-1 bg-primary" />
@@ -310,22 +310,22 @@ const NetworkPartners: React.FC = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
                                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                    className="space-y-16"
+                                    className="space-y-16 max-md:space-y-8"
                                 >
-                                    <div className="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden text-center max-w-5xl mx-auto mb-12">
+                                    <div className="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden text-center max-w-5xl mx-auto mb-12 max-md:p-6 max-md:rounded-[2rem] max-md:mb-6">
                                         <div className="absolute top-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
                                         <div className="relative z-10">
-                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-slate-900 tracking-tighter uppercase italic">
-                                                Indonesia's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500 text-6xl">Logistics Backbone</span>
+                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-slate-900 tracking-tighter uppercase italic max-md:text-2xl max-md:mb-4">
+                                                Indonesia's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500 text-6xl max-md:text-3xl max-md:block">Logistics Backbone</span>
                                             </h2>
-                                            <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-3xl mx-auto">
+                                            <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-3xl mx-auto max-md:text-sm">
                                                 Over 34 strategic operation hubs connecting major cities across the archipelago, ensuring medical supplies reach those who need them most.
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* Unified Network Command Center */}
-                                    <div className="bg-slate-950 rounded-[4rem] p-4 md:p-10 relative overflow-hidden shadow-4xl mb-24 border border-white/5 box-ring-glow">
+                                    <div className="bg-slate-950 rounded-[4rem] p-4 md:p-10 relative overflow-hidden shadow-4xl mb-24 border border-white/5 box-ring-glow max-md:rounded-[2rem] max-md:p-2 max-md:mb-12">
                                         {/* Atmospheric Background */}
                                         <div className="absolute inset-0 pointer-events-none">
                                             <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-primary/10 rounded-full blur-[150px]"></div>
@@ -333,15 +333,15 @@ const NetworkPartners: React.FC = () => {
                                             <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
                                         </div>
 
-                                        <div className="relative z-10 flex flex-col lg:flex-row gap-8 h-[700px]">
+                                        <div className="relative z-10 flex flex-col lg:flex-row gap-8 h-[700px] max-md:h-auto max-md:gap-4">
                                             {/* Left: Region Navigator */}
-                                            <div className="w-full lg:w-[350px] bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 flex flex-col overflow-hidden">
-                                                <div className="p-8 border-b border-white/10">
-                                                    <h3 className="text-xl font-black text-white uppercase italic tracking-tighter">Region Navigator</h3>
+                                            <div className="w-full lg:w-[350px] bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 flex flex-col overflow-hidden max-md:rounded-2xl">
+                                                <div className="p-8 border-b border-white/10 max-md:p-4">
+                                                    <h3 className="text-xl font-black text-white uppercase italic tracking-tighter max-md:text-base">Region Navigator</h3>
                                                     <p className="text-white/40 text-[9px] font-black uppercase tracking-[0.3em] mt-1">Select Tactical Zone</p>
                                                 </div>
 
-                                                <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4">
+                                                <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4 max-md:max-h-[300px]">
                                                     {[
                                                         { id: 1, title: 'REGION-1', cities: ['Banda Aceh', 'Batam', 'Medan', 'Pekanbaru', 'Padang', 'Jambi', 'Palembang', 'Lampung'] },
                                                         { id: 2, title: 'REGION-2', cities: ['Jakarta-1', 'Jakarta-2', 'Tangerang', 'Bogor', 'Bandung', 'Tasikmalaya', 'Cirebon', 'Pontianak'] },
@@ -351,10 +351,10 @@ const NetworkPartners: React.FC = () => {
                                                         <div key={region.id} className={`rounded-3xl transition-all duration-500 overflow-hidden ${activeRegion === region.id ? 'bg-primary/20 border-primary/30 border' : 'bg-white/5 border border-transparent hover:bg-white/10'}`}>
                                                             <button
                                                                 onClick={() => setActiveRegion(region.id)}
-                                                                className="w-full p-6 text-left flex items-center justify-between"
+                                                                className="w-full p-6 text-left flex items-center justify-between max-md:p-4"
                                                             >
-                                                                <span className={`text-sm font-black uppercase tracking-[0.2em] ${activeRegion === region.id ? 'text-primary' : 'text-white/60'}`}>{region.title}</span>
-                                                                <ArrowRight size={14} className={`transition-transform duration-500 ${activeRegion === region.id ? 'rotate-90 text-primary' : 'text-white/20'}`} />
+                                                                <span className={`text-sm font-black uppercase tracking-[0.2em] max-md:text-xs ${activeRegion === region.id ? 'text-primary' : 'text-white/60'}`}>{region.title}</span>
+                                                                <ArrowRight size={14} className={`transition-transform duration-500 max-md:shrink-0 ${activeRegion === region.id ? 'rotate-90 text-primary' : 'text-white/20'}`} />
                                                             </button>
 
                                                             <AnimatePresence>
@@ -363,9 +363,9 @@ const NetworkPartners: React.FC = () => {
                                                                         initial={{ height: 0, opacity: 0 }}
                                                                         animate={{ height: 'auto', opacity: 1 }}
                                                                         exit={{ height: 0, opacity: 0 }}
-                                                                        className="px-6 pb-6 pt-2"
+                                                                        className="px-6 pb-6 pt-2 max-md:px-4 max-md:pb-4"
                                                                     >
-                                                                        <ul className="space-y-3">
+                                                                        <ul className="grid grid-cols-2 gap-3 max-md:grid-cols-1">
                                                                             {region.cities.map((city, idx) => {
                                                                                 const searchTerms = city.split(/[\s-]+/);
                                                                                 const cityAliases: { [key: string]: string[] } = {
@@ -400,14 +400,18 @@ const NetworkPartners: React.FC = () => {
 
                                                                                 return (
                                                                                     <li key={idx} className="flex items-center gap-3">
-                                                                                        <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${branch ? 'bg-primary shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'bg-white/5'}`}></div>
+                                                                                        <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 shrink-0 ${branch ? 'bg-primary shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'bg-white/5'}`}></div>
                                                                                         <button
                                                                                             onClick={() => {
                                                                                                 if (branch) {
                                                                                                     focusBranch(branch);
+                                                                                                    // On mobile, we might want to scroll to the map after selection
+                                                                                                    if (window.innerWidth <= 768 && mapRef.current) {
+                                                                                                        mapRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                                                                    }
                                                                                                 }
                                                                                             }}
-                                                                                            className={`text-[11px] font-bold uppercase tracking-wider text-left transition-all duration-300 ${branch ? 'text-white/90 hover:text-primary' : 'text-white/10 cursor-default'}`}
+                                                                                            className={`text-[11px] font-bold uppercase tracking-wider text-left transition-all duration-300 max-md:text-[10px] ${branch ? 'text-white/90 hover:text-primary' : 'text-white/10 cursor-default'}`}
                                                                                         >
                                                                                             {city}
                                                                                         </button>
@@ -424,19 +428,19 @@ const NetworkPartners: React.FC = () => {
                                             </div>
 
                                             {/* Right: Real Leaflet Map (Free Replacement) */}
-                                            <div className="flex-1 bg-slate-900 rounded-[3rem] border border-white/5 relative overflow-hidden group/map">
+                                            <div className="flex-1 bg-slate-900 rounded-[3rem] border border-white/5 relative overflow-hidden group/map max-md:rounded-2xl max-md:min-h-[400px]">
                                                 <div ref={mapRef} className="absolute inset-0 w-full h-full z-0" />
 
                                                 {/* Map Overlay Info */}
-                                                <div className="absolute top-8 right-8 text-right pointer-events-none z-10">
-                                                    <div className="text-[40px] font-black text-white/5 italic leading-none tracking-tighter uppercase">Integrated Network</div>
-                                                    <div className="text-primary/40 font-black uppercase tracking-[0.5em] text-[10px] mt-2">Tactical Command Visualization v3.0</div>
+                                                <div className="absolute top-8 right-8 text-right pointer-events-none z-10 max-md:top-4 max-md:right-4">
+                                                    <div className="text-[40px] font-black text-white/5 italic leading-none tracking-tighter uppercase max-md:text-[20px]">Integrated Network</div>
+                                                    <div className="text-primary/40 font-black uppercase tracking-[0.5em] text-[10px] mt-2 max-md:text-[8px] max-md:mt-1">Tactical Command Visualization v3.0</div>
                                                 </div>
 
-                                                <div className="absolute bottom-10 left-10 flex items-center gap-6 z-10">
-                                                    <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10">
-                                                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-                                                        <span className="text-[9px] font-black text-white/60 uppercase tracking-widest">Active Link Established</span>
+                                                <div className="absolute bottom-10 left-10 flex items-center gap-6 z-10 max-md:bottom-4 max-md:left-4">
+                                                    <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 max-md:px-3 max-md:py-1.5">
+                                                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse max-md:shrink-0"></div>
+                                                        <span className="text-[9px] font-black text-white/60 uppercase tracking-widest max-md:text-[8px]">Active Link Established</span>
                                                     </div>
                                                 </div>
 
@@ -464,21 +468,21 @@ const NetworkPartners: React.FC = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
                                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                    className="space-y-16"
+                                    className="space-y-16 max-md:space-y-8"
                                 >
-                                    <div className="bg-slate-900 p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-900/40 text-white relative overflow-hidden text-center max-w-5xl mx-auto">
+                                    <div className="bg-slate-900 p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-900/40 text-white relative overflow-hidden text-center max-w-5xl mx-auto max-md:p-6 max-md:rounded-[2rem]">
                                         <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[100px] translate-y-1/2 translate-x-1/2"></div>
                                         <div className="relative z-10">
-                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-white tracking-tighter uppercase italic">
-                                                Strategic <span className="text-cyan-400 text-6xl">Global Alliances</span>
+                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-white tracking-tighter uppercase italic max-md:text-2xl max-md:mb-4">
+                                                Strategic <span className="text-cyan-400 text-6xl max-md:text-3xl max-md:block">Global Alliances</span>
                                             </h2>
-                                            <p className="text-white/60 font-medium text-lg leading-relaxed max-w-3xl mx-auto">
+                                            <p className="text-white/60 font-medium text-lg leading-relaxed max-w-3xl mx-auto max-md:text-sm">
                                                 We bridge the gap between world-leading clinical innovators and the Indonesian market through resilient partnerships built on trust and efficiency.
                                             </p>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 max-md:gap-6">
                                         {partners.map((partner, index) => (
                                             <PartnerCard
                                                 key={partner.id}
@@ -493,11 +497,11 @@ const NetworkPartners: React.FC = () => {
                         </AnimatePresence>
 
                         {/* Network Stats / Capabilities */}
-                        <div className="mt-24 grid md:grid-cols-3 gap-10">
+                        <div className="mt-24 grid md:grid-cols-3 gap-10 max-md:mt-12 max-md:grid-cols-1 max-md:gap-4">
                             {[
-                                { icon: <Layers size={32} />, label_id: 'Gudang Modern', label_en: 'Modern Warehousing', value: '45,000 m²', color: 'text-primary' },
-                                { icon: <Zap size={32} />, label_id: 'Distribusi Cepat', label_en: 'Last-Mile Delivery', value: '24/7 Ops', color: 'text-cyan-500' },
-                                { icon: <ShieldCheck size={32} />, label_id: 'Rantai Dingin', label_en: 'Cold Chain Ready', value: '100% Secure', color: 'text-emerald-500' },
+                                { icon: <Layers size={32} className="max-md:w-6 max-md:h-6" />, label_id: 'Gudang Modern', label_en: 'Modern Warehousing', value: '45,000 m²', color: 'text-primary' },
+                                { icon: <Zap size={32} className="max-md:w-6 max-md:h-6" />, label_id: 'Distribusi Cepat', label_en: 'Last-Mile Delivery', value: '24/7 Ops', color: 'text-cyan-500' },
+                                { icon: <ShieldCheck size={32} className="max-md:w-6 max-md:h-6" />, label_id: 'Rantai Dingin', label_en: 'Cold Chain Ready', value: '100% Secure', color: 'text-emerald-500' },
                             ].map((stat, i) => (
                                 <motion.div
                                     key={i}
@@ -505,13 +509,13 @@ const NetworkPartners: React.FC = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/40 text-center space-y-4 group"
+                                    className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/40 text-center space-y-4 group max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto"
                                 >
-                                    <div className={`w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center ${stat.color} mx-auto group-hover:scale-110 transition-transform`}>
+                                    <div className={`w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center ${stat.color} mx-auto group-hover:scale-110 transition-transform max-md:w-12 max-md:h-12 max-md:rounded-xl`}>
                                         {stat.icon}
                                     </div>
-                                    <div className="text-3xl font-black text-slate-900 tracking-tighter italic">{stat.value}</div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+                                    <div className="text-3xl font-black text-slate-900 tracking-tighter italic max-md:text-2xl">{stat.value}</div>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 max-md:text-[8px] max-md:tracking-widest">
                                         {language === 'id' ? stat.label_id : stat.label_en}
                                     </p>
                                 </motion.div>
@@ -524,7 +528,7 @@ const NetworkPartners: React.FC = () => {
             {/* Branch Modal - Map Viewer */}
             <AnimatePresence>
                 {modalBranch && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10 max-md:p-2">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -537,16 +541,16 @@ const NetworkPartners: React.FC = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 40 }}
                             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                            className="relative w-full max-w-4xl bg-white rounded-[4rem] overflow-hidden shadow-4xl flex flex-col md:flex-row border border-white/20"
+                            className="relative w-full max-w-4xl bg-white rounded-[4rem] overflow-hidden shadow-4xl flex flex-col md:flex-row border border-white/20 max-md:rounded-3xl max-md:max-h-[90vh] max-md:overflow-y-auto"
                         >
                             <button
                                 onClick={() => setModalBranch(null)}
-                                className="absolute top-8 right-8 z-30 w-14 h-14 flex items-center justify-center bg-slate-900 text-white rounded-2xl hover:bg-primary transition-all shadow-xl shadow-slate-950/20"
+                                className="absolute top-8 right-8 z-30 w-14 h-14 flex items-center justify-center bg-slate-900 text-white rounded-2xl hover:bg-primary transition-all shadow-xl shadow-slate-950/20 max-md:top-4 max-md:right-4 max-md:w-10 max-md:h-10 max-md:rounded-xl"
                             >
-                                <X size={28} />
+                                <X size={28} className="max-md:w-5 max-md:h-5" />
                             </button>
 
-                            <div className="w-full md:w-1/2 h-[300px] md:h-auto bg-slate-100">
+                            <div className="w-full md:w-1/2 h-[300px] md:h-auto bg-slate-100 max-md:h-[200px] shrink-0">
                                 <iframe
                                     width="100%" height="100%" frameBorder="0"
                                     src={`https://maps.google.com/maps?q=${modalBranch.latitude},${modalBranch.longitude}&z=15&output=embed`}
@@ -554,23 +558,23 @@ const NetworkPartners: React.FC = () => {
                                 ></iframe>
                             </div>
 
-                            <div className="p-10 md:p-14 flex-1 flex flex-col justify-between">
-                                <div className="space-y-6">
+                            <div className="p-10 md:p-14 flex-1 flex flex-col justify-between max-md:p-6">
+                                <div className="space-y-6 max-md:space-y-4">
                                     <div>
-                                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 block">Official Network Location</span>
-                                        <h3 className="text-3xl font-black text-slate-900 uppercase italic tracking-tighter leading-tight">
+                                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 block max-md:mb-2 max-md:text-[8px]">Official Network Location</span>
+                                        <h3 className="text-3xl font-black text-slate-900 uppercase italic tracking-tighter leading-tight max-md:text-xl">
                                             {modalBranch.name}
                                         </h3>
                                     </div>
-                                    <div className="space-y-4">
-                                        <div className="flex gap-4">
-                                            <MapPin className="text-primary shrink-0" size={24} />
-                                            <p className="text-slate-500 font-medium leading-relaxed">{modalBranch.address}</p>
+                                    <div className="space-y-4 max-md:space-y-3">
+                                        <div className="flex gap-4 max-md:gap-3">
+                                            <MapPin className="text-primary shrink-0 max-md:w-5 max-md:h-5" size={24} />
+                                            <p className="text-slate-500 font-medium leading-relaxed max-md:text-sm">{modalBranch.address}</p>
                                         </div>
                                         {modalBranch.phone && (
-                                            <div className="flex gap-4">
-                                                <Phone className="text-primary shrink-0" size={24} />
-                                                <p className="text-slate-700 font-black tracking-tight">{modalBranch.phone}</p>
+                                            <div className="flex gap-4 max-md:gap-3">
+                                                <Phone className="text-primary shrink-0 max-md:w-5 max-md:h-5" size={24} />
+                                                <p className="text-slate-700 font-black tracking-tight max-md:text-sm">{modalBranch.phone}</p>
                                             </div>
                                         )}
                                     </div>
@@ -578,10 +582,10 @@ const NetworkPartners: React.FC = () => {
 
                                 <button
                                     onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(modalBranch.name + ' ' + modalBranch.city)}`, '_blank')}
-                                    className="mt-12 w-full py-6 wow-button-gradient text-white font-black uppercase text-[10px] tracking-[0.4em] rounded-2xl shadow-2xl flex items-center justify-center gap-4 group/btn"
+                                    className="mt-12 w-full py-6 wow-button-gradient text-white font-black uppercase text-[10px] tracking-[0.4em] rounded-2xl shadow-2xl flex items-center justify-center gap-4 group/btn max-md:mt-8 max-md:py-4 max-md:min-h-[44px]"
                                 >
                                     Get Directions
-                                    <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform" />
+                                    <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform max-md:shrink-0" />
                                 </button>
                             </div>
                         </motion.div>
