@@ -136,6 +136,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                   <img
                     src={settings?.logo_url || "/logo-icon.png"}
                     alt="Penta Valent"
+                    width="200"
+                    height="64"
                     className={`${isScrolled ? 'h-10 lg:h-14' : 'h-12 lg:h-16'} w-auto transition-all duration-700 scale-100 group-hover:scale-110 relative z-10`}
                   />
                 </div>

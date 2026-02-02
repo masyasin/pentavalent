@@ -106,6 +106,7 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                     loading={index === 0 ? "eager" : "lazy"}
                                     fetchPriority={index === 0 ? "high" : "auto"}
                                     decoding="async"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                                     style={{ 
                                         willChange: 'transform',
                                         objectPosition: 'center 30%'
