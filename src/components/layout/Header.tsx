@@ -398,19 +398,28 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
 
             {/* Actions Column - Symmetric with logo side */}
             <div className="flex-1 flex items-center justify-end xl:justify-center gap-2 xl:gap-3 min-w-0">
-              <div className={`hidden lg:flex items-center rounded-full p-1 border transition-all duration-500 flex-shrink-0 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
-                {['id', 'en'].map((lang) => (
-                  <button
-                    key={lang}
-                    onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${language === lang
-                      ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/10'
-                      : (isScrolled ? 'text-slate-500 hover:text-primary' : 'text-white/60 hover:text-white')
-                      }`}
-                  >
-                    {lang}
-                  </button>
-                ))}
+              {/* Bilingual Switch - Desktop */}
+              <div 
+                className={`hidden lg:flex items-center rounded-full p-1 border transition-all duration-500 flex-shrink-0 relative cursor-pointer ${
+                  isScrolled ? 'border-slate-200 bg-slate-100/80' : 'border-white/20 bg-white/10'
+                }`}
+                onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+              >
+                <div className="flex items-center relative z-10">
+                  <div className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-300 ${language === 'id' ? 'text-white' : (isScrolled ? 'text-slate-400' : 'text-white/40')}`}>ID</div>
+                  <div className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors duration-300 ${language === 'en' ? 'text-white' : (isScrolled ? 'text-slate-400' : 'text-white/40')}`}>EN</div>
+                </div>
+                
+                {/* Switch Slider */}
+                <motion.div 
+                  className="absolute top-1 bottom-1 rounded-full bg-slate-900 shadow-lg z-0"
+                  initial={false}
+                  animate={{ 
+                    left: language === 'id' ? '4px' : '38px',
+                    right: language === 'id' ? '38px' : '4px'
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
               </div>
 
               <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -531,16 +540,30 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               </nav>
             </div>
             <div className="p-6 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm">
-              <div className="flex items-center justify-center gap-3">
-                {['id', 'en'].map((lang) => (
-                  <button
-                    key={lang}
-                    onClick={() => setLanguage(lang as 'id' | 'en')}
-                    className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 ${language === lang ? 'wow-button-gradient text-white shadow-lg shadow-cyan-500/20 scale-[1.02]' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`}
-                  >
-                    {lang === 'id' ? 'Indonesia' : 'English'}
-                  </button>
-                ))}
+              <div 
+                className="relative bg-slate-100 rounded-2xl p-1 flex items-center cursor-pointer overflow-hidden border border-slate-200"
+                onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+              >
+                {/* Switch Slider Mobile */}
+                <motion.div 
+                  className="absolute top-1 bottom-1 w-[calc(50%-4px)] wow-button-gradient rounded-xl shadow-md z-0"
+                  initial={false}
+                  animate={{ 
+                    x: language === 'id' ? 0 : '100%',
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+                
+                <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
+                  <span className={`text-xs font-black uppercase tracking-widest ${language === 'id' ? 'text-white' : 'text-slate-400'}`}>
+                    Indonesia
+                  </span>
+                </div>
+                <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
+                  <span className={`text-xs font-black uppercase tracking-widest ${language === 'en' ? 'text-white' : 'text-slate-400'}`}>
+                    English
+                  </span>
+                </div>
               </div>
             </div>
           </div>
