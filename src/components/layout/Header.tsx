@@ -466,33 +466,26 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
             />
             
             <motion.div 
-              initial={{ x: '100%', borderRadius: '100px 0 0 100px' }}
-              animate={{ x: 0, borderRadius: '0px 0 0 0px' }}
-              exit={{ x: '100%', borderRadius: '100px 0 0 100px' }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="absolute top-0 right-0 w-[88%] max-w-sm h-full bg-white/90 backdrop-blur-2xl shadow-[-20px_0_80px_rgba(0,0,0,0.1)] flex flex-col"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: "spring", damping: 28, stiffness: 240 }}
+              className="absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white/95 backdrop-blur-3xl flex flex-col"
             >
-              {/* Header inside menu */}
-              <div className="p-6 flex items-center justify-between border-b border-slate-100/50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cyan-500 p-[1px]">
-                    <div className="w-full h-full bg-white rounded-[11px] flex items-center justify-center">
-                      <img src="/logo-icon.png" alt="Penta Valent" className="h-6 w-auto" />
-                    </div>
-                  </div>
-                  <span className="text-sm font-black tracking-tighter italic text-slate-900 uppercase">Navigation</span>
-                </div>
+              {/* Header inside menu - Minimalist */}
+              <div className="pt-10 pb-6 px-8 flex items-center justify-between">
+                <img src="/logo-icon.png" alt="Penta Valent" className="h-8 w-auto grayscale opacity-80" />
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)} 
-                  className="w-11 h-11 flex items-center justify-center bg-slate-100 text-slate-500 rounded-full hover:bg-slate-200 transition-all active:scale-90"
+                  className="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
                 >
-                  <X size={20} strokeWidth={2.5} />
+                  <X size={24} strokeWidth={1.5} />
                 </button>
               </div>
 
-              {/* Menu Content with Staggered Animation */}
-              <div className="flex-1 overflow-y-auto py-8 px-6 custom-scrollbar">
-                <nav className="space-y-3">
+              {/* Menu Content - Airy & Elegant */}
+              <div className="flex-1 overflow-y-auto py-4 px-8 custom-scrollbar">
+                <nav className="space-y-1">
                   {parentMenus.map((menu, idx) => {
                     const children = getChildMenus(menu.id);
                     const hasChildren = children.length > 0;
@@ -504,66 +497,58 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                     return (
                       <motion.div 
                         key={menu.id}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + (idx * 0.05) }}
-                        className="space-y-2"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 + (idx * 0.04) }}
+                        className="py-1"
                       >
                         <button
                           onClick={() => hasChildren ? setActiveDropdown(isOpen ? null : menu.id) : handleLinkClick(menu.path)}
-                          className={`w-full text-left p-4 rounded-2xl transition-all duration-300 flex items-center justify-between group relative overflow-hidden ${
-                            isActive 
-                              ? 'bg-primary/10 text-primary border border-primary/20' 
-                              : 'text-slate-600 hover:bg-slate-50 border border-transparent'
-                          }`}
+                          className={`w-full text-left py-4 transition-all flex items-center justify-between group`}
                         >
-                          {isActive && <motion.div layoutId="mobile-active" className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />}
-                          
-                          <div className="flex items-center gap-4 relative z-10">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 ${
-                              isActive ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-slate-50 text-slate-400 group-hover:bg-white group-hover:shadow-md'
-                            }`}>
-                              {menu.label_en.toLowerCase().includes('home') ? <Layout size={20} /> : 
-                               menu.label_en.toLowerCase().includes('about') ? <Building2 size={20} /> :
-                               menu.label_en.toLowerCase().includes('business') ? <Target size={20} /> :
-                               menu.label_en.toLowerCase().includes('investor') ? <TrendingUp size={20} /> :
-                               menu.label_en.toLowerCase().includes('news') ? <Newspaper size={20} /> :
-                               menu.label_en.toLowerCase().includes('career') ? <Briefcase size={20} /> :
-                               <ArrowRight size={20} />}
+                          <div className="flex items-center gap-5">
+                            <div className={`transition-colors duration-500 ${isActive ? 'text-primary' : 'text-slate-300 group-hover:text-slate-600'}`}>
+                              {menu.label_en.toLowerCase().includes('home') ? <Layout size={22} strokeWidth={1.5} /> : 
+                               menu.label_en.toLowerCase().includes('about') ? <Building2 size={22} strokeWidth={1.5} /> :
+                               menu.label_en.toLowerCase().includes('business') ? <Target size={22} strokeWidth={1.5} /> :
+                               menu.label_en.toLowerCase().includes('investor') ? <TrendingUp size={22} strokeWidth={1.5} /> :
+                               menu.label_en.toLowerCase().includes('news') ? <Newspaper size={22} strokeWidth={1.5} /> :
+                               menu.label_en.toLowerCase().includes('career') ? <Briefcase size={22} strokeWidth={1.5} /> :
+                               <ArrowRight size={22} strokeWidth={1.5} />}
                             </div>
-                            <span className={`text-[15px] font-bold tracking-tight transition-colors ${isActive ? 'text-slate-900' : 'text-slate-600'}`}>
+                            <span className={`text-lg tracking-tight transition-all duration-500 ${isActive ? 'font-black text-slate-900 scale-105' : 'font-medium text-slate-500 group-hover:text-slate-800'}`}>
                               {menuLabel}
                             </span>
                           </div>
                           
                           {hasChildren ? (
-                            <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isOpen ? 'rotate-180 text-primary' : 'text-slate-300'}`} />
+                            <div className={`transition-transform duration-500 ${isOpen ? 'rotate-180 text-primary' : 'text-slate-300'}`}>
+                              <ChevronDown size={20} strokeWidth={1.5} />
+                            </div>
                           ) : (
-                            <ArrowRight size={18} className={`transition-all duration-300 ${isActive ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-slate-300'}`} />
+                            <ArrowRight size={18} strokeWidth={1.5} className={`transition-all duration-500 ${isActive ? 'translate-x-0 opacity-100 text-primary' : '-translate-x-2 opacity-0 text-slate-300'}`} />
                           )}
                         </button>
 
-                        {/* Fluid Submenu Expansion */}
+                        {/* Minimalist Submenu */}
                         <AnimatePresence>
                           {hasChildren && isOpen && (
                             <motion.div
-                              initial={{ opacity: 0, height: 0, y: -10 }}
-                              animate={{ opacity: 1, height: 'auto', y: 0 }}
-                              exit={{ opacity: 0, height: 0, y: -10 }}
-                              transition={{ duration: 0.3, ease: "circOut" }}
-                              className="overflow-hidden ml-9 pl-5 border-l border-slate-100 space-y-1"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden ml-11 space-y-1"
                             >
                               {children.map((child, cIdx) => (
                                 <motion.button
                                   key={child.id}
-                                  initial={{ opacity: 0, x: 10 }}
+                                  initial={{ opacity: 0, x: -5 }}
                                   animate={{ opacity: 1, x: 0 }}
                                   transition={{ delay: cIdx * 0.03 }}
                                   onClick={() => handleLinkClick(child.path)}
-                                  className="w-full text-left px-4 py-3.5 rounded-xl text-[14px] font-medium text-slate-500 hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-between group/sub"
+                                  className="w-full text-left py-3 text-[15px] font-medium text-slate-400 hover:text-primary transition-colors flex items-center justify-between"
                                 >
                                   <span>{language === 'id' ? child.label_id : child.label_en}</span>
-                                  <ArrowRight size={14} className="opacity-0 group-hover/sub:opacity-100 -translate-x-2 group-hover/sub:translate-x-0 transition-all text-primary" />
                                 </motion.button>
                               ))}
                             </motion.div>
@@ -575,24 +560,24 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 </nav>
               </div>
 
-              {/* Premium Language Switcher */}
-              <div className="p-8 border-t border-slate-100 bg-white/50 backdrop-blur-md">
+              {/* Minimalist Language Switcher */}
+              <div className="p-10">
                 <div 
-                  className="relative bg-slate-100/80 rounded-[1.25rem] p-1.5 flex items-center cursor-pointer border border-slate-200/50 shadow-inner h-14"
+                  className="relative bg-slate-50 rounded-full p-1 flex items-center cursor-pointer border border-slate-100 w-32 mx-auto h-11"
                   onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
                 >
                   <motion.div 
-                    className="absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-slate-900 rounded-[1rem] shadow-xl z-0"
+                    className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white shadow-sm border border-slate-100 rounded-full z-0"
                     initial={false}
                     animate={{ x: language === 'id' ? 0 : '100%' }}
-                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                    transition={{ type: "spring", damping: 25, stiffness: 200 }}
                   />
                   
                   <div className="flex-1 text-center relative z-10">
-                    <span className={`text-xs font-black tracking-[0.2em] transition-colors duration-500 ${language === 'id' ? 'text-white' : 'text-slate-400'}`}>ID</span>
+                    <span className={`text-[10px] font-black tracking-widest transition-colors duration-500 ${language === 'id' ? 'text-slate-900' : 'text-slate-400'}`}>ID</span>
                   </div>
                   <div className="flex-1 text-center relative z-10">
-                    <span className={`text-xs font-black tracking-[0.2em] transition-colors duration-500 ${language === 'en' ? 'text-white' : 'text-slate-400'}`}>EN</span>
+                    <span className={`text-[10px] font-black tracking-widest transition-colors duration-500 ${language === 'en' ? 'text-slate-900' : 'text-slate-400'}`}>EN</span>
                   </div>
                 </div>
               </div>
