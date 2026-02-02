@@ -442,22 +442,33 @@ const NewsDetail: React.FC = () => {
                                     )}
                                 </div>
 
-                                <div className="bg-slate-900 p-8 md:p-10 rounded-[2.5rem] text-white shadow-2xl shadow-slate-900/20 relative overflow-hidden">
+                                <div className="bg-slate-900 p-8 md:p-12 rounded-[3rem] text-white shadow-2xl shadow-slate-900/20 relative overflow-hidden max-w-3xl mx-auto">
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                                     <div className="relative z-10">
-                                        <h5 className="text-2xl font-black tracking-tighter mb-2">Leave a Comment</h5>
-                                        <p className="text-white/60 text-sm mb-8">Your email address will not be published.</p>
-                                        <form onSubmit={handleSubmitComment} className="space-y-4">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <input type="text" placeholder="Your Name" value={commentData.name} onChange={(e) => setCommentData({ ...commentData, name: e.target.value })} className="bg-white/10 border-white/10 rounded-2xl px-6 py-4 text-sm focus:bg-white/20 focus:ring-2 focus:ring-primary/50 transition-all outline-none" required />
-                                                <input type="email" placeholder="Your Email" value={commentData.email} onChange={(e) => setCommentData({ ...commentData, email: e.target.value })} className="bg-white/10 border-white/10 rounded-2xl px-6 py-4 text-sm focus:bg-white/20 focus:ring-2 focus:ring-primary/50 transition-all outline-none" required />
+                                        <div className="mb-10 text-center">
+                                            <h5 className="text-3xl font-black tracking-tighter mb-3 italic">Leave a Comment</h5>
+                                            <p className="text-white/50 text-xs uppercase tracking-widest font-bold">Your email address will not be published.</p>
+                                        </div>
+                                        <form onSubmit={handleSubmitComment} className="space-y-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Full Name</label>
+                                                    <input type="text" placeholder="John Doe" value={commentData.name} onChange={(e) => setCommentData({ ...commentData, name: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm focus:bg-white/10 focus:border-primary/50 transition-all outline-none" required />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Corporate Email</label>
+                                                    <input type="email" placeholder="john@company.com" value={commentData.email} onChange={(e) => setCommentData({ ...commentData, email: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm focus:bg-white/10 focus:border-primary/50 transition-all outline-none" required />
+                                                </div>
                                             </div>
-                                            <textarea placeholder="Your Message" rows={4} value={commentData.message} onChange={(e) => setCommentData({ ...commentData, message: e.target.value })} className="w-full bg-white/10 border-white/10 rounded-2xl px-6 py-4 text-sm focus:bg-white/20 focus:ring-2 focus:ring-primary/50 transition-all outline-none resize-none" required />
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Your Intelligence</label>
+                                                <textarea placeholder="Share your thoughts or questions..." rows={4} value={commentData.message} onChange={(e) => setCommentData({ ...commentData, message: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm focus:bg-white/10 focus:border-primary/50 transition-all outline-none resize-none" required />
+                                            </div>
 
                                             <div className="flex flex-col sm:flex-row items-center gap-6 bg-white/5 p-6 rounded-[2rem] border border-white/10 group/captcha">
                                                 <div className="flex items-center gap-5">
                                                     <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-primary group-hover/captcha:scale-110 transition-transform">
-                                                        <span className="text-xs font-black uppercase">Solve</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-tighter">Solve</span>
                                                     </div>
                                                     <div className="flex items-center gap-3">
                                                         <span className="bg-primary/20 text-primary px-5 py-3 rounded-xl font-black text-xl tracking-tighter border border-primary/10 shadow-xl">{captcha.q}</span>

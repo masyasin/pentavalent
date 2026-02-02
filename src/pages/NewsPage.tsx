@@ -291,7 +291,7 @@ const NewsPage: React.FC = () => {
                     </div>
 
                     {/* Category Filter Pills - High-end arrangement */}
-                    <div className="flex flex-wrap items-center justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                    <div className="flex overflow-x-auto pb-4 -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap items-center justify-start md:justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 scrollbar-hide">
                         {categories.map((cat) => (
                             <button
                                 key={cat.id}
@@ -299,7 +299,7 @@ const NewsPage: React.FC = () => {
                                     setSelectedCategory(cat.id);
                                     setCurrentPage(1);
                                 }}
-                                className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative flex items-center gap-2 group ${selectedCategory === cat.id
+                                className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative flex items-center gap-2 group whitespace-nowrap ${selectedCategory === cat.id
                                     ? 'bg-blue-600 text-white shadow-[0_15px_30px_rgba(37,99,235,0.25)] scale-105'
                                     : 'bg-slate-50 text-slate-400 hover:bg-white hover:text-blue-600 border border-slate-100/50 hover:border-blue-200 hover:shadow-lg'
                                     }`}

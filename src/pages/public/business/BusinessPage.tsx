@@ -841,12 +841,12 @@ const BusinessPage: React.FC = () => {
                                                 </div>
                                                 {language === 'id' ? 'Kategori Target Pasar' : 'Target Market Categories'}
                                             </h3>
-                                            <div className="flex flex-wrap gap-3 relative z-[101]">
+                                            <div className="flex overflow-x-auto pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:flex-wrap gap-3 relative z-[101] scrollbar-hide">
                                                 {TARGET_MARKET_DETAILS.map((tab) => (
                                                     <button
                                                         key={tab.id}
                                                         onClick={() => setActiveTargetTab(tab.id)}
-                                                        className={`relative overflow-hidden px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 flex items-center gap-3 active:scale-95 touch-manipulation cursor-pointer shadow-sm hover:shadow-md ${activeTargetTab === tab.id
+                                                        className={`relative overflow-hidden px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 flex items-center gap-3 active:scale-95 whitespace-nowrap touch-manipulation cursor-pointer shadow-sm hover:shadow-md ${activeTargetTab === tab.id
                                                             ? 'bg-cyan-500 text-white shadow-xl shadow-cyan-200 -translate-y-1'
                                                             : 'bg-white border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-600'
                                                             }`}
@@ -900,16 +900,16 @@ const BusinessPage: React.FC = () => {
                                                         <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-4">
                                                             {language === 'id' ? 'Cakupan Outlet & Instansi' : 'Outlet & Institution Coverage'}
                                                         </h4>
-                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                                             {TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.items.map((item, idx) => (
                                                                 <div
                                                                     key={idx}
-                                                                    className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:border-cyan-200 transition-all group/item text-center sm:text-left justify-center sm:justify-start"
+                                                                    className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:border-cyan-200 transition-all group/item text-left justify-start"
                                                                 >
-                                                                    <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-500 group-hover/item:bg-cyan-500 group-hover/item:text-white transition-all duration-300">
-                                                                        {getIcon(item.icon)}
+                                                                    <div className="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-500 group-hover/item:bg-cyan-500 group-hover/item:text-white transition-all duration-300 shrink-0">
+                                                                        {React.cloneElement(getIcon(item.icon) as React.ReactElement, { size: 24 })}
                                                                     </div>
-                                                                    <span className="font-bold text-slate-700 text-xs uppercase tracking-tight">{item.name}</span>
+                                                                    <span className="font-black text-slate-800 text-[11px] uppercase tracking-tight leading-tight">{item.name}</span>
                                                                 </div>
                                                             ))}
                                                         </div>
