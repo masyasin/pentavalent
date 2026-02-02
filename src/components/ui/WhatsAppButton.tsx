@@ -9,8 +9,8 @@ const WhatsAppButton: React.FC = () => {
   // Tbk Rules:
   // 1. Completely hide if user manually closed it
   // 2. Disable on Homepage ('/') - Too casual for Tbk first impression
-  // 3. Enable ONLY on '/contact' and '/business/*' pages
-  const isTargetPage = location.pathname.startsWith('/contact') || location.pathname.startsWith('/business');
+  // 3. Absolute Rule: Show ONLY on '/contact' page (as requested)
+  const isTargetPage = location.pathname.startsWith('/contact');
 
   if (!isVisible || !isTargetPage) return null;
   const phoneNumber = '6281234567890'; // Replace with actual WhatsApp number
