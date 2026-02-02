@@ -27,11 +27,21 @@ export const logUserActivity = async (action: string, module: string, details: s
             user_agent: navigator.userAgent
         };
 
-        // Only include user_id if it exists and looks like a UUID or we've updated the table to TEXT
-        // To be safe against 400 errors, we only include it if it's not null
-        if (user?.id) {
+        // Only include user_id if it exists and is a valid UUID
+        // This prevents 400 Bad Request if the ID is a custom string like 'admin-123'
+        // while the database column is still a UUID type.
+        const isUUID = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+        
+        if (user?.id && isUUID(user.id)) {
             payload.user_id = user.id;
         }
+
+        // Clean up undefined or null values to prevent schema mismatch
+        Object.keys(payload).forEach(key => {
+            if (payload[key] === undefined || payload[key] === null) {
+                delete payload[key];
+            }
+        });
 
         await supabase.from('user_activity_logs').insert(payload);
     } catch (err) {
