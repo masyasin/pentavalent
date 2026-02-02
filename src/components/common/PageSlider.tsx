@@ -88,7 +88,7 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
     if (slides.length === 0) return null;
 
     return (
-        <section className="relative h-[45dvh] min-h-[350px] md:h-[55dvh] md:min-h-[500px] lg:h-[70vh] lg:min-h-[600px] w-full overflow-hidden bg-slate-900">
+        <section className="relative h-[55dvh] min-h-[480px] md:h-[60dvh] md:min-h-[550px] lg:h-[75vh] lg:min-h-[650px] w-full overflow-hidden bg-slate-900">
             {/* Embla Viewport */}
             <div className="h-full w-full embla" ref={emblaRef}>
                 <div className="flex h-full w-full">
@@ -109,11 +109,11 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                         objectPosition: 'center 30%'
                                     }}
                                 />
-                                <div className="absolute inset-0 bg-slate-950/20 z-10"></div>
+                                <div className="absolute inset-0 bg-slate-950/40 z-10"></div>
                             </div>
 
                             {/* Content */}
-                            <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-6 pt-24 md:pt-32">
+                            <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-6 pt-28 pb-32 md:pt-36 md:pb-36">
                                 <div className="max-w-5xl mx-auto space-y-4 md:space-y-6">
                                     <AnimatePresence mode="wait">
                                         {selectedIndex === index && (
@@ -122,9 +122,9 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                                 exit={{ opacity: 0, y: -20, scale: 1.02 }}
                                                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                                className="space-y-4 md:space-y-6"
+                                                className="flex flex-col items-center"
                                             >
-                                                <div className="inline-flex items-center gap-3 px-5 py-2 bg-primary/20 backdrop-blur-xl border border-primary/30 rounded-full mb-2">
+                                                <div className="inline-flex items-center gap-3 px-5 py-2 bg-primary/30 backdrop-blur-xl border border-primary/40 rounded-full mb-6 shadow-xl">
                                                     <span className="relative flex h-2 w-2">
                                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                                                         <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
@@ -134,11 +134,11 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                                     </span>
                                                 </div>
 
-                                                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.1] tracking-tighter text-white italic drop-shadow-2xl">
+                                                <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] tracking-tighter text-white italic drop-shadow-2xl mb-6 px-4">
                                                     {language === 'id' ? slide.title_id : slide.title_en}
                                                 </h1>
 
-                                                <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mt-8 mb-8 select-none">
+                                                <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mb-10 select-none scale-90 md:scale-100">
                                                     {/* Home Node */}
                                                     <a href="/" className="flex items-center group">
                                                         <div className="w-3 h-3 rounded-full border-2 border-cyan-400 bg-transparent group-hover:bg-cyan-400 transition-colors shrink-0"></div>
@@ -173,7 +173,7 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                                     </div>
                                                 </div>
 
-                                                <p className="text-lg md:text-2xl text-blue-100/70 font-medium max-w-3xl mx-auto leading-relaxed">
+                                                <p className="text-sm md:text-lg lg:text-xl text-white font-medium max-w-4xl mx-auto leading-relaxed drop-shadow-lg px-6 opacity-90">
                                                     {language === 'id' ? slide.subtitle_id : slide.subtitle_en}
                                                 </p>
                                             </motion.div>
@@ -207,7 +207,7 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
             )}
 
             {/* Bottom Interface Fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-20 md:h-40 bg-gradient-to-t from-white to-transparent z-10"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-12 md:h-20 bg-gradient-to-t from-white via-white/20 to-transparent z-10"></div>
         </section>
     );
 };
