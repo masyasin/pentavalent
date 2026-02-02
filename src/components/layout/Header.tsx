@@ -498,7 +498,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                     <div key={menu.id} className="space-y-2">
                       <button
                         onClick={() => hasChildren ? setActiveDropdown(isOpen ? null : menu.id) : handleLinkClick(menu.path)}
-                        className={`w-full text-left px-6 py-5 rounded-[2rem] text-[13px] font-black capitalize tracking-wide transition-all flex items-center justify-between border ${isActive
+                        className={`w-full text-left px-6 py-5 rounded-[2rem] text-[15px] font-black capitalize tracking-wide transition-all flex items-center justify-between border ${isActive
                           ? 'bg-slate-900 text-white border-slate-900 shadow-xl shadow-slate-900/20'
                           : 'text-slate-600 bg-slate-50 border-slate-100 hover:bg-white hover:border-primary/30'}`}
                       >
@@ -523,7 +523,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                               <button
                                 key={child.id}
                                 onClick={() => handleLinkClick(child.path)}
-                                className="w-full text-left px-6 py-4 rounded-2xl text-[11.5px] font-bold capitalize tracking-normal text-slate-500 bg-white border border-slate-50 hover:border-primary/20 hover:text-primary transition-all flex items-center justify-between group"
+                                className="w-full text-left px-6 py-4 rounded-2xl text-[13px] font-bold capitalize tracking-normal text-slate-500 bg-white border border-slate-50 hover:border-primary/20 hover:text-primary transition-all flex items-center justify-between group"
                               >
                                 <span>{language === 'id' ? child.label_id : child.label_en}</span>
                                 <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
