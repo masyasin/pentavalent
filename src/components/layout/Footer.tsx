@@ -394,6 +394,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           <div className="flex items-center gap-6 flex-wrap justify-center max-md:gap-y-3 max-md:gap-x-6">
+            <a href="/sitemap" className="text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">{language === 'id' ? 'Peta Situs' : 'Sitemap'}</a>
             <a href="/faq" className="text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">{t('footer.faq')}</a>
             <a href="/privacy-policy" className="text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">{t('footer.privacy')}</a>
             <a href="/code-of-conduct" className="text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">{t('footer.code_conduct')}</a>

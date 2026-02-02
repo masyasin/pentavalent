@@ -263,7 +263,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
                 }}
               >
                 <div className="flex items-center justify-start py-1">
-                  <img
+                    <img
                     src={settings?.logo_url || "/logo-icon.png"}
                     alt="Penta Valent"
                     width="200"

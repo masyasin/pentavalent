@@ -21,6 +21,7 @@ const BusinessPage = lazy(() => import("./pages/public/business/BusinessPage"));
 const InvestorPage = lazy(() => import("./pages/public/investor/InvestorPage"));
 const CareerPage = lazy(() => import("./pages/public/career/CareerPage"));
 const ContactPage = lazy(() => import("./pages/public/contact/ContactPage"));
+const SitemapPage = lazy(() => import("./pages/public/SitemapPage"));
 const GlobalTools = lazy(() => import("./components/ui/GlobalTools"));
 
 // Simple Loading Fallback
@@ -69,6 +70,7 @@ const App = () => (
                 <Route path="/investor/keterbukaan-informasi" element={<InvestorPage />} />
                 <Route path="/career" element={<CareerPage />} />
                 <Route path="/contact" element={<ContactPage />} />
+                <Route path="/sitemap" element={<SitemapPage />} />
                 <Route path="/*" element={<AppLayout />} />
               </Routes>
             </Suspense>
