@@ -28,6 +28,7 @@ import ForgotPasswordPage from './ForgotPasswordPage';
 import NewsletterManager from './NewsletterManager';
 import SecurityLogsManager from './SecurityLogsManager';
 import UserActivityManager from './UserActivityManager';
+import DatabaseBackupManager from './DatabaseBackupManager';
 
 // Admin Pages Component with Auth Check and Routing
 const AdminContent: React.FC = () => {
@@ -94,6 +95,7 @@ const AdminContent: React.FC = () => {
         <Route path="investor" element={<ProtectedRoute module="investor"><InvestorManager /></ProtectedRoute>} />
         <Route path="security_logs" element={<ProtectedRoute module="security_logs"><SecurityLogsManager /></ProtectedRoute>} />
         <Route path="audit_logs" element={<ProtectedRoute module="audit_logs"><UserActivityManager /></ProtectedRoute>} />
+        <Route path="db_backup" element={<ProtectedRoute module="db_backup"><DatabaseBackupManager /></ProtectedRoute>} />
         <Route path="analytics" element={<ProtectedRoute module="analytics"><AnalyticsManager /></ProtectedRoute>} />
 
 

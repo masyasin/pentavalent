@@ -296,6 +296,7 @@ const translations: Translations = {
   'admin.menu.legal': { id: 'Dokumen Hukum', en: 'Legal Documents' },
   'admin.menu.newsletter': { id: 'Buletin', en: 'Newsletter' },
   'admin.menu.settings': { id: 'Pengaturan Situs', en: 'Site Settings' },
+  'admin.menu.db_backup': { id: 'Backup Database', en: 'Database Backup' },
   'admin.menu.profile': { id: 'Profil Saya', en: 'My Profile' },
   'admin.menu.security': { id: 'Keamanan & Privasi', en: 'Security & Privacy' },
   'admin.menu.signout': { id: 'Keluar', en: 'Sign Out' },

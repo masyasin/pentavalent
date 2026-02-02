@@ -73,7 +73,8 @@ export type AdminModule =
   | 'website'
   | 'recruitment'
   | 'content'
-  | 'security_logs';
+  | 'security_logs'
+  | 'db_backup';
 
 // Role-based permissions matrix
 const rolePermissions: Record<UserRole, Permission[]> = {
@@ -143,6 +144,7 @@ const moduleAccess: Record<AdminModule, UserRole[]> = {
   calendar: ['super_admin', 'admin', 'editor'],
   newsletter: ['super_admin', 'admin', 'editor', 'viewer'],
   security_logs: ['super_admin', 'admin'],
+  db_backup: ['super_admin'],
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
