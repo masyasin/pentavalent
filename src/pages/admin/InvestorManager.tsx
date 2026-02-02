@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { motion } from 'framer-motion';
+import { useAuth, usePermission } from '../../contexts/AuthContext';
 
 // --- Interfaces ---
 
@@ -104,6 +105,11 @@ const ICON_OPTIONS = [
 type TabType = 'documents' | 'highlights' | 'ratios' | 'shareholders' | 'dividends' | 'calendar';
 
 const InvestorManager: React.FC = () => {
+    const { user } = useAuth();
+    const canCreate = usePermission('create', 'investor');
+    const canEdit = usePermission('edit', 'investor');
+    const canDelete = usePermission('delete', 'investor');
+
     const [activeTab, setActiveTab] = useState<TabType>('documents');
     const [loading, setLoading] = useState(false);
 
@@ -351,8 +357,21 @@ const InvestorManager: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-2">
-                                            <button onClick={() => openModal(doc)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"><Edit2 size={16} /></button>
-                                            <button onClick={() => setDeleteDialog({ isOpen: true, id: doc.id, name: doc.title_id, table: 'investor_documents' })} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><Trash2 size={16} /></button>
+                                            {canEdit && (
+                                                <button onClick={() => openModal(doc)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Edit Document">
+                                                    <Edit2 size={16} />
+                                                </button>
+                                            )}
+                                            {!canEdit && (
+                                                <button onClick={() => openModal(doc)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View Details">
+                                                    <Eye size={16} />
+                                                </button>
+                                            )}
+                                            {canDelete && (
+                                                <button onClick={() => setDeleteDialog({ isOpen: true, id: doc.id, name: doc.title_id, table: 'investor_documents' })} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete Document">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>
@@ -457,22 +476,37 @@ const InvestorManager: React.FC = () => {
                         )}
 
                         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all flex gap-2">
-                            <button onClick={() => openModal(item)} className="p-2 bg-white text-blue-600 rounded-lg shadow-sm border border-gray-100 hover:bg-blue-50"><Edit2 size={16} /></button>
-                            <button onClick={() => setDeleteDialog({ isOpen: true, id: item.id, name: 'Items', table })} className="p-2 bg-white text-red-600 rounded-lg shadow-sm border border-gray-100 hover:bg-red-50"><Trash2 size={16} /></button>
+                            {canEdit && (
+                                <button onClick={() => openModal(item)} className="p-2 bg-white text-blue-600 rounded-lg shadow-sm border border-gray-100 hover:bg-blue-50" title="Edit Item">
+                                    <Edit2 size={16} />
+                                </button>
+                            )}
+                            {!canEdit && (
+                                <button onClick={() => openModal(item)} className="p-2 bg-white text-blue-600 rounded-lg shadow-sm border border-gray-100 hover:bg-blue-50" title="View Details">
+                                    <Eye size={16} />
+                                </button>
+                            )}
+                            {canDelete && (
+                                <button onClick={() => setDeleteDialog({ isOpen: true, id: item.id, name: 'Items', table })} className="p-2 bg-white text-red-600 rounded-lg shadow-sm border border-gray-100 hover:bg-red-50" title="Delete Item">
+                                    <Trash2 size={16} />
+                                </button>
+                            )}
                         </div>
                     </motion.div>
                 ))}
 
                 {/* Add New Card */}
-                <button
-                    onClick={() => openModal()}
-                    className="min-h-[200px] border-2 border-dashed border-gray-200 rounded-[2rem] flex flex-col items-center justify-center gap-3 text-gray-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50/10 transition-all group"
-                >
-                    <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Plus size={24} />
-                    </div>
-                    <span className="font-bold text-sm uppercase tracking-wide">Add New Item</span>
-                </button>
+                {canCreate && (
+                    <button
+                        onClick={() => openModal()}
+                        className="min-h-[200px] border-2 border-dashed border-gray-200 rounded-[2rem] flex flex-col items-center justify-center gap-3 text-gray-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50/10 transition-all group"
+                    >
+                        <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <Plus size={24} />
+                        </div>
+                        <span className="font-bold text-sm uppercase tracking-wide">Add New Item</span>
+                    </button>
+                )}
             </div>
         );
     };
@@ -484,7 +518,7 @@ const InvestorManager: React.FC = () => {
                     <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic underline decoration-blue-500 decoration-8 underline-offset-8">Investor Relations</h2>
                     <p className="text-gray-500 mt-2 font-medium">Manage Documents, Ratios, and Shareholder Data</p>
                 </div>
-                {activeTab === 'documents' && (
+                {activeTab === 'documents' && canCreate && (
                     <button
                         onClick={() => openModal()}
                         className="px-6 py-3 bg-blue-600 text-white rounded-xl font-black shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2 uppercase tracking-wide text-xs"
@@ -511,6 +545,18 @@ const InvestorManager: React.FC = () => {
                         </div>
 
                         <form onSubmit={handleSubmit} className="p-8 space-y-6">
+                            {/* Read Only Warning */}
+                            {!canEdit && editingId && (
+                                <div className="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+                                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                                        <Eye size={20} />
+                                    </div>
+                                    <div>
+                                        <p className="font-black text-blue-900 uppercase tracking-tight text-xs">Read-Only Mode</p>
+                                        <p className="text-[10px] text-blue-600 font-bold uppercase tracking-widest">Viewing details only. Changes disabled.</p>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* --- Fields for Documents --- */}
                             {activeTab === 'documents' && (
@@ -680,14 +726,26 @@ const InvestorManager: React.FC = () => {
                                 </>
                             )}
 
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full py-4 bg-slate-900 text-white rounded-xl font-black uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
-                            >
-                                {loading ? <RefreshCw className="animate-spin" /> : <Save size={20} />}
-                                Save Changes
-                            </button>
+                            {(canEdit || (!editingId && canCreate)) && (
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full py-4 bg-slate-900 text-white rounded-xl font-black uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+                                >
+                                    {loading ? <RefreshCw className="animate-spin" /> : <Save size={20} />}
+                                    {editingId ? 'Save Changes' : 'Create New Item'}
+                                </button>
+                            )}
+
+                            {!canEdit && editingId && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                    className="w-full py-4 bg-slate-100 text-slate-500 rounded-xl font-black uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
+                                >
+                                    Close Preview
+                                </button>
+                            )}
 
                         </form>
                     </div>
