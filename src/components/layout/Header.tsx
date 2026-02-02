@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Search, X, ChevronDown, Building2, Target, Users, Globe, ShieldCheck, ArrowRight, Server, TrendingUp, Activity, FileText, FileSearch, Info } from 'lucide-react';
+import { Search, X, ChevronDown, Building2, Target, Users, Globe, ShieldCheck, ArrowRight, Server, TrendingUp, Activity, FileText, FileSearch, Info, Layout, Newspaper, Briefcase } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
