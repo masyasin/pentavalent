@@ -1,16 +1,18 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Briefcase, FileText } from 'lucide-react';
+import { Briefcase, FileText, Users } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import CareerManager from './CareerManager';
 import ApplicationsManager from './ApplicationsManager';
 
 const RecruitmentManager: React.FC = () => {
+    const { t } = useLanguage();
     const location = useLocation();
     const navigate = useNavigate();
 
     const tabs = [
-        { id: 'jobs', label: 'Careers', icon: Briefcase, description: 'Manage job listings' },
-        { id: 'applications', label: 'Job Applications', icon: FileText, description: 'Review applicant submissions' },
+        { id: 'jobs', label: t('admin.recruitment.tab.careers'), icon: Briefcase, description: 'Manage job listings' },
+        { id: 'applications', label: t('admin.recruitment.tab.applications'), icon: Users, description: 'Review applicant submissions' },
     ] as const;
 
     // Extract current tab from URL
@@ -18,25 +20,27 @@ const RecruitmentManager: React.FC = () => {
     const activeTab = currentPath.split('/')[0];
 
     return (
-        <div className="space-y-8 pb-20">
+        <div className="space-y-10 animate-in fade-in duration-700 pb-20">
             <div className="space-y-2 px-1 text-left">
                 <h1 className="text-5xl font-black text-gray-900 tracking-tighter uppercase italic leading-none">
-                    Recruitment <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">Hub</span>
+                    {t('admin.recruitment.title').split(' ')[0]} <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-8">{t('admin.recruitment.title').split(' ').slice(1).join(' ')}</span>
                 </h1>
-                <p className="text-gray-400 font-black uppercase tracking-[0.3em] text-[10px]">Manage opening positions and applications</p>
+                <p className="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px]">
+                    {t('admin.recruitment.subtitle')}
+                </p>
             </div>
 
-            <div className="bg-white p-3 rounded-[3rem] border border-gray-100 shadow-sm flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-4 p-2 bg-gray-50/50 border border-gray-100 rounded-[2.5rem] w-fit">
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => navigate(`/admin/recruitment/${tab.id}`)}
-                        className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] transition-all font-black uppercase text-[10px] tracking-widest ${activeTab === tab.id
-                            ? 'bg-blue-600 text-white shadow-2xl shadow-blue-200 -translate-y-1'
-                            : 'text-gray-400 hover:text-gray-700 hover:bg-gray-50'
+                        className={`px-10 py-5 rounded-[2rem] font-black uppercase tracking-widest text-[11px] transition-all flex items-center gap-3 ${activeTab === tab.id
+                            ? 'bg-white text-blue-600 shadow-xl shadow-blue-500/10 ring-1 ring-gray-100'
+                            : 'text-gray-400 hover:text-gray-600 hover:bg-white/50'
                             }`}
                     >
-                        <tab.icon size={16} />
+                        <tab.icon size={18} className={activeTab === tab.id ? 'animate-pulse' : ''} />
                         {tab.label}
                     </button>
                 ))}

@@ -6,7 +6,7 @@ import { translateText } from '../../lib/translation';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
     Plus, Search, Edit2, Trash2, MapPin, Building2,
-    Calendar, Briefcase, ChevronRight, ChevronLeft, X, Save, AlertCircle, Sparkles, RefreshCw, Maximize2, Minimize2
+    Calendar, Briefcase, ChevronRight, ChevronLeft, X, Save, AlertCircle, Sparkles, RefreshCw, Maximize2, Minimize2, Eye
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { logUserActivity } from '../../lib/security';
@@ -249,7 +249,7 @@ const CareerManager: React.FC = () => {
                     <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                         type="text"
-                        placeholder="Search opportunities..."
+                        placeholder={t('admin.career.search_placeholder')}
                         value={searchTerm}
                         onChange={(e) => {
                             setSearchTerm(e.target.value);
@@ -277,7 +277,7 @@ const CareerManager: React.FC = () => {
                             <div className="grid grid-cols-1 gap-6">
                                 {loading ? (
                                     <div className="p-20 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">
-                                        {t('common.loading') || 'Scanning Career Network...'}
+                                        {t('admin.career.loading')}
                                     </div>
                                 ) : filteredCareers.length === 0 ? (
                                     <div className="bg-white rounded-[3rem] border-2 border-dashed border-gray-100 p-20 text-center space-y-6">
@@ -285,8 +285,8 @@ const CareerManager: React.FC = () => {
                                             <Briefcase size={40} />
                                         </div>
                                         <div className="space-y-2">
-                                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">No Global Vacancies</h3>
-                                            <p className="text-gray-400 font-medium text-sm">{searchTerm ? 'No matches found.' : 'Start building your team by posting the first job opening.'}</p>
+                                            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">{t('admin.career.empty_title')}</h3>
+                                            <p className="text-gray-400 font-medium text-sm">{searchTerm ? t('admin.career.empty_search') : t('admin.career.empty_desc')}</p>
                                         </div>
                                     </div>
                                 ) : (
@@ -316,7 +316,7 @@ const CareerManager: React.FC = () => {
                                                             </div>
                                                             <div className={`px-3 py-1 rounded-lg text-[9px] ${career.is_active ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'
                                                                 }`}>
-                                                                {career.is_active ? 'ACTIVE' : 'CLOSED'}
+                                                                {career.is_active ? t('common.active') : t('common.inactive')}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -326,7 +326,7 @@ const CareerManager: React.FC = () => {
                                                         <button
                                                             onClick={() => handleEdit(career)}
                                                             className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
-                                                            title="Edit Opportunity"
+                                                            title={t('common.edit')}
                                                         >
                                                             <Edit2 size={20} />
                                                         </button>
@@ -335,7 +335,7 @@ const CareerManager: React.FC = () => {
                                                         <button
                                                             onClick={() => handleEdit(career)}
                                                             className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
-                                                            title="View Details"
+                                                            title={t('common.view')}
                                                         >
                                                             <Eye size={20} />
                                                         </button>
@@ -344,7 +344,7 @@ const CareerManager: React.FC = () => {
                                                         <button
                                                             onClick={() => handleDelete(career.id, career.title)}
                                                             className="p-4 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-[1.25rem] transition-all"
-                                                            title="Delete Opportunity"
+                                                            title={t('common.delete')}
                                                         >
                                                             <Trash2 size={20} />
                                                         </button>
@@ -361,7 +361,7 @@ const CareerManager: React.FC = () => {
                                 totalPages > 1 && (
                                     <div className="flex items-center justify-between p-4 px-8 mt-4">
                                         <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                                            Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredCareers.length)} of {filteredCareers.length}
+                                            {t('common.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredCareers.length)} {t('common.of')} {filteredCareers.length}
                                         </div>
                                         <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
                                             <button
@@ -404,9 +404,9 @@ const CareerManager: React.FC = () => {
                                     </div>
                                     <div>
                                         <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight italic">
-                                            {editingCareer ? 'Update Opportunity' : 'Launch New Opening'}
+                                            {editingCareer ? t('admin.career.modal.edit_title') : t('admin.career.modal.add_title')}
                                         </h3>
-                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Global Talent Acquisition</p>
+                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('admin.career.modal.subtitle')}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -434,15 +434,15 @@ const CareerManager: React.FC = () => {
                                             <Eye size={24} />
                                         </div>
                                         <div>
-                                            <p className="font-black text-blue-900 uppercase tracking-tight italic">Read-Only Mode</p>
-                                            <p className="text-xs text-blue-600 font-bold uppercase tracking-widest">You are viewing this career opportunity in preview mode. Changes cannot be saved.</p>
+                                            <p className="font-black text-blue-900 uppercase tracking-tight italic">{t('common.read_only_mode')}</p>
+                                            <p className="text-xs text-blue-600 font-bold uppercase tracking-widest">{t('common.read_only_warning')}</p>
                                         </div>
                                     </div>
                                 )}
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Job Title</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">{t('admin.career.form.title')}</label>
                                         <input
                                             type="text"
                                             required
@@ -453,7 +453,7 @@ const CareerManager: React.FC = () => {
                                         />
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Department</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">{t('admin.career.form.dept')}</label>
                                         <input
                                             type="text"
                                             required
@@ -467,7 +467,7 @@ const CareerManager: React.FC = () => {
 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                     <div className="space-y-3">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Office Location</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">{t('admin.career.form.location')}</label>
                                         <div className="relative">
                                             <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 text-rose-500" size={20} />
                                             <input
@@ -481,7 +481,7 @@ const CareerManager: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Employment Model</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">{t('admin.career.form.type')}</label>
                                         <div className="relative">
                                             <Briefcase className="absolute left-6 top-1/2 -translate-y-1/2 text-blue-500" size={20} />
                                             <select
@@ -496,7 +496,7 @@ const CareerManager: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Closing Date</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">{t('admin.career.form.deadline')}</label>
                                         <div className="relative">
                                             <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 text-amber-500" size={20} />
                                             <input
@@ -513,19 +513,19 @@ const CareerManager: React.FC = () => {
                                 <div className="space-y-8 pt-6 border-t border-gray-50">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-1 h-blue-600 rounded-full"></div>
-                                        <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-[0.3em] italic">Operational Mission (Description)</h4>
+                                        <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-[0.3em] italic">{t('admin.career.form.mission_title')}</h4>
                                     </div>
                                     <div className={`grid gap-8 ${isMaximized ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                         <div className="space-y-4">
                                             <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic flex items-center gap-2">
                                                 <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                                                Description (Bahasa Indonesia)
+                                                {t('admin.career.form.desc_id')}
                                             </label>
                                             <div className="rounded-[2.5rem] overflow-hidden border-2 border-transparent focus-within:border-blue-500 transition-all shadow-inner">
                                                 <RichTextEditor
                                                     content={formData.description_id}
                                                     onChange={(val) => setFormData({ ...formData, description_id: val })}
-                                                    placeholder="Tuliskan deskripsi pekerjaan..."
+                                                    placeholder={t('admin.career.form.desc_placeholder_id')}
                                                 />
                                             </div>
                                         </div>
@@ -533,23 +533,23 @@ const CareerManager: React.FC = () => {
                                             <div className="flex justify-between items-center px-4">
                                                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none flex items-center gap-2">
                                                     <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                                                    Description (English)
+                                                    {t('admin.career.form.desc_en')}
                                                 </label>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleAutoTranslate(formData.description_id, 'description_en')}
                                                     disabled={!!translating}
-                                                    className="text-blue-600 hover:text-black transition-colors flex items-center gap-2 group"
+                                                    className="px-6 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2 group shadow-sm"
                                                 >
                                                     {translating === 'description_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} className="group-hover:scale-125 transition-transform" />}
-                                                    <span className="text-[10px] font-black uppercase tracking-widest">Global Sync</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest leading-none">{t('common.auto_translate')}</span>
                                                 </button>
                                             </div>
                                             <div className="rounded-[2.5rem] overflow-hidden border-2 border-transparent focus-within:border-emerald-500 transition-all shadow-inner">
                                                 <RichTextEditor
                                                     content={formData.description_en}
                                                     onChange={(val) => setFormData({ ...formData, description_en: val })}
-                                                    placeholder="Write global job description..."
+                                                    placeholder={t('admin.career.form.desc_placeholder_en')}
                                                 />
                                             </div>
                                         </div>
@@ -560,19 +560,19 @@ const CareerManager: React.FC = () => {
                                 <div className="space-y-8 pt-6 border-t border-gray-50">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-1 h-rose-500 rounded-full"></div>
-                                        <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-[0.3em] italic">Tactical Requirements</h4>
+                                        <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-[0.3em] italic">{t('admin.career.form.req_title')}</h4>
                                     </div>
                                     <div className={`grid gap-8 ${isMaximized ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                         <div className="space-y-4">
                                             <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic flex items-center gap-2">
                                                 <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                                                Requirements (Bahasa Indonesia)
+                                                {t('admin.career.form.req_id')}
                                             </label>
                                             <div className="rounded-[2.5rem] overflow-hidden border-2 border-transparent focus-within:border-blue-500 transition-all shadow-inner">
                                                 <RichTextEditor
                                                     content={formData.requirements_id}
                                                     onChange={(val) => setFormData({ ...formData, requirements_id: val })}
-                                                    placeholder="Tuliskan kriteria pelamar..."
+                                                    placeholder={t('admin.career.form.req_placeholder_id')}
                                                 />
                                             </div>
                                         </div>
@@ -580,23 +580,23 @@ const CareerManager: React.FC = () => {
                                             <div className="flex justify-between items-center px-4">
                                                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none flex items-center gap-2">
                                                     <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                                                    Requirements (English)
+                                                    {t('admin.career.form.req_en')}
                                                 </label>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleAutoTranslate(formData.requirements_id, 'requirements_en')}
                                                     disabled={!!translating}
-                                                    className="text-blue-600 hover:text-black transition-colors flex items-center gap-2 group"
+                                                    className="px-6 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2 group shadow-sm"
                                                 >
                                                     {translating === 'requirements_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} className="group-hover:scale-125 transition-transform" />}
-                                                    <span className="text-[10px] font-black uppercase tracking-widest">Global Sync</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest leading-none">{t('common.auto_translate')}</span>
                                                 </button>
                                             </div>
                                             <div className="rounded-[2.5rem] overflow-hidden border-2 border-transparent focus-within:border-emerald-500 transition-all shadow-inner">
                                                 <RichTextEditor
                                                     content={formData.requirements_en}
                                                     onChange={(val) => setFormData({ ...formData, requirements_en: val })}
-                                                    placeholder="Write global applicant criteria..."
+                                                    placeholder={t('admin.career.form.req_placeholder_en')}
                                                 />
                                             </div>
                                         </div>
@@ -609,8 +609,8 @@ const CareerManager: React.FC = () => {
                                             <CheckCircle2 size={24} />
                                         </div>
                                         <div className="text-left">
-                                            <span className="block text-xs font-black uppercase tracking-widest text-gray-800 italic">Publishing Status</span>
-                                            <span className="block text-[10px] font-bold text-gray-400 uppercase">{formData.is_active ? 'Visible to global applicants' : 'Private internal draft'}</span>
+                                            <span className="block text-xs font-black uppercase tracking-widest text-gray-800 italic">{t('admin.career.form.status_title')}</span>
+                                            <span className="block text-[10px] font-bold text-gray-400 uppercase">{formData.is_active ? t('admin.career.form.status_active') : t('admin.career.form.status_draft')}</span>
                                         </div>
                                     </div>
                                     <label className="relative inline-flex items-center cursor-pointer">
@@ -630,7 +630,7 @@ const CareerManager: React.FC = () => {
                                         onClick={() => setShowModal(false)}
                                         className="flex-1 px-10 py-6 bg-gray-100 text-gray-500 font-black rounded-[1.5rem] hover:bg-black hover:text-white transition-all uppercase tracking-widest text-[10px]"
                                     >
-                                        {canEdit || !editingCareer ? 'Discard Changes' : 'Close Preview'}
+                                        {canEdit || !editingCareer ? t('admin.career.form.discard') : t('admin.career.form.close_preview')}
                                     </button>
                                     {(canEdit || (!editingCareer && canCreate)) && (
                                         <button
@@ -638,7 +638,7 @@ const CareerManager: React.FC = () => {
                                             className="flex-[2] px-12 py-6 bg-blue-600 text-white font-black rounded-[1.5rem] hover:bg-black transition-all shadow-2xl shadow-blue-200 flex items-center justify-center gap-4 uppercase tracking-widest text-[10px] active:scale-95"
                                         >
                                             <Save size={20} />
-                                            {editingCareer ? 'SUBMIT UPGRADED MISSION' : 'LAUNCH GLOBAL VACANCY'}
+                                            {editingCareer ? t('admin.career.form.submit_update') : t('admin.career.form.submit_launch')}
                                         </button>
                                     )}
                                 </div>

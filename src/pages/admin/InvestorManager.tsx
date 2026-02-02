@@ -12,6 +12,7 @@ import {
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { motion } from 'framer-motion';
 import { useAuth, usePermission } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 // --- Interfaces ---
 
@@ -106,6 +107,7 @@ type TabType = 'documents' | 'highlights' | 'ratios' | 'shareholders' | 'dividen
 
 const InvestorManager: React.FC = () => {
     const { user } = useAuth();
+    const { t, language } = useLanguage();
     const canCreate = usePermission('create', 'investor');
     const canEdit = usePermission('edit', 'investor');
     const canDelete = usePermission('delete', 'investor');
@@ -285,12 +287,12 @@ const InvestorManager: React.FC = () => {
     const renderTabs = () => (
         <div className="flex flex-wrap gap-2 mb-8 bg-white p-1 rounded-2xl border border-gray-100 w-fit">
             {[
-                { id: 'documents', label: 'Documents', icon: FileText },
-                { id: 'highlights', label: 'Highlights', icon: TrendingUp },
-                { id: 'ratios', label: 'Fin. Ratios', icon: Activity },
-                { id: 'shareholders', label: 'Shareholders', icon: Users },
-                { id: 'dividends', label: 'Dividends', icon: PieChart },
-                { id: 'calendar', label: 'Calendar', icon: Calendar },
+                { id: 'documents', label: t('admin.investor.tabs.documents'), icon: FileText },
+                { id: 'highlights', label: t('admin.investor.tabs.highlights'), icon: TrendingUp },
+                { id: 'ratios', label: t('admin.investor.tabs.ratios'), icon: Activity },
+                { id: 'shareholders', label: t('admin.investor.tabs.shareholders'), icon: Users },
+                { id: 'dividends', label: t('admin.investor.tabs.dividends'), icon: PieChart },
+                { id: 'calendar', label: t('admin.investor.tabs.calendar'), icon: Calendar },
             ].map(tab => (
                 <button
                     key={tab.id}
@@ -323,7 +325,7 @@ const InvestorManager: React.FC = () => {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                     <input
                         type="text"
-                        placeholder="Search documents..."
+                        placeholder={t('admin.investor.form.search_docs')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm font-medium"
@@ -334,10 +336,10 @@ const InvestorManager: React.FC = () => {
                     <table className="w-full text-left text-sm">
                         <thead className="bg-gray-50/50 border-b border-gray-100">
                             <tr>
-                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">Title</th>
-                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">Type</th>
-                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">Period</th>
-                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px] text-right">Actions</th>
+                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">{t('common.title')}</th>
+                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">{t('admin.investor.form.type')}</th>
+                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px]">{t('admin.investor.form.period')}</th>
+                                <th className="px-6 py-4 font-black text-gray-400 uppercase tracking-widest text-[10px] text-right">{t('common.actions')}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -358,17 +360,17 @@ const InvestorManager: React.FC = () => {
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             {canEdit && (
-                                                <button onClick={() => openModal(doc)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Edit Document">
+                                                <button onClick={() => openModal(doc)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title={t('common.edit')}>
                                                     <Edit2 size={16} />
                                                 </button>
                                             )}
                                             {!canEdit && (
-                                                <button onClick={() => openModal(doc)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View Details">
+                                                <button onClick={() => openModal(doc)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title={t('common.view')}>
                                                     <Eye size={16} />
                                                 </button>
                                             )}
                                             {canDelete && (
-                                                <button onClick={() => setDeleteDialog({ isOpen: true, id: doc.id, name: doc.title_id, table: 'investor_documents' })} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete Document">
+                                                <button onClick={() => setDeleteDialog({ isOpen: true, id: doc.id, name: doc.title_id, table: 'investor_documents' })} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title={t('common.delete')}>
                                                     <Trash2 size={16} />
                                                 </button>
                                             )}
@@ -382,7 +384,7 @@ const InvestorManager: React.FC = () => {
                     {totalPages > 1 && (
                         <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
                             <button disabled={docPage === 1} onClick={() => setDocPage(p => p - 1)} className="p-2 disabled:opacity-30"><ChevronLeft size={16} /></button>
-                            <span className="text-xs font-bold text-slate-500">Page {docPage} of {totalPages}</span>
+                            <span className="text-xs font-bold text-slate-500">{t('admin.news.form.showing')} {docPage} {t('admin.news.form.of')} {totalPages}</span>
                             <button disabled={docPage === totalPages} onClick={() => setDocPage(p => p + 1)} className="p-2 disabled:opacity-30"><ChevronRight size={16} /></button>
                         </div>
                     )}
@@ -422,7 +424,7 @@ const InvestorManager: React.FC = () => {
                                 <h4 className="font-bold text-slate-800 mb-1">{item.label_id}</h4>
                                 <p className="text-xs text-slate-400 uppercase tracking-wider">{item.label_en}</p>
                                 <div className="mt-4 inline-block px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-full">
-                                    {item.growth} Growth
+                                    {item.growth} {t('admin.investor.form.growth')}
                                 </div>
                             </>
                         )}
@@ -435,7 +437,7 @@ const InvestorManager: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="text-3xl font-black text-slate-900 mb-2">{item.value}</div>
-                                <p className="text-xs text-slate-500 font-medium">{item.description_id}</p>
+                                <p className="text-xs text-slate-500 font-medium">{language === 'id' ? item.description_id : item.description_en}</p>
                             </>
                         )}
                         {activeTab === 'shareholders' && (
@@ -453,7 +455,7 @@ const InvestorManager: React.FC = () => {
                                     {item.year}
                                 </div>
                                 <div>
-                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">Dividend</div>
+                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">{t('admin.investor.tabs.dividends')}</div>
                                     <div className="text-xl font-black text-slate-900">{item.amount}</div>
                                 </div>
                             </div>
@@ -461,33 +463,33 @@ const InvestorManager: React.FC = () => {
                         {activeTab === 'calendar' && (
                             <div className="flex gap-4 items-start">
                                 <div className={`flex flex-col items-center justify-center p-3 rounded-xl border border-slate-100 ${item.is_active ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-400'}`}>
-                                    <span className="text-[10px] font-black uppercase tracking-widest">{new Date(item.event_date).toLocaleString('default', { month: 'short' })}</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">{new Date(item.event_date).toLocaleString(language === 'id' ? 'id-ID' : 'en-US', { month: 'short' })}</span>
                                     <span className="text-2xl font-black leading-none">{new Date(item.event_date).getDate()}</span>
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         <span className="px-2 py-0.5 rounded-md bg-slate-100 text-[9px] font-black uppercase tracking-widest text-slate-500">{item.event_type}</span>
-                                        {!item.is_active && <span className="text-[9px] font-bold text-red-400 italic">Hidden</span>}
+                                        {!item.is_active && <span className="text-[9px] font-bold text-red-400 italic">{t('admin.investor.form.hidden')}</span>}
                                     </div>
-                                    <h4 className="font-bold text-slate-900 leading-tight mb-1">{item.title_id}</h4>
-                                    <p className="text-xs text-slate-400 font-medium italic">{item.title_en}</p>
+                                    <h4 className="font-bold text-slate-900 leading-tight mb-1">{language === 'id' ? item.title_id : item.title_en}</h4>
+                                    <p className="text-xs text-slate-400 font-medium italic">{language === 'id' ? item.title_en : item.title_id}</p>
                                 </div>
                             </div>
                         )}
 
                         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all flex gap-2">
                             {canEdit && (
-                                <button onClick={() => openModal(item)} className="p-2 bg-white text-blue-600 rounded-lg shadow-sm border border-gray-100 hover:bg-blue-50" title="Edit Item">
+                                <button onClick={() => openModal(item)} className="p-2 bg-white text-blue-600 rounded-lg shadow-sm border border-gray-100 hover:bg-blue-50" title={t('common.edit')}>
                                     <Edit2 size={16} />
                                 </button>
                             )}
                             {!canEdit && (
-                                <button onClick={() => openModal(item)} className="p-2 bg-white text-blue-600 rounded-lg shadow-sm border border-gray-100 hover:bg-blue-50" title="View Details">
+                                <button onClick={() => openModal(item)} className="p-2 bg-white text-blue-600 rounded-lg shadow-sm border border-gray-100 hover:bg-blue-50" title={t('common.view')}>
                                     <Eye size={16} />
                                 </button>
                             )}
                             {canDelete && (
-                                <button onClick={() => setDeleteDialog({ isOpen: true, id: item.id, name: 'Items', table })} className="p-2 bg-white text-red-600 rounded-lg shadow-sm border border-gray-100 hover:bg-red-50" title="Delete Item">
+                                <button onClick={() => setDeleteDialog({ isOpen: true, id: item.id, name: 'Items', table })} className="p-2 bg-white text-red-600 rounded-lg shadow-sm border border-gray-100 hover:bg-red-50" title={t('common.delete')}>
                                     <Trash2 size={16} />
                                 </button>
                             )}
@@ -504,7 +506,7 @@ const InvestorManager: React.FC = () => {
                         <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Plus size={24} />
                         </div>
-                        <span className="font-bold text-sm uppercase tracking-wide">Add New Item</span>
+                        <span className="font-bold text-sm uppercase tracking-wide">{t('admin.investor.form.add_new')}</span>
                     </button>
                 )}
             </div>
@@ -515,15 +517,15 @@ const InvestorManager: React.FC = () => {
         <div className="space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic underline decoration-blue-500 decoration-8 underline-offset-8">Investor Relations</h2>
-                    <p className="text-gray-500 mt-2 font-medium">Manage Documents, Ratios, and Shareholder Data</p>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic underline decoration-blue-500 decoration-8 underline-offset-8">{t('admin.investor.title')}</h2>
+                    <p className="text-gray-500 mt-2 font-medium">{t('admin.investor.subtitle')}</p>
                 </div>
                 {activeTab === 'documents' && canCreate && (
                     <button
                         onClick={() => openModal()}
                         className="px-6 py-3 bg-blue-600 text-white rounded-xl font-black shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2 uppercase tracking-wide text-xs"
                     >
-                        <Plus size={16} /> Upload Document
+                        <Plus size={16} /> {t('admin.investor.form.upload_doc')}
                     </button>
                 )}
             </div>
@@ -539,7 +541,7 @@ const InvestorManager: React.FC = () => {
                     <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
                         <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                             <h3 className="text-xl font-black uppercase italic tracking-tighter text-slate-900">
-                                {editingId ? 'Edit Item' : 'Create New Item'}
+                                {editingId ? t('admin.investor.form.edit_item') : t('admin.investor.form.create_item')}
                             </h3>
                             <button onClick={() => setShowModal(false)}><X size={24} className="text-slate-400 hover:text-slate-900" /></button>
                         </div>
@@ -552,8 +554,8 @@ const InvestorManager: React.FC = () => {
                                         <Eye size={20} />
                                     </div>
                                     <div>
-                                        <p className="font-black text-blue-900 uppercase tracking-tight text-xs">Read-Only Mode</p>
-                                        <p className="text-[10px] text-blue-600 font-bold uppercase tracking-widest">Viewing details only. Changes disabled.</p>
+                                        <p className="font-black text-blue-900 uppercase tracking-tight text-xs">{t('common.read_only_mode')}</p>
+                                        <p className="text-[10px] text-blue-600 font-bold uppercase tracking-widest">{t('common.read_only_warning')}</p>
                                     </div>
                                 </div>
                             )}
@@ -563,31 +565,31 @@ const InvestorManager: React.FC = () => {
                                 <>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Title (ID)</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.title_id')}</label>
                                             <input type="text" value={formData.title_id} onChange={e => setFormData({ ...formData, title_id: e.target.value })} className="input-field w-full p-3 bg-slate-50 rounded-xl border-none outline-none focus:ring-2 focus:ring-blue-500" required />
                                         </div>
                                         <div className="space-y-2">
                                             <div className="flex justify-between">
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Title (EN)</label>
-                                                <button type="button" onClick={() => handleAutoTranslate(formData.title_id, 'title_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> Auto</button>
+                                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.title_en')}</label>
+                                                <button type="button" onClick={() => handleAutoTranslate(formData.title_id, 'title_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> {t('common.sync')}</button>
                                             </div>
                                             <input type="text" value={formData.title_en} onChange={e => setFormData({ ...formData, title_en: e.target.value })} className="input-field w-full p-3 bg-slate-50 rounded-xl border-none outline-none focus:ring-2 focus:ring-blue-500" required />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Type</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.type')}</label>
                                             <select value={formData.document_type} onChange={e => setFormData({ ...formData, document_type: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none outline-none font-bold text-sm">
                                                 {DOCUMENT_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
                                             </select>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Year</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.year')}</label>
                                             <input type="number" value={formData.year} onChange={e => setFormData({ ...formData, year: parseInt(e.target.value) })} className="w-full p-3 bg-slate-50 rounded-xl border-none outline-none font-bold" />
                                         </div>
                                     </div>
                                     <FileUpload
-                                        label="PDF Document"
+                                        label={t('admin.investor.form.pdf')}
                                         bucket="documents"
                                         accept=".pdf"
                                         currentUrl={formData.file_url}
@@ -602,27 +604,27 @@ const InvestorManager: React.FC = () => {
                                 <>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Label (ID)</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.label_id')}</label>
                                             <input type="text" value={formData.label_id} onChange={e => setFormData({ ...formData, label_id: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" />
                                         </div>
                                         <div className="space-y-2">
-                                            <div className="flex justify-between"><label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Label (EN)</label>
-                                                <button type="button" onClick={() => handleAutoTranslate(formData.label_id, 'label_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> Auto</button></div>
+                                            <div className="flex justify-between"><label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.label_en')}</label>
+                                                <button type="button" onClick={() => handleAutoTranslate(formData.label_id, 'label_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> {t('common.sync')}</button></div>
                                             <input type="text" value={formData.label_en} onChange={e => setFormData({ ...formData, label_en: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Value</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.value')}</label>
                                             <input type="text" placeholder="e.g. 18.4%" value={formData.value} onChange={e => setFormData({ ...formData, value: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-black text-lg" />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Growth</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.growth')}</label>
                                             <input type="text" placeholder="e.g. +2.1%" value={formData.growth} onChange={e => setFormData({ ...formData, growth: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold text-green-600" />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Icon</label>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.icon')}</label>
                                         <select value={formData.icon_name} onChange={e => setFormData({ ...formData, icon_name: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold">
                                             {ICON_OPTIONS.map(icon => <option key={icon} value={icon}>{icon}</option>)}
                                         </select>
@@ -634,21 +636,21 @@ const InvestorManager: React.FC = () => {
                             {activeTab === 'ratios' && (
                                 <>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Label (e.g. P/E Ratio)</label>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.label_id')} (e.g. P/E Ratio)</label>
                                         <input type="text" value={formData.label} onChange={e => setFormData({ ...formData, label: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Value (e.g. 12.4x)</label>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.value')} (e.g. 12.4x)</label>
                                         <input type="text" value={formData.value} onChange={e => setFormData({ ...formData, value: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-black text-xl" />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Desc (ID)</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.desc_id')}</label>
                                             <input type="text" value={formData.description_id} onChange={e => setFormData({ ...formData, description_id: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none text-sm" />
                                         </div>
                                         <div className="space-y-2">
-                                            <div className="flex justify-between"><label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Desc (EN)</label>
-                                                <button type="button" onClick={() => handleAutoTranslate(formData.description_id, 'description_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> Auto</button></div>
+                                            <div className="flex justify-between"><label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.desc_en')}</label>
+                                                <button type="button" onClick={() => handleAutoTranslate(formData.description_id, 'description_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> {t('common.sync')}</button></div>
                                             <input type="text" value={formData.description_en} onChange={e => setFormData({ ...formData, description_en: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none text-sm" />
                                         </div>
                                     </div>
@@ -659,20 +661,20 @@ const InvestorManager: React.FC = () => {
                             {activeTab === 'shareholders' && (
                                 <>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Shareholder Name</label>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.sh_name')}</label>
                                         <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Percentage (%)</label>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.percentage')}</label>
                                         <input type="number" step="0.01" value={formData.percentage} onChange={e => setFormData({ ...formData, percentage: parseFloat(e.target.value) })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-black text-xl" />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Color Start (Tailwind)</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.color_start')}</label>
                                             <input type="text" placeholder="from-blue-600" value={formData.color_start} onChange={e => setFormData({ ...formData, color_start: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none text-xs font-mono" />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Color End (Tailwind)</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.color_end')}</label>
                                             <input type="text" placeholder="to-cyan-500" value={formData.color_end} onChange={e => setFormData({ ...formData, color_end: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none text-xs font-mono" />
                                         </div>
                                     </div>
@@ -683,11 +685,11 @@ const InvestorManager: React.FC = () => {
                             {activeTab === 'dividends' && (
                                 <>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Year</label>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.year')}</label>
                                         <input type="number" value={formData.year} onChange={e => setFormData({ ...formData, year: parseInt(e.target.value) })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-black text-xl" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Amount (e.g. 15 IDR/Share)</label>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.amount')}</label>
                                         <input type="text" value={formData.amount} onChange={e => setFormData({ ...formData, amount: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" />
                                     </div>
                                 </>
@@ -698,22 +700,22 @@ const InvestorManager: React.FC = () => {
                                 <>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Event Title (ID)</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.title_id')}</label>
                                             <input type="text" value={formData.title_id} onChange={e => setFormData({ ...formData, title_id: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" required />
                                         </div>
                                         <div className="space-y-2">
-                                            <div className="flex justify-between"><label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Event Title (EN)</label>
-                                                <button type="button" onClick={() => handleAutoTranslate(formData.title_id, 'title_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> Auto</button></div>
+                                            <div className="flex justify-between"><label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.title_en')}</label>
+                                                <button type="button" onClick={() => handleAutoTranslate(formData.title_id, 'title_en')} className="text-[10px] font-bold text-blue-500 uppercase flex items-center gap-1 hover:text-blue-700"><Sparkles size={10} /> {t('common.sync')}</button></div>
                                             <input type="text" value={formData.title_en} onChange={e => setFormData({ ...formData, title_en: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" required />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Date</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.event_date')}</label>
                                             <input type="date" value={formData.event_date} onChange={e => setFormData({ ...formData, event_date: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold" required />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Event Type</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('admin.investor.form.event_type')}</label>
                                             <select value={formData.event_type} onChange={e => setFormData({ ...formData, event_type: e.target.value })} className="w-full p-3 bg-slate-50 rounded-xl border-none font-bold">
                                                 {EVENT_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
                                             </select>
@@ -721,7 +723,7 @@ const InvestorManager: React.FC = () => {
                                     </div>
                                     <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
                                         <input type="checkbox" id="is_active" checked={formData.is_active} onChange={e => setFormData({ ...formData, is_active: e.target.checked })} className="w-5 h-5" />
-                                        <label htmlFor="is_active" className="text-sm font-bold text-slate-600">Publish to Calendar</label>
+                                        <label htmlFor="is_active" className="text-sm font-bold text-slate-600">{t('admin.investor.form.publish_cal')}</label>
                                     </div>
                                 </>
                             )}
@@ -733,7 +735,7 @@ const InvestorManager: React.FC = () => {
                                     className="w-full py-4 bg-slate-900 text-white rounded-xl font-black uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
                                 >
                                     {loading ? <RefreshCw className="animate-spin" /> : <Save size={20} />}
-                                    {editingId ? 'Save Changes' : 'Create New Item'}
+                                    {editingId ? t('admin.investor.form.save') : t('admin.investor.form.create_item')}
                                 </button>
                             )}
 
@@ -743,7 +745,7 @@ const InvestorManager: React.FC = () => {
                                     onClick={() => setShowModal(false)}
                                     className="w-full py-4 bg-slate-100 text-slate-500 rounded-xl font-black uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
                                 >
-                                    Close Preview
+                                    {t('common.close')}
                                 </button>
                             )}
 

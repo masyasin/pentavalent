@@ -97,7 +97,7 @@ const Dashboard: React.FC = () => {
       icon: Newspaper,
       color: 'from-blue-600 to-indigo-600',
       lightColor: 'bg-blue-50 text-blue-600',
-      description: 'Published updates',
+      description: t('admin.dashboard.stat.news_desc') || 'Published updates',
       path: '/admin/content/news'
     },
     {
@@ -107,7 +107,7 @@ const Dashboard: React.FC = () => {
       icon: MessageSquare,
       color: 'from-amber-500 to-orange-600',
       lightColor: 'bg-amber-50 text-amber-600',
-      description: 'Unread inquiries',
+      description: t('admin.dashboard.stat.messages_desc') || 'Unread inquiries',
       path: '/admin/messages'
     },
     {
@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
       icon: FileText,
       color: 'from-emerald-500 to-teal-600',
       lightColor: 'bg-emerald-50 text-emerald-600',
-      description: 'Pending review',
+      description: t('admin.dashboard.stat.applications_desc') || 'Pending review',
       path: '/admin/recruitment/applications'
     },
     {
@@ -127,7 +127,7 @@ const Dashboard: React.FC = () => {
       icon: Briefcase,
       color: 'from-purple-500 to-fuchsia-600',
       lightColor: 'bg-purple-50 text-purple-600',
-      description: 'Open positions',
+      description: t('admin.dashboard.stat.jobs_desc') || 'Open positions',
       path: '/admin/recruitment/careers'
     },
     {
@@ -137,7 +137,7 @@ const Dashboard: React.FC = () => {
       icon: Users,
       color: 'from-rose-500 to-red-600',
       lightColor: 'bg-rose-50 text-rose-600',
-      description: 'Business network',
+      description: t('admin.dashboard.stat.partners_desc') || 'Business network',
       path: '/admin/company/partners'
     },
     {
@@ -147,7 +147,7 @@ const Dashboard: React.FC = () => {
       icon: TrendingUp,
       color: 'from-cyan-500 to-sky-600',
       lightColor: 'bg-cyan-50 text-cyan-600',
-      description: 'Financial reports',
+      description: t('admin.dashboard.stat.investor_desc') || 'Financial reports',
       path: '/admin/investor'
     },
   ];

@@ -105,18 +105,18 @@ const MessagesManager: React.FC = () => {
     }
   };
 
-  const exportToExcel = () => {
-    try {
-      const dataToExport = filteredMessages.map(msg => ({
-        'Date': new Date(msg.created_at).toLocaleString(),
-        'Name': msg.name,
-        'Email': msg.email,
-        'Phone': msg.phone || 'N/A',
-        'Subject': msg.subject || 'No subject',
-        'Consultation Type': msg.consultation_type || 'General',
-        'Message': msg.message,
-        'Status': msg.is_read ? 'Read' : 'Unread'
-      }));
+    const exportToExcel = () => {
+        try {
+            const dataToExport = filteredMessages.map(msg => ({
+                'Date': new Date(msg.created_at).toLocaleString(),
+                'Name': msg.name,
+                'Email': msg.email,
+                'Phone': msg.phone || 'N/A',
+                'Subject': msg.subject || t('admin.messages.no_subject'),
+                'Consultation Type': msg.consultation_type || t('admin.messages.consultation_general'),
+                'Message': msg.message,
+                'Status': msg.is_read ? t('admin.messages.filter.read') : t('admin.messages.filter.unread')
+            }));
 
       const worksheet = XLSX.utils.json_to_sheet(dataToExport);
       const workbook = XLSX.utils.book_new();
@@ -186,7 +186,7 @@ const MessagesManager: React.FC = () => {
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
               type="text"
-              placeholder="Search inbox..."
+              placeholder={t('admin.messages.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-14 pr-6 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold text-xs"
@@ -369,7 +369,7 @@ const MessagesManager: React.FC = () => {
                     className="inline-flex items-center gap-4 px-10 py-5 bg-slate-900 text-white rounded-2xl hover:bg-blue-600 transition-all shadow-2xl shadow-slate-200 font-black uppercase tracking-widest text-xs group"
                   >
                     <Mail size={18} className="group-hover:-rotate-12 transition-transform" />
-                    Reply via Official Email
+                    {t('admin.messages.reply_btn')}
                   </a>
                 </div>
               </div>
@@ -384,7 +384,7 @@ const MessagesManager: React.FC = () => {
                       {t('admin.messages.select_prompt')}
                     </p>
                     <p className="text-gray-400 font-medium text-sm">
-                      Choose an inquiry from the list to start reviewing and responding.
+                      {t('admin.messages.select_desc')}
                     </p>
                   </div>
                 </div>

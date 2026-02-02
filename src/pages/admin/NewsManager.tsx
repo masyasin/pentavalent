@@ -403,7 +403,7 @@ const NewsManager: React.FC = () => {
               ) : filteredNews.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-10 py-20 text-center text-gray-300 font-black uppercase tracking-widest">
-                    {searchTerm ? 'No matches found' : 'No news articles yet'}
+                    {searchTerm ? t('admin.news.form.no_matches') : t('admin.news.form.no_articles')}
                   </td>
                 </tr>
               ) : (
@@ -439,7 +439,7 @@ const NewsManager: React.FC = () => {
                         : 'bg-amber-50 text-amber-600 border border-amber-100'
                         }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${item.is_published ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
-                        {item.is_published ? 'Published' : 'Draft'}
+                        {item.is_published ? t('admin.news.form.published') : t('admin.news.form.draft')}
                       </span>
                     </td>
                     <td className="px-10 py-6 text-xs text-gray-500 font-bold">
@@ -498,7 +498,7 @@ const NewsManager: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-between p-4 gap-4">
             <div className="flex items-center gap-4">
               <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredNews.length)} of {filteredNews.length}
+                {t('admin.news.form.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredNews.length)} {t('admin.news.form.of')} {filteredNews.length}
               </div>
               <select
                 value={itemsPerPage}
@@ -508,10 +508,10 @@ const NewsManager: React.FC = () => {
                 }}
                 className="bg-gray-50 border-none rounded-lg text-xs font-bold text-gray-600 focus:ring-0 cursor-pointer py-1 pl-2 pr-8"
               >
-                <option value={5}>5 per page</option>
-                <option value={10}>10 per page</option>
-                <option value={25}>25 per page</option>
-                <option value={50}>50 per page</option>
+                <option value={5}>5 {t('admin.news.form.per_page')}</option>
+                <option value={10}>10 {t('admin.news.form.per_page')}</option>
+                <option value={25}>25 {t('admin.news.form.per_page')}</option>
+                <option value={50}>50 {t('admin.news.form.per_page')}</option>
               </select>
             </div>
 
@@ -555,9 +555,9 @@ const NewsManager: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight italic">
-                      {editingNews ? 'Update Article' : 'Draft New Article'}
+                      {editingNews ? t('admin.news.form.update_title') : t('admin.news.form.draft_title')}
                     </h3>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Global News & Media Console</p>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('admin.news.form.console')}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -585,8 +585,8 @@ const NewsManager: React.FC = () => {
                       <Eye size={24} />
                     </div>
                     <div>
-                      <p className="font-black text-blue-900 uppercase tracking-tight italic">Read-Only Mode</p>
-                      <p className="text-xs text-blue-600 font-bold uppercase tracking-widest">You are viewing this article in preview mode. Changes cannot be saved.</p>
+                      <p className="font-black text-blue-900 uppercase tracking-tight italic">{t('common.read_only_mode')}</p>
+                      <p className="text-xs text-blue-600 font-bold uppercase tracking-widest">{t('common.read_only_warning')}</p>
                     </div>
                   </div>
                 )}
@@ -596,7 +596,7 @@ const NewsManager: React.FC = () => {
                   <div className="space-y-4">
                     <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic flex items-center gap-2">
                       <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                      Title (Bahasa Indonesia)
+                      {t('admin.news.form.title_id')}
                     </label>
                     <input
                       type="text"
@@ -604,14 +604,14 @@ const NewsManager: React.FC = () => {
                       value={formData.title_id}
                       onChange={(e) => setFormData({ ...formData, title_id: e.target.value })}
                       className="w-full px-8 py-6 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[2rem] transition-all font-black text-2xl italic tracking-tight"
-                      placeholder="Judul Berita Baru..."
+                      placeholder="..."
                     />
                   </div>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center px-2">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic flex items-center gap-2">
                         <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                        Title (English)
+                        {t('admin.news.form.title_en')}
                       </label>
                       <button
                         type="button"
@@ -620,7 +620,7 @@ const NewsManager: React.FC = () => {
                         className="text-blue-600 hover:text-black transition-colors flex items-center gap-2 group"
                       >
                         {translating === 'title_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} className="group-hover:scale-125 transition-transform" />}
-                        <span className="text-[10px] font-black uppercase tracking-widest">Auto Translate</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest">{t('admin.news.form.auto_translate')}</span>
                       </button>
                     </div>
                     <input
@@ -629,7 +629,7 @@ const NewsManager: React.FC = () => {
                       value={formData.title_en}
                       onChange={(e) => setFormData({ ...formData, title_en: e.target.value })}
                       className="w-full px-8 py-6 bg-gray-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-[2rem] transition-all font-black text-2xl italic tracking-tight"
-                      placeholder="New Article Title..."
+                      placeholder="..."
                     />
                   </div>
                 </div>
@@ -637,13 +637,13 @@ const NewsManager: React.FC = () => {
                 {/* Slug & Category */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   <div className="space-y-4">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2">Slug (URL Mapping)</label>
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2">{t('admin.news.form.slug')}</label>
                     <div className="flex gap-4">
                       <input
                         type="text"
                         value={formData.slug}
                         onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                        placeholder="leave-empty-for-auto"
+                        placeholder="..."
                         className="flex-1 px-8 py-4 bg-slate-900 text-emerald-400 border border-slate-800 rounded-2xl transition-all font-mono text-xs tracking-wider"
                       />
                       <button
@@ -654,12 +654,12 @@ const NewsManager: React.FC = () => {
                         }}
                         className="px-6 py-4 bg-slate-100 text-slate-900 rounded-2xl hover:bg-slate-200 text-[10px] font-black uppercase tracking-widest transition-all"
                       >
-                        Sync
+                        {t('admin.news.form.sync')}
                       </button>
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2">Article Category</label>
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2">{t('admin.news.form.category')}</label>
                     <div className="relative">
                       <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                       <select
@@ -683,8 +683,8 @@ const NewsManager: React.FC = () => {
                         <Plus size={20} />
                       </div>
                       <div>
-                        <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-widest">Cinematic Gallery</h4>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Main article slider images</p>
+                        <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-widest">{t('admin.news.form.gallery_title')}</h4>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">{t('admin.news.form.gallery_subtitle')}</p>
                       </div>
                     </div>
                     <button
@@ -692,7 +692,7 @@ const NewsManager: React.FC = () => {
                       onClick={() => setFormData({ ...formData, images: [...formData.images, ''] })}
                       className="px-6 py-3 bg-white text-blue-600 border border-blue-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-sm"
                     >
-                      Add Slide
+                      {t('admin.news.form.add_slide')}
                     </button>
                   </div>
 
@@ -706,7 +706,7 @@ const NewsManager: React.FC = () => {
                             setFormData({ ...formData, images: newImages });
                           }}
                           currentUrl={img}
-                          label={`Visual ${idx + 1}`}
+                          label={`${t('common.image')} ${idx + 1}`}
                           bucket="images"
                           type="image"
                         />
@@ -726,7 +726,7 @@ const NewsManager: React.FC = () => {
                     ))}
                     {formData.images.length === 0 && (
                       <div className="col-span-full py-12 text-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">No Visuals Attached</p>
+                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">{t('admin.news.form.no_visuals')}</p>
                       </div>
                     )}
                   </div>
@@ -735,18 +735,18 @@ const NewsManager: React.FC = () => {
                 {/* Excerpts */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                   <div className="space-y-4">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Summary (ID)</label>
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">{t('admin.news.form.summary_id')}</label>
                     <div className="rounded-[2rem] overflow-hidden border-2 border-transparent focus-within:border-blue-500 transition-all">
                       <RichTextEditor
                         content={formData.excerpt_id}
                         onChange={(content) => setFormData({ ...formData, excerpt_id: content })}
-                        placeholder="Ringkasan berita yang menarik..."
+                        placeholder="..."
                       />
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center px-2">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Summary (EN)</label>
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic">{t('admin.news.form.summary_en')}</label>
                       <button
                         type="button"
                         onClick={() => handleAutoTranslate(formData.excerpt_id, 'excerpt_en')}
@@ -754,14 +754,14 @@ const NewsManager: React.FC = () => {
                         className="text-blue-600 hover:text-black transition-colors flex items-center gap-2 group"
                       >
                         {translating === 'excerpt_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} className="group-hover:scale-125 transition-transform" />}
-                        <span className="text-[10px] font-black uppercase tracking-widest">Auto</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest">{t('common.auto_translate')}</span>
                       </button>
                     </div>
                     <div className="rounded-[2rem] overflow-hidden border-2 border-transparent focus-within:border-emerald-500 transition-all">
                       <RichTextEditor
                         content={formData.excerpt_en}
                         onChange={(content) => setFormData({ ...formData, excerpt_en: content })}
-                        placeholder="Captivating English summary..."
+                        placeholder="..."
                       />
                     </div>
                   </div>
@@ -772,13 +772,13 @@ const NewsManager: React.FC = () => {
                   <div className="space-y-6">
                     <label className="text-xl font-black text-gray-900 uppercase tracking-tighter italic flex items-center gap-4">
                       <span className="w-12 h-1 bg-blue-600 rounded-full"></span>
-                      Full Article Content (ID)
+                      {t('admin.news.form.content_id')}
                     </label>
                     <div className="rounded-[3rem] overflow-hidden border-2 border-slate-100 focus-within:border-blue-600 transition-all shadow-inner">
                       <RichTextEditor
                         content={formData.content_id}
                         onChange={(content) => setFormData({ ...formData, content_id: content })}
-                        placeholder="Tulis isi berita selengkapnya di sini..."
+                        placeholder="..."
                       />
                     </div>
                   </div>
@@ -786,7 +786,7 @@ const NewsManager: React.FC = () => {
                     <div className="flex justify-between items-center px-2">
                       <label className="text-xl font-black text-gray-900 uppercase tracking-tighter italic flex items-center gap-4">
                         <span className="w-12 h-1 bg-emerald-500 rounded-full"></span>
-                        Full Article Content (EN)
+                        {t('admin.news.form.content_en')}
                       </label>
                       <button
                         type="button"
@@ -795,14 +795,14 @@ const NewsManager: React.FC = () => {
                         className="px-6 py-3 bg-emerald-50 text-emerald-600 rounded-2xl hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-3 group"
                       >
                         {translating === 'content_en' ? <RefreshCw size={14} className="animate-spin" /> : <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />}
-                        <span className="text-[10px] font-black uppercase tracking-widest">Global Sync</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest">{t('admin.news.form.sync')}</span>
                       </button>
                     </div>
                     <div className="rounded-[3rem] overflow-hidden border-2 border-slate-100 focus-within:border-emerald-600 transition-all shadow-inner">
                       <RichTextEditor
                         content={formData.content_en}
                         onChange={(content) => setFormData({ ...formData, content_en: content })}
-                        placeholder="Write the full English article content here..."
+                        placeholder="..."
                       />
                     </div>
                   </div>
@@ -822,8 +822,8 @@ const NewsManager: React.FC = () => {
                       <div className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-md ${formData.is_published ? 'translate-x-6' : 'translate-x-0'}`}></div>
                     </div>
                     <div className="text-left">
-                      <span className="block text-[11px] font-black text-gray-900 uppercase tracking-widest">Public Visibility</span>
-                      <span className="block text-[10px] text-gray-400 font-bold uppercase">{formData.is_published ? 'Live on Production' : 'Saved in Private Drafts'}</span>
+                      <span className="block text-[11px] font-black text-gray-900 uppercase tracking-widest">{t('admin.news.form.visibility')}</span>
+                      <span className="block text-[10px] text-gray-400 font-bold uppercase">{formData.is_published ? t('admin.news.form.live') : t('admin.news.form.private')}</span>
                     </div>
                   </label>
 
@@ -833,14 +833,14 @@ const NewsManager: React.FC = () => {
                       onClick={() => setShowModal(false)}
                       className="flex-1 md:flex-none px-10 py-5 bg-gray-100 text-gray-500 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:bg-black hover:text-white transition-all active:scale-95"
                     >
-                      {canEdit || !editingNews ? 'Discard' : 'Close Preview'}
+                      {canEdit || !editingNews ? t('admin.news.form.discard') : t('admin.news.form.close_preview')}
                     </button>
                     {(canEdit || (!editingNews && canCreate)) && (
                       <button
                         type="submit"
                         className="flex-1 md:flex-none px-12 py-5 bg-blue-600 text-white rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:bg-black transition-all shadow-2xl shadow-blue-200 active:scale-95"
                       >
-                        {editingNews ? 'Update Global Article' : 'Launch New Article'}
+                        {editingNews ? t('admin.news.form.update_btn') : t('admin.news.form.launch')}
                       </button>
                     )}
                   </div>
@@ -871,8 +871,8 @@ const NewsManager: React.FC = () => {
                     <MessageSquare size={24} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">Public Discussion</h3>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">News: {selectedNewsItem.title_id}</p>
+                    <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">{t('admin.news.form.comments_title')}</h3>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">News: {language === 'id' ? selectedNewsItem.title_id : selectedNewsItem.title_en}</p>
                   </div>
                 </div>
                 <button
@@ -885,11 +885,11 @@ const NewsManager: React.FC = () => {
 
               <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar bg-white text-left">
                 {loadingComments ? (
-                  <div className="text-center py-20 text-gray-400 font-bold uppercase tracking-widest animate-pulse">Scanning Discussions...</div>
+                  <div className="text-center py-20 text-gray-400 font-bold uppercase tracking-widest animate-pulse">{t('admin.news.form.scanning')}</div>
                 ) : comments.filter(c => !c.parent_id).length === 0 ? (
                   <div className="text-center py-24 space-y-4 border-2 border-dashed border-gray-50 rounded-[3rem]">
                     <MessageSquare className="mx-auto text-gray-100" size={64} />
-                    <p className="text-gray-300 font-black uppercase tracking-[0.3em] text-[10px]">No Community Input Yet</p>
+                    <p className="text-gray-300 font-black uppercase tracking-[0.3em] text-[10px]">{t('admin.news.form.no_comments')}</p>
                   </div>
                 ) : (
                   comments.filter(c => !c.parent_id).map(comment => (
@@ -914,7 +914,7 @@ const NewsManager: React.FC = () => {
                                 }`}
                             >
                               {comment.is_approved ? <CheckCircle size={12} /> : <XCircle size={12} />}
-                              {comment.is_approved ? 'Approved' : 'Hidden'}
+                              {comment.is_approved ? t('admin.news.form.approved') : t('admin.news.form.hidden')}
                             </button>
                             <button
                               onClick={() => deleteComment(comment.id)}
@@ -933,7 +933,7 @@ const NewsManager: React.FC = () => {
                           <div key={reply.id} className="bg-blue-50/30 p-6 rounded-[2rem] border border-blue-50 flex justify-between items-start group shadow-sm">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-3">
-                                <span className="px-3 py-1 bg-blue-600 text-white rounded-lg text-[8px] font-black uppercase tracking-[0.2em] italic">Official Reply</span>
+                                <span className="px-3 py-1 bg-blue-600 text-white rounded-lg text-[8px] font-black uppercase tracking-[0.2em] italic">{t('admin.news.form.official_reply')}</span>
                                 <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{new Date(reply.created_at).toLocaleDateString()}</span>
                               </div>
                               <p className="text-gray-800 font-bold text-sm leading-relaxed">{reply.content}</p>
@@ -952,13 +952,13 @@ const NewsManager: React.FC = () => {
                           <div className="relative flex-1">
                             <input
                               type="text"
-                              placeholder="Type your official response..."
+                              placeholder={t('admin.news.form.reply_placeholder')}
                               value={replyText[comment.id] || ''}
                               onChange={(e) => setReplyText(prev => ({ ...prev, [comment.id]: e.target.value }))}
                               className="w-full bg-white border-2 border-slate-100 rounded-2xl px-8 py-5 text-sm font-bold focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all shadow-sm"
                               onKeyPress={(e) => e.key === 'Enter' && handleReply(comment.id)}
                             />
-                            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none italic font-black text-[10px] uppercase tracking-widest">Enterprise Support</div>
+                            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none italic font-black text-[10px] uppercase tracking-widest">{t('admin.news.form.enterprise_support')}</div>
                           </div>
                           <button
                             onClick={() => handleReply(comment.id)}
@@ -983,13 +983,13 @@ const NewsManager: React.FC = () => {
         isOpen={submitDialog.isOpen}
         onClose={() => setSubmitDialog({ ...submitDialog, isOpen: false })}
         onConfirm={handleConfirmSubmit}
-        title={submitDialog.action === 'create' ? "Launch Article" : "Force Update"}
+        title={submitDialog.action === 'create' ? t('admin.news.form.confirm_launch_title') : t('admin.news.form.confirm_update_title')}
         message={submitDialog.action === 'create'
-          ? "You are about to publish this piece to the global media network. Proceed?"
-          : "Are you sure you want to deploy these changes to production?"}
+          ? t('admin.news.form.confirm_launch_msg')
+          : t('admin.news.form.confirm_update_msg')}
         itemName={formData.title_id}
         isLoading={loading}
-        confirmText={submitDialog.action === 'create' ? "Deploy Now" : "Push Changes"}
+        confirmText={submitDialog.action === 'create' ? t('admin.news.form.confirm_deploy_btn') : t('admin.news.form.confirm_push_btn')}
         type="info"
       />
     </div >

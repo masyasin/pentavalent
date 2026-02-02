@@ -169,10 +169,10 @@ const CertificationManager: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="text-left">
                     <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase italic leading-none">
-                        Quality <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">& Certifications</span>
+                        {t('admin.certifications.title').split(' ')[0]} <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">{t('admin.certifications.title').split(' ')[1]} {t('admin.certifications.title').split(' ')[2]}</span>
                     </h2>
                     <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">
-                        Manage global ISO standards and industry leadership credentials
+                        {t('admin.certifications.subtitle')}
                     </p>
                 </div>
                 <button
@@ -183,16 +183,16 @@ const CertificationManager: React.FC = () => {
                     className="px-8 py-4 bg-slate-900 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-blue-600 transition-all shadow-2xl shadow-slate-100 uppercase tracking-widest text-xs"
                 >
                     <Plus size={18} />
-                    Add Certificate
+                    {t('admin.certifications.add')}
                 </button>
             </div>
 
             {/* Search Check */}
-            <div className="relative max-w-xl">
+            <div className="relative max-w-xl text-left">
                 <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
                 <input
                     type="text"
-                    placeholder="Search certifications by name, issuer, or number..."
+                    placeholder={t('admin.certifications.search_placeholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
@@ -211,7 +211,7 @@ const CertificationManager: React.FC = () => {
                     const paginatedCerts = filteredCerts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
                     if (loading) {
-                        return <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Scanning Quality Ledger...</div>;
+                        return <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">{t('admin.certifications.loading')}</div>;
                     }
 
                     if (filteredCerts.length === 0) {
@@ -221,12 +221,12 @@ const CertificationManager: React.FC = () => {
                                     <ShieldCheck size={64} />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-black text-gray-900 uppercase italic">No Credentials Found</h3>
-                                    <p className="text-gray-400 font-medium">No certifications match your search criteria.</p>
+                                    <h3 className="text-2xl font-black text-gray-900 uppercase italic">{t('admin.certifications.empty_title')}</h3>
+                                    <p className="text-gray-400 font-medium">{t('admin.certifications.empty_desc')}</p>
                                 </div>
                                 {certifications.length === 0 && (
                                     <button onClick={() => setShowModal(true)} className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs">
-                                        Verify Global Entry <Plus size={16} />
+                                        {t('admin.certifications.add_first')} <Plus size={16} />
                                     </button>
                                 )}
                             </div>
@@ -258,15 +258,15 @@ const CertificationManager: React.FC = () => {
                                                     <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${cert.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
                                                         }`}>
                                                         <div className={`w-2 h-2 rounded-full ${cert.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
-                                                        <span className="text-[9px] font-black uppercase tracking-widest">{cert.is_active ? 'VALID' : 'EXPIRED'}</span>
+                                                        <span className="text-[9px] font-black uppercase tracking-widest">{cert.is_active ? t('admin.certifications.status.valid') : t('admin.certifications.status.expired')}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="flex gap-2">
-                                                <button onClick={() => handleEdit(cert)} className="w-10 h-10 text-gray-400 hover:text-blue-600 bg-white shadow-sm border border-gray-50 hover:border-blue-100 rounded-xl transition-all flex items-center justify-center">
+                                                <button onClick={() => handleEdit(cert)} title={t('common.edit')} className="w-10 h-10 text-gray-400 hover:text-blue-600 bg-white shadow-sm border border-gray-50 hover:border-blue-100 rounded-xl transition-all flex items-center justify-center">
                                                     <Edit2 size={16} />
                                                 </button>
-                                                <button onClick={() => handleDelete(cert.id, cert.name)} className="w-10 h-10 text-gray-400 hover:text-rose-500 bg-white shadow-sm border border-gray-50 hover:border-rose-100 rounded-xl transition-all flex items-center justify-center">
+                                                <button onClick={() => handleDelete(cert.id, cert.name)} title={t('common.delete')} className="w-10 h-10 text-gray-400 hover:text-rose-500 bg-white shadow-sm border border-gray-50 hover:border-rose-100 rounded-xl transition-all flex items-center justify-center">
                                                     <Trash2 size={16} />
                                                 </button>
                                             </div>
@@ -274,7 +274,7 @@ const CertificationManager: React.FC = () => {
                                         <div className="space-y-4">
                                             <div className="flex items-center gap-2 text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] italic">
                                                 <FileCheck size={14} className="text-blue-400" />
-                                                Registry Code: {cert.certificate_number || 'CORE-PROTOCOL-PENDING'}
+                                                {t('admin.certifications.registry_code')}: {cert.certificate_number || 'CORE-PROTOCOL-PENDING'}
                                             </div>
                                             <div className="bg-gray-50/50 p-6 rounded-[2rem] border border-transparent group-hover:border-blue-50 transition-all">
                                                 <div dangerouslySetInnerHTML={{ __html: language === 'id' ? cert.description_id : cert.description_en }} className="text-gray-500 text-[13px] font-medium leading-relaxed italic line-clamp-2 group-hover:line-clamp-none transition-all" />
@@ -288,7 +288,7 @@ const CertificationManager: React.FC = () => {
                             {totalPages > 1 && (
                                 <div className="col-span-full flex items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100">
                                     <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                                        Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredCerts.length)} of {filteredCerts.length}
+                                        {t('common.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredCerts.length)} {t('common.of')} {filteredCerts.length}
                                     </div>
                                     <div className="flex bg-gray-50 rounded-xl p-1 gap-1">
                                         <button
@@ -329,16 +329,16 @@ const CertificationManager: React.FC = () => {
                                 </div>
                                 <div className="space-y-1">
                                     <h3 className="text-4xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">
-                                        {editingCert ? 'Calibrate Badge' : 'Anchor Credential'}
+                                        {editingCert ? t('admin.certifications.modal.edit_title') : t('admin.certifications.modal.create_title')}
                                     </h3>
-                                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Quality Standard Alignment System</p>
+                                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">{t('admin.certifications.modal.subtitle')}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => setIsMaximized(!isMaximized)}
                                     className="p-4 hover:bg-white hover:shadow-xl rounded-[1.5rem] transition-all text-gray-400 hover:text-blue-600"
-                                    title={isMaximized ? "Exit Fullscreen" : "Fullscreen"}
+                                    title={isMaximized ? t('common.minimize') : t('common.maximize')}
                                 >
                                     {isMaximized ? <Minimize2 size={24} /> : <Maximize2 size={24} />}
                                 </button>
@@ -355,7 +355,7 @@ const CertificationManager: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
                                 <div className="md:col-span-8 space-y-10">
                                     <div className="space-y-4">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Official Credential Name</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.certifications.form.name')}</label>
                                         <input
                                             type="text"
                                             required
@@ -368,7 +368,7 @@ const CertificationManager: React.FC = () => {
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="space-y-4">
-                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Authority / Issuer</label>
+                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.certifications.form.issuer')}</label>
                                             <input
                                                 type="text"
                                                 required
@@ -379,7 +379,7 @@ const CertificationManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-4">
-                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Registry Number</label>
+                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.certifications.form.number')}</label>
                                             <input
                                                 type="text"
                                                 value={formData.certificate_number}
@@ -394,14 +394,14 @@ const CertificationManager: React.FC = () => {
                                     <FileUpload
                                         onUploadComplete={(url) => setFormData({ ...formData, image_url: url })}
                                         currentUrl={formData.image_url}
-                                        label="Anchor Scanned Asset"
+                                        label={t('admin.certifications.form.asset')}
                                         bucket="images"
                                         type="image"
                                     />
                                     <div className="flex items-center justify-between p-6 bg-gray-50 rounded-[2.5rem] border-2 border-transparent focus-within:border-blue-500 transition-all cursor-pointer group">
                                         <div className="text-left">
-                                            <span className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.2em]">Live Status</span>
-                                            <span className="block text-[10px] text-gray-400 font-bold uppercase">{formData.is_active ? 'Verified & Active' : 'Deprioritized / Expired'}</span>
+                                            <span className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.2em]">{t('admin.certifications.form.status')}</span>
+                                            <span className="block text-[10px] text-gray-400 font-bold uppercase">{formData.is_active ? t('admin.certifications.form.status_active') : t('admin.certifications.form.status_inactive')}</span>
                                         </div>
                                         <label className="relative inline-flex items-center cursor-pointer">
                                             <input
@@ -420,19 +420,19 @@ const CertificationManager: React.FC = () => {
                             <div className="space-y-10 pt-10 border-t border-gray-50">
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
-                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tighter italic leading-none">Technical Narrative & Impact</h4>
+                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tighter italic leading-none">{t('admin.certifications.form.narrative_title')}</h4>
                                 </div>
                                 <div className={`grid gap-12 ${isMaximized ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                     <div className="space-y-4">
                                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-8 italic flex items-center gap-3">
                                             <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                                            INDONESIAN NARRATIVE
+                                            {t('admin.certifications.form.id_label')}
                                         </label>
                                         <div className="rounded-[3rem] overflow-hidden border-4 border-transparent focus-within:border-blue-500/10 transition-all shadow-2xl">
                                             <RichTextEditor
                                                 content={formData.description_id}
                                                 onChange={(val) => setFormData({ ...formData, description_id: val })}
-                                                placeholder="Jelaskan peran sertifikasi ini bagi kualitas perusahaan..."
+                                                placeholder="..."
                                             />
                                         </div>
                                     </div>
@@ -440,7 +440,7 @@ const CertificationManager: React.FC = () => {
                                         <div className="flex justify-between items-center px-8">
                                             <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic flex items-center gap-3">
                                                 <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                                                ENGLISH NARRATIVE
+                                                {t('admin.certifications.form.en_label')}
                                             </label>
                                             <button
                                                 type="button"
@@ -449,14 +449,14 @@ const CertificationManager: React.FC = () => {
                                                 className="px-6 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2 group shadow-sm"
                                             >
                                                 {translating === 'description_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} className="group-hover:scale-125 transition-transform" />}
-                                                <span className="text-[10px] font-black uppercase tracking-widest leading-none">Auto Sync</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest leading-none">{t('common.auto_translate')}</span>
                                             </button>
                                         </div>
                                         <div className="rounded-[3rem] overflow-hidden border-4 border-transparent focus-within:border-emerald-500/10 transition-all shadow-2xl">
                                             <RichTextEditor
                                                 content={formData.description_en}
                                                 onChange={(val) => setFormData({ ...formData, description_en: val })}
-                                                placeholder="Detail the impact of this standard for global audience..."
+                                                placeholder="..."
                                             />
                                         </div>
                                     </div>
@@ -469,14 +469,14 @@ const CertificationManager: React.FC = () => {
                                     onClick={() => setShowModal(false)}
                                     className="flex-1 px-12 py-8 bg-gray-100 text-gray-500 font-black rounded-[2.5rem] hover:bg-black hover:text-white transition-all uppercase tracking-widest text-[11px]"
                                 >
-                                    Cancel Alignment
+                                    {t('common.discard')}
                                 </button>
                                 <button
                                     type="submit"
                                     className="flex-[2] px-[4rem] py-8 bg-blue-600 text-white font-black rounded-[2.5rem] hover:bg-black transition-all shadow-[0_20px_50px_-12px_rgba(37,99,235,0.3)] flex items-center justify-center gap-6 uppercase tracking-[0.3em] text-[11px]"
                                 >
                                     <Save size={24} />
-                                    {editingCert ? 'UPDATE CREDENTIAL' : 'ANCHOR POSITION'}
+                                    {editingCert ? t('admin.certifications.form.update_btn') : t('admin.certifications.form.publish_btn')}
                                 </button>
                             </div>
                         </form>

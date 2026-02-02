@@ -271,10 +271,10 @@ const BranchManager: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="text-left">
           <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase italic leading-none">
-            Branch <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">Network</span>
+            {t('admin.branch.title').split(' ')[0]} <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">{t('admin.branch.title').split(' ').slice(1).join(' ')}</span>
           </h2>
           <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">
-            Manage global distribution nodes and logistical headquarters
+            {t('admin.branch.subtitle')}
           </p>
         </div>
         <button
@@ -286,7 +286,7 @@ const BranchManager: React.FC = () => {
           className="px-8 py-4 bg-slate-900 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-blue-600 transition-all shadow-2xl shadow-slate-100 uppercase tracking-widest text-xs"
         >
           <Plus size={18} />
-          Add Node
+          {t('admin.branch.add')}
         </button>
       </div>
 
@@ -301,7 +301,7 @@ const BranchManager: React.FC = () => {
             <div className="text-3xl font-black text-gray-900 italic tracking-tighter">
               {branches.length}
             </div>
-            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Global Nodes</div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">{t('admin.branch.stats.nodes')}</div>
           </div>
         </div>
 
@@ -314,7 +314,7 @@ const BranchManager: React.FC = () => {
             <div className="text-3xl font-black text-gray-900 italic tracking-tighter">
               {branches.filter(b => b.type === 'head_office').length}
             </div>
-            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Headquarters</div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">{t('admin.branch.stats.hq')}</div>
           </div>
         </div>
 
@@ -327,7 +327,7 @@ const BranchManager: React.FC = () => {
             <div className="text-3xl font-black text-gray-900 italic tracking-tighter">
               {branches.filter(b => b.type === 'branch').length}
             </div>
-            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Active Branches</div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">{t('admin.branch.stats.active')}</div>
           </div>
         </div>
 
@@ -340,7 +340,7 @@ const BranchManager: React.FC = () => {
             <div className="text-3xl font-black text-gray-900 italic tracking-tighter">
               {branches.filter(b => b.type === 'depo').length}
             </div>
-            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Regional Depots</div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">{t('admin.branch.stats.depots')}</div>
           </div>
         </div>
 
@@ -360,7 +360,7 @@ const BranchManager: React.FC = () => {
               />
               {isSavingStats && <RefreshCw size={12} className="animate-spin text-amber-600" />}
             </div>
-            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Titik Distribusi</div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">{t('admin.branch.stats.distribution_points')}</div>
           </div>
         </div>
       </div>
@@ -371,7 +371,7 @@ const BranchManager: React.FC = () => {
           <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-blue-500 transition-colors" size={20} />
           <input
             type="text"
-            placeholder="Search within the global grid (Name, City, Province)..."
+            placeholder={t('admin.branch.search_placeholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-16 pr-8 py-5 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-8 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
@@ -388,7 +388,7 @@ const BranchManager: React.FC = () => {
                 }`}
             >
               <div className={`w-2 h-2 rounded-full ${filter === type ? 'bg-white animate-pulse' : 'bg-gray-200'}`}></div>
-              {type === 'all' ? 'Universal' : type === 'head_office' ? 'HQ Units' : type === 'branch' ? 'Branches' : 'Depots'}
+              {type === 'all' ? t('admin.branch.filter.universal') : type === 'head_office' ? t('admin.branch.filter.hq') : type === 'branch' ? t('admin.branch.filter.branches') : t('admin.branch.filter.depots')}
             </button>
           ))}
         </div>
@@ -400,12 +400,12 @@ const BranchManager: React.FC = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50/50 border-b border-gray-50">
-                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Sequence</th>
-                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">Node Identity</th>
-                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">Protocol / Type</th>
-                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">Spatial Position</th>
-                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">Status</th>
-                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-right">Actions</th>
+                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic">{t('admin.branch.table.sequence')}</th>
+                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">{t('admin.branch.table.identity')}</th>
+                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">{t('admin.branch.table.type')}</th>
+                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">{t('admin.branch.table.position')}</th>
+                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-left">{t('admin.branch.table.status')}</th>
+                <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic text-right">{t('admin.branch.table.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -415,7 +415,7 @@ const BranchManager: React.FC = () => {
 
                 if (loading) return (
                   <tr>
-                    <td colSpan={6} className="px-10 py-32 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Syncing Network Ledger...</td>
+                    <td colSpan={6} className="px-10 py-32 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">{t('admin.branch.loading')}</td>
                   </tr>
                 );
 
@@ -424,7 +424,7 @@ const BranchManager: React.FC = () => {
                     <td colSpan={6} className="px-10 py-32 text-center">
                       <div className="space-y-4">
                         <Compass size={48} className="mx-auto text-gray-100" />
-                        <p className="text-gray-300 font-black uppercase tracking-widest">No signals found in this sector</p>
+                        <p className="text-gray-300 font-black uppercase tracking-widest">{t('admin.branch.empty')}</p>
                       </div>
                     </td>
                   </tr>
@@ -469,7 +469,7 @@ const BranchManager: React.FC = () => {
                           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border w-fit ${branch.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-gray-50 text-gray-400 border-gray-100'
                             }`}>
                             <div className={`w-2 h-2 rounded-full ${branch.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`}></div>
-                            <span className="text-[9px] font-black uppercase tracking-widest">{branch.is_active ? 'PULSING' : 'SILENT'}</span>
+                            <span className="text-[9px] font-black uppercase tracking-widest">{branch.is_active ? t('admin.branch.status.active') : t('admin.branch.status.inactive')}</span>
                           </div>
                         </td>
                         <td className="px-10 py-8">
@@ -497,7 +497,7 @@ const BranchManager: React.FC = () => {
                         <td colSpan={6} className="px-10 py-4 bg-gray-50/30">
                           <div className="flex items-center justify-between">
                             <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                              Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredBranches.length)} of {filteredBranches.length}
+                              {t('common.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredBranches.length)} {t('common.of')} {filteredBranches.length}
                             </div>
                             <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
                               <button
@@ -540,9 +540,9 @@ const BranchManager: React.FC = () => {
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-4xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">
-                    {editingBranch ? 'Recalibrate' : 'Initialize'} Node
+                    {editingBranch ? t('admin.branch.modal.edit') : t('admin.branch.modal.add')}
                   </h3>
-                  <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Distribution Geometry Terminal</p>
+                  <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">{t('admin.branch.modal.terminal')}</p>
                 </div>
               </div>
               <button
@@ -556,7 +556,7 @@ const BranchManager: React.FC = () => {
             <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar text-left font-medium">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">Protocol Name</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">{t('admin.branch.form.name')}</label>
                   <input
                     type="text"
                     required
@@ -567,7 +567,7 @@ const BranchManager: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-4">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">Facility Classification</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">{t('admin.branch.form.type')}</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
@@ -582,7 +582,7 @@ const BranchManager: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4 text-left">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">Sector / City</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">{t('admin.branch.form.city')}</label>
                   <input
                     type="text"
                     required
@@ -593,7 +593,7 @@ const BranchManager: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-4 text-left">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">Region / Province</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">{t('admin.branch.form.province')}</label>
                   <input
                     type="text"
                     required
@@ -606,7 +606,7 @@ const BranchManager: React.FC = () => {
               </div>
 
               <div className="space-y-4 text-left">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">Physical Landmark / Address</label>
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">{t('admin.branch.form.address')}</label>
                 <textarea
                   rows={3}
                   value={formData.address}
@@ -618,7 +618,7 @@ const BranchManager: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4 text-left">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">Comms / Phone</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">{t('admin.branch.form.phone')}</label>
                   <div className="relative group">
                     <Phone className="absolute left-8 top-1/2 -translate-y-1/2 text-blue-500" size={20} />
                     <input
@@ -631,7 +631,7 @@ const BranchManager: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-4 text-left">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">Digital Uplink / Email</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic">{t('admin.branch.form.email')}</label>
                   <div className="relative group">
                     <Mail className="absolute left-8 top-1/2 -translate-y-1/2 text-rose-500" size={20} />
                     <input
@@ -650,17 +650,17 @@ const BranchManager: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Globe size={18} className="text-blue-400" />
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Geographic Localization</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('admin.branch.form.geo')}</span>
                     </div>
                     {formData.latitude && formData.longitude && (
                       <div className="text-[8px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full">
-                        Coordinates Extracted
+                        {t('admin.branch.form.coords_extracted')}
                       </div>
                     )}
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-4 italic leading-none">Google Map Link</label>
+                    <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-4 italic leading-none">{t('admin.branch.form.map_link')}</label>
                     <div className="relative group">
                       <Map size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-blue-500" />
                       <input
@@ -679,11 +679,11 @@ const BranchManager: React.FC = () => {
                   {/* Hidden but stored coordinates for UI logic if needed, or just show them readonly */}
                   <div className="grid grid-cols-2 gap-4 pt-2">
                     <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/30">
-                      <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Detected Latitude</div>
+                      <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">{t('admin.branch.form.lat')}</div>
                       <div className="text-xs font-mono text-blue-400 font-bold">{formData.latitude || '0.000000'}</div>
                     </div>
                     <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/30">
-                      <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Detected Longitude</div>
+                      <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">{t('admin.branch.form.lng')}</div>
                       <div className="text-xs font-mono text-rose-400 font-bold">{formData.longitude || '0.000000'}</div>
                     </div>
                   </div>
@@ -703,8 +703,8 @@ const BranchManager: React.FC = () => {
                     <div className={`absolute left-1.5 top-1.5 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-md ${formData.is_active ? 'translate-x-7' : 'translate-x-0'}`}></div>
                   </div>
                   <div className="text-left">
-                    <span className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.2em]">Pulsing Status</span>
-                    <span className="block text-[10px] text-gray-400 font-bold uppercase">{formData.is_active ? 'ACTIVE TRANSMISSION' : 'STANDBY MODE'}</span>
+                    <span className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.2em]">{t('admin.branch.form.status')}</span>
+                    <span className="block text-[10px] text-gray-400 font-bold uppercase">{formData.is_active ? t('admin.branch.form.active_desc') : t('admin.branch.form.standby_desc')}</span>
                   </div>
                 </div>
 
@@ -714,14 +714,14 @@ const BranchManager: React.FC = () => {
                     onClick={() => setShowModal(false)}
                     className="px-12 py-8 bg-gray-100 text-gray-500 font-black rounded-[2.5rem] hover:bg-black hover:text-white transition-all uppercase tracking-widest text-[11px]"
                   >
-                    Discard
+                    {t('admin.branch.form.discard')}
                   </button>
                   <button
                     type="submit"
                     className="px-[4rem] py-8 bg-blue-600 text-white font-black rounded-[2.5rem] hover:bg-black transition-all shadow-[0_20px_50px_-12px_rgba(37,99,235,0.3)] flex items-center justify-center gap-6 uppercase tracking-[0.3em] text-[11px]"
                   >
                     <Save size={24} />
-                    {editingBranch ? 'CONFIRM UPDATE' : 'DEPLOY NODE'}
+                    {editingBranch ? t('admin.branch.form.update_btn') : t('admin.branch.form.deploy_btn')}
                   </button>
                 </div>
               </div>

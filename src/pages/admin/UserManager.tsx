@@ -6,6 +6,7 @@ import { UserRole, PermissionAction, AdminModule } from '../../contexts/AuthCont
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { logUserActivity } from '../../lib/security';
 import { useAuth, usePermission } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface AdminUser {
     id: string;
@@ -17,23 +18,24 @@ interface AdminUser {
     permissions?: Record<string, PermissionAction[]>;
 }
 
-const ADMIN_MODULES: { id: AdminModule; name: string }[] = [
-    { id: 'dashboard', name: 'Dashboard' },
-    { id: 'website', name: 'Website (Banners/Gallery)' },
-    { id: 'company', name: 'Profil Perusahaan' },
-    { id: 'content', name: 'Berita & Konten' },
-    { id: 'recruitment', name: 'Karir & Rekrutmen' },
-    { id: 'investor', name: 'Hubungan Investor' },
-    { id: 'messages', name: 'Pesan & Kontak' },
-    { id: 'security_logs', name: 'Security Logs' },
-    { id: 'audit_logs', name: 'Audit Logs' },
-    { id: 'users', name: 'Manajemen User' },
-    { id: 'db_backup', name: 'Database Backup' },
-    { id: 'analytics', name: 'Analytics' },
-    { id: 'settings', name: 'Pengaturan Sistem' },
-];
-
 const UserManager: React.FC = () => {
+    const { t } = useLanguage();
+
+    const ADMIN_MODULES: { id: AdminModule; name: string }[] = [
+        { id: 'dashboard', name: 'Dashboard' },
+        { id: 'website', name: 'Website (Banners/Gallery)' },
+        { id: 'company', name: t('admin.menu.company') },
+        { id: 'content', name: t('admin.menu.content') },
+        { id: 'recruitment', name: t('admin.menu.recruitment') },
+        { id: 'investor', name: t('admin.menu.investor') },
+        { id: 'messages', name: t('admin.menu.messages') },
+        { id: 'security_logs', name: t('admin.menu.security_logs') },
+        { id: 'audit_logs', name: t('admin.menu.activity_logs') },
+        { id: 'users', name: t('admin.menu.users') },
+        { id: 'db_backup', name: 'Database Backup' },
+        { id: 'analytics', name: 'Analytics' },
+        { id: 'settings', name: t('admin.menu.settings') },
+    ];
     const { user: currentUser } = useAuth();
     const canCreate = usePermission('create', 'users');
     const canEdit = usePermission('edit', 'users');
@@ -271,8 +273,8 @@ const UserManager: React.FC = () => {
         <div className="space-y-6 pb-20">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic">User Management</h2>
-                    <p className="text-gray-500">Manage administrative access and permissions</p>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic">{t('admin.users.title')}</h2>
+                    <p className="text-gray-500">{t('admin.users.subtitle')}</p>
                 </div>
                 {canCreate && (
                     <button
@@ -283,7 +285,7 @@ const UserManager: React.FC = () => {
                         className="px-8 py-4 bg-gray-900 text-white rounded-2xl font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl uppercase tracking-widest text-sm"
                     >
                         <Plus size={18} />
-                        Add New User
+                        {t('admin.users.add')}
                     </button>
                 )}
             </div>
@@ -295,14 +297,14 @@ const UserManager: React.FC = () => {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                     <input
                         type="text"
-                        placeholder="Search name or email..."
+                        placeholder={t('admin.users.search_placeholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full pl-12 pr-6 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-4 focus:ring-blue-50 transition-all font-medium text-sm"
                     />
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest">
-                    Total: {filteredUsers.length} Users
+                    {t('admin.users.total_users').replace('{count}', filteredUsers.length.toString())}
                 </div>
             </div>
 
@@ -311,20 +313,20 @@ const UserManager: React.FC = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-gray-100">
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">User Identity</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Access Role</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Registered</th>
-                                <th className="px-8 py-5 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Control</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">{t('admin.users.table.identity')}</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">{t('admin.users.table.role')}</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">{t('admin.users.table.registered')}</th>
+                                <th className="px-8 py-5 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">{t('admin.users.table.control')}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={4} className="px-8 py-20 text-center text-gray-300 font-bold uppercase tracking-widest animate-pulse">Syncing User Database...</td>
+                                    <td colSpan={4} className="px-8 py-20 text-center text-gray-300 font-bold uppercase tracking-widest animate-pulse">{t('admin.users.loading')}</td>
                                 </tr>
                             ) : filteredUsers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={4} className="px-8 py-20 text-center text-gray-400">No users found match your search</td>
+                                    <td colSpan={4} className="px-8 py-20 text-center text-gray-400">{t('admin.users.empty')}</td>
                                 </tr>
                             ) : (
                                 filteredUsers.map((user) => (
@@ -400,11 +402,11 @@ const UserManager: React.FC = () => {
                                     <Shield size={32} />
                                 </div>
                                 <div>
-                                    <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic">
-                                        {viewOnly ? 'View Access' : editingUser ? 'Modify Access' : 'Create Access'}
+                                    <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic text-left">
+                                        {viewOnly ? t('admin.users.modal.view_title') : editingUser ? t('admin.users.modal.edit_title') : t('admin.users.modal.create_title')}
                                     </h3>
-                                    <p className="text-gray-500 mt-1">
-                                        {viewOnly ? 'Viewing permissions for administrative user' : 'Configure permissions for administrative user'}
+                                    <p className="text-gray-500 mt-1 text-left">
+                                        {viewOnly ? t('admin.users.modal.view_subtitle') : t('admin.users.modal.edit_subtitle')}
                                     </p>
                                 </div>
                             </div>
@@ -413,8 +415,8 @@ const UserManager: React.FC = () => {
 
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-12 space-y-8">
                             <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Email Address</label>
+                                <div className="space-y-2 text-left">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">{t('admin.users.form.email')}</label>
                                     <div className="relative">
                                         <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                                         <input
@@ -428,8 +430,8 @@ const UserManager: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Full Name</label>
+                                <div className="space-y-2 text-left">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">{t('admin.users.form.full_name')}</label>
                                     <div className="relative">
                                         <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                                         <input
@@ -443,26 +445,26 @@ const UserManager: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">System Permissions (Role)</label>
+                                <div className="space-y-2 text-left">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">{t('admin.users.form.role')}</label>
                                     <select
                                         value={formData.role}
                                         disabled={viewOnly}
                                         onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
                                         className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold uppercase tracking-tighter italic disabled:opacity-50"
                                     >
-                                        <option value="viewer">Viewer (Read Only)</option>
-                                        <option value="editor">Editor (Content Management)</option>
-                                        <option value="admin">Admin (System Management)</option>
-                                        <option value="super_admin">Super Admin (Full Access)</option>
+                                        <option value="viewer">{t('admin.users.form.role_viewer')}</option>
+                                        <option value="editor">{t('admin.users.form.role_editor')}</option>
+                                        <option value="admin">{t('admin.users.form.role_admin')}</option>
+                                        <option value="super_admin">{t('admin.users.form.role_super_admin')}</option>
                                     </select>
                                 </div>
 
                                 {formData.role !== 'super_admin' && (
                                     <div className="space-y-4 p-8 bg-gray-50 rounded-[2rem] border border-gray-100">
                                         <div className="flex items-center justify-between mb-4">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Granular Access Control</label>
-                                            <div className="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase">Dynamic RBAC</div>
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">{t('admin.users.form.granular_title')}</label>
+                                            <div className="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase">{t('admin.users.form.dynamic_rbac')}</div>
                                         </div>
                                         
                                         <div className="space-y-4">
@@ -486,14 +488,14 @@ const UserManager: React.FC = () => {
                                                         >
                                                             <Eye size={20} />
                                                         </button>
-                                                        <div className="flex flex-col">
+                                                        <div className="flex flex-col text-left">
                                                             <span className={`font-black text-sm transition-colors ${
                                                                 formData.permissions?.[module.id]?.includes('view') ? 'text-gray-900' : 'text-gray-400'
                                                             }`}>
                                                                 {module.name}
                                                             </span>
                                                             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
-                                                                {formData.permissions?.[module.id]?.includes('view') ? 'Access Enabled' : 'No Access'}
+                                                                {formData.permissions?.[module.id]?.includes('view') ? t('admin.users.form.access_enabled') : t('admin.users.form.no_access')}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -523,8 +525,8 @@ const UserManager: React.FC = () => {
 
                                 {!editingUser && (
                                     <>
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Initial Password</label>
+                                        <div className="space-y-2 text-left">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">{t('admin.users.form.initial_password')}</label>
                                             <div className="relative">
                                                 <Shield className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                                                 <input
@@ -533,7 +535,7 @@ const UserManager: React.FC = () => {
                                                     value={formData.password}
                                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                                     className="w-full pl-14 pr-14 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-50 transition-all font-bold"
-                                                    placeholder="Minimum 6 characters"
+                                                    placeholder={t('admin.users.form.password_placeholder')}
                                                 />
                                                 <button
                                                     type="button"
@@ -544,10 +546,10 @@ const UserManager: React.FC = () => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4">
+                                        <div className="p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4 text-left">
                                             <AlertCircle className="text-blue-600 mt-1" size={20} />
                                             <div className="text-xs text-blue-700 font-medium leading-relaxed">
-                                                By publishing this user, an account will be created automatically in the authentication system with the password provided.
+                                                {t('admin.users.form.auth_warning')}
                                             </div>
                                         </div>
                                     </>
@@ -560,7 +562,7 @@ const UserManager: React.FC = () => {
                                     onClick={() => setShowModal(false)}
                                     className="flex-1 px-10 py-5 border-2 border-gray-100 text-gray-400 font-black rounded-3xl hover:bg-gray-50 transition-all uppercase tracking-widest"
                                 >
-                                    {viewOnly ? 'Close' : 'Discard'}
+                                    {viewOnly ? t('admin.users.form.close') : t('admin.users.form.discard')}
                                 </button>
                                 {!viewOnly && (
                                     <button
@@ -569,7 +571,7 @@ const UserManager: React.FC = () => {
                                         className="flex-[2] px-10 py-5 bg-gray-900 text-white font-black rounded-3xl hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 uppercase tracking-[0.2em]"
                                     >
                                         {loading ? <RefreshCw className="animate-spin" size={24} /> : <Save size={24} />}
-                                        {editingUser ? 'Save Changes' : 'Publish User'}
+                                        {editingUser ? t('admin.users.form.save') : t('admin.users.form.publish')}
                                     </button>
                                 )}
                             </div>

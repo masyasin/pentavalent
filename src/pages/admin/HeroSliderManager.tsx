@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { supabase } from '../../lib/supabase';
 import { translateText } from '../../lib/translation';
+import { useLanguage } from '../../contexts/LanguageContext';
 import FileUpload from '../../components/admin/FileUpload';
 import {
     Plus, Edit2, Trash2, Image as ImageIcon, Video,
@@ -30,6 +31,7 @@ interface HeroSlide {
 }
 
 const HeroSliderManager: React.FC = () => {
+    const { t } = useLanguage();
     const [slides, setSlides] = useState<HeroSlide[]>([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
@@ -179,8 +181,8 @@ const HeroSliderManager: React.FC = () => {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic">Hero Visuals</h2>
-                    <p className="text-gray-500">Manage banner images and high-impact background videos</p>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic">{t('admin.hero.title')}</h2>
+                    <p className="text-gray-500">{t('admin.hero.subtitle')}</p>
                 </div>
                 <button
                     onClick={() => {
@@ -190,7 +192,7 @@ const HeroSliderManager: React.FC = () => {
                     className="px-8 py-4 bg-gray-900 text-white rounded-2xl font-black flex items-center gap-3 hover:bg-black transition-all shadow-xl active:scale-95 uppercase tracking-[0.15em] text-sm"
                 >
                     <Plus size={18} />
-                    Create New Slide
+                    {t('admin.hero.add')}
                 </button>
             </div>
 
@@ -199,7 +201,7 @@ const HeroSliderManager: React.FC = () => {
                 <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
                 <input
                     type="text"
-                    placeholder="Search slides by title or subtitle..."
+                    placeholder={t('admin.hero.search_placeholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-16 pr-8 py-4 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
@@ -219,21 +221,21 @@ const HeroSliderManager: React.FC = () => {
                     const paginatedSlides = filteredSlides.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
                     if (loading) {
-                        return <div className="p-20 text-center text-gray-400">Loading visual assets...</div>;
+                        return <div className="p-20 text-center text-gray-400">{t('admin.hero.loading')}</div>;
                     }
 
                     if (filteredSlides.length === 0) {
                         return (
                             <div className="bg-white rounded-[2rem] border-4 border-dashed border-gray-100 p-20 text-center">
                                 <ImageIcon className="mx-auto text-gray-200 mb-6" size={64} />
-                                <h3 className="text-2xl font-black text-gray-900 uppercase">No Slides Found</h3>
-                                <p className="text-gray-500 mb-8">No slides match your search criteria.</p>
+                                <h3 className="text-2xl font-black text-gray-900 uppercase">{t('admin.hero.empty_title')}</h3>
+                                <p className="text-gray-500 mb-8">{t('admin.hero.empty_desc')}</p>
                                 {slides.length === 0 && (
                                     <button
                                         onClick={() => setShowModal(true)}
                                         className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:underline"
                                     >
-                                        Add first slide now <Plus size={16} />
+                                        {t('admin.hero.add_first')} <Plus size={16} />
                                     </button>
                                 )}
                             </div>
@@ -256,7 +258,7 @@ const HeroSliderManager: React.FC = () => {
                                                 <img src={slide.image_url} alt={slide.title_id} className="w-full h-full object-cover" />
                                             )}
                                             <div className="absolute top-2 left-2 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-black tracking-widest uppercase">
-                                                Order: {slide.sort_order}
+                                                {t('admin.hero.table.order')}: {slide.sort_order}
                                             </div>
                                         </div>
 
@@ -272,12 +274,14 @@ const HeroSliderManager: React.FC = () => {
                                                 <div className="flex gap-2">
                                                     <button
                                                         onClick={() => handleEdit(slide)}
+                                                        title={t('common.edit')}
                                                         className="p-3 bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all"
                                                     >
                                                         <Edit2 size={20} />
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(slide.id, slide.title_id)}
+                                                        title={t('common.delete')}
                                                         className="p-3 bg-gray-50 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all"
                                                     >
                                                         <Trash2 size={20} />
@@ -291,7 +295,7 @@ const HeroSliderManager: React.FC = () => {
                                                 <div className="flex items-center gap-2">
                                                     <div className={`w-3 h-3 rounded-full ${slide.is_active ? 'bg-green-500' : 'bg-red-500'}`}></div>
                                                     <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-                                                        Status: {slide.is_active ? 'Active Display' : 'Hidden'}
+                                                        {t('common.status')}: {slide.is_active ? t('admin.hero.status.active') : t('admin.hero.status.hidden')}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
@@ -311,7 +315,7 @@ const HeroSliderManager: React.FC = () => {
                                 <div className="flex flex-col md:flex-row items-center justify-between p-4 px-8 bg-white rounded-[2rem] border border-gray-100 gap-4">
                                     <div className="flex items-center gap-4">
                                         <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                                            Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredSlides.length)} of {filteredSlides.length}
+                                            {t('common.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredSlides.length)} {t('common.of')} {filteredSlides.length}
                                         </div>
                                         <select
                                             value={itemsPerPage}
@@ -321,10 +325,10 @@ const HeroSliderManager: React.FC = () => {
                                             }}
                                             className="bg-gray-50 border-none rounded-lg text-xs font-bold text-gray-600 focus:ring-0 cursor-pointer py-1 pl-2 pr-8"
                                         >
-                                            <option value={3}>3 per page</option>
-                                            <option value={5}>5 per page</option>
-                                            <option value={10}>10 per page</option>
-                                            <option value={20}>20 per page</option>
+                                            <option value={3}>3 {t('common.per_page')}</option>
+                                            <option value={5}>5 {t('common.per_page')}</option>
+                                            <option value={10}>10 {t('common.per_page')}</option>
+                                            <option value={20}>20 {t('common.per_page')}</option>
                                         </select>
                                     </div>
 
@@ -362,9 +366,9 @@ const HeroSliderManager: React.FC = () => {
                         <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                             <div>
                                 <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic">
-                                    {editingSlide ? 'Modify Visual Asset' : 'Create New Visual'}
+                                    {editingSlide ? t('admin.hero.modal.edit_title') : t('admin.hero.modal.create_title')}
                                 </h3>
-                                <p className="text-gray-500 font-medium">Define high-impact messaging and imagery for the hero section</p>
+                                <p className="text-gray-500 font-medium">{t('admin.hero.modal.subtitle')}</p>
                             </div>
                             <button
                                 onClick={() => setShowModal(false)}
@@ -381,20 +385,20 @@ const HeroSliderManager: React.FC = () => {
                                     <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
                                         <ImageIcon size={18} />
                                     </div>
-                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">Media Assets</h4>
+                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">{t('admin.hero.form.media_title')}</h4>
                                 </div>
                                 <div className="grid grid-cols-2 gap-8">
                                     <FileUpload
                                         onUploadComplete={(url) => setFormData({ ...formData, image_url: url })}
                                         currentUrl={formData.image_url}
-                                        label="Background Image"
+                                        label={t('admin.hero.form.bg_image')}
                                         bucket="images"
                                         type="image"
                                     />
                                     <FileUpload
                                         onUploadComplete={(url) => setFormData({ ...formData, video_url: url })}
                                         currentUrl={formData.video_url || ''}
-                                        label="Background Video (Optional)"
+                                        label={t('admin.hero.form.bg_video')}
                                         bucket="videos"
                                         type="video"
                                         accept="video/*"
@@ -408,13 +412,13 @@ const HeroSliderManager: React.FC = () => {
                                     <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
                                         <Type size={18} />
                                     </div>
-                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">Main Messaging</h4>
+                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">{t('admin.hero.form.messaging_title')}</h4>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-10">
                                     <div className="space-y-6">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-1">Headline (ID)</label>
+                                            <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-1">{t('admin.hero.form.headline')} (ID)</label>
                                             <input
                                                 type="text"
                                                 value={formData.title_id}
@@ -423,7 +427,7 @@ const HeroSliderManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Sub-headline (ID)</label>
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">{t('admin.hero.form.sub_headline')} (ID)</label>
                                             <textarea
                                                 value={formData.subtitle_id}
                                                 onChange={(e) => setFormData({ ...formData, subtitle_id: e.target.value })}
@@ -436,7 +440,7 @@ const HeroSliderManager: React.FC = () => {
                                     <div className="space-y-6">
                                         <div className="space-y-2">
                                             <div className="flex justify-between items-center px-1">
-                                                <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Headline (EN)</label>
+                                                <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{t('admin.hero.form.headline')} (EN)</label>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleAutoTranslate(formData.title_id || '', 'title_en')}
@@ -444,7 +448,7 @@ const HeroSliderManager: React.FC = () => {
                                                     className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
                                                 >
                                                     {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">{t('common.auto_translate')}</span>
                                                 </button>
                                             </div>
                                             <input
@@ -456,7 +460,7 @@ const HeroSliderManager: React.FC = () => {
                                         </div>
                                         <div className="space-y-2">
                                             <div className="flex justify-between items-center px-1">
-                                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Sub-headline (EN)</label>
+                                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('admin.hero.form.sub_headline')} (EN)</label>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleAutoTranslate(formData.subtitle_id || '', 'subtitle_en')}
@@ -464,7 +468,7 @@ const HeroSliderManager: React.FC = () => {
                                                     className="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 group"
                                                 >
                                                     {translating === 'subtitle_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                                    <span className="text-[8px] font-black uppercase tracking-widest">Auto</span>
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">{t('common.auto_translate')}</span>
                                                 </button>
                                             </div>
                                             <textarea
@@ -484,22 +488,22 @@ const HeroSliderManager: React.FC = () => {
                                     <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
                                         <LinkIcon size={18} />
                                     </div>
-                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">Call to Action (CTA)</h4>
+                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">{t('admin.hero.form.cta_title')}</h4>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-x-12 gap-y-8">
                                     <div className="p-8 bg-blue-50/50 rounded-[2rem] border border-blue-100 space-y-4">
-                                        <h5 className="font-black text-blue-900 uppercase text-xs tracking-widest">Primary Button</h5>
+                                        <h5 className="font-black text-blue-900 uppercase text-xs tracking-widest">{t('admin.hero.form.primary_btn')}</h5>
                                         <div className="grid grid-cols-2 gap-4">
                                             <input
-                                                placeholder="Label (ID)"
+                                                placeholder={`${t('admin.hero.form.label')} (ID)`}
                                                 value={formData.cta_primary_text_id || ''}
                                                 onChange={(e) => setFormData({ ...formData, cta_primary_text_id: e.target.value })}
                                                 className="w-full px-4 py-3 bg-white border border-blue-100 rounded-xl font-bold"
                                             />
                                             <div className="relative">
                                                 <input
-                                                    placeholder="Label (EN)"
+                                                    placeholder={`${t('admin.hero.form.label')} (EN)`}
                                                     value={formData.cta_primary_text_en || ''}
                                                     onChange={(e) => setFormData({ ...formData, cta_primary_text_en: e.target.value })}
                                                     className="w-full px-4 py-3 bg-white border border-blue-100 rounded-xl font-bold pr-10"
@@ -509,14 +513,14 @@ const HeroSliderManager: React.FC = () => {
                                                     onClick={() => handleAutoTranslate(formData.cta_primary_text_id || '', 'cta_primary_text_en')}
                                                     disabled={!!translating}
                                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-800 transition-colors"
-                                                    title="Auto Translate"
+                                                    title={t('common.auto_translate')}
                                                 >
                                                     {translating === 'cta_primary_text_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
                                                 </button>
                                             </div>
                                         </div>
                                         <input
-                                            placeholder="Link (URL or #anchor)"
+                                            placeholder={t('admin.hero.form.link')}
                                             value={formData.cta_primary_link || ''}
                                             onChange={(e) => setFormData({ ...formData, cta_primary_link: e.target.value })}
                                             className="w-full px-4 py-3 bg-white border border-blue-100 rounded-xl font-medium"
@@ -524,17 +528,17 @@ const HeroSliderManager: React.FC = () => {
                                     </div>
 
                                     <div className="p-8 bg-gray-50 rounded-[2rem] border border-gray-200 space-y-4 text-gray-600">
-                                        <h5 className="font-black uppercase text-xs tracking-widest">Secondary Button</h5>
+                                        <h5 className="font-black uppercase text-xs tracking-widest">{t('admin.hero.form.secondary_btn')}</h5>
                                         <div className="grid grid-cols-2 gap-4">
                                             <input
-                                                placeholder="Label (ID)"
+                                                placeholder={`${t('admin.hero.form.label')} (ID)`}
                                                 value={formData.cta_secondary_text_id || ''}
                                                 onChange={(e) => setFormData({ ...formData, cta_secondary_text_id: e.target.value })}
                                                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl font-bold"
                                             />
                                             <div className="relative">
                                                 <input
-                                                    placeholder="Label (EN)"
+                                                    placeholder={`${t('admin.hero.form.label')} (EN)`}
                                                     value={formData.cta_secondary_text_en || ''}
                                                     onChange={(e) => setFormData({ ...formData, cta_secondary_text_en: e.target.value })}
                                                     className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl font-bold pr-10"
@@ -544,14 +548,14 @@ const HeroSliderManager: React.FC = () => {
                                                     onClick={() => handleAutoTranslate(formData.cta_secondary_text_id || '', 'cta_secondary_text_en')}
                                                     disabled={!!translating}
                                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
-                                                    title="Auto Translate"
+                                                    title={t('common.auto_translate')}
                                                 >
                                                     {translating === 'cta_secondary_text_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
                                                 </button>
                                             </div>
                                         </div>
                                         <input
-                                            placeholder="Link (URL or #anchor)"
+                                            placeholder={t('admin.hero.form.link')}
                                             value={formData.cta_secondary_link || ''}
                                             onChange={(e) => setFormData({ ...formData, cta_secondary_link: e.target.value })}
                                             className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl font-medium"
@@ -562,7 +566,7 @@ const HeroSliderManager: React.FC = () => {
 
                             <div className="flex items-center gap-10 pt-6">
                                 <div className="flex items-center gap-4">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Sort Order</label>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('admin.hero.form.sort')}</label>
                                     <input
                                         type="number"
                                         value={formData.sort_order}
@@ -578,7 +582,7 @@ const HeroSliderManager: React.FC = () => {
                                         onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
                                         className="w-6 h-6 text-blue-600 rounded-xl border-gray-300"
                                     />
-                                    <label htmlFor="slide_active" className="text-sm font-black text-gray-700 uppercase tracking-tight">Visible on Frontend</label>
+                                    <label htmlFor="slide_active" className="text-sm font-black text-gray-700 uppercase tracking-tight">{t('admin.hero.form.visible')}</label>
                                 </div>
                             </div>
 
@@ -588,14 +592,14 @@ const HeroSliderManager: React.FC = () => {
                                     onClick={() => setShowModal(false)}
                                     className="flex-1 px-10 py-5 border-2 border-gray-100 text-gray-400 font-black rounded-[2rem] hover:bg-gray-50 transition-all uppercase tracking-widest"
                                 >
-                                    Discard Changes
+                                    {t('common.discard')}
                                 </button>
                                 <button
                                     type="submit"
                                     className="flex-[2] px-10 py-5 bg-gray-900 text-white font-black rounded-[2rem] hover:bg-black transition-all shadow-2xl flex items-center justify-center gap-4 uppercase tracking-[0.2em]"
                                 >
                                     <Save size={24} />
-                                    {editingSlide ? 'Update Visual' : 'Publish Visual'}
+                                    {editingSlide ? t('admin.hero.form.update_btn') : t('admin.hero.form.publish_btn')}
                                 </button>
                             </div>
                         </form>

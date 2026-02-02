@@ -187,10 +187,10 @@ const PartnerManager: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="text-left">
                     <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase italic leading-none">
-                        Partner <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">Portfolio</span>
+                        {t('admin.partners.title').split(' ')[0]} <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">{t('admin.partners.title').split(' ')[1]}</span>
                     </h2>
                     <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">
-                        Manage company principals and global alliance networks
+                        {t('admin.partners.subtitle')}
                     </p>
                 </div>
                 <button
@@ -201,7 +201,7 @@ const PartnerManager: React.FC = () => {
                     className="px-8 py-4 bg-slate-900 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-blue-600 transition-all shadow-2xl shadow-slate-100 uppercase tracking-widest text-xs"
                 >
                     <Plus size={18} />
-                    Register Partner
+                    {t('admin.partners.add')}
                 </button>
             </div>
 
@@ -211,7 +211,7 @@ const PartnerManager: React.FC = () => {
                     <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-blue-500 transition-colors" size={20} />
                     <input
                         type="text"
-                        placeholder="Search partners by name..."
+                        placeholder={t('admin.partners.search_placeholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full pl-16 pr-8 py-5 bg-white border border-gray-100 rounded-[2rem] shadow-sm focus:ring-8 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all font-medium text-sm italic"
@@ -227,7 +227,7 @@ const PartnerManager: React.FC = () => {
                                 : 'bg-white text-gray-400 border border-gray-50 hover:bg-gray-50 shadow-sm'
                                 }`}
                         >
-                            {type === 'all' ? 'Universal' : type === 'principal' ? 'Principals' : 'International'}
+                            {type === 'all' ? t('admin.branch.filter.universal') : type === 'principal' ? t('partners.stats.national') : t('partners.stats.international')}
                         </button>
                     ))}
                 </div>
@@ -241,18 +241,18 @@ const PartnerManager: React.FC = () => {
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                             {loading ? (
-                                <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Syncing Alliance Protocols...</div>
+                                <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">{t('admin.partners.loading')}</div>
                             ) : filteredPartners.length === 0 ? (
                                 <div className="col-span-full bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
                                     <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
                                         <Globe size={64} />
                                     </div>
                                     <div className="space-y-2">
-                                        <h3 className="text-2xl font-black text-gray-900 uppercase italic">Alliances Empty</h3>
-                                        <p className="text-gray-400 font-medium">No business partners have been synchronized with the grid.</p>
+                                        <h3 className="text-2xl font-black text-gray-900 uppercase italic">{t('admin.partners.empty_title')}</h3>
+                                        <p className="text-gray-400 font-medium">{t('admin.partners.empty_desc')}</p>
                                     </div>
                                     <button onClick={() => setShowModal(true)} className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs">
-                                        Anchor First Alliance <Plus size={16} />
+                                        {t('admin.partners.add_first')} <Plus size={16} />
                                     </button>
                                 </div>
                             ) : (
@@ -263,13 +263,13 @@ const PartnerManager: React.FC = () => {
                                         <div className="flex items-center justify-between mb-8">
                                             <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] italic border ${partner.partner_type === 'principal' ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-blue-50 text-blue-600 border-blue-100'
                                                 }`}>
-                                                {partner.partner_type}
+                                                {partner.partner_type === 'principal' ? t('partners.stats.national') : t('partners.stats.international')}
                                             </span>
                                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-y-[-10px] group-hover:translate-y-0 duration-500">
-                                                <button onClick={() => handleEdit(partner)} className="w-10 h-10 bg-white shadow-xl text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50">
+                                                <button onClick={() => handleEdit(partner)} title={t('common.edit')} className="w-10 h-10 bg-white shadow-xl text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50">
                                                     <Edit2 size={16} />
                                                 </button>
-                                                <button onClick={() => handleDelete(partner.id, partner.name)} className="w-10 h-10 bg-white shadow-xl text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50">
+                                                <button onClick={() => handleDelete(partner.id, partner.name)} title={t('common.delete')} className="w-10 h-10 bg-white shadow-xl text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50">
                                                     <Trash2 size={16} />
                                                 </button>
                                             </div>
@@ -296,11 +296,11 @@ const PartnerManager: React.FC = () => {
                                         </div>
 
                                         <div className="mt-8 pt-6 border-t border-gray-50 flex justify-between items-center bg-gray-50/50 -mx-8 -mb-8 px-8 py-4">
-                                            <div className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] italic">Protocol #{partner.sort_order}</div>
+                                            <div className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] italic">{t('admin.partners.table.order')} {partner.sort_order}</div>
                                             <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${partner.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'
                                                 }`}>
                                                 <div className={`w-1.5 h-1.5 rounded-full ${partner.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
-                                                <span className="text-[8px] font-black uppercase tracking-widest">{partner.is_active ? 'ACTIVE' : 'OFFLINE'}</span>
+                                                <span className="text-[8px] font-black uppercase tracking-widest">{partner.is_active ? t('admin.partners.status.active') : t('admin.partners.status.offline')}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -312,7 +312,7 @@ const PartnerManager: React.FC = () => {
                         {totalPages > 1 && (
                             <div className="flex items-center justify-between p-4 px-8 mt-4">
                                 <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                                    Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredPartners.length)} of {filteredPartners.length}
+                                    {t('common.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredPartners.length)} {t('common.of')} {filteredPartners.length}
                                 </div>
                                 <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
                                     <button
@@ -350,9 +350,9 @@ const PartnerManager: React.FC = () => {
                                 </div>
                                 <div className="space-y-1">
                                     <h3 className="text-4xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">
-                                        {editingPartner ? 'Modify Alliance' : 'Anchor Partner'}
+                                        {editingPartner ? t('admin.partners.modal.edit_title') : t('admin.partners.modal.create_title')}
                                     </h3>
-                                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Strategic Alliance Configuration Terminal</p>
+                                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">{t('admin.partners.modal.subtitle')}</p>
                                 </div>
                             </div>
                             <button
@@ -366,7 +366,7 @@ const PartnerManager: React.FC = () => {
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar text-left font-medium">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div className="space-y-4">
-                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Partner Identity</label>
+                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.partners.form.identity')}</label>
                                     <input
                                         type="text"
                                         required
@@ -377,32 +377,32 @@ const PartnerManager: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Alliance Tier</label>
+                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.partners.form.tier')}</label>
                                     <select
                                         value={formData.partner_type}
                                         onChange={(e) => setFormData({ ...formData, partner_type: e.target.value as any })}
                                         className="w-full px-10 py-8 bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[3rem] transition-all font-black text-xl italic uppercase tracking-tighter appearance-none cursor-pointer"
                                     >
-                                        <option value="principal">Principal Tier</option>
-                                        <option value="international">International Tier</option>
+                                        <option value="principal">{t('admin.partners.form.tier_principal')}</option>
+                                        <option value="international">{t('admin.partners.form.tier_international')}</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div className="space-y-4">
-                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Signal Assets (Logo)</label>
+                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.partners.form.assets')}</label>
                                     <FileUpload
                                         onUploadComplete={(url) => setFormData({ ...formData, logo_url: url })}
                                         currentUrl={formData.logo_url}
-                                        label="Anchor Digital Asset"
+                                        label={t('admin.partners.form.anchor_asset')}
                                         bucket="images"
                                         type="image"
                                     />
                                 </div>
                                 <div className="space-y-8">
                                     <div className="space-y-4">
-                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">External Uplink (Website)</label>
+                                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.partners.form.uplink')}</label>
                                         <div className="relative group">
                                             <Globe className="absolute left-8 top-1/2 -translate-y-1/2 text-blue-500" size={20} />
                                             <input
@@ -416,7 +416,7 @@ const PartnerManager: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-2 gap-6">
                                         <div className="space-y-4">
-                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Sort Priority</label>
+                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.partners.form.priority')}</label>
                                             <input
                                                 type="number"
                                                 value={formData.sort_order}
@@ -425,7 +425,7 @@ const PartnerManager: React.FC = () => {
                                             />
                                         </div>
                                         <div className="space-y-4">
-                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">Live Status</label>
+                                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-6 italic leading-none">{t('admin.partners.form.status')}</label>
                                             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-[2.5rem] border-2 border-transparent focus-within:border-blue-500 transition-all cursor-pointer">
                                                 <label className="relative inline-flex items-center cursor-pointer px-2">
                                                     <input
@@ -436,7 +436,7 @@ const PartnerManager: React.FC = () => {
                                                     />
                                                     <div className="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
                                                 </label>
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-gray-900">{formData.is_active ? 'ACTIVE' : 'DRAFT'}</span>
+                                                <span className="text-[9px] font-black uppercase tracking-widest text-gray-900">{formData.is_active ? t('common.active').toUpperCase() : t('common.draft').toUpperCase()}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -447,19 +447,19 @@ const PartnerManager: React.FC = () => {
                             <div className="space-y-10 pt-10 border-t border-gray-50">
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
-                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tighter italic leading-none">Strategic Narrative</h4>
+                                    <h4 className="text-lg font-black text-gray-900 uppercase tracking-tighter italic leading-none">{t('admin.partners.form.narrative')}</h4>
                                 </div>
                                 <div className="space-y-12">
                                     <div className="space-y-4">
                                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-8 italic flex items-center gap-3">
                                             <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                                            INDONESIAN ANALYSIS
+                                            {t('admin.partners.form.id_label')}
                                         </label>
                                         <div className="rounded-[3rem] overflow-hidden border-4 border-transparent focus-within:border-blue-500/10 transition-all shadow-2xl">
                                             <RichTextEditor
                                                 content={formData.description_id}
                                                 onChange={(val) => setFormData({ ...formData, description_id: val })}
-                                                placeholder="Jelaskan kemitraan ini secara mendalam..."
+                                                placeholder="..."
                                             />
                                         </div>
                                     </div>
@@ -467,7 +467,7 @@ const PartnerManager: React.FC = () => {
                                         <div className="flex justify-between items-center px-8">
                                             <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic flex items-center gap-3">
                                                 <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                                                ENGLISH ANALYSIS
+                                                {t('admin.partners.form.en_label')}
                                             </label>
                                             <button
                                                 type="button"
@@ -476,14 +476,14 @@ const PartnerManager: React.FC = () => {
                                                 className="px-6 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2 group shadow-sm"
                                             >
                                                 {translating === 'description_en' ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} className="group-hover:scale-125 transition-transform" />}
-                                                <span className="text-[10px] font-black uppercase tracking-widest leading-none">Global Sync</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest leading-none">{t('common.auto_translate')}</span>
                                             </button>
                                         </div>
                                         <div className="rounded-[3rem] overflow-hidden border-4 border-transparent focus-within:border-emerald-500/10 transition-all shadow-2xl">
                                             <RichTextEditor
                                                 content={formData.description_en}
                                                 onChange={(val) => setFormData({ ...formData, description_en: val })}
-                                                placeholder="Explain this alliance for global records..."
+                                                placeholder="..."
                                             />
                                         </div>
                                     </div>
@@ -496,14 +496,14 @@ const PartnerManager: React.FC = () => {
                                     onClick={() => setShowModal(false)}
                                     className="flex-1 px-12 py-8 bg-gray-100 text-gray-500 font-black rounded-[2.5rem] hover:bg-black hover:text-white transition-all uppercase tracking-widest text-[11px]"
                                 >
-                                    Cancel Anchor
+                                    {t('common.cancel')}
                                 </button>
                                 <button
                                     type="submit"
                                     className="flex-[2] px-[4rem] py-8 bg-blue-600 text-white font-black rounded-[2.5rem] hover:bg-black transition-all shadow-[0_20px_50px_-12px_rgba(37,99,235,0.3)] flex items-center justify-center gap-6 uppercase tracking-[0.3em] text-[11px]"
                                 >
                                     <Save size={24} />
-                                    {editingPartner ? 'CONFIRM UPDATE' : 'ESTABLISH ALLIANCE'}
+                                    {editingPartner ? t('admin.partners.form.update_btn') : t('admin.partners.form.publish_btn')}
                                 </button>
                             </div>
                         </form>

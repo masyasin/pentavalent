@@ -153,10 +153,10 @@ const AdvantagesManager: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="text-left">
                     <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase italic leading-none">
-                        Competitive <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">Advantages</span>
+                        {t('admin.advantages.title').split(' ')[0]} <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-4">{t('admin.advantages.title').split(' ')[1]}</span>
                     </h2>
                     <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">
-                        Manage your company's core differentiators and strengths
+                        {t('admin.advantages.subtitle')}
                     </p>
                 </div>
                 <button
@@ -167,32 +167,32 @@ const AdvantagesManager: React.FC = () => {
                     className="px-8 py-4 bg-slate-900 text-white rounded-[2rem] font-black flex items-center gap-3 hover:bg-blue-600 transition-all shadow-2xl shadow-slate-100 uppercase tracking-widest text-xs"
                 >
                     <Plus size={18} />
-                    New Advantage
+                    {t('admin.advantages.add')}
                 </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
                 {loading ? (
-                    <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">Syncing Advantages...</div>
+                    <div className="col-span-full py-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">{t('admin.advantages.loading')}</div>
                 ) : advantages.length === 0 ? (
                     <div className="col-span-full bg-white rounded-[3.5rem] border-4 border-dashed border-gray-100 p-24 text-center space-y-6">
                         <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200">
                             <TrendingUp size={64} />
                         </div>
-                        <h3 className="text-2xl font-black text-gray-900 uppercase italic">No Advantages Defined</h3>
+                        <h3 className="text-2xl font-black text-gray-900 uppercase italic">{t('admin.advantages.empty_title')}</h3>
                         <button
                             onClick={() => setShowModal(true)}
                             className="text-blue-600 font-black flex items-center gap-2 mx-auto hover:scale-105 transition-all uppercase tracking-widest text-xs"
                         >
-                            Add First Advantage <Plus size={16} />
+                            {t('admin.advantages.add_first')} <Plus size={16} />
                         </button>
                     </div>
                 ) : (
                     advantages.map((adv) => (
                         <div key={adv.id} className="bg-white rounded-[3rem] p-8 border border-gray-50 shadow-sm hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/5 transition-all group relative flex flex-col items-start text-left">
                             <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-all transform translate-y-[-10px] group-hover:translate-y-0 duration-500 flex gap-2">
-                                <button onClick={() => handleEdit(adv)} className="w-10 h-10 bg-white shadow-xl text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50"><Edit2 size={16} /></button>
-                                <button onClick={() => handleDelete(adv.id, adv.title_id)} className="w-10 h-10 bg-white shadow-xl text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50"><Trash2 size={16} /></button>
+                                <button onClick={() => handleEdit(adv)} title={t('common.edit')} className="w-10 h-10 bg-white shadow-xl text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-gray-50"><Edit2 size={16} /></button>
+                                <button onClick={() => handleDelete(adv.id, adv.title_id)} title={t('common.delete')} className="w-10 h-10 bg-white shadow-xl text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-gray-50"><Trash2 size={16} /></button>
                             </div>
 
                             <div className="flex gap-6 items-start">
@@ -207,9 +207,9 @@ const AdvantagesManager: React.FC = () => {
                                         {language === 'id' ? adv.description_id : adv.description_en}
                                     </p>
                                     <div className="flex items-center gap-4 mt-4">
-                                        <p className="text-gray-300 font-bold uppercase tracking-[0.2em] text-[9px] italic">Order Index #{adv.sort_order}</p>
+                                        <p className="text-gray-300 font-bold uppercase tracking-[0.2em] text-[9px] italic">{t('admin.advantages.table.order')} {adv.sort_order}</p>
                                         {!adv.is_active && (
-                                            <span className="px-3 py-1 bg-rose-500 text-white text-[8px] font-black uppercase tracking-widest rounded-full">Inactive</span>
+                                            <span className="px-3 py-1 bg-rose-500 text-white text-[8px] font-black uppercase tracking-widest rounded-full">{t('admin.advantages.status.inactive')}</span>
                                         )}
                                     </div>
                                 </div>
@@ -228,8 +228,8 @@ const AdvantagesManager: React.FC = () => {
                                     <Zap size={32} />
                                 </div>
                                 <div>
-                                    <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">Advantage Details</h3>
-                                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[9px] mt-1">Configure Competitive Differentiator</p>
+                                    <h3 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">{t('admin.advantages.modal.title')}</h3>
+                                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[9px] mt-1">{t('admin.advantages.modal.subtitle')}</p>
                                 </div>
                             </div>
                             <button onClick={() => setShowModal(false)} className="w-12 h-12 flex items-center justify-center hover:bg-gray-100 rounded-2xl transition-all text-gray-400 hover:text-rose-500"><X size={28} /></button>
@@ -238,7 +238,7 @@ const AdvantagesManager: React.FC = () => {
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-12 space-y-10 text-left">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic">Select Visual Symbol</label>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic">{t('admin.advantages.form.visual_symbol')}</label>
                                     <div className="grid grid-cols-5 gap-3 p-4 bg-gray-50 rounded-[2rem]">
                                         {EMOJI_OPTIONS.map(emoji => (
                                             <button
@@ -252,7 +252,7 @@ const AdvantagesManager: React.FC = () => {
                                         ))}
                                     </div>
                                     <div className="flex items-center gap-4 px-2">
-                                        <label className="text-[9px] text-gray-400 uppercase font-black">Manual Input:</label>
+                                        <label className="text-[9px] text-gray-400 uppercase font-black">{t('admin.advantages.form.manual_input')}:</label>
                                         <input
                                             type="text"
                                             value={formData.icon}
@@ -262,7 +262,7 @@ const AdvantagesManager: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic">Sort Order</label>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic">{t('admin.advantages.form.sort')}</label>
                                     <input
                                         type="number"
                                         value={formData.sort_order}
@@ -274,7 +274,7 @@ const AdvantagesManager: React.FC = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-2 italic">Title (ID)</label>
+                                    <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest px-2 italic">{t('admin.advantages.form.title_id')}</label>
                                     <input
                                         type="text"
                                         required
@@ -285,7 +285,7 @@ const AdvantagesManager: React.FC = () => {
                                 </div>
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center px-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">Title (EN)</label>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">{t('admin.advantages.form.title_en')}</label>
                                         <button
                                             type="button"
                                             onClick={() => handleAutoTranslate(formData.title_id || '', 'title_en')}
@@ -293,7 +293,7 @@ const AdvantagesManager: React.FC = () => {
                                             className="text-blue-600 hover:text-black transition-colors flex items-center gap-1 group"
                                         >
                                             {translating === 'title_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                            <span className="text-[8px] font-black uppercase tracking-widest">Translate</span>
+                                            <span className="text-[8px] font-black uppercase tracking-widest">{t('common.auto_translate')}</span>
                                         </button>
                                     </div>
                                     <input
@@ -308,7 +308,7 @@ const AdvantagesManager: React.FC = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-gray-50">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic">Description (ID)</label>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 italic">{t('admin.advantages.form.desc_id')}</label>
                                     <textarea
                                         required
                                         rows={4}
@@ -319,7 +319,7 @@ const AdvantagesManager: React.FC = () => {
                                 </div>
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center px-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">Description (EN)</label>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">{t('admin.advantages.form.desc_en')}</label>
                                         <button
                                             type="button"
                                             onClick={() => handleAutoTranslate(formData.description_id || '', 'description_en')}
@@ -327,7 +327,7 @@ const AdvantagesManager: React.FC = () => {
                                             className="text-blue-600 hover:text-black transition-colors flex items-center gap-1 group"
                                         >
                                             {translating === 'description_en' ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} className="group-hover:scale-125 transition-transform" />}
-                                            <span className="text-[8px] font-black uppercase tracking-widest">Translate</span>
+                                            <span className="text-[8px] font-black uppercase tracking-widest">{t('common.auto_translate')}</span>
                                         </button>
                                     </div>
                                     <textarea
@@ -352,14 +352,14 @@ const AdvantagesManager: React.FC = () => {
                                         <div className={`w-14 h-8 rounded-full transition-all duration-300 ${formData.is_active ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
                                         <div className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-md ${formData.is_active ? 'translate-x-6' : 'translate-x-0'}`}></div>
                                     </div>
-                                    <span className="text-[10px] font-black text-gray-900 uppercase tracking-widest">Active Advantage</span>
+                                    <span className="text-[10px] font-black text-gray-900 uppercase tracking-widest">{t('admin.advantages.form.active')}</span>
                                 </label>
 
                                 <div className="flex gap-4">
-                                    <button type="button" onClick={() => setShowModal(false)} className="px-10 py-5 bg-gray-50 text-gray-400 font-black rounded-2xl hover:bg-black hover:text-white transition-all uppercase tracking-widest text-[10px]">Discard</button>
+                                    <button type="button" onClick={() => setShowModal(false)} className="px-10 py-5 bg-gray-50 text-gray-400 font-black rounded-2xl hover:bg-black hover:text-white transition-all uppercase tracking-widest text-[10px]">{t('common.discard')}</button>
                                     <button type="submit" className="px-14 py-5 bg-blue-600 text-white font-black rounded-2xl hover:bg-black transition-all shadow-2xl shadow-blue-100 flex items-center gap-3 uppercase tracking-widest text-[10px]">
                                         <Save size={18} />
-                                        Save Advantage
+                                        {t('admin.advantages.form.save')}
                                     </button>
                                 </div>
                             </div>

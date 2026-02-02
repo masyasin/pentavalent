@@ -166,6 +166,16 @@ const ApplicationsManager: React.FC = () => {
         }
     };
 
+    const getStatusLabel = (status: Application['status']) => {
+        switch (status) {
+            case 'pending': return t('admin.applications.status.pending');
+            case 'reviewed': return t('admin.applications.status.reviewed');
+            case 'accepted': return t('admin.applications.status.accepted');
+            case 'rejected': return t('admin.applications.status.rejected');
+            default: return status;
+        }
+    };
+
     return (
         <div className="space-y-10 animate-in fade-in duration-500 pb-20">
             {/* Header */}
@@ -186,13 +196,13 @@ const ApplicationsManager: React.FC = () => {
                         className="px-8 py-4 bg-emerald-50 text-emerald-600 rounded-[2rem] font-black uppercase text-[10px] tracking-widest hover:bg-emerald-600 hover:text-white transition-all border-2 border-emerald-100 flex items-center gap-2 disabled:opacity-50 h-[62px]"
                     >
                         <Download size={18} />
-                        {language === 'id' ? 'Ekspor Kandidat' : 'Export Candidates'}
+                        {t('admin.applications.export')}
                     </button>
                     <div className="relative group w-full sm:w-72">
                         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                         <input
                             type="text"
-                            placeholder="Find Candidate..."
+                            placeholder={t('admin.applications.search_placeholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-16 pr-8 py-5 bg-white border-2 border-gray-50 rounded-[2rem] focus:border-blue-500 transition-all font-bold placeholder:text-gray-300 shadow-sm"
@@ -205,11 +215,11 @@ const ApplicationsManager: React.FC = () => {
                             onChange={(e) => setStatusFilter(e.target.value)}
                             className="w-full pl-16 pr-12 py-5 bg-white border-2 border-gray-50 rounded-[2rem] focus:border-blue-500 transition-all font-black uppercase text-[10px] tracking-widest appearance-none shadow-sm cursor-pointer h-[62px]"
                         >
-                            <option value="all">Global Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="reviewed">Under Review</option>
-                            <option value="accepted">Accepted</option>
-                            <option value="rejected">Rejected</option>
+                            <option value="all">{t('admin.applications.filter.status')}</option>
+                            <option value="pending">{t('admin.applications.status.pending')}</option>
+                            <option value="reviewed">{t('admin.applications.status.reviewed')}</option>
+                            <option value="accepted">{t('admin.applications.status.accepted')}</option>
+                            <option value="rejected">{t('admin.applications.status.rejected')}</option>
                         </select>
                     </div>
                 </div>
@@ -223,7 +233,7 @@ const ApplicationsManager: React.FC = () => {
                     <>
                         {loading ? (
                             <div className="p-24 text-center text-gray-300 font-black uppercase tracking-widest animate-pulse">
-                                Scanning Talent Pool...
+                                {t('admin.applications.loading')}
                             </div>
                         ) : filteredApplications.length === 0 ? (
                             <div className="bg-white rounded-[3rem] p-24 text-center border-2 border-dashed border-gray-100 space-y-6">
@@ -231,9 +241,9 @@ const ApplicationsManager: React.FC = () => {
                                     <User size={40} />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">No Global Match</h3>
+                                    <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">{t('admin.applications.empty_title')}</h3>
                                     <p className="text-gray-400 font-medium text-sm max-w-sm mx-auto">
-                                        Global talent acquisition systems show no records matching your current sequence.
+                                        {t('admin.applications.empty_desc')}
                                     </p>
                                 </div>
                             </div>
@@ -261,7 +271,7 @@ const ApplicationsManager: React.FC = () => {
                                                                 </span>
                                                                 <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border ${getStatusStyle(app.status)} flex items-center gap-2`}>
                                                                     {getStatusIcon(app.status)}
-                                                                    {app.status}
+                                                                    {getStatusLabel(app.status)}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -269,7 +279,7 @@ const ApplicationsManager: React.FC = () => {
                                                     <button
                                                         onClick={() => handleDelete(app.id, app.full_name)}
                                                         className="p-4 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-[1.25rem] transition-all"
-                                                        title="Expunge Record"
+                                                        title={t('common.delete')}
                                                     >
                                                         <Trash2 size={24} />
                                                     </button>
@@ -281,7 +291,7 @@ const ApplicationsManager: React.FC = () => {
                                                             <Mail size={20} />
                                                         </div>
                                                         <div className="min-w-0">
-                                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Direct Contact</p>
+                                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{t('admin.applications.table.contact')}</p>
                                                             <p className="font-bold text-gray-900 truncate text-sm">{app.email}</p>
                                                         </div>
                                                     </div>
@@ -290,7 +300,7 @@ const ApplicationsManager: React.FC = () => {
                                                             <Phone size={20} />
                                                         </div>
                                                         <div>
-                                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Access Protocol</p>
+                                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{t('admin.applications.table.protocol')}</p>
                                                             <p className="font-bold text-gray-900 text-sm">{app.phone}</p>
                                                         </div>
                                                     </div>
@@ -299,7 +309,7 @@ const ApplicationsManager: React.FC = () => {
                                                             <Calendar size={20} />
                                                         </div>
                                                         <div>
-                                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Transmission Date</p>
+                                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{t('admin.applications.table.transmission')}</p>
                                                             <p className="font-bold text-gray-900 text-sm">{new Date(app.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                                                         </div>
                                                     </div>
@@ -312,7 +322,7 @@ const ApplicationsManager: React.FC = () => {
                                                         </div>
                                                         <p className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2 italic">
                                                             <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
-                                                            Mission Statement / Cover Letter
+                                                            {t('admin.applications.table.mission')}
                                                         </p>
                                                         <p className="text-blue-100/80 text-sm leading-relaxed font-medium line-clamp-2 hover:line-clamp-none transition-all cursor-pointer">
                                                             {app.cover_letter}
@@ -323,7 +333,7 @@ const ApplicationsManager: React.FC = () => {
 
                                             <div className="lg:w-80 space-y-8">
                                                 <div className="space-y-4">
-                                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.3em] px-2 italic">TALENT FILES</label>
+                                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.3em] px-2 italic">{t('admin.applications.table.files')}</label>
                                                     {app.resume_url ? (
                                                         <a
                                                             href={app.resume_url}
@@ -335,25 +345,25 @@ const ApplicationsManager: React.FC = () => {
                                                                 <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 group-hover/btn:bg-blue-600 group-hover/btn:text-white transition-all">
                                                                     <FileText size={20} />
                                                                 </div>
-                                                                View Resume
+                                                                {t('admin.applications.table.resume_view')}
                                                             </div>
                                                             <ChevronRight size={18} className="translate-x-0 group-hover/btn:translate-x-1 transition-transform" />
                                                         </a>
                                                     ) : (
                                                         <div className="p-8 bg-gray-50 rounded-[1.75rem] text-gray-300 text-[10px] font-black uppercase tracking-[0.2em] border-2 border-dashed border-gray-100 text-center">
-                                                            NO VISUAL RESUME
+                                                            {t('admin.applications.table.no_resume')}
                                                         </div>
                                                     )}
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.3em] px-2 italic">DECISION CONSOLE</label>
+                                                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.3em] px-2 italic">{t('admin.applications.table.decision')}</label>
                                                     <div className="grid grid-cols-2 gap-3">
                                                         {[
-                                                            { id: 'reviewed', label: 'Reviewing', color: 'blue' },
-                                                            { id: 'accepted', label: 'Accept', color: 'emerald' },
-                                                            { id: 'rejected', label: 'Reject', color: 'rose' },
-                                                            { id: 'pending', label: 'Waitlist', color: 'amber' }
+                                                            { id: 'reviewed', label: t('admin.applications.action.review'), color: 'blue' },
+                                                            { id: 'accepted', label: t('admin.applications.action.accept'), color: 'emerald' },
+                                                            { id: 'rejected', label: t('admin.applications.action.reject'), color: 'rose' },
+                                                            { id: 'pending', label: t('admin.applications.action.waitlist'), color: 'amber' }
                                                         ].map((btn) => (
                                                             <button
                                                                 key={btn.id}
@@ -379,7 +389,7 @@ const ApplicationsManager: React.FC = () => {
                         {totalPages > 1 && (
                             <div className="flex items-center justify-between p-4 px-8 mt-4">
                                 <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                                    Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredApplications.length)} of {filteredApplications.length}
+                                    {t('common.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredApplications.length)} {t('common.of')} {filteredApplications.length}
                                 </div>
                                 <div className="flex bg-white rounded-xl p-1 gap-1 border border-gray-100 shadow-sm">
                                     <button
