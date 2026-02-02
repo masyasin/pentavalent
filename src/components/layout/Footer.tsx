@@ -190,8 +190,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   return (
-    <footer className="relative bg-foreground text-white overflow-hidden pt-16 pb-16">
-      <div className="absolute bottom-0 left-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden">
+    <footer className="relative bg-foreground text-white overflow-hidden pt-16 pb-16 max-md:pt-10 max-md:pb-10 max-md:overflow-x-hidden">
+      <div className="absolute bottom-0 left-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden max-md:hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-medical-deep via-foreground to-medical-deep"></div>
         <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.8) 1.5px, transparent 1.5px)', backgroundSize: '60px 60px' }}></div>
         <div className="absolute bottom-0 left-0 w-full h-[700px] bg-gradient-to-t from-blue-600/20 via-purple-600/10 to-transparent blur-3xl mix-blend-screen"></div>
@@ -214,27 +214,27 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="absolute bottom-[-50px] right-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-700"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-20">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-20 max-md:mb-10 max-md:px-4">
         {/* Closing CTA Banner */}
-        <div className="relative p-10 md:p-16 rounded-[3rem] overflow-hidden border border-white/10 group">
+        <div className="relative p-10 md:p-16 rounded-[3rem] overflow-hidden border border-white/10 group max-md:p-8 max-md:rounded-[2rem]">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-slate-900/50 to-cyan-900/50 backdrop-blur-3xl transition-all duration-700 group-hover:scale-105"></div>
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10 max-md:gap-6">
             <div className="max-w-2xl text-center md:text-left">
-              <h3 className="text-2xl md:text-4xl font-black text-white leading-tight tracking-tighter mb-4 italic">
+              <h3 className="text-2xl md:text-4xl font-black text-white leading-tight tracking-tighter mb-4 italic max-md:text-xl max-md:mb-3">
                 {language === 'id'
                   ? 'Mendukung Rantai Distribusi Kesehatan Indonesia'
                   : 'Supporting Indonesia\'s Healthcare Distribution Chain'}
               </h3>
-              <p className="text-blue-100/60 mb-6 text-lg font-medium">
+              <p className="text-blue-100/60 mb-6 text-lg font-medium max-md:text-sm max-md:mb-4">
                 {language === 'id'
                   ? 'PT Penta Valent Tbk berkomitmen untuk terus berkontribusi dalam memastikan ketersediaan produk farmasi, medis, dan kesehatan secara merata dan berkelanjutan di Indonesia.'
                   : 'PT Penta Valent Tbk is committed to continuing to contribute to ensuring the availability of pharmaceutical, medical, and health products equally and sustainably in Indonesia.'}
               </p>
-              <div className="h-1 w-20 bg-accent rounded-full mb-4 mx-auto md:mx-0"></div>
+              <div className="h-1 w-20 bg-accent rounded-full mb-4 mx-auto md:mx-0 max-md:w-12 max-md:mb-2"></div>
             </div>
             <button
               onClick={() => onNavigate('contact')}
-              className="px-12 py-5 bg-white text-slate-950 font-black uppercase tracking-widest text-xs rounded-full hover:bg-accent hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-2xl"
+              className="px-12 py-5 bg-white text-slate-950 font-black uppercase tracking-widest text-xs rounded-full hover:bg-accent hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-2xl max-md:w-full max-md:min-h-[44px] max-md:py-4 max-md:text-[10px]"
             >
               {language === 'id' ? 'Hubungi Kami' : 'Contact Us'}
             </button>
@@ -242,21 +242,21 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-0 pb-16 border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 max-md:px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-0 pb-16 border-b border-white/5 max-md:gap-10 max-md:pb-10">
           {/* Column 1: Logo, Social, Counter */}
-          <div className="space-y-8 flex flex-col items-start">
+          <div className="space-y-8 flex flex-col items-start max-md:space-y-6 max-md:items-center max-md:text-center">
             <div className="relative group hover:scale-105 transition-transform duration-300">
-              <img src={settings?.logo_url || "/logo-penta-valent.png"} alt={settings?.company_name || "Penta Valent"} className="h-16 w-auto brightness-0 invert" />
+              <img src={settings?.logo_url || "/logo-penta-valent.png"} alt={settings?.company_name || "Penta Valent"} className="h-16 w-auto brightness-0 invert max-md:h-12" />
             </div>
 
-            <div className="space-y-6 w-full flex flex-col items-start">
-              <div className="flex items-center gap-3 justify-start">
+            <div className="space-y-6 w-full flex flex-col items-start max-md:items-center max-md:space-y-4">
+              <div className="flex items-center gap-3 justify-start max-md:justify-center">
                 {socialLinks.map((item, idx) => (
                   <a
                     key={idx}
                     href={item.url}
-                    className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:wow-button-gradient hover:border-transparent hover:-translate-y-1 touch-active active:scale-[0.95] transition-all duration-300"
+                    className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:wow-button-gradient hover:border-transparent hover:-translate-y-1 touch-active active:scale-[0.95] transition-all duration-300 max-md:w-11 max-md:h-11"
                     aria-label={item.platform}
                   >
                     {getSocialIcon(item.platform)}
@@ -264,76 +264,76 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 ))}
               </div>
 
-              <div className="pt-2 w-full flex justify-start">
+              <div className="pt-2 w-full flex justify-start max-md:justify-center">
                 <VisitorCounter />
               </div>
             </div>
           </div>
 
           {/* Column 2: Contact Information */}
-          <div className="pt-2">
-            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>{t('footer.column.contact')}</h4>
-            <div className="space-y-6 pt-2">
-              <a href={`tel:${settings?.contact_phone || '+622158061XX'}`} className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all">
-                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
-                  <Phone size={20} />
+          <div className="pt-2 max-md:pt-0">
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3 max-md:mb-4 max-md:justify-center"><span className="w-1 h-4 bg-orange-500 rounded-full"></span>{t('footer.column.contact')}</h4>
+            <div className="space-y-6 pt-2 max-md:space-y-4 max-md:pt-0">
+              <a href={`tel:${settings?.contact_phone || '+622158061XX'}`} className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all max-md:p-1 max-md:justify-center">
+                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all max-md:shrink-0 max-md:w-9 max-md:h-9">
+                  <Phone size={20} className="max-md:w-5 max-md:h-5" />
                 </div>
-                <div>
+                <div className="max-md:text-left">
                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.ho')}</span>
-                  <span className="text-white font-bold group-hover/link:text-accent transition-colors">{settings?.contact_phone || '+62 21 580 61XX'}</span>
+                  <span className="text-white font-bold group-hover/link:text-accent transition-colors max-md:text-sm">{settings?.contact_phone || '+62 21 580 61XX'}</span>
                 </div>
               </a>
-              <a href={`mailto:${settings?.contact_email || 'info@pentavalent.co.id'}`} className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all">
-                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all">
-                  <Mail size={20} />
+              <a href={`mailto:${settings?.contact_email || 'info@pentavalent.co.id'}`} className="flex items-start gap-4 group/link touch-active p-2 rounded-xl transition-all max-md:p-1 max-md:justify-center">
+                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent group-hover/link:bg-accent group-hover/link:text-white transition-all max-md:shrink-0 max-md:w-9 max-md:h-9">
+                  <Mail size={20} className="max-md:w-5 max-md:h-5" />
                 </div>
-                <div>
+                <div className="max-md:text-left">
                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.digital')}</span>
-                  <span className="text-white font-bold group-hover/link:text-accent transition-colors">{settings?.contact_email || 'info@pentavalent.co.id'}</span>
+                  <span className="text-white font-bold group-hover/link:text-accent transition-colors max-md:text-sm">{settings?.contact_email || 'info@pentavalent.co.id'}</span>
                 </div>
               </a>
-              <div className="flex items-start gap-4 group/link p-2">
-                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent">
-                  <MapPin size={20} />
+              <div className="flex items-start gap-4 group/link p-2 max-md:p-1 max-md:justify-center">
+                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-accent max-md:shrink-0 max-md:w-9 max-md:h-9">
+                  <MapPin size={20} className="max-md:w-5 max-md:h-5" />
                 </div>
-                <div>
+                <div className="max-md:text-left">
                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-1">{t('footer.contact.hq')}</span>
-                  <span className="text-white/80 text-xs font-semibold">{settings?.address || 'Tanah Abang III No. 12, Jakarta'}</span>
+                  <span className="text-white/80 text-xs font-semibold max-md:text-[11px]">{settings?.address || 'Tanah Abang III No. 12, Jakarta'}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Column 3: Corporate Menu */}
-          <div className="pt-2 lg:pl-8">
-            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-blue-500 rounded-full"></span>{t('footer.column.corporate')}</h4>
-            <ul className="space-y-4 pl-4 border-l border-white/5">
+          <div className="pt-2 lg:pl-8 max-md:pt-0">
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3 max-md:mb-4 max-md:justify-center"><span className="w-1 h-4 bg-blue-500 rounded-full"></span>{t('footer.column.corporate')}</h4>
+            <ul className="space-y-4 pl-4 border-l border-white/5 max-md:pl-0 max-md:border-l-0 max-md:flex max-md:flex-col max-md:items-center max-md:space-y-3">
               {corporateMenus.map((link) => (
-                <li key={link.id}><button onClick={() => handleLinkClick(link.path)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 wow-text-primary">→</span>{language === 'id' ? link.label_id : link.label_en}</button></li>
+                <li key={link.id} className="max-md:w-full max-md:text-center"><button onClick={() => handleLinkClick(link.path)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left max-md:w-full max-md:justify-center max-md:min-h-[44px]"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 wow-text-primary max-md:hidden">→</span>{language === 'id' ? link.label_id : link.label_en}</button></li>
               ))}
             </ul>
           </div>
 
           {/* Column 4: Stakeholders Menu */}
-          <div className="pt-2">
-            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3"><span className="w-1 h-4 bg-cyan-500 rounded-full"></span>{t('footer.column.stakeholders')}</h4>
-            <ul className="space-y-4 pl-4 border-l border-white/5">
+          <div className="pt-2 max-md:pt-0">
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3 max-md:mb-4 max-md:justify-center"><span className="w-1 h-4 bg-cyan-500 rounded-full"></span>{t('footer.column.stakeholders')}</h4>
+            <ul className="space-y-4 pl-4 border-l border-white/5 max-md:pl-0 max-md:border-l-0 max-md:flex max-md:flex-col max-md:items-center max-md:space-y-3">
               {stakeholderMenus.map((link) => (
-                <li key={link.id}><button onClick={() => handleLinkClick(link.path)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 wow-text-primary">→</span>{language === 'id' ? link.label_id : link.label_en}</button></li>
+                <li key={link.id} className="max-md:w-full max-md:text-center"><button onClick={() => handleLinkClick(link.path)} className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white hover:translate-x-1 transition-all transition-transform duration-300 flex items-center gap-2 group text-left max-md:w-full max-md:justify-center max-md:min-h-[44px]"><span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 wow-text-primary max-md:hidden">→</span>{language === 'id' ? link.label_id : link.label_en}</button></li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5 mt-4">
-          <div className="flex items-center gap-6">
-            <div className="text-slate-400 text-xs font-bold uppercase tracking-widest">
-              © {new Date().getFullYear()} {settings?.company_name?.toUpperCase() || 'PT PENTA VALENT TBK'}. <span className="hidden sm:inline opacity-30 mx-2">|</span> <span className="text-slate-400">All rights reserved.</span>
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5 mt-4 max-md:pt-6 max-md:gap-4">
+          <div className="flex items-center gap-6 max-md:text-center">
+            <div className="text-slate-400 text-xs font-bold uppercase tracking-widest max-md:text-[10px]">
+              © {new Date().getFullYear()} {settings?.company_name?.toUpperCase() || 'PT PENTA VALENT TBK'}. <span className="hidden sm:inline opacity-30 mx-2">|</span> <span className="block sm:inline text-slate-400 mt-1 sm:mt-0">All rights reserved.</span>
             </div>
           </div>
-          <div className="flex items-center gap-6 flex-wrap justify-center">
-            <a href="/privacy-policy" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">{t('footer.privacy')}</a>
-            <a href="/code-of-conduct" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">{t('footer.code_conduct')}</a>
+          <div className="flex items-center gap-6 flex-wrap justify-center max-md:gap-4">
+            <a href="/privacy-policy" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors max-md:text-[10px]">{t('footer.privacy')}</a>
+            <a href="/code-of-conduct" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors max-md:text-[10px]">{t('footer.code_conduct')}</a>
           </div>
         </div>
       </div >
