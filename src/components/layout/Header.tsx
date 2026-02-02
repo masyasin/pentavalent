@@ -452,134 +452,154 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
         ></div>
       </header >
 
-      {/* Mobile Menu Overlay */}
-      < div className={`fixed inset-0 z-[110] transition-all duration-500 ${isMobileMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'}`
-      }>
-        <div className="absolute inset-0 bg-primary/20 backdrop-blur-md" onClick={() => setIsMobileMenuOpen(false)}></div>
-        <div className={`absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white shadow-4xl transition-transform duration-500 ease-out transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="flex flex-col h-full">
-            <div className="p-5 flex items-center justify-between border-b border-slate-100">
-              <img src={settings?.logo_url || "/logo-icon.png"} alt="Penta Valent" className="h-7 w-auto" />
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-slate-50 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all touch-active active:scale-95">
-                <X size={20} strokeWidth={2.5} />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto py-6">
-              {/* Mobile Search Bar */}
-              <div className="px-6 mb-8">
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Search className="h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
-                  </div>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      setIsSearchOpen(true);
-                    }}
-                    placeholder={language === 'id' ? 'Cari...' : 'Search...'}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
-                  />
-                </div>
-              </div>
-
-              <nav className="space-y-1.5 px-6">
-                {parentMenus.map((menu) => {
-                  const children = getChildMenus(menu.id);
-                  const hasChildren = children.length > 0;
-                  const menuLabel = language === 'id' ? menu.label_id : menu.label_en;
-                  const isOpen = activeDropdown === menu.id;
-                  const menuPath = menu.path.startsWith('#') ? menu.path.substring(1) : menu.path;
-                  const isActive = activeSection === menuPath || (activeSection === 'beranda' && (menuPath === '' || menuPath === 'home' || menuPath === 'hero'));
-
-                  return (
-                    <div key={menu.id} className="space-y-1">
-                      <button
-                        onClick={() => hasChildren ? setActiveDropdown(isOpen ? null : menu.id) : handleLinkClick(menu.path)}
-                        className={`w-full text-left px-5 py-4 rounded-2xl transition-all duration-300 flex items-center justify-between group ${isActive
-                          ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
-                          : 'text-slate-700 hover:bg-slate-50'}`}
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isActive ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-primary/10 group-hover:text-primary'}`}>
-                            {menu.label_en.toLowerCase().includes('home') ? <Layout size={20} /> : 
-                             menu.label_en.toLowerCase().includes('about') ? <Building2 size={20} /> :
-                             menu.label_en.toLowerCase().includes('business') ? <Target size={20} /> :
-                             menu.label_en.toLowerCase().includes('investor') ? <TrendingUp size={20} /> :
-                             menu.label_en.toLowerCase().includes('news') ? <Newspaper size={20} /> :
-                             menu.label_en.toLowerCase().includes('career') ? <Briefcase size={20} /> :
-                             <ArrowRight size={20} />}
-                          </div>
-                          <span className="text-[15px] font-bold capitalize tracking-tight">{menuLabel}</span>
-                        </div>
-                        {hasChildren ? (
-                          <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isOpen ? 'rotate-180 text-primary' : 'opacity-20'}`} />
-                        ) : (
-                          <ArrowRight size={18} className={`transition-transform duration-300 ${isActive ? 'translate-x-1 opacity-100' : 'opacity-10 group-hover:opacity-100'}`} />
-                        )}
-                      </button>
-
-                      {/* Mobile Dropdown - Modern Style */}
-                      <AnimatePresence>
-                        {hasChildren && isOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden pl-14 pr-2 pb-2 space-y-1"
-                          >
-                            {children.map(child => (
-                              <button
-                                key={child.id}
-                                onClick={() => handleLinkClick(child.path)}
-                                className="w-full text-left px-4 py-3.5 rounded-xl text-[14px] font-medium capitalize text-slate-500 hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-between group/sub"
-                              >
-                                <span>{language === 'id' ? child.label_id : child.label_en}</span>
-                                <div className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center opacity-0 group-hover/sub:opacity-100 transition-all">
-                                  <ArrowRight size={12} className="text-primary" />
-                                </div>
-                              </button>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+      {/* Mobile Menu Overlay - Ultra Modern Glass Style */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-[110] overflow-hidden">
+            {/* Backdrop with deeper blur */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-xl" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            
+            <motion.div 
+              initial={{ x: '100%', borderRadius: '100px 0 0 100px' }}
+              animate={{ x: 0, borderRadius: '0px 0 0 0px' }}
+              exit={{ x: '100%', borderRadius: '100px 0 0 100px' }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="absolute top-0 right-0 w-[88%] max-w-sm h-full bg-white/90 backdrop-blur-2xl shadow-[-20px_0_80px_rgba(0,0,0,0.1)] flex flex-col"
+            >
+              {/* Header inside menu */}
+              <div className="p-6 flex items-center justify-between border-b border-slate-100/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cyan-500 p-[1px]">
+                    <div className="w-full h-full bg-white rounded-[11px] flex items-center justify-center">
+                      <img src="/logo-icon.png" alt="Penta Valent" className="h-6 w-auto" />
                     </div>
-                  );
-                })}
-              </nav>
-            </div>
-            <div className="p-6 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm">
-              <div 
-                className="relative bg-slate-200/50 rounded-2xl p-1.5 flex items-center cursor-pointer overflow-hidden border border-slate-200"
-                onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
-              >
-                {/* Switch Slider Mobile */}
-                <motion.div 
-                  className="absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-slate-900 rounded-xl shadow-lg z-0"
-                  initial={false}
-                  animate={{ 
-                    x: language === 'id' ? 0 : '100%',
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-                
-                <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
-                  <span className={`text-[13px] font-black uppercase tracking-[0.2em] ${language === 'id' ? 'text-white' : 'text-slate-500'}`}>
-                    ID
-                  </span>
+                  </div>
+                  <span className="text-sm font-black tracking-tighter italic text-slate-900 uppercase">Navigation</span>
                 </div>
-                <div className="flex-1 text-center py-3 relative z-10 transition-colors duration-300">
-                  <span className={`text-[13px] font-black uppercase tracking-[0.2em] ${language === 'en' ? 'text-white' : 'text-slate-500'}`}>
-                    EN
-                  </span>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="w-11 h-11 flex items-center justify-center bg-slate-100 text-slate-500 rounded-full hover:bg-slate-200 transition-all active:scale-90"
+                >
+                  <X size={20} strokeWidth={2.5} />
+                </button>
+              </div>
+
+              {/* Menu Content with Staggered Animation */}
+              <div className="flex-1 overflow-y-auto py-8 px-6 custom-scrollbar">
+                <nav className="space-y-3">
+                  {parentMenus.map((menu, idx) => {
+                    const children = getChildMenus(menu.id);
+                    const hasChildren = children.length > 0;
+                    const menuLabel = language === 'id' ? menu.label_id : menu.label_en;
+                    const isOpen = activeDropdown === menu.id;
+                    const menuPath = menu.path.startsWith('#') ? menu.path.substring(1) : menu.path;
+                    const isActive = activeSection === menuPath || (activeSection === 'beranda' && (menuPath === '' || menuPath === 'home' || menuPath === 'hero'));
+
+                    return (
+                      <motion.div 
+                        key={menu.id}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 + (idx * 0.05) }}
+                        className="space-y-2"
+                      >
+                        <button
+                          onClick={() => hasChildren ? setActiveDropdown(isOpen ? null : menu.id) : handleLinkClick(menu.path)}
+                          className={`w-full text-left p-4 rounded-2xl transition-all duration-300 flex items-center justify-between group relative overflow-hidden ${
+                            isActive 
+                              ? 'bg-primary/10 text-primary border border-primary/20' 
+                              : 'text-slate-600 hover:bg-slate-50 border border-transparent'
+                          }`}
+                        >
+                          {isActive && <motion.div layoutId="mobile-active" className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />}
+                          
+                          <div className="flex items-center gap-4 relative z-10">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 ${
+                              isActive ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-slate-50 text-slate-400 group-hover:bg-white group-hover:shadow-md'
+                            }`}>
+                              {menu.label_en.toLowerCase().includes('home') ? <Layout size={20} /> : 
+                               menu.label_en.toLowerCase().includes('about') ? <Building2 size={20} /> :
+                               menu.label_en.toLowerCase().includes('business') ? <Target size={20} /> :
+                               menu.label_en.toLowerCase().includes('investor') ? <TrendingUp size={20} /> :
+                               menu.label_en.toLowerCase().includes('news') ? <Newspaper size={20} /> :
+                               menu.label_en.toLowerCase().includes('career') ? <Briefcase size={20} /> :
+                               <ArrowRight size={20} />}
+                            </div>
+                            <span className={`text-[15px] font-bold tracking-tight transition-colors ${isActive ? 'text-slate-900' : 'text-slate-600'}`}>
+                              {menuLabel}
+                            </span>
+                          </div>
+                          
+                          {hasChildren ? (
+                            <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isOpen ? 'rotate-180 text-primary' : 'text-slate-300'}`} />
+                          ) : (
+                            <ArrowRight size={18} className={`transition-all duration-300 ${isActive ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-slate-300'}`} />
+                          )}
+                        </button>
+
+                        {/* Fluid Submenu Expansion */}
+                        <AnimatePresence>
+                          {hasChildren && isOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0, y: -10 }}
+                              animate={{ opacity: 1, height: 'auto', y: 0 }}
+                              exit={{ opacity: 0, height: 0, y: -10 }}
+                              transition={{ duration: 0.3, ease: "circOut" }}
+                              className="overflow-hidden ml-9 pl-5 border-l border-slate-100 space-y-1"
+                            >
+                              {children.map((child, cIdx) => (
+                                <motion.button
+                                  key={child.id}
+                                  initial={{ opacity: 0, x: 10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: cIdx * 0.03 }}
+                                  onClick={() => handleLinkClick(child.path)}
+                                  className="w-full text-left px-4 py-3.5 rounded-xl text-[14px] font-medium text-slate-500 hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-between group/sub"
+                                >
+                                  <span>{language === 'id' ? child.label_id : child.label_en}</span>
+                                  <ArrowRight size={14} className="opacity-0 group-hover/sub:opacity-100 -translate-x-2 group-hover/sub:translate-x-0 transition-all text-primary" />
+                                </motion.button>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              {/* Premium Language Switcher */}
+              <div className="p-8 border-t border-slate-100 bg-white/50 backdrop-blur-md">
+                <div 
+                  className="relative bg-slate-100/80 rounded-[1.25rem] p-1.5 flex items-center cursor-pointer border border-slate-200/50 shadow-inner h-14"
+                  onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+                >
+                  <motion.div 
+                    className="absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-slate-900 rounded-[1rem] shadow-xl z-0"
+                    initial={false}
+                    animate={{ x: language === 'id' ? 0 : '100%' }}
+                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                  />
+                  
+                  <div className="flex-1 text-center relative z-10">
+                    <span className={`text-xs font-black tracking-[0.2em] transition-colors duration-500 ${language === 'id' ? 'text-white' : 'text-slate-400'}`}>ID</span>
+                  </div>
+                  <div className="flex-1 text-center relative z-10">
+                    <span className={`text-xs font-black tracking-[0.2em] transition-colors duration-500 ${language === 'en' ? 'text-white' : 'text-slate-400'}`}>EN</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </div >
+        )}
+      </AnimatePresence>
 
       {/* Search Modal Spotlight */}
       <AnimatePresence>
