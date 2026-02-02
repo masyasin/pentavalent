@@ -38,8 +38,12 @@ const NewsSection: React.FC = () => {
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
     setCanScrollPrev(emblaApi.canScrollPrev());
     setCanScrollNext(emblaApi.canScrollNext());
   }, [emblaApi]);
@@ -47,8 +51,12 @@ const NewsSection: React.FC = () => {
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
+    setScrollSnaps(emblaApi.scrollSnapList());
     emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
+    emblaApi.on('reInit', (api) => {
+      onSelect();
+      setScrollSnaps(api.scrollSnapList());
+    });
   }, [emblaApi, onSelect]);
 
   useEffect(() => {
@@ -151,34 +159,36 @@ const NewsSection: React.FC = () => {
           </div>
         ) : (
           <div className="relative group/slider max-md:w-full">
-            {/* Premium Side Navigation Buttons - Tablet & Desktop Only */}
+            {/* Premium Side Navigation Buttons - Visible on all devices for 3 items slider */}
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}
-              className={`hidden md:flex absolute -left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-[1.5rem] items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollPrev
-                ? 'bg-white/90 border-slate-200 text-slate-600 shadow-2xl hover:bg-white hover:border-cyan-400 hover:text-cyan-600 hover:-translate-x-2'
+              className={`absolute -left-2 md:-left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-30 w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-[1.5rem] flex items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollPrev
+                ? 'bg-white/90 border-slate-200 text-slate-600 shadow-2xl hover:bg-white hover:border-cyan-400 hover:text-cyan-600 md:hover:-translate-x-2'
                 : 'bg-slate-50/50 border-slate-100 text-slate-300 cursor-not-allowed opacity-0'
                 }`}
+              aria-label="Previous News"
             >
-              <svg className="w-6 h-6 max-md:shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
             </button>
 
             <button
               onClick={scrollNext}
               disabled={!canScrollNext}
-              className={`hidden md:flex absolute -right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-[1.5rem] items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollNext
-                ? 'bg-white/90 border-slate-200 text-slate-600 shadow-2xl hover:bg-white hover:border-cyan-400 hover:text-cyan-600 hover:translate-x-2'
+              className={`absolute -right-2 md:-right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-30 w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-[1.5rem] flex items-center justify-center transition-all duration-500 backdrop-blur-md border ${canScrollNext
+                ? 'bg-white/90 border-slate-200 text-slate-600 shadow-2xl hover:bg-white hover:border-cyan-400 hover:text-cyan-600 md:hover:translate-x-2'
                 : 'bg-slate-50/50 border-slate-100 text-slate-300 cursor-not-allowed opacity-0'
                 }`}
+              aria-label="Next News"
             >
-              <svg className="w-6 h-6 max-md:shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
             </button>
 
             {/* Carousel Container */}
-            <div className="embla overflow-hidden px-4 -mx-4 max-md:overflow-x-hidden" ref={emblaRef}>
+            <div className="embla overflow-hidden px-4 -mx-4" ref={emblaRef}>
               <div className="flex max-md:flex-row">
                 {news.map((item, index) => (
-                  <div key={item.id} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-6 max-md:px-2">
+                  <div key={item.id} className="flex-[0_0_88%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-3 md:px-6">
                     <article
                       onClick={() => navigate(`/news/${item.slug}`)}
                       className="group bg-white rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-gray-100 shadow-xl transition-all duration-700 hover:-translate-y-4 enterprise-shadow touch-active active:scale-[0.98] max-md:rounded-[2rem] max-md:w-full"
@@ -243,6 +253,18 @@ const NewsSection: React.FC = () => {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Pagination Dots - Mobile Focused Visual Cue */}
+            <div className="flex justify-center gap-3 mt-10 md:hidden">
+              {scrollSnaps.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => emblaApi && emblaApi.scrollTo(index)}
+                  className={`h-1.5 transition-all duration-500 rounded-full ${selectedIndex === index ? 'w-8 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]' : 'w-2 bg-slate-200'}`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
         )}
