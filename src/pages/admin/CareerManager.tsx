@@ -326,14 +326,25 @@ const CareerManager: React.FC = () => {
                                                         <button
                                                             onClick={() => handleEdit(career)}
                                                             className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
+                                                            title="Edit Opportunity"
                                                         >
                                                             <Edit2 size={20} />
+                                                        </button>
+                                                    )}
+                                                    {!canEdit && (
+                                                        <button
+                                                            onClick={() => handleEdit(career)}
+                                                            className="p-4 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-lg rounded-[1.25rem] transition-all border border-transparent hover:border-gray-50"
+                                                            title="View Details"
+                                                        >
+                                                            <Eye size={20} />
                                                         </button>
                                                     )}
                                                     {canDelete && (
                                                         <button
                                                             onClick={() => handleDelete(career.id, career.title)}
                                                             className="p-4 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-[1.25rem] transition-all"
+                                                            title="Delete Opportunity"
                                                         >
                                                             <Trash2 size={20} />
                                                         </button>
@@ -416,6 +427,19 @@ const CareerManager: React.FC = () => {
                             </div>
 
                             <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar text-left">
+                                {/* Read Only Warning */}
+                                {!canEdit && editingCareer && (
+                                    <div className="p-6 bg-blue-50 border-2 border-blue-100 rounded-[2rem] flex items-center gap-4 animate-in slide-in-from-top-4 mb-8">
+                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                                            <Eye size={24} />
+                                        </div>
+                                        <div>
+                                            <p className="font-black text-blue-900 uppercase tracking-tight italic">Read-Only Mode</p>
+                                            <p className="text-xs text-blue-600 font-bold uppercase tracking-widest">You are viewing this career opportunity in preview mode. Changes cannot be saved.</p>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
                                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] px-2 italic">Job Title</label>
@@ -606,15 +630,17 @@ const CareerManager: React.FC = () => {
                                         onClick={() => setShowModal(false)}
                                         className="flex-1 px-10 py-6 bg-gray-100 text-gray-500 font-black rounded-[1.5rem] hover:bg-black hover:text-white transition-all uppercase tracking-widest text-[10px]"
                                     >
-                                        Discard Changes
+                                        {canEdit || !editingCareer ? 'Discard Changes' : 'Close Preview'}
                                     </button>
-                                    <button
-                                        type="submit"
-                                        className="flex-[2] px-12 py-6 bg-blue-600 text-white font-black rounded-[1.5rem] hover:bg-black transition-all shadow-2xl shadow-blue-200 flex items-center justify-center gap-4 uppercase tracking-widest text-[10px] active:scale-95"
-                                    >
-                                        <Save size={20} />
-                                        {editingCareer ? 'SUBMIT UPGRADED MISSION' : 'LAUNCH GLOBAL VACANCY'}
-                                    </button>
+                                    {(canEdit || (!editingCareer && canCreate)) && (
+                                        <button
+                                            type="submit"
+                                            className="flex-[2] px-12 py-6 bg-blue-600 text-white font-black rounded-[1.5rem] hover:bg-black transition-all shadow-2xl shadow-blue-200 flex items-center justify-center gap-4 uppercase tracking-widest text-[10px] active:scale-95"
+                                        >
+                                            <Save size={20} />
+                                            {editingCareer ? 'SUBMIT UPGRADED MISSION' : 'LAUNCH GLOBAL VACANCY'}
+                                        </button>
+                                    )}
                                 </div>
                             </form>
                         </div>

@@ -463,6 +463,15 @@ const NewsManager: React.FC = () => {
                             <Edit2 size={16} />
                           </button>
                         )}
+                        {!canEdit && (
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className="p-3 text-gray-400 hover:text-blue-600 hover:bg-white rounded-xl transition-all border border-transparent hover:border-gray-100 hover:shadow-sm"
+                            title="View Details"
+                          >
+                            <Eye size={16} />
+                          </button>
+                        )}
                         {canDelete && (
                           <button
                             onClick={() => handleDelete(item.id, item.title_id)}
@@ -569,6 +578,19 @@ const NewsManager: React.FC = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar text-left">
+                {/* Read Only Warning */}
+                {!canEdit && editingNews && (
+                  <div className="p-6 bg-blue-50 border-2 border-blue-100 rounded-[2rem] flex items-center gap-4 animate-in slide-in-from-top-4">
+                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                      <Eye size={24} />
+                    </div>
+                    <div>
+                      <p className="font-black text-blue-900 uppercase tracking-tight italic">Read-Only Mode</p>
+                      <p className="text-xs text-blue-600 font-bold uppercase tracking-widest">You are viewing this article in preview mode. Changes cannot be saved.</p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Titles Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                   <div className="space-y-4">
@@ -811,14 +833,16 @@ const NewsManager: React.FC = () => {
                       onClick={() => setShowModal(false)}
                       className="flex-1 md:flex-none px-10 py-5 bg-gray-100 text-gray-500 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:bg-black hover:text-white transition-all active:scale-95"
                     >
-                      Discard
+                      {canEdit || !editingNews ? 'Discard' : 'Close Preview'}
                     </button>
-                    <button
-                      type="submit"
-                      className="flex-1 md:flex-none px-12 py-5 bg-blue-600 text-white rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:bg-black transition-all shadow-2xl shadow-blue-200 active:scale-95"
-                    >
-                      {editingNews ? 'Update Global Article' : 'Launch New Article'}
-                    </button>
+                    {(canEdit || (!editingNews && canCreate)) && (
+                      <button
+                        type="submit"
+                        className="flex-1 md:flex-none px-12 py-5 bg-blue-600 text-white rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:bg-black transition-all shadow-2xl shadow-blue-200 active:scale-95"
+                      >
+                        {editingNews ? 'Update Global Article' : 'Launch New Article'}
+                      </button>
+                    )}
                   </div>
                 </div>
               </form>
