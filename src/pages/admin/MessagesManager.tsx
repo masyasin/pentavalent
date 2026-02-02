@@ -22,8 +22,8 @@ interface Message {
 
 const MessagesManager: React.FC = () => {
   const { t } = useLanguage();
-  const { user, hasPermission } = useAuth();
-  const canDelete = usePermission('delete_content');
+  const { user, hasPermission: checkPermission } = useAuth();
+  const canDelete = usePermission('delete', 'messages');
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);

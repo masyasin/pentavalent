@@ -23,7 +23,7 @@ interface UserActivityLog {
 const UserActivityManager: React.FC = () => {
     const { t, language } = useLanguage();
     const { user } = useAuth();
-    const canClear = usePermission('manage_settings');
+    const canClear = usePermission('delete', 'audit_logs');
     const [logs, setLogs] = useState<UserActivityLog[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedLog, setSelectedLog] = useState<UserActivityLog | null>(null);

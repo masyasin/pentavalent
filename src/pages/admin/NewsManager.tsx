@@ -42,10 +42,10 @@ interface Comment {
 
 const NewsManager: React.FC = () => {
   const { t, language } = useLanguage();
-  const { user, hasPermission } = useAuth();
-  const canCreate = usePermission('create_content');
-  const canEdit = usePermission('edit_content');
-  const canDelete = usePermission('delete_content');
+  const { user, hasPermission: checkPermission } = useAuth();
+  const canCreate = usePermission('create', 'content');
+  const canEdit = usePermission('edit', 'content');
+  const canDelete = usePermission('delete', 'content');
 
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);

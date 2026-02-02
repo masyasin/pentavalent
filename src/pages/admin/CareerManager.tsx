@@ -31,10 +31,10 @@ interface Career {
 
 const CareerManager: React.FC = () => {
     const { t } = useLanguage();
-    const { user, hasPermission } = useAuth();
-    const canCreate = usePermission('create_content');
-    const canEdit = usePermission('edit_content');
-    const canDelete = usePermission('delete_content');
+    const { user, hasPermission: checkPermission } = useAuth();
+    const canCreate = usePermission('create', 'recruitment');
+    const canEdit = usePermission('edit', 'recruitment');
+    const canDelete = usePermission('delete', 'recruitment');
 
     const [careers, setCareers] = useState<Career[]>([]);
     const [loading, setLoading] = useState(true);

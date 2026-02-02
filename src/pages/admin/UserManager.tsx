@@ -7,7 +7,7 @@ import {
     Mail, CheckCircle2, AlertCircle, RefreshCw,
     MoreVertical, Eye, EyeOff
 } from 'lucide-react';
-import { UserRole } from '../../contexts/AuthContext';
+import { UserRole, PermissionAction } from '../../contexts/AuthContext';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { logUserActivity } from '../../lib/security';
 import { useAuth, usePermission } from '../../contexts/AuthContext';
@@ -19,13 +19,30 @@ interface AdminUser {
     role: UserRole;
     avatar_url: string | null;
     created_at: string;
+    permissions?: Record<string, PermissionAction[]>;
 }
+
+const ADMIN_MODULES: { id: string; name: string }[] = [
+    { id: 'dashboard', name: 'Dashboard' },
+    { id: 'website', name: 'Website (Banners/Gallery)' },
+    { id: 'company', name: 'Profil Perusahaan' },
+    { id: 'content', name: 'Berita & Konten' },
+    { id: 'recruitment', name: 'Karir & Rekrutmen' },
+    { id: 'investor', name: 'Hubungan Investor' },
+    { id: 'messages', name: 'Pesan & Kontak' },
+    { id: 'security_logs', name: 'Security Logs' },
+    { id: 'audit_logs', name: 'Audit Logs' },
+    { id: 'users', name: 'Manajemen User' },
+    { id: 'db_backup', name: 'Database Backup' },
+    { id: 'analytics', name: 'Analytics' },
+    { id: 'settings', name: 'Pengaturan Sistem' },
+];
 
 const UserManager: React.FC = () => {
     const { user: currentUser } = useAuth();
-    const canCreate = usePermission('create_users');
-    const canEdit = usePermission('edit_users');
-    const canDelete = usePermission('delete_users');
+    const canCreate = usePermission('create', 'users');
+    const canEdit = usePermission('edit', 'users');
+    const canDelete = usePermission('delete', 'users');
 
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [loading, setLoading] = useState(true);
@@ -45,6 +62,7 @@ const UserManager: React.FC = () => {
         role: 'viewer',
         avatar_url: '',
         password: '',
+        permissions: {},
     });
 
 
@@ -69,6 +87,24 @@ const UserManager: React.FC = () => {
         }
     };
 
+    const togglePermission = (moduleId: string, action: PermissionAction) => {
+        const currentPermissions = { ...(formData.permissions || {}) };
+        const modulePermissions = [...(currentPermissions[moduleId] || [])];
+
+        if (modulePermissions.includes(action)) {
+            currentPermissions[moduleId] = modulePermissions.filter(a => a !== action);
+        } else {
+            currentPermissions[moduleId] = [...modulePermissions, action];
+        }
+
+        // Clean up empty modules
+        if (currentPermissions[moduleId].length === 0) {
+            delete currentPermissions[moduleId];
+        }
+
+        setFormData({ ...formData, permissions: currentPermissions });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -82,6 +118,7 @@ const UserManager: React.FC = () => {
                         full_name: formData.full_name,
                         role: formData.role,
                         avatar_url: formData.avatar_url,
+                        permissions: formData.permissions,
                     })
                     .eq('id', editingUser.id);
 
@@ -126,12 +163,11 @@ const UserManager: React.FC = () => {
                             email: formData.email,
                             full_name: formData.full_name,
                             role: formData.role,
-                            avatar_url: formData.avatar_url
+                            avatar_url: formData.avatar_url,
+                            permissions: formData.permissions || {},
                         }]);
 
                     if (profileError) {
-                        // If profile insert fails, we might have an orphan Auth user, 
-                        // but usually this happens if RLS is not set up correctly.
                         throw profileError;
                     }
 
@@ -160,6 +196,7 @@ const UserManager: React.FC = () => {
             role: 'viewer',
             avatar_url: '',
             password: '',
+            permissions: {},
         });
     };
 
@@ -382,6 +419,39 @@ const UserManager: React.FC = () => {
                                         <option value="super_admin">Super Admin (Full Access)</option>
                                     </select>
                                 </div>
+
+                                {formData.role !== 'super_admin' && (
+                                    <div className="space-y-4 p-8 bg-gray-50 rounded-[2rem] border border-gray-100">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Granular Access Control</label>
+                                            <div className="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase">Dynamic RBAC</div>
+                                        </div>
+                                        
+                                        <div className="space-y-4">
+                                            {ADMIN_MODULES.map((module) => (
+                                                <div key={module.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-4 bg-white rounded-2xl border border-gray-100">
+                                                    <span className="font-bold text-sm text-gray-700">{module.name}</span>
+                                                    <div className="flex gap-2">
+                                                        {(['view', 'create', 'edit', 'delete'] as PermissionAction[]).map((action) => (
+                                                            <button
+                                                                key={action}
+                                                                type="button"
+                                                                onClick={() => togglePermission(module.id, action)}
+                                                                className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter transition-all border ${
+                                                                    formData.permissions?.[module.id]?.includes(action)
+                                                                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200'
+                                                                        : 'bg-gray-50 border-gray-100 text-gray-400 hover:border-gray-300'
+                                                                }`}
+                                                            >
+                                                                {action}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 {!editingUser && (
                                     <>

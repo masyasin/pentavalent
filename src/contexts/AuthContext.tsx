@@ -4,12 +4,15 @@ import { logUserActivity } from '../lib/security';
 
 export type UserRole = 'super_admin' | 'admin' | 'editor' | 'viewer';
 
+export type PermissionAction = 'view' | 'create' | 'edit' | 'delete';
+
 export interface User {
   id: string;
   email: string;
   full_name: string;
   role: UserRole;
   avatar_url?: string;
+  permissions?: Record<string, PermissionAction[]>;
 }
 
 export interface AuthContextType {
@@ -23,7 +26,7 @@ export interface AuthContextType {
   requestPasswordReset: (email: string) => Promise<{ success: boolean; error?: string; reset_token?: string }>;
   resetPassword: (token: string, newPassword: string, refreshToken?: string) => Promise<{ success: boolean; error?: string }>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
-  hasPermission: (permission: Permission) => boolean;
+  hasPermission: (permission: Permission | PermissionAction, module?: AdminModule | 'all') => boolean;
   canAccessModule: (module: AdminModule) => boolean;
   updateLocalUser: (userData: Partial<User>) => void;
   updateEmail: (newEmail: string) => Promise<{ success: boolean; error?: string }>;
@@ -175,7 +178,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             // Fetch LATEST profile from public.users table using EMAIL
             const { data: profiles } = await supabase
               .from('users')
-              .select('id, email, full_name, avatar_url, role')
+              .select('id, email, full_name, avatar_url, role, permissions')
               .eq('email', authUser.email)
               .limit(1);
 
@@ -293,7 +296,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // created separately or imported.
         const { data: profiles } = await supabase
           .from('users')
-          .select('id, email, full_name, avatar_url, role')
+          .select('id, email, full_name, avatar_url, role, permissions')
           .eq('email', data.user.email)
           .limit(1);
 
@@ -494,13 +497,45 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const hasPermission = (permission: Permission): boolean => {
+  const hasPermission = (permission: Permission | PermissionAction, module: AdminModule | 'all' = 'all'): boolean => {
     if (!user) return false;
-    return rolePermissions[user.role]?.includes(permission) || false;
+    
+    // Super admin has all permissions
+    if (user.role === 'super_admin') return true;
+
+    // Check dynamic permissions first
+    if (user.permissions) {
+      // Check for global 'all' permissions
+      if (user.permissions.all?.includes(permission as PermissionAction)) return true;
+      
+      // Check for module-specific permissions
+      if (module !== 'all' && user.permissions[module]?.includes(permission as PermissionAction)) return true;
+    }
+
+    // Fallback to static role-based permissions for backward compatibility
+    // Permission type strings usually contain underscores like 'view_dashboard'
+    if (typeof permission === 'string' && permission.includes('_')) {
+        return rolePermissions[user.role]?.includes(permission as Permission) || false;
+    }
+
+    return false;
   };
 
   const canAccessModule = (module: AdminModule): boolean => {
     if (!user) return false;
+    
+    // Super admin has access to everything
+    if (user.role === 'super_admin') return true;
+
+    // Check dynamic permissions
+    if (user.permissions) {
+        // If module exists in permissions and has any action, user can access it
+        if (user.permissions[module] && user.permissions[module].length > 0) return true;
+        // Or if user has global view access
+        if (user.permissions.all?.includes('view')) return true;
+    }
+
+    // Fallback to static module access
     return moduleAccess[module]?.includes(user.role) || false;
   };
   const finalizeLogin = () => {
@@ -588,9 +623,9 @@ export const useAuth = (): AuthContextType => {
 };
 
 // Helper hook for checking permissions
-export const usePermission = (permission: Permission): boolean => {
+export const usePermission = (permission: Permission | PermissionAction, module?: AdminModule | 'all'): boolean => {
   const { hasPermission } = useAuth();
-  return hasPermission(permission);
+  return hasPermission(permission, module);
 };
 
 // Helper hook for checking module access
