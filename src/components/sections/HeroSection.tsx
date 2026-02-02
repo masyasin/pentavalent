@@ -59,7 +59,9 @@ const HeroSlideItem: React.FC<{
                 src={slide.image_url}
                 alt={language === 'id' ? slide.title_id : slide.title_en}
                 className="w-full h-full object-cover"
-                loading="eager"
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                decoding="async"
                 onError={() => {
                   console.warn('Hero image failed, activating premium gradient fallback');
                   setImgError(true);

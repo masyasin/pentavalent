@@ -100,10 +100,12 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                     src={slide.image_url}
                                     alt={language === 'id' ? slide.title_id : slide.title_en}
                                     onError={(e) => {
-                                        e.currentTarget.src = "https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=2070&auto=format&fit=crop";
+                                        e.currentTarget.src = "https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=2000&auto=format&fit=crop";
                                     }}
                                     className={`w-full h-full object-cover transition-transform duration-[10000ms] ease-out ${selectedIndex === index ? 'scale-110' : 'scale-100'}`}
-                                    loading="eager"
+                                    loading={index === 0 ? "eager" : "lazy"}
+                                    fetchPriority={index === 0 ? "high" : "auto"}
+                                    decoding="async"
                                     style={{ 
                                         willChange: 'transform',
                                         objectPosition: 'center 30%'
