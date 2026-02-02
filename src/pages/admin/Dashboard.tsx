@@ -95,7 +95,8 @@ const Dashboard: React.FC = () => {
       icon: Newspaper,
       color: 'from-blue-600 to-indigo-600',
       lightColor: 'bg-blue-50 text-blue-600',
-      description: 'Published updates'
+      description: 'Published updates',
+      path: '/admin/content/news'
     },
     {
       id: 'messages',
@@ -104,7 +105,8 @@ const Dashboard: React.FC = () => {
       icon: MessageSquare,
       color: 'from-amber-500 to-orange-600',
       lightColor: 'bg-amber-50 text-amber-600',
-      description: 'Unread inquiries'
+      description: 'Unread inquiries',
+      path: '/admin/messages'
     },
     {
       id: 'applications',
@@ -113,7 +115,8 @@ const Dashboard: React.FC = () => {
       icon: FileText,
       color: 'from-emerald-500 to-teal-600',
       lightColor: 'bg-emerald-50 text-emerald-600',
-      description: 'Pending review'
+      description: 'Pending review',
+      path: '/admin/recruitment/applications'
     },
     {
       id: 'careers',
@@ -122,7 +125,8 @@ const Dashboard: React.FC = () => {
       icon: Briefcase,
       color: 'from-purple-500 to-fuchsia-600',
       lightColor: 'bg-purple-50 text-purple-600',
-      description: 'Open positions'
+      description: 'Open positions',
+      path: '/admin/recruitment/careers'
     },
     {
       id: 'partners',
@@ -131,7 +135,8 @@ const Dashboard: React.FC = () => {
       icon: Users,
       color: 'from-rose-500 to-red-600',
       lightColor: 'bg-rose-50 text-rose-600',
-      description: 'Business network'
+      description: 'Business network',
+      path: '/admin/company/partners'
     },
     {
       id: 'investor',
@@ -140,7 +145,8 @@ const Dashboard: React.FC = () => {
       icon: TrendingUp,
       color: 'from-cyan-500 to-sky-600',
       lightColor: 'bg-cyan-50 text-cyan-600',
-      description: 'Financial reports'
+      description: 'Financial reports',
+      path: '/admin/investor'
     },
   ];
 
@@ -171,11 +177,11 @@ const Dashboard: React.FC = () => {
             </p>
           </div>
           <div className="mt-8 md:mt-0 flex gap-4">
-            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/dashboard')}>
+            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/company/branches')}>
               <p className="text-3xl font-black text-blue-400 mb-1">{stats.branches}</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{t('admin.dashboard.stat.branches')}</p>
             </div>
-            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/company')}>
+            <div className="px-8 py-6 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 text-center min-w-[140px] group hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/admin/company/certifications')}>
               <p className="text-3xl font-black text-emerald-400 mb-1">{stats.certs}</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{t('admin.dashboard.stat.certs')}</p>
             </div>
@@ -191,10 +197,10 @@ const Dashboard: React.FC = () => {
         {statCards.map((stat) => (
           <button
             key={stat.id}
-            onClick={() => navigate(`/admin/${stat.id}`)}
-            className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500 text-left relative overflow-hidden active:scale-95"
+            onClick={() => navigate(stat.path)}
+            className="group bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500 text-center relative overflow-hidden active:scale-95"
           >
-            <div className="flex flex-col h-full justify-between items-start space-y-4">
+            <div className="flex flex-col h-full justify-between items-center space-y-4">
               <div className={`p-4 rounded-2xl ${stat.lightColor} group-hover:scale-110 transition-transform`}>
                 <stat.icon size={24} />
               </div>
