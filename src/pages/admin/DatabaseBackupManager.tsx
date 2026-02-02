@@ -14,23 +14,25 @@ const DatabaseBackupManager: React.FC = () => {
         setLoading(true);
         try {
             const tables = [
-                // Core Auth & Logging
+                // 1. Core & Auth
                 'users', 
                 'user_activity_logs', 
                 'security_logs',
-                
-                // Website Content & Settings
                 'site_settings',
                 'nav_menus',
                 'hero_slides',
+                'seo_settings',
+                'visitor_logs',
                 
-                // Company & About
+                // 2. About & Company
                 'company_timeline',
                 'corporate_values',
                 'management',
                 'certifications',
+                'advantages',
+                'faqs',
                 
-                // Business & Partners
+                // 3. Business & Partners
                 'business_lines',
                 'business_features',
                 'business_stats',
@@ -38,25 +40,40 @@ const DatabaseBackupManager: React.FC = () => {
                 'partners',
                 'branches',
                 
-                // News & Media
+                // 4. News & Media
                 'news',
                 'news_comments',
+                'news_banners',
                 'newsletter_subscribers',
                 
-                // Careers & Applications
+                // 5. Careers & Applications
                 'careers',
                 'job_applications',
                 
-                // Investor Relations
+                // 6. Investor Relations
                 'investor_documents',
                 'investor_financials',
                 'investor_stock',
                 'investor_highlights',
                 'investor_calendar',
-                'rups_schedules'
+                'rups_schedules',
+                'investor_ratios',
+                'investor_shareholders',
+                'investor_dividend_history',
+                
+                // 7. GCG (Good Corporate Governance)
+                'gcg_principles',
+                'board_of_commissioners',
+                'board_of_directors',
+                'gcg_committees',
+                'gcg_policies',
+                
+                // 8. Other
+                'contact_messages',
+                'pages'
             ];
 
-            let sqlOutput = `-- PENTA VALENT COMPREHENSIVE DATABASE BACKUP\n`;
+            let sqlOutput = `-- PENTA VALENT COMPLETE DATABASE BACKUP (42 TABLES)\n`;
             sqlOutput += `-- Generated on: ${new Date().toLocaleString()}\n`;
             sqlOutput += `-- Administrator: ${user?.email || 'System'}\n\n`;
             sqlOutput += `SET statement_timeout = 0;\nSET lock_timeout = 0;\nSET client_encoding = 'UTF8';\n\n`;
@@ -163,7 +180,11 @@ const DatabaseBackupManager: React.FC = () => {
                         </div>
                         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tables Detected</span>
-                            <span className="text-gray-900 font-bold text-xs">28 Modules Detected</span>
+                            <span className="text-gray-900 font-bold text-xs">42 Tables Detected</span>
+                        </div>
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Functions Detected</span>
+                            <span className="text-gray-900 font-bold text-xs">1 Active Function</span>
                         </div>
                         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Last Operation</span>
@@ -177,7 +198,7 @@ const DatabaseBackupManager: React.FC = () => {
                             <div className="space-y-1">
                                 <p className="text-[10px] font-black text-blue-800 uppercase tracking-widest">Scope Informasi</p>
                                 <p className="text-[10px] text-blue-700 font-medium leading-relaxed">
-                                    Mencakup konten website, struktur menu, profil perusahaan, investor relations, karir, dan log audit.
+                                    Mencakup seluruh 42 tabel sistem termasuk GCG, Investor Relations, Konten Web, Karir, dan Log Audit.
                                 </p>
                             </div>
                         </div>
