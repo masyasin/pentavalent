@@ -170,18 +170,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           const { data: { user: authUser }, error } = await supabase.auth.getUser(storedToken);
 
           if (authUser && !error) {
-            // Fetch LATEST profile from public.users table
+            // Fetch LATEST profile from public.users table using EMAIL
             const { data: profiles } = await supabase
               .from('users')
-              .select('email, full_name, avatar_url, role')
-              .eq('id', authUser.id)
+              .select('id, email, full_name, avatar_url, role')
+              .eq('email', authUser.email)
               .limit(1);
 
             const profile = profiles && profiles.length > 0 ? profiles[0] : null;
 
             const finalUser = profile
               ? { ...authUser, ...profile }
-              : (JSON.parse(storedUser) as User); // Fallback to stored user if profile fetch fails
+              : (JSON.parse(storedUser) as User); 
+
+            // If profile found but ID mismatched, update the local object with profile role
+            if (profile && !finalUser.role) {
+                finalUser.role = profile.role;
+            }
 
             setToken(storedToken);
             setUser(finalUser);
@@ -281,22 +286,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       if (data.user && data.session) {
+        // Fetch profile using EMAIL as primary key during login for better reliability
+        // because the ID in public.users might not match the Auth ID yet if they were 
+        // created separately or imported.
         const { data: profiles } = await supabase
           .from('users')
-          .select('email, full_name, avatar_url, role')
-          .eq('id', data.user.id)
+          .select('id, email, full_name, avatar_url, role')
+          .eq('email', data.user.email)
           .limit(1);
 
         const profile = profiles && profiles.length > 0 ? profiles[0] : null;
 
-        const finalUser = profile ? { ...data.user, ...profile } : data.user;
+        // Construct final user, prioritizing profile data (especially role)
+        const finalUser = profile 
+            ? { ...data.user, ...profile } 
+            : { ...data.user, role: 'admin' as UserRole }; // Fallback to admin if profile missing but auth passed
+
         // STAGE in TEMP storage
         localStorage.setItem(TEMP_TOKEN_KEY, data.session.access_token);
         localStorage.setItem(TEMP_USER_KEY, JSON.stringify(finalUser));
-        
-        // Also set the main state immediately to avoid race conditions
-        setToken(data.session.access_token);
-        setUser(finalUser as User);
         
         return { success: true };
       }

@@ -382,6 +382,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onForgotPassword }) => {
 
                   <button
                     type="button"
+                    onClick={handleResendOtp}
+                    className="w-full text-[10px] font-black text-accent hover:text-white uppercase tracking-[0.3em] transition-colors"
+                  >
+                    Resend Code
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => setStep('login')}
                     className="w-full text-[10px] font-black text-blue-200/30 hover:text-white uppercase tracking-[0.3em] transition-colors"
                   >
