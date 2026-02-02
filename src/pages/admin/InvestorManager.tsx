@@ -7,7 +7,7 @@ import {
     Plus, Edit2, Trash2, FileText, X, Save,
     Calendar, Sparkles, RefreshCw, Search,
     ChevronLeft, ChevronRight, TrendingUp, PieChart, Users,
-    LayoutGrid, Activity, Briefcase
+    LayoutGrid, Activity, Briefcase, Eye
 } from 'lucide-react';
 import DeleteConfirmDialog from '../../components/admin/DeleteConfirmDialog';
 import { motion } from 'framer-motion';
