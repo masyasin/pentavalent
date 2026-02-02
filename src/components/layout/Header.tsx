@@ -123,8 +123,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
       >
         <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="flex items-center justify-between relative z-10 h-full gap-2 xl:gap-4">
-            {/* Logo Column - Flexible but compact */}
-            <div className="flex-1 flex items-center justify-start min-w-0">
+            {/* Logo Column - Balanced and centered between edge and menu */}
+            <div className="flex-1 flex items-center justify-center min-w-0">
               <div
                 className="cursor-pointer group flex-shrink-0"
                 onClick={() => {
@@ -264,8 +264,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeSection }) => {
               })}
             </nav>
 
-            {/* Actions Column - Compact right side */}
-            <div className="flex-1 flex items-center justify-end gap-2 xl:gap-3 min-w-0">
+            {/* Actions Column - Symmetric with logo side */}
+            <div className="flex-1 flex items-center justify-center gap-2 xl:gap-3 min-w-0">
               <div className={`hidden lg:flex items-center rounded-full p-1 border transition-all duration-500 flex-shrink-0 ${isScrolled ? 'border-slate-200 bg-slate-50/50' : 'border-white/20 bg-white/10'}`}>
                 {['id', 'en'].map((lang) => (
                   <button
