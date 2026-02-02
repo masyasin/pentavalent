@@ -316,7 +316,7 @@ const NetworkPartners: React.FC = () => {
                                         <div className="absolute top-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
                                         <div className="relative z-10">
                                             <h2 className="text-4xl md:text-5xl font-black mb-8 text-slate-900 tracking-tighter uppercase italic max-md:text-2xl max-md:mb-4">
-                                                Indonesia's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500 text-6xl max-md:text-3xl max-md:block">Logistics Backbone</span>
+                                                Indonesia's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500 text-6xl max-md:text-2xl max-md:block">Logistics Backbone</span>
                                             </h2>
                                             <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-3xl mx-auto max-md:text-sm">
                                                 Over 34 strategic operation hubs connecting major cities across the archipelago, ensuring medical supplies reach those who need them most.
@@ -428,7 +428,7 @@ const NetworkPartners: React.FC = () => {
                                             </div>
 
                                             {/* Right: Real Leaflet Map (Free Replacement) */}
-                                            <div className="flex-1 bg-slate-900 rounded-[3rem] border border-white/5 relative overflow-hidden group/map max-md:rounded-2xl max-md:min-h-[400px]">
+                                            <div className="flex-1 bg-slate-900 rounded-[3rem] border border-white/5 relative overflow-hidden group/map max-md:rounded-2xl min-h-[400px] md:h-full w-full">
                                                 <div ref={mapRef} className="absolute inset-0 w-full h-full z-0" />
 
                                                 {/* Map Overlay Info */}
