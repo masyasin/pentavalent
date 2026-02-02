@@ -174,7 +174,7 @@ const NetworkSection: React.FC = () => {
 
           {/* Right: Interactive Live Map */}
           <div className="lg:w-[60%] relative max-md:w-full">
-            <div className="relative h-[400px] md:h-[600px] bg-white rounded-[3rem] border border-white shadow-2xl overflow-hidden group max-md:h-[300px] max-md:rounded-[2rem]">
+            <div className="relative h-[400px] md:h-[600px] bg-white rounded-[3rem] border border-slate-200 shadow-2xl overflow-hidden group max-md:h-[350px] max-md:rounded-[2rem]">
               {/* Visual Loading State */}
               {loading && (
                 <div className="absolute inset-0 z-20 bg-slate-50 flex items-center justify-center">
@@ -187,9 +187,9 @@ const NetworkSection: React.FC = () => {
 
               {/* Map Floating UI Overlay */}
               <div className="absolute bottom-8 right-8 z-20 pointer-events-none max-md:bottom-4 max-md:right-4">
-                <div className="bg-slate-900/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3 max-md:px-3 max-md:py-1.5">
+                <div className="bg-white/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-slate-200 flex items-center gap-3 max-md:px-3 max-md:py-1.5 shadow-xl">
                   <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse max-md:shrink-0"></div>
-                  <span className="text-[9px] font-black text-white uppercase tracking-widest max-md:text-[8px]">Live Interactive Grid</span>
+                  <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest max-md:text-[8px]">Live Interactive Grid</span>
                 </div>
               </div>
             </div>
@@ -206,6 +206,7 @@ const NetworkSection: React.FC = () => {
             padding: 0;
             overflow: hidden;
             border: 1px solid #f1f5f9;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
         .custom-leaflet-popup .leaflet-popup-content {
             margin: 0;
@@ -215,6 +216,7 @@ const NetworkSection: React.FC = () => {
         }
         .leaflet-container {
             font-family: inherit;
+            background: #f8fafc !important;
         }
       `}</style>
     </section>
