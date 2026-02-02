@@ -391,31 +391,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // FLOW 1: Check Active Session
       let { data: { session } } = await supabase.auth.getSession();
       
-      // FLOW 1.5: Force Update via Direct API Call (Bypass SDK Session Issue)
-      // If we have an access token (JWT) but no session, we can call the Auth API directly.
-      if (!session && resetToken && resetToken.startsWith('ey')) {
-           console.log('No session detected, but valid JWT found. Attempting direct API update...');
-           
-           const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
-               method: 'PUT',
-               headers: {
-                   'Authorization': `Bearer ${resetToken}`,
-                   'Content-Type': 'application/json',
-                   'apikey': supabaseKey // anon key
-               },
-               body: JSON.stringify({ password: newPassword })
-           });
-
-           const data = await response.json();
-
-           if (!response.ok) {
-               console.error('Direct API Update Failed:', data);
-               return { success: false, error: data.msg || data.error_description || 'Failed to update password' };
-           }
-
-           console.log('Direct API Update Success!');
-           return { success: true };
-      }
+      // FLOW 1.5: Proxy to Admin API (The "Nuclear Option")
+       // If we have an access token (JWT) but no session, we ask our server (Super Admin) to do it.
+       if (!session && resetToken && resetToken.startsWith('ey')) {
+            console.log('No session detected. Delegating to Admin API (api/confirm-reset)...');
+            
+            const response = await fetch('/api/confirm-reset', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: resetToken, newPassword: newPassword })
+            });
+ 
+            const data = await response.json();
+ 
+            if (!response.ok) {
+                console.error('Admin API Update Failed:', data);
+                return { success: false, error: data.error || 'Failed to update password' };
+            }
+ 
+            console.log('Admin API Update Success!');
+            return { success: true };
+       }
 
       // If we still have no session, try one last check
       if (!session) {
