@@ -143,22 +143,26 @@ const NetworkSection: React.FC = () => {
             </p>
 
             <div className="grid grid-cols-2 gap-6 mb-12 max-md:grid-cols-1 max-md:gap-4 max-md:mb-8">
-              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto">
-                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-4 transition-transform group-hover:scale-110 max-md:w-10 max-md:h-10 max-md:shrink-0">
-                  <Building2 size={24} className="max-md:w-5 max-md:h-5" />
+              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto max-md:flex max-md:flex-row max-md:items-center max-md:gap-6">
+                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-4 transition-transform group-hover:scale-110 max-md:w-14 max-md:h-14 max-md:shrink-0 max-md:mb-0">
+                  <Building2 size={24} className="max-md:w-6 max-md:h-6" />
                 </div>
-                <div className="text-3xl font-black text-slate-900 mb-1 max-md:text-2xl">{mainHubs.length}</div>
-                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight max-md:text-[10px]">
-                  {language === 'id' ? 'Hub Utama (Tier 1)' : 'Main Strategic Hubs'}
+                <div>
+                  <div className="text-3xl font-black text-slate-900 mb-1 max-md:text-2xl">{mainHubs.length}</div>
+                  <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight max-md:text-[11px]">
+                    {language === 'id' ? 'Hub Utama (Tier 1)' : 'Main Strategic Hubs'}
+                  </div>
                 </div>
               </div>
-              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto">
-                <div className="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center text-cyan-600 mb-4 transition-transform group-hover:scale-110 max-md:w-10 max-md:h-10 max-md:shrink-0">
-                  <Truck size={24} className="max-md:w-5 max-md:h-5" />
+              <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm group max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto max-md:flex max-md:flex-row max-md:items-center max-md:gap-6">
+                <div className="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center text-cyan-600 mb-4 transition-transform group-hover:scale-110 max-md:w-14 max-md:h-14 max-md:shrink-0 max-md:mb-0">
+                  <Truck size={24} className="max-md:w-6 max-md:h-6" />
                 </div>
-                <div className="text-3xl font-black text-slate-900 mb-1 max-md:text-2xl">{depots.length}</div>
-                <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight max-md:text-[10px]">
-                  {language === 'id' ? 'Cabang & Depo' : 'Regional Branches'}
+                <div>
+                  <div className="text-3xl font-black text-slate-900 mb-1 max-md:text-2xl">{depots.length}</div>
+                  <div className="text-[13px] font-black text-slate-400 uppercase tracking-widest leading-tight max-md:text-[11px]">
+                    {language === 'id' ? 'Cabang & Depo' : 'Regional Branches'}
+                  </div>
                 </div>
               </div>
             </div>
