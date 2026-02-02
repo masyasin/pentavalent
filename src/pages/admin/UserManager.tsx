@@ -441,25 +441,34 @@ const UserManager: React.FC = () => {
                                         
                                         <div className="space-y-4">
                                             {ADMIN_MODULES.map((module) => (
-                                                <div key={module.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-4 bg-white rounded-2xl border border-gray-100">
-                                                    <div className="flex items-center gap-3">
+                                                <div key={module.id} className={`grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-5 rounded-2xl border transition-all ${
+                                                    formData.permissions?.[module.id]?.includes('view')
+                                                        ? 'bg-white border-blue-100 shadow-sm'
+                                                        : 'bg-gray-50/50 border-gray-100 opacity-80'
+                                                }`}>
+                                                    <div className="flex items-center gap-4">
                                                         <button
                                                             type="button"
                                                             onClick={() => togglePermission(module.id, 'view')}
-                                                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${
+                                                            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all border-2 ${
                                                                 formData.permissions?.[module.id]?.includes('view')
                                                                     ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200'
-                                                                    : 'bg-gray-50 border-gray-100 text-gray-300 hover:border-gray-300'
+                                                                    : 'bg-white border-gray-200 text-gray-400 hover:border-blue-400 hover:text-blue-500'
                                                             }`}
                                                             title="Toggle Module Access (Read Only)"
                                                         >
-                                                            <Eye size={18} />
+                                                            <Eye size={20} />
                                                         </button>
-                                                        <span className={`font-bold text-sm transition-colors ${
-                                                            formData.permissions?.[module.id]?.includes('view') ? 'text-gray-900' : 'text-gray-300'
-                                                        }`}>
-                                                            {module.name}
-                                                        </span>
+                                                        <div className="flex flex-col">
+                                                            <span className={`font-black text-sm transition-colors ${
+                                                                formData.permissions?.[module.id]?.includes('view') ? 'text-gray-900' : 'text-gray-400'
+                                                            }`}>
+                                                                {module.name}
+                                                            </span>
+                                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
+                                                                {formData.permissions?.[module.id]?.includes('view') ? 'Access Enabled' : 'No Access'}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                     
                                                     <div className="flex gap-2">
@@ -469,10 +478,10 @@ const UserManager: React.FC = () => {
                                                                 type="button"
                                                                 disabled={!formData.permissions?.[module.id]?.includes('view')}
                                                                 onClick={() => togglePermission(module.id, action)}
-                                                                className={`px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-tighter transition-all border ${
+                                                                className={`flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-tight transition-all border-2 ${
                                                                     formData.permissions?.[module.id]?.includes(action)
-                                                                        ? 'bg-gray-900 border-gray-900 text-white shadow-lg'
-                                                                        : 'bg-gray-50 border-gray-100 text-gray-400 hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed'
+                                                                        ? 'bg-gray-900 border-gray-900 text-white shadow-md'
+                                                                        : 'bg-white border-gray-200 text-gray-500 hover:border-gray-900 hover:text-gray-900 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-gray-200'
                                                                 }`}
                                                             >
                                                                 {action}
