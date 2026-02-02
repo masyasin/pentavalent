@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Upload, X, File, Image as ImageIcon, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface FileUploadProps {
     onUploadComplete: (url: string) => void;
@@ -19,6 +20,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
     currentUrl = "",
     type = "image"
 }) => {
+    const { language } = useLanguage();
     const [uploading, setUploading] = useState(false);
     const [preview, setPreview] = useState<string>(currentUrl);
     const [error, setError] = useState<string | null>(null);
@@ -29,13 +31,34 @@ const FileUpload: React.FC<FileUploadProps> = ({
         const file = event.target.files?.[0];
         if (!file) return;
 
+        // --- SECURITY VALIDATION ---
+        // 1. Size Validation
+        const maxSize = type === 'image' ? 5 * 1024 * 1024 : 
+                        type === 'video' ? 100 * 1024 * 1024 : 
+                        10 * 1024 * 1024;
+        
+        if (file.size > maxSize) {
+            setError(language === 'id' ? `Ukuran file terlalu besar (Max ${maxSize / (1024 * 1024)}MB)` : `File too large (Max ${maxSize / (1024 * 1024)}MB)`);
+            return;
+        }
+
+        // 2. Extension Validation (Prevent .exe, .sh, etc.)
+        const allowedExtensions = type === 'image' ? ['jpg', 'jpeg', 'png', 'webp', 'svg'] :
+                                  type === 'video' ? ['mp4', 'webm'] :
+                                  ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'sql'];
+        
+        const fileExt = file.name.split('.').pop()?.toLowerCase() || '';
+        if (!allowedExtensions.includes(fileExt)) {
+            setError(language === 'id' ? 'Format file tidak diizinkan' : 'File format not allowed');
+            return;
+        }
+
         try {
             setUploading(true);
             setError(null);
             setSuccess(false);
 
-            // Generate unique filename
-            const fileExt = file.name.split('.').pop();
+            // 3. Rename File (Prevent original filename exploits)
             const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
             const filePath = fileName;
 

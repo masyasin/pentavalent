@@ -20,6 +20,10 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [lastSubmitTime, setLastSubmitTime] = useState(0);
+
+  // Honeypot State
+  const [honeypot, setHoneypot] = useState('');
 
   // Captcha State
   const [captcha, setCaptcha] = useState({ q: '', a: 0 });
@@ -43,6 +47,20 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 1. Honeypot Check (Bots usually fill this)
+    if (honeypot) {
+      console.warn('Spam detected via honeypot');
+      logSecurityEvent('SPAM_HONEYPOT', 'honeypot', 'Filled');
+      return;
+    }
+
+    // 2. Simple Rate Limiting (Prevent rapid fire submissions)
+    const now = Date.now();
+    if (now - lastSubmitTime < 30000) { // 30 seconds cooldown
+      setSubmitError(language === 'id' ? 'Tunggu sebentar sebelum mengirim pesan lagi' : 'Please wait before sending another message');
+      return;
+    }
 
     if (parseInt(userCaptcha) !== captcha.a) {
       setSubmitError(language === 'id' ? 'Jawaban captcha salah' : 'Incorrect captcha answer');
@@ -112,6 +130,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
 
       if (error) throw error;
       setSubmitSuccess(true);
+      setLastSubmitTime(Date.now());
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
       generateCaptcha();
       setTimeout(() => setSubmitSuccess(false), 5000);
@@ -210,6 +229,18 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
                 )}
 
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+                  {/* Honeypot Field - Hidden from humans */}
+                  <div className="hidden" aria-hidden="true">
+                    <input
+                      type="text"
+                      name="website_url"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
+
                   <div className="space-y-2.5">
                     <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1 flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
