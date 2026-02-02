@@ -315,7 +315,7 @@ const NetworkPartners: React.FC = () => {
                                     <div className="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden text-center max-w-5xl mx-auto mb-12 max-md:p-6 max-md:rounded-[2rem] max-md:mb-6">
                                         <div className="absolute top-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
                                         <div className="relative z-10">
-                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-slate-900 tracking-tighter uppercase italic max-md:text-2xl max-md:mb-4">
+                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-slate-900 tracking-tighter uppercase italic max-md:text-xl max-md:mb-4">
                                                 Indonesia's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500 text-6xl max-md:text-2xl max-md:block">Logistics Backbone</span>
                                             </h2>
                                             <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-3xl mx-auto max-md:text-sm">
@@ -325,20 +325,20 @@ const NetworkPartners: React.FC = () => {
                                     </div>
 
                                     {/* Unified Network Command Center */}
-                                    <div className="bg-slate-950 rounded-[4rem] p-4 md:p-10 relative overflow-hidden shadow-4xl mb-24 border border-white/5 box-ring-glow max-md:rounded-[2rem] max-md:p-2 max-md:mb-12">
+                                    <div className="bg-white rounded-[4rem] p-4 md:p-10 relative overflow-hidden shadow-2xl mb-24 border border-slate-100 max-md:rounded-[2rem] max-md:p-2 max-md:mb-12">
                                         {/* Atmospheric Background */}
                                         <div className="absolute inset-0 pointer-events-none">
-                                            <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-primary/10 rounded-full blur-[150px]"></div>
+                                            <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-[150px]"></div>
                                             <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-cyan-500/5 rounded-full blur-[120px]"></div>
-                                            <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+                                            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
                                         </div>
 
                                         <div className="relative z-10 flex flex-col lg:flex-row gap-8 h-[700px] max-md:h-auto max-md:gap-4">
                                             {/* Left: Region Navigator */}
-                                            <div className="w-full lg:w-[350px] bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 flex flex-col overflow-hidden max-md:rounded-2xl">
-                                                <div className="p-8 border-b border-white/10 max-md:p-4">
-                                                    <h3 className="text-xl font-black text-white uppercase italic tracking-tighter max-md:text-base">Region Navigator</h3>
-                                                    <p className="text-white/40 text-[9px] font-black uppercase tracking-[0.3em] mt-1">Select Tactical Zone</p>
+                                            <div className="w-full lg:w-[350px] bg-slate-50/80 backdrop-blur-xl rounded-[3rem] border border-slate-200 flex flex-col overflow-hidden max-md:rounded-2xl">
+                                                <div className="p-8 border-b border-slate-200 max-md:p-4">
+                                                    <h3 className="text-xl font-black text-slate-900 uppercase italic tracking-tighter max-md:text-base">Region Navigator</h3>
+                                                    <p className="text-slate-400 text-[9px] font-black uppercase tracking-[0.3em] mt-1">Select Tactical Zone</p>
                                                 </div>
 
                                                 <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4 max-md:max-h-[300px]">
@@ -348,13 +348,13 @@ const NetworkPartners: React.FC = () => {
                                                         { id: 3, title: 'REGION-3', cities: ['Semarang', 'Tegal', 'Purwokerto', 'Solo', 'Jogjakarta', 'Banjarmasin', 'Denpasar', 'Mataram', 'Kupang'] },
                                                         { id: 4, title: 'REGION-4', cities: ['Surabaya', 'Kediri', 'Malang', 'Jember', 'Samarinda', 'Makasar', 'Palu', 'Kendari', 'Manado'] }
                                                     ].map((region) => (
-                                                        <div key={region.id} className={`rounded-3xl transition-all duration-500 overflow-hidden ${activeRegion === region.id ? 'bg-primary/20 border-primary/30 border' : 'bg-white/5 border border-transparent hover:bg-white/10'}`}>
+                                                        <div key={region.id} className={`rounded-3xl transition-all duration-500 overflow-hidden ${activeRegion === region.id ? 'bg-primary/10 border-primary/30 border' : 'bg-white border border-slate-100 hover:bg-slate-50'}`}>
                                                             <button
                                                                 onClick={() => setActiveRegion(region.id)}
                                                                 className="w-full p-6 text-left flex items-center justify-between max-md:p-4"
                                                             >
-                                                                <span className={`text-sm font-black uppercase tracking-[0.2em] max-md:text-xs ${activeRegion === region.id ? 'text-primary' : 'text-white/60'}`}>{region.title}</span>
-                                                                <ArrowRight size={14} className={`transition-transform duration-500 max-md:shrink-0 ${activeRegion === region.id ? 'rotate-90 text-primary' : 'text-white/20'}`} />
+                                                                <span className={`text-sm font-black uppercase tracking-[0.2em] max-md:text-xs ${activeRegion === region.id ? 'text-primary' : 'text-slate-600'}`}>{region.title}</span>
+                                                                <ArrowRight size={14} className={`transition-transform duration-500 max-md:shrink-0 ${activeRegion === region.id ? 'rotate-90 text-primary' : 'text-slate-300'}`} />
                                                             </button>
 
                                                             <AnimatePresence>
@@ -400,7 +400,7 @@ const NetworkPartners: React.FC = () => {
 
                                                                                 return (
                                                                                     <li key={idx} className="flex items-center gap-3">
-                                                                                        <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 shrink-0 ${branch ? 'bg-primary shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'bg-white/5'}`}></div>
+                                                                                        <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 shrink-0 ${branch ? 'bg-primary shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'bg-slate-200'}`}></div>
                                                                                         <button
                                                                                             onClick={() => {
                                                                                                 if (branch) {
@@ -411,7 +411,7 @@ const NetworkPartners: React.FC = () => {
                                                                                                     }
                                                                                                 }
                                                                                             }}
-                                                                                            className={`text-[11px] font-bold uppercase tracking-wider text-left transition-all duration-300 max-md:text-[10px] ${branch ? 'text-white/90 hover:text-primary' : 'text-white/10 cursor-default'}`}
+                                                                                            className={`text-[11px] font-bold uppercase tracking-wider text-left transition-all duration-300 max-md:text-[10px] ${branch ? 'text-slate-700 hover:text-primary' : 'text-slate-300 cursor-default'}`}
                                                                                         >
                                                                                             {city}
                                                                                         </button>
@@ -428,19 +428,19 @@ const NetworkPartners: React.FC = () => {
                                             </div>
 
                                             {/* Right: Real Leaflet Map (Free Replacement) */}
-                                            <div className="flex-1 bg-slate-900 rounded-[3rem] border border-white/5 relative overflow-hidden group/map max-md:rounded-2xl min-h-[400px] md:h-full w-full">
+                                            <div className="flex-1 bg-slate-50 rounded-[3rem] border border-slate-200 relative overflow-hidden group/map max-md:rounded-2xl min-h-[400px] md:h-full w-full">
                                                 <div ref={mapRef} className="absolute inset-0 w-full h-full z-0" />
 
                                                 {/* Map Overlay Info */}
                                                 <div className="absolute top-8 right-8 text-right pointer-events-none z-10 max-md:top-4 max-md:right-4">
-                                                    <div className="text-[40px] font-black text-white/5 italic leading-none tracking-tighter uppercase max-md:text-[20px]">Integrated Network</div>
+                                                    <div className="text-[40px] font-black text-slate-900/5 italic leading-none tracking-tighter uppercase max-md:text-[20px]">Integrated Network</div>
                                                     <div className="text-primary/40 font-black uppercase tracking-[0.5em] text-[10px] mt-2 max-md:text-[8px] max-md:mt-1">Tactical Command Visualization v3.0</div>
                                                 </div>
 
                                                 <div className="absolute bottom-10 left-10 flex items-center gap-6 z-10 max-md:bottom-4 max-md:left-4">
-                                                    <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 max-md:px-3 max-md:py-1.5">
+                                                    <div className="flex items-center gap-3 bg-white/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-slate-200 max-md:px-3 max-md:py-1.5 shadow-xl">
                                                         <div className="w-2 h-2 rounded-full bg-primary animate-pulse max-md:shrink-0"></div>
-                                                        <span className="text-[9px] font-black text-white/60 uppercase tracking-widest max-md:text-[8px]">Active Link Established</span>
+                                                        <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest max-md:text-[8px]">Active Link Established</span>
                                                     </div>
                                                 </div>
 
@@ -454,7 +454,7 @@ const NetworkPartners: React.FC = () => {
                                                         display: none !important;
                                                     }
                                                     .leaflet-container {
-                                                        background: #0f172a !important;
+                                                        background: #f8fafc !important;
                                                     }
                                                 `}</style>
                                             </div>
