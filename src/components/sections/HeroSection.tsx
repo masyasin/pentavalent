@@ -32,6 +32,20 @@ const HeroSlideItem: React.FC<{
   onNavigate: (section: string) => void;
 }> = ({ slide, index, selectedIndex, language, onNavigate }) => {
   const [imgError, setImgError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
+  // Helper to optimize Unsplash URLs
+  const getOptimizedUrl = (url: string) => {
+    if (url.includes('images.unsplash.com')) {
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}auto=format&fit=crop&q=80&w=${isMobile ? 800 : 1920}`;
+    }
+    return url;
+  };
 
   return (
     <div className="relative flex-[0_0_100%] min-w-0 h-full overflow-hidden max-md:overflow-x-hidden">
@@ -44,7 +58,7 @@ const HeroSlideItem: React.FC<{
         <div
           className={`absolute inset-0 transition-all duration-[8000ms] ease-out ${selectedIndex === index ? 'animate-ken-burns opacity-100' : 'opacity-0'}`}
         >
-          {slide.video_url ? (
+          {slide.video_url && !isMobile ? (
             <video
               src={slide.video_url}
               autoPlay
@@ -56,13 +70,15 @@ const HeroSlideItem: React.FC<{
           ) : (
             !imgError && (
               <img
-                src={slide.image_url}
+                src={getOptimizedUrl(slide.image_url)}
                 alt={language === 'id' ? slide.title_id : slide.title_en}
+                width={1920}
+                height={1080}
                 className="w-full h-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
                 fetchPriority={index === 0 ? "high" : "auto"}
                 decoding="async"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+                sizes="(max-width: 768px) 100vw, 100vw"
                 onError={() => {
                   console.warn('Hero image failed, activating premium gradient fallback');
                   setImgError(true);

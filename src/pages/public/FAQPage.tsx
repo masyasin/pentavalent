@@ -135,6 +135,7 @@ const FAQPage: React.FC = () => {
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         placeholder={language === 'id' ? 'Cari pertanyaan...' : 'Search questions...'}
+                                        aria-label={language === 'id' ? 'Cari pertanyaan FAQ' : 'Search FAQ questions'}
                                         className="w-full pl-16 pr-6 py-5 md:py-7 bg-white border border-slate-100 rounded-[2rem] text-lg font-bold shadow-2xl shadow-slate-200/50 focus:ring-4 focus:ring-cyan-50 focus:border-cyan-200 transition-all outline-none"
                                     />
                                 </div>
