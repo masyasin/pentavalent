@@ -40,10 +40,10 @@ const HeroSlideItem: React.FC<{
 
   // Helper to optimize Unsplash URLs
   const getOptimizedUrl = (url: string) => {
-    if (!url) return "/logo-penta-valent.png"; // Fallback to logo if URL is empty
+    if (!url) return "/logo-penta-valent.png";
     if (url.includes('images.unsplash.com')) {
       const separator = url.includes('?') ? '&' : '?';
-      return `${url}${separator}auto=format&fit=crop&q=75&w=${isMobile ? 600 : 1600}`;
+      return `${url}${separator}auto=format&fit=crop&q=${isMobile ? 60 : 80}&w=${isMobile ? 600 : 1600}`;
     }
     return url;
   };

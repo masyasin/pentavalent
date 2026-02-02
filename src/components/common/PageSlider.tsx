@@ -38,10 +38,10 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
 
     // Helper to optimize Unsplash URLs
     const getOptimizedUrl = (url: string) => {
-        if (!url) return "https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=800&auto=format&fit=crop";
+        if (!url) return "https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=60&w=800&auto=format&fit=crop";
         if (url.includes('images.unsplash.com')) {
             const separator = url.includes('?') ? '&' : '?';
-            return `${url}${separator}auto=format&fit=crop&q=75&w=${isMobile ? 600 : 1600}`;
+            return `${url}${separator}auto=format&fit=crop&q=${isMobile ? 60 : 80}&w=${isMobile ? 600 : 1600}`;
         }
         return url;
     };
