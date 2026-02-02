@@ -106,11 +106,12 @@ const AdminContent: React.FC = () => {
 
         <Route path="profile" element={<ProfilePage />} />
         <Route path="change_password" element={<ProfilePage />} />
+        <Route path="reset-password" element={<Navigate to="/admin/dashboard" replace />} />
 
         {/* Default Redirect from /admin to /admin/dashboard */}
-        <Route path="/" element={<Navigate to="dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
         {/* Catch all for admin routes */}
-        <Route path="*" element={<Navigate to="dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
       </Routes>
     </AdminLayout>
   );
