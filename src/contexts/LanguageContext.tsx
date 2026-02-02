@@ -255,6 +255,12 @@ const translations: Translations = {
   'cookie.accept': { id: 'Terima', en: 'Accept' },
   'cookie.manage': { id: 'Kelola Preferensi', en: 'Manage Preferences' },
   'cookie.policy': { id: 'Kebijakan Cookie', en: 'Cookie Policy' },
+  'cookie.save': { id: 'Simpan Konfigurasi', en: 'Save Configuration' },
+  'cookie.pref.necessary': { id: 'Wajib', en: 'Necessary' },
+  'cookie.pref.analytics': { id: 'Analitik', en: 'Analytics' },
+  'cookie.pref.marketing': { id: 'Pemasaran', en: 'Marketing' },
+  'cookie.pref.title': { id: 'Preferensi', en: 'Preferences' },
+  'cookie.pref.subtitle': { id: 'Konfigurasi Node', en: 'Configuration Node' },
 
   // Admin & Login
   'login.title': { id: 'Panel Admin', en: 'Admin Panel' },

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 const CookieBanner: React.FC = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState({
@@ -55,7 +57,15 @@ const CookieBanner: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-black text-white tracking-tighter">Cookie Privacy</h3>
-                  <p className="text-slate-400 text-[11px] font-bold leading-relaxed">{t('cookie.message')}</p>
+                  <p className="text-slate-400 text-[11px] font-bold leading-relaxed">
+                    {t('cookie.message')}{' '}
+                    <button
+                      onClick={() => navigate('/privacy-policy')}
+                      className="text-cyan-400 hover:text-cyan-300 underline underline-offset-4 transition-colors"
+                    >
+                      {t('footer.privacy')}
+                    </button>
+                  </p>
                 </div>
               </div>
 
@@ -78,8 +88,8 @@ const CookieBanner: React.FC = () => {
             <div className="animate-fade-in space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl font-black text-white tracking-tighter">Preferences</h3>
-                  <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Configuration Node</p>
+                  <h3 className="text-xl font-black text-white tracking-tighter">{t('cookie.pref.title')}</h3>
+                  <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{t('cookie.pref.subtitle')}</p>
                 </div>
                 <button onClick={() => setShowPreferences(false)} className="p-2 bg-white/5 text-slate-400 hover:text-white rounded-lg transition-all">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -88,9 +98,9 @@ const CookieBanner: React.FC = () => {
 
               <div className="space-y-2">
                 {[
-                  { id: 'necessary', title: 'Necessary', required: true },
-                  { id: 'analytics', title: 'Analytics', required: false },
-                  { id: 'marketing', title: 'Marketing', required: false },
+                  { id: 'necessary', title: t('cookie.pref.necessary'), required: true },
+                  { id: 'analytics', title: t('cookie.pref.analytics'), required: false },
+                  { id: 'marketing', title: t('cookie.pref.marketing'), required: false },
                 ].map((pref) => (
                   <div
                     key={pref.id}
@@ -118,7 +128,7 @@ const CookieBanner: React.FC = () => {
                 onClick={handleSavePreferences}
                 className="w-full py-4 text-[9px] font-black uppercase tracking-widest text-white bg-slate-800 hover:bg-cyan-600 rounded-xl transition-all shadow-2xl active:scale-95"
               >
-                Save Configuration
+                {t('cookie.save')}
               </button>
             </div>
           )}
