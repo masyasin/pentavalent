@@ -1,14 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Database, Download, RefreshCw, AlertCircle, FileCode, CheckCircle2 } from 'lucide-react';
+import { Database, Download, RefreshCw, AlertCircle, FileCode, CheckCircle2, History, Clock, User } from 'lucide-react';
 import { toast } from 'sonner';
 import { logUserActivity } from '../../lib/security';
 import { useAuth } from '../../contexts/AuthContext';
+
+interface BackupLog {
+    id: string;
+    email: string;
+    created_at: string;
+    details: string;
+}
 
 const DatabaseBackupManager: React.FC = () => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(false);
     const [lastBackup, setLastBackup] = useState<string | null>(null);
+    const [history, setHistory] = useState<BackupLog[]>([]);
+    const [loadingHistory, setLoadingHistory] = useState(true);
+
+    const fetchBackupHistory = async () => {
+        try {
+            setLoadingHistory(true);
+            const { data, error } = await supabase
+                .from('user_activity_logs')
+                .select('id, email, created_at, details')
+                .eq('module', 'DATABASE')
+                .order('created_at', { ascending: false })
+                .limit(5);
+
+            if (error) throw error;
+            setHistory(data || []);
+        } catch (error) {
+            console.error('Failed to fetch backup history:', error);
+        } finally {
+            setLoadingHistory(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchBackupHistory();
+    }, []);
 
     const generateSQLBackup = async () => {
         setLoading(true);
@@ -120,6 +152,7 @@ const DatabaseBackupManager: React.FC = () => {
             setLastBackup(new Date().toLocaleString());
             toast.success('Database SQL backup generated successfully');
             await logUserActivity('EXPORT', 'DATABASE', 'Generated full database SQL backup', user?.email);
+            fetchBackupHistory();
 
         } catch (error: any) {
             console.error('Backup failed:', error);
@@ -213,6 +246,65 @@ const DatabaseBackupManager: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {/* Backup History */}
+            <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm space-y-8 text-left">
+                <div className="flex items-center justify-between border-b border-gray-50 pb-6">
+                    <div className="flex items-center gap-3">
+                        <History className="text-blue-600" size={24} />
+                        <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Recent Backup History</h3>
+                    </div>
+                    <button 
+                        onClick={fetchBackupHistory}
+                        className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                        title="Refresh History"
+                    >
+                        <RefreshCw className={loadingHistory ? "animate-spin" : ""} size={18} />
+                    </button>
+                </div>
+
+                <div className="overflow-hidden">
+                    {loadingHistory ? (
+                        <div className="py-10 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px] animate-pulse">
+                            Retrieving Audit Logs...
+                        </div>
+                    ) : history.length === 0 ? (
+                        <div className="py-10 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">
+                            No backup records found
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {history.map((log) => (
+                                <div key={log.id} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-gray-50 rounded-[2rem] border border-gray-100 group hover:border-blue-200 transition-all">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm group-hover:shadow-md transition-all">
+                                            <FileCode size={20} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-black text-gray-900">{log.details}</p>
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                                                    <User size={12} />
+                                                    {log.email}
+                                                </div>
+                                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                                                    <Clock size={12} />
+                                                    {new Date(log.created_at).toLocaleString()}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 md:mt-0 flex items-center gap-2">
+                                        <span className="px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100">
+                                            Success
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
