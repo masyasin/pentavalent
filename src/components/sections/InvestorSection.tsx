@@ -191,21 +191,23 @@ const InvestorSection: React.FC = () => {
         <div className="mt-24 pt-24 border-t border-slate-100 max-md:mt-12 max-md:pt-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-md:gap-4">
             {[
-              { label_id: 'Profil Perusahaan', label_en: 'Company Profile', link: '/about/profile', icon: '🏢' },
-              { label_id: 'Laporan Keuangan', label_en: 'Financial Reports', link: '/investor/laporan-keuangan', icon: '📊' },
-              { label_id: 'Tata Kelola GCG', label_en: 'Corporate Governance', link: '/about/legality-achievements', icon: '⚖️' },
-              { label_id: 'Pusat Berita', label_en: 'Media Center', link: '/news', icon: '📰' }
+              { label_id: 'Profil Perusahaan', label_en: 'Company Profile', link: '/about/profile', icon: '🏢', color: 'bg-blue-600' },
+              { label_id: 'Laporan Keuangan', label_en: 'Financial Reports', link: '/investor/laporan-keuangan', icon: '📊', color: 'bg-emerald-600' },
+              { label_id: 'Tata Kelola GCG', label_en: 'Corporate Governance', link: '/about/legality-achievements', icon: '⚖️', color: 'bg-amber-600' },
+              { label_id: 'Pusat Berita', label_en: 'Media Center', link: '/news', icon: '📰', color: 'bg-cyan-600' }
             ].map((link, i) => (
               <a
                 key={i}
                 href={link.link}
-                className="group p-8 rounded-3xl hover:bg-slate-50 transition-all duration-300 border border-transparent hover:border-slate-100 max-md:p-4 max-md:rounded-2xl"
+                className="group p-8 rounded-3xl hover:bg-slate-50 transition-all duration-300 border border-transparent hover:border-slate-100 max-md:p-4 max-md:rounded-2xl flex flex-col items-start"
               >
-                <div className="text-3xl mb-6 grayscale group-hover:grayscale-0 transition-all max-md:text-2xl max-md:mb-3">{link.icon}</div>
-                <div className="text-lg font-black text-slate-900 mb-2 max-md:text-xs">
+                <div className="text-3xl mb-6 grayscale group-hover:grayscale-0 transition-all max-md:text-2xl max-md:mb-3">
+                  {link.icon}
+                </div>
+                <div className="text-lg font-black text-slate-900 mb-2 max-md:text-[11px] group-hover:text-blue-600 transition-colors leading-tight">
                   {language === 'id' ? link.label_id : link.label_en}
                 </div>
-                <div className="w-10 h-1 bg-slate-100 group-hover:w-20 group-hover:bg-slate-900 transition-all duration-500 max-md:w-6 max-md:h-0.5"></div>
+                <div className={`w-10 h-1 bg-slate-100 group-hover:w-full group-hover:${link.color} transition-all duration-500 max-md:w-6 max-md:h-0.5`}></div>
               </a>
             ))}
           </div>
