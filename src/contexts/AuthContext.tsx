@@ -167,24 +167,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (storedToken && storedUser) {
         // Verify token is still valid
         try {
-          const { data, error } = await supabase.functions.invoke('auth', {
-            body: { action: 'verify', token: storedToken },
-          });
+          const { data: { user: authUser }, error } = await supabase.auth.getUser(storedToken);
 
-          if (data?.valid && data?.user) {
-            // Fetch LATEST profile from public.users table to ensure 
-            // changes like avatar_url persist after refresh
+          if (authUser && !error) {
+            // Fetch LATEST profile from public.users table
             const { data: profiles } = await supabase
               .from('users')
               .select('email, full_name, avatar_url, role')
-              .eq('id', data.user.id)
+              .eq('id', authUser.id)
               .limit(1);
 
             const profile = profiles && profiles.length > 0 ? profiles[0] : null;
 
             const finalUser = profile
-              ? { ...data.user, ...profile }
-              : data.user;
+              ? { ...authUser, ...profile }
+              : (JSON.parse(storedUser) as User); // Fallback to stored user if profile fetch fails
 
             setToken(storedToken);
             setUser(finalUser);
@@ -273,31 +270,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const authEmail = email;
 
       // 2. PHASE 2: INTERNAL AUTHENTICATION
-      const { data, error } = await supabase.functions.invoke('auth', {
-        body: { action: 'login', email: authEmail, password },
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: authEmail,
+        password: password
       });
 
-      if (error || data?.error) {
-        // Fallback: If the new email gives 401 but we know it's valid in our table,
-        // we might need to try the auth with the system's hardcoded admin email 
-        // while the sync is pending, but keep the user's profile as the identity.
-        if (email === 'yaskds@gmail.com' || profileByEmail) {
-          const { data: fallbackData } = await supabase.functions.invoke('auth', {
-            body: { action: 'login', email: 'admin@pentavalent.co.id', password },
-          });
-
-          if (fallbackData?.success) {
-            const finalUser = profileByEmail || fallbackData.user;
-            // STAGE in TEMP storage to prevent auto-login on refresh
-            localStorage.setItem(TEMP_TOKEN_KEY, fallbackData.token);
-            localStorage.setItem(TEMP_USER_KEY, JSON.stringify(finalUser));
-            return { success: true };
-          }
-        }
-        return { success: false, error: data?.error || 'Authentication denied' };
+      if (error || !data.user || !data.session) {
+        console.error('Supabase auth error:', error);
+        return { success: false, error: error?.message || 'Authentication denied' };
       }
 
-      if (data?.success && data?.token && data?.user) {
+      if (data.user && data.session) {
         const { data: profiles } = await supabase
           .from('users')
           .select('email, full_name, avatar_url, role')
@@ -308,8 +291,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         const finalUser = profile ? { ...data.user, ...profile } : data.user;
         // STAGE in TEMP storage
-        localStorage.setItem(TEMP_TOKEN_KEY, data.token);
+        localStorage.setItem(TEMP_TOKEN_KEY, data.session.access_token);
         localStorage.setItem(TEMP_USER_KEY, JSON.stringify(finalUser));
+        
+        // Also set the main state immediately to avoid race conditions
+        setToken(data.session.access_token);
+        setUser(finalUser as User);
+        
         return { success: true };
       }
 
@@ -325,9 +313,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = async (): Promise<void> => {
     try {
       if (token) {
-        await supabase.functions.invoke('auth', {
-          body: { action: 'logout', token },
-        });
+        await supabase.auth.signOut();
       }
     } catch (error) {
       console.error('Logout error:', error);
@@ -372,14 +358,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // We return a dummy token just to satisfy the UI state transition,
       // or we can update the UI to just say "Check your email for the link".
       return { success: true, reset_token: 'CHECK_EMAIL_LINK' };
-
-      /*
-      // OLD LOGIC
-      const { data, error } = await supabase.functions.invoke('auth', {
-        body: { action: 'request_reset', email },
-      });
-      ...
-      */
     } catch (error) {
       console.error('Password reset request error:', error);
       return { success: false, error: 'System busy. Please try again in a moment.' };
@@ -461,16 +439,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return { success: false, error: 'Not authenticated' };
       }
 
-      const { data, error } = await supabase.functions.invoke('auth', {
-        body: { action: 'change_password', token, current_password: currentPassword, new_password: newPassword },
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPassword
       });
 
       if (error) {
-        return { success: false, error: 'Network error. Please try again.' };
-      }
-
-      if (data?.error) {
-        return { success: false, error: data.error };
+        return { success: false, error: error.message };
       }
 
       return { success: true };
@@ -492,13 +466,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       if (!token) return { success: false, error: 'Not authenticated' };
 
-      const { data, error } = await supabase.functions.invoke('auth', {
-        body: { action: 'update_email', token, new_email: newEmail },
+      const { data, error } = await supabase.auth.updateUser({
+        email: newEmail
       });
 
-      if (error || data?.error) {
-        console.error('Edge function error:', error || data?.error);
-        return { success: false, error: data?.error || 'Failed to sync login credentials' };
+      if (error) {
+        console.error('Update email error:', error);
+        return { success: false, error: error.message };
       }
 
       // Update local state and storage
