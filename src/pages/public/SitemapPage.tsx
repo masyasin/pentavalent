@@ -193,6 +193,7 @@ const SitemapPage: React.FC = () => {
                         </button>
                     </motion.div>
                 </div>
+            </div>
             </main>
 
             <Footer onNavigate={() => {}} />
