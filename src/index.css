@@ -466,9 +466,16 @@
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.no-scrollbar::-webkit-scrollbar {
-  display: none !important;
-}
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Hide Vercel Toolbar */
+  #__vercel-toolbar,
+  .vercel-toolbar-container,
+  vercel-live-feedback {
+    display: none !important;
+  }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
