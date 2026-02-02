@@ -16,6 +16,8 @@ export const logSecurityEvent = async (type: string, field: string, payload: str
 
 export const logUserActivity = async (action: string, module: string, details: string, userEmail?: string) => {
     try {
+        console.log(`[ActivityLog] Attempting to log: ${action} - ${module} - ${details}`);
+        
         const storedUser = localStorage.getItem('peve_admin_user');
         const user = storedUser ? JSON.parse(storedUser) : null;
 
@@ -23,13 +25,11 @@ export const logUserActivity = async (action: string, module: string, details: s
             action: action,
             module: module,
             details: details,
-            email: userEmail || user?.email,
+            email: userEmail || user?.email || 'system@pentavalent.co.id',
             user_agent: navigator.userAgent
         };
 
         // Only include user_id if it exists and is a valid UUID
-        // This prevents 400 Bad Request if the ID is a custom string like 'admin-123'
-        // while the database column is still a UUID type.
         const isUUID = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
         
         if (user?.id && isUUID(user.id)) {
@@ -43,9 +43,15 @@ export const logUserActivity = async (action: string, module: string, details: s
             }
         });
 
-        await supabase.from('user_activity_logs').insert(payload);
+        const { error } = await supabase.from('user_activity_logs').insert(payload);
+        
+        if (error) {
+            console.error('[ActivityLog] Database Error:', error);
+        } else {
+            console.log('[ActivityLog] Success');
+        }
     } catch (err) {
-        console.error('Failed to log user activity:', err);
+        console.error('[ActivityLog] Critical Error:', err);
     }
 };
 

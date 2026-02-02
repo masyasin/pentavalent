@@ -108,14 +108,14 @@ const CareerManager: React.FC = () => {
                     .eq('id', editingCareer.id);
                 if (error) throw error;
                 toast.success('Career opportunity updated successfully');
-                logUserActivity('UPDATE', 'CAREER', `Updated job: ${formData.title}`, user?.email);
+                await logUserActivity('UPDATE', 'CAREER', `Updated job: ${formData.title}`, user?.email);
             } else {
                 const { error } = await supabase
                     .from('careers')
                     .insert(formData);
                 if (error) throw error;
                 toast.success('Career opportunity created successfully');
-                logUserActivity('CREATE', 'CAREER', `Created job: ${formData.title}`, user?.email);
+                await logUserActivity('CREATE', 'CAREER', `Created job: ${formData.title}`, user?.email);
             }
 
             setShowModal(false);
@@ -170,7 +170,7 @@ const CareerManager: React.FC = () => {
             setLoading(true);
             const { error } = await supabase.from('careers').delete().eq('id', deleteDialog.id);
             if (error) throw error;
-            logUserActivity('DELETE', 'CAREER', `Deleted job: ${deleteDialog.name}`, user?.email);
+            await logUserActivity('DELETE', 'CAREER', `Deleted job: ${deleteDialog.name}`, user?.email);
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             toast.success('Career opportunity deleted successfully');
             fetchCareers();

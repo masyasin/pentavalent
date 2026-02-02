@@ -146,7 +146,7 @@ const NewsManager: React.FC = () => {
 
         if (error) throw error;
         toast.success("News article updated successfully");
-        logUserActivity('UPDATE', 'NEWS', `Updated article: ${formData.title_id}`, user?.email);
+        await logUserActivity('UPDATE', 'NEWS', `Updated article: ${formData.title_id}`, user?.email);
       } else {
         const { error } = await supabase
           .from('news')
@@ -158,7 +158,7 @@ const NewsManager: React.FC = () => {
 
         if (error) throw error;
         toast.success("News article created successfully");
-        logUserActivity('CREATE', 'NEWS', `Created article: ${formData.title_id}`, user?.email);
+        await logUserActivity('CREATE', 'NEWS', `Created article: ${formData.title_id}`, user?.email);
       }
 
       setSubmitDialog(prev => ({ ...prev, isOpen: false }));
@@ -299,7 +299,7 @@ const NewsManager: React.FC = () => {
       setLoading(true);
       const { error } = await supabase.from('news').delete().eq('id', deleteDialog.id);
       if (error) throw error;
-      logUserActivity('DELETE', 'NEWS', `Deleted article: ${deleteDialog.title}`, user?.email);
+      await logUserActivity('DELETE', 'NEWS', `Deleted article: ${deleteDialog.title}`, user?.email);
       setDeleteDialog({ isOpen: false, id: null, title: '' });
       fetchNews();
     } catch (error) {

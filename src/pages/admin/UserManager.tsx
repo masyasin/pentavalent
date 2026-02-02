@@ -135,7 +135,7 @@ const UserManager: React.FC = () => {
                         throw profileError;
                     }
 
-                    logUserActivity('CREATE', 'USERS', `Created new user: ${formData.email} (Role: ${formData.role})`, currentUser?.email);
+                    await logUserActivity('CREATE', 'USERS', `Created new user: ${formData.email} (Role: ${formData.role})`, currentUser?.email);
                 }
 
                 toast.success('User created successfully! They can now log in.');
@@ -179,7 +179,7 @@ const UserManager: React.FC = () => {
             setLoading(true);
             const { error } = await supabase.from('users').delete().eq('id', deleteDialog.id);
             if (error) throw error;
-            logUserActivity('DELETE', 'USERS', `Deleted user: ${deleteDialog.name}`, currentUser?.email);
+            await logUserActivity('DELETE', 'USERS', `Deleted user: ${deleteDialog.name}`, currentUser?.email);
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             toast.success('User deleted successfully');
             fetchUsers();

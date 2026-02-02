@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { logUserActivity } from '../../lib/security';
+import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 import FileUpload from '../../components/admin/FileUpload';
@@ -25,6 +27,7 @@ interface Partner {
 }
 
 const PartnerManager: React.FC = () => {
+    const { user } = useAuth();
     const { t, language } = useLanguage();
     const [partners, setPartners] = useState<Partner[]>([]);
     const [loading, setLoading] = useState(true);
@@ -102,12 +105,14 @@ const PartnerManager: React.FC = () => {
                     .eq('id', editingPartner.id);
                 if (error) throw error;
                 toast.success('Partner updated successfully');
+                await logUserActivity('UPDATE', 'PARTNERS', `Updated partner: ${formData.name}`, user?.email);
             } else {
                 const { error } = await supabase
                     .from('partners')
                     .insert(formData);
                 if (error) throw error;
                 toast.success('Partner anchored successfully');
+                await logUserActivity('CREATE', 'PARTNERS', `Registered new partner: ${formData.name}`, user?.email);
             }
 
             setShowModal(false);
@@ -158,6 +163,7 @@ const PartnerManager: React.FC = () => {
             setLoading(true);
             const { error } = await supabase.from('partners').delete().eq('id', deleteDialog.id);
             if (error) throw error;
+            await logUserActivity('DELETE', 'PARTNERS', `Removed partner: ${deleteDialog.name}`, user?.email);
             setDeleteDialog({ isOpen: false, id: null, name: '' });
             toast.success('Partner deleted successfully');
             fetchPartners();

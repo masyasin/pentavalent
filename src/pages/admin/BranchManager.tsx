@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { logUserActivity } from '../../lib/security';
+import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
@@ -26,6 +28,7 @@ interface Branch {
 }
 
 const BranchManager: React.FC = () => {
+  const { user } = useAuth();
   const { t, language } = useLanguage();
   const [branches, setBranches] = useState<Branch[]>([]);
   const [loading, setLoading] = useState(true);
@@ -149,10 +152,12 @@ const BranchManager: React.FC = () => {
 
         if (error) throw error;
         toast.success('Branch updated successfully');
+        await logUserActivity('UPDATE', 'BRANCHES', `Updated branch: ${formData.name}`, user?.email);
       } else {
         const { error } = await supabase.from('branches').insert(branchData);
         if (error) throw error;
         toast.success('Branch created successfully');
+        await logUserActivity('CREATE', 'BRANCHES', `Created new branch: ${formData.name}`, user?.email);
       }
 
       setShowModal(false);
@@ -238,6 +243,7 @@ const BranchManager: React.FC = () => {
       setLoading(true);
       const { error } = await supabase.from('branches').delete().eq('id', deleteDialog.id);
       if (error) throw error;
+      await logUserActivity('DELETE', 'BRANCHES', `Removed branch: ${deleteDialog.name}`, user?.email);
       setDeleteDialog({ isOpen: false, id: null, name: '' });
       toast.success('Branch deleted successfully');
       fetchBranches();

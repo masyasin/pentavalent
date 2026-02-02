@@ -4,11 +4,12 @@ import { toast } from 'sonner';
 
 interface ForgotPasswordPageProps {
   onBack: () => void;
+  initialStep?: 'request' | 'reset' | 'success';
 }
 
-const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
+const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack, initialStep }) => {
   const { requestPasswordReset, resetPassword } = useAuth();
-  const [step, setStep] = useState<'request' | 'reset' | 'success'>('request');
+  const [step, setStep] = useState<'request' | 'reset' | 'success'>(initialStep || 'request');
   const [email, setEmail] = useState('');
   const [resetToken, setResetToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
