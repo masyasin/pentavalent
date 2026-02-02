@@ -237,6 +237,7 @@ const translations: Translations = {
   'footer.contact': { id: 'Kontak', en: 'Contact' },
   'footer.copyright': { id: 'Hak Cipta', en: 'Copyright' },
   'footer.privacy': { id: 'Kebijakan Privasi', en: 'Privacy Policy' },
+  'footer.faq': { id: 'Tanya Jawab (FAQ)', en: 'F.A.Q' },
   'footer.terms': { id: 'Syarat & Ketentuan', en: 'Terms & Conditions' },
   'footer.rights': { id: 'Seluruh hak cipta dilindungi.', en: 'All rights reserved.' },
   'footer.column.contact': { id: 'Hubungi Kami', en: 'Contact Us' },

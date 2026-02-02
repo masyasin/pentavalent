@@ -325,19 +325,29 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </ul>
           </div>
 
-          {/* Column 4: Stakeholders Menu */}
+          {/* Column 4: Investor Relations Menu */}
           <div className="pt-2 max-md:pt-0">
-            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3 max-md:mb-4 max-md:justify-center"><span className="w-1 h-4 bg-cyan-500 rounded-full"></span>{t('footer.column.stakeholders')}</h4>
+            <h4 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-3 max-md:mb-4 max-md:justify-center">
+              <span className="w-1 h-4 bg-cyan-500 rounded-full"></span>
+              {t('investor.tagline')}
+            </h4>
             <ul className="space-y-4 pl-4 border-l border-white/5 max-md:pl-0 max-md:border-l-0 max-md:flex max-md:flex-col max-md:items-center max-md:space-y-3">
-              {stakeholderMenus.map((link) => (
-                <li key={link.id} className="max-md:w-full max-md:text-center">
+              {[
+                { label: t('investor.nav.highlights'), path: '/investor/ringkasan-investor' },
+                { label: t('investor.nav.stock'), path: '/investor/informasi-saham' },
+                { label: t('investor.nav.financials'), path: '/investor/laporan-keuangan' },
+                { label: t('investor.nav.prospectus'), path: '/investor/prospektus' },
+                { label: t('investor.nav.rups'), path: '/investor/rups' },
+                { label: t('investor.nav.disclosure'), path: '/investor/keterbukaan-informasi' },
+              ].map((link, idx) => (
+                <li key={idx} className="max-md:w-full max-md:text-center">
                   <button
                     onClick={() => handleLinkClick(link.path)}
                     className="text-slate-300 text-xs font-bold uppercase tracking-wide hover:text-white transition-all duration-300 flex flex-col items-start gap-1 group text-left max-md:w-full max-md:items-center max-md:justify-center max-md:min-h-[44px]"
                   >
                     <div className="flex items-center gap-2">
                       <span className="w-0 overflow-hidden group-hover:w-2 transition-all duration-300 bg-cyan-500 h-[2px] max-md:hidden"></span>
-                      {language === 'id' ? link.label_id : link.label_en}
+                      {link.label}
                     </div>
                     <div className="w-0 h-[1.5px] bg-cyan-500 group-hover:w-full transition-all duration-500 max-md:h-[1px]"></div>
                   </button>
@@ -354,6 +364,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
           </div>
           <div className="flex items-center gap-6 flex-wrap justify-center max-md:gap-4">
+            <a href="/faq" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors max-md:text-[10px]">{t('footer.faq')}</a>
             <a href="/privacy-policy" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors max-md:text-[10px]">{t('footer.privacy')}</a>
             <a href="/code-of-conduct" className="group flex items-center gap-2 text-slate-300 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors max-md:text-[10px]">{t('footer.code_conduct')}</a>
           </div>
