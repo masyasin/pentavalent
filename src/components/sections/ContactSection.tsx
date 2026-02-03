@@ -188,11 +188,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
             <span className="inline-block px-5 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black tracking-[0.4em] uppercase mb-8 shadow-xl shadow-primary/5">
               {t('contact.tagline')}
             </span>
-            <h2 className="text-fluid-h1 py-2 mb-10 text-slate-900 border-l-8 border-accent pl-6 md:pl-10">
+            <h2 className="text-3xl md:text-5xl lg:text-5xl xl:text-6xl py-2 mb-10 text-slate-900 border-l-8 border-accent pl-6 md:pl-10">
               {t('contact.title.text')} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{t('contact.title.italic')}</span>
             </h2>
-            <p className="text-fluid-body text-slate-500 max-w-xl">
+            <p className="text-base md:text-lg lg:text-lg text-slate-500 max-w-xl">
               {t('contact.description')}
             </p>
 
@@ -214,7 +214,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
           <div className="lg:col-span-7">
             <div className="bg-white rounded-[2rem] md:rounded-[4rem] p-6 sm:p-12 md:p-16 border border-slate-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] relative overflow-hidden group">
               <div className="relative z-10">
-                <h3 className="text-3xl font-black text-slate-900 mb-12 tracking-tighter">{t('contact.cta.subtitle')}</h3>
+                <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-12 tracking-tighter">{t('contact.cta.subtitle')}</h3>
 
                 {submitSuccess && (
                   <div className="mb-10 p-8 bg-cyan-50 border border-cyan-100 rounded-3xl flex items-center gap-6 animate-fade-in">
@@ -385,7 +385,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ isPageMode = false }) =
                   <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
                   <span className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">{language === 'id' ? 'Aksi Instan' : 'Instant Action'}</span>
                 </div>
-                <h4 className="text-3xl font-black text-white mb-2 tracking-tighter">{t('contact.fast_response')}</h4>
+                <h4 className="text-2xl md:text-3xl font-black text-white mb-2 tracking-tighter">{t('contact.fast_response')}</h4>
                 <p className="text-white/60 text-sm font-bold mb-8">{language === 'id' ? 'Terhubung dengan tim dukungan eksekutif kami.' : 'Connect with our executive support team.'}</p>
                 <div className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl group-hover:bg-[#128C7E] group-hover:text-white transition-all">
                   {t('contact.sidebar.whatsapp')}

@@ -190,8 +190,8 @@ const CompanyProfile: React.FC = () => {
 
                                         {/* Floating Glass Label */}
                                         <div className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 p-4 md:p-6 bg-white/20 backdrop-blur-md rounded-2xl md:rounded-3xl border border-white/30">
-                                            <div className="text-[8px] md:text-[10px] font-black text-cyan-100 uppercase tracking-[0.3em] mb-1">Corporate Visual</div>
-                                            <div className="text-base md:text-xl font-black text-white italic tracking-tighter">PT PENTA VALENT Tbk</div>
+                                            <div className="text-[10px] font-black text-cyan-100 uppercase tracking-[0.3em] mb-1">Corporate Visual</div>
+                                            <div className="text-lg md:text-xl font-black text-white md:italic tracking-tighter">PT PENTA VALENT Tbk</div>
                                         </div>
                                     </motion.div>
 
@@ -216,8 +216,8 @@ const CompanyProfile: React.FC = () => {
                                         className="absolute bottom-20 -left-6 w-56 h-36 bg-slate-900 shadow-[0_40px_80px_rgba(0,0,0,0.4)] rounded-[2.5rem] z-30 hidden lg:flex items-center justify-between px-10 border border-white/10"
                                     >
                                         <div className="text-left py-2">
-                                            <div className="text-5xl font-black text-primary italic leading-none">PEVE</div>
-                                            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-3 italic">IDX STOCK CODE</div>
+                                            <div className="text-3xl md:text-5xl font-black text-primary md:italic leading-none">PEVE</div>
+                                            <div className="text-[10px] md:text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-3 md:italic">IDX STOCK CODE</div>
                                         </div>
                                         <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                                             <div className="w-3 h-3 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
@@ -239,8 +239,8 @@ const CompanyProfile: React.FC = () => {
                                         <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.5em]">Corporate Numbers</span>
                                     </div>
 
-                                    <h2 className="text-5xl md:text-6xl xl:text-7xl font-black text-slate-900 tracking-tighter mb-12 leading-[0.9]">
-                                        Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-600 to-cyan-500 italic">Excellence</span> <br />
+                                    <h2 className="text-3xl md:text-5xl lg:text-5xl xl:text-6xl font-black text-slate-900 tracking-tighter mb-12 leading-[0.9]">
+                                        Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-600 to-cyan-500 md:italic">Excellence</span> <br />
                                         <span className="text-slate-300">Defined by Data</span>
                                     </h2>
 
@@ -264,10 +264,10 @@ const CompanyProfile: React.FC = () => {
                                                         transition={{ delay: idx * 0.1, duration: 0.8 }}
                                                         className="relative z-10"
                                                     >
-                                                        <div className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter leading-none italic mb-3 md:mb-5 group-hover:text-primary transition-all duration-500 transform group-hover:translate-x-2">
+                                                        <div className="text-2xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-slate-900 tracking-tighter leading-none md:italic mb-3 md:mb-5 group-hover:text-primary transition-all duration-500 transform group-hover:translate-x-2">
                                                             <AnimatedNumber value={stat.value} />
                                                         </div>
-                                                        <div className="text-[8px] md:text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] md:tracking-[0.4em] leading-tight opacity-80 group-hover:opacity-100 group-hover:text-slate-600 transition-all">
+                                                        <div className="text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] md:tracking-[0.4em] leading-tight opacity-80 group-hover:opacity-100 group-hover:text-slate-600 transition-all">
                                                             {language === 'id' ? stat.label_id : stat.label_en}
                                                         </div>
                                                     </motion.div>
@@ -285,7 +285,7 @@ const CompanyProfile: React.FC = () => {
                                                 </div>
                                                 <div className="text-left">
                                                     <div className="text-[9px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.5em] mb-1 md:mb-2 leading-none">Market Status</div>
-                                                    <h3 className="text-xl lg:text-3xl font-black text-slate-900 italic tracking-tighter leading-tight">
+                                                    <h3 className="text-lg lg:text-3xl font-black text-slate-900 md:italic tracking-tighter leading-tight">
                                                         {language === 'id' ? 'Saham Terdaftar (IPO) 2023' : 'Publicly Listed (IPO) 2023'}
                                                     </h3>
                                                 </div>
@@ -326,7 +326,7 @@ const CompanyProfile: React.FC = () => {
                                     <div className="w-8 h-px bg-primary/30"></div>
                                     <span className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Heritage</span>
                                 </div>
-                                <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter italic leading-none">
+                                <h3 className="text-2xl md:text-2xl lg:text-3xl font-black text-slate-900 tracking-tighter italic leading-none">
                                     Profil <br />
                                     <span className="text-primary not-italic">Korporasi</span>
                                 </h3>
@@ -371,7 +371,7 @@ const CompanyProfile: React.FC = () => {
                             <History size={14} />
                             Timeline
                         </div>
-                        <h3 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">
+                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter mb-4">
                             Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-500 to-blue-600 italic">Journey</span>
                         </h3>
                         <p className="text-slate-500 text-lg max-w-2xl mx-auto">

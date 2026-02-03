@@ -234,7 +234,7 @@ const InvestorPage: React.FC = () => {
                                 <motion.h1
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="text-3xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter"
+                                    className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 mb-8 tracking-tighter"
                                 >
                                     {language === 'id' ? pageContent?.title_id : pageContent?.title_en}
                                 </motion.h1>
@@ -281,10 +281,10 @@ const InvestorPage: React.FC = () => {
                                                                 {language === 'id' ? 'Profil Sekilas' : 'Company at a Glance'}
                                                             </span>
                                                         </div>
-                                                        <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+                                                        <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 leading-tight">
                                                             {language === 'id' ? 'Mitra Distribusi Kesehatan' : 'Healthcare Distribution'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 md:italic">{language === 'id' ? 'Terpercaya' : 'Partner'}</span>
                                                         </h2>
-                                                        <p className="text-lg text-slate-500 leading-relaxed font-medium max-w-2xl">
+                                                        <p className="text-base md:text-lg text-slate-500 leading-relaxed font-medium max-w-2xl">
                                                             {language === 'id'
                                                                 ? 'Perseroan didirikan pada bulan September 1968 di Jakarta, Indonesia dengan nama CV Penta Valent. Selanjutnya, pada tahun 1972, Perseroan melakukan perubahan badan hukum menjadi Perseroan Terbatas.'
                                                                 : 'The Company was established in September 1968 in Jakarta, Indonesia under the name CV Penta Valent. Subsequently, in 1972, the Company changed its legal status to a Limited Liability Company.'}
@@ -296,7 +296,7 @@ const InvestorPage: React.FC = () => {
                                                             <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-50 rounded-bl-[3rem] -mr-8 -mt-8"></div>
                                                             <div className="relative z-10">
                                                                 <div className="flex items-baseline gap-2 mb-2">
-                                                                    <span className="text-7xl font-black text-slate-900 tracking-tighter">34</span>
+                                                                    <span className="text-6xl font-black text-slate-900 tracking-tighter">34</span>
                                                                     <span className="text-4xl font-black text-cyan-500">+</span>
                                                                 </div>
                                                                 <div className="text-2xl font-bold text-slate-400 tracking-tight leading-none mb-8">
@@ -381,7 +381,7 @@ const InvestorPage: React.FC = () => {
 
                                                     <div className="relative z-10">
                                                         <div className="text-center max-w-2xl mx-auto mb-16">
-                                                            <h3 className="text-3xl font-black mb-4">{language === 'id' ? 'Mengapa Penta Valent?' : 'Why Penta Valent?'}</h3>
+                                                            <h3 className="text-2xl font-black mb-4">{language === 'id' ? 'Mengapa Penta Valent?' : 'Why Penta Valent?'}</h3>
                                                             <p className="text-slate-400 text-lg">
                                                                 {language === 'id'
                                                                     ? 'Keunggulan strategis yang membedakan kami di pasar yang kompetitif.'
@@ -432,17 +432,17 @@ const InvestorPage: React.FC = () => {
                                                     </div>
                                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                                         {highlights.map((h, i) => (
-                                                            <div key={i} className="p-8 rounded-[2.5rem] bg-slate-50 border border-slate-100 group hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 hover:border-transparent transition-all duration-300">
+                                                            <div key={i} className="p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-slate-50 border border-slate-100 group hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 hover:border-transparent transition-all duration-300">
                                                                 <div className="flex items-start justify-between mb-8">
                                                                     <div className="w-12 h-12 rounded-2xl bg-white text-slate-900 flex items-center justify-center shadow-sm group-hover:bg-cyan-500 group-hover:text-white transition-colors">
                                                                         {getIcon(h.icon_name)}
                                                                     </div>
-                                                                    <div className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-[10px] font-bold uppercase tracking-wide flex items-center gap-1">
+                                                                    <div className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-wide flex items-center gap-1">
                                                                         <TrendingUp size={10} /> {h.growth}
                                                                     </div>
                                                                 </div>
-                                                                <h3 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-cyan-600 transition-colors">{h.value}</h3>
-                                                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                                                <h3 className="text-2xl md:text-2xl lg:text-3xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-cyan-600 transition-colors">{h.value}</h3>
+                                                                <p className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">
                                                                     {language === 'id' ? h.label_id : h.label_en}
                                                                 </p>
                                                             </div>
@@ -666,7 +666,7 @@ const InvestorPage: React.FC = () => {
                                                             <TrendingUp className="text-cyan-400" /> {language === 'id' ? 'Hasil Dividen' : 'Dividend Yield'}
                                                         </h3>
                                                         <div className="relative z-10">
-                                                            <div className="text-4xl md:text-6xl font-black text-cyan-400 mb-4">4.2%</div>
+                                                            <div className="text-4xl md:text-5xl font-black text-cyan-400 mb-4">4.2%</div>
                                                             <p className="text-slate-400 text-sm leading-relaxed mb-8 max-w-sm">
                                                                 {language === 'id'
                                                                     ? 'Kami secara konsisten membagikan dividen sebagai bentuk apresiasi atas kepercayaan pemegang saham kami selama 3 tahun terakhir.'
@@ -818,7 +818,7 @@ const InvestorPage: React.FC = () => {
                                                                         <div className="text-[9px] md:text-[11px] font-black text-cyan-600 uppercase tracking-[0.25em] mb-2 md:mb-3 truncate">
                                                                             {doc.document_type.replace(/_/g, ' ')} • {doc.year} {doc.quarter ? `• ${doc.quarter}` : ''}
                                                                         </div>
-                                                                        <h4 className="text-sm md:text-3xl font-black text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 md:gap-4 flex-wrap leading-tight md:italic tracking-tight">
+                                                                        <h4 className="text-sm md:text-xl lg:text-xl xl:text-2xl font-black text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center gap-2 md:gap-4 flex-wrap leading-tight md:italic tracking-tight">
                                                                             {language === 'id' ? doc.title_id : doc.title_en}
 
                                                                             <div className="flex gap-2">

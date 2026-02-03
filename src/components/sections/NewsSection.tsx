@@ -121,7 +121,7 @@ const NewsSection: React.FC = () => {
   ];
 
   return (
-    <section id="news" className="py-24 md:py-36 lg:py-48 bg-white relative overflow-hidden max-md:py-16 max-md:overflow-x-hidden">
+    <section id="news" className="pt-12 md:pt-24 pb-24 md:pb-36 lg:pb-48 bg-white relative overflow-hidden max-md:py-16 max-md:overflow-x-hidden">
       {/* Super Premium Background Decor */}
       <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-gradient-to-br from-blue-50/50 via-cyan-50/30 to-transparent rounded-full blur-[120px] -mr-96 -mt-96 animate-pulse max-md:hidden"></div>
       <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-cyan-50/30 via-blue-50/20 to-transparent rounded-full blur-[100px] -ml-64 -mb-64 max-md:hidden"></div>
@@ -135,7 +135,7 @@ const NewsSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[11px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10 max-md:mb-4 max-md:text-[10px]">
               {language === 'id' ? 'Berita & Keterbukaan Informasi' : 'News & Disclosure'}
             </span>
-            <h2 className="text-fluid-h1 py-2 mb-0 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10 max-md:text-3xl max-md:pl-4 max-md:border-l-4">
+            <h2 className="text-3xl md:text-5xl lg:text-5xl xl:text-6xl py-2 mb-0 text-slate-900 border-l-8 border-cyan-500 pl-6 md:pl-10 max-md:text-3xl max-md:pl-4 max-md:border-l-4">
               {language === 'id' ? 'Update' : 'Corporate'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{language === 'id' ? 'Korporasi' : 'Updates'}</span>
             </h2>
@@ -225,12 +225,12 @@ const NewsSection: React.FC = () => {
                           <span className="text-[10px] font-black text-slate-400 group-hover:text-slate-900 uppercase tracking-[0.25em] transition-colors max-md:text-[8px]">{formatDate(item.published_at)}</span>
                         </div>
 
-                        <h3 className="text-xl md:text-3xl font-black text-slate-900 group-hover:text-blue-600 transition-all duration-500 leading-tight tracking-tight line-clamp-2 min-h-[3rem] md:min-h-[4rem] mb-4 md:mb-6 max-md:text-lg max-md:min-h-0 max-md:mb-3">
+                        <h3 className="text-xl md:text-xl lg:text-xl xl:text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-all duration-500 leading-tight tracking-tight line-clamp-2 min-h-[3rem] md:min-h-[4rem] mb-4 md:mb-6 max-md:text-lg max-md:min-h-0 max-md:mb-3">
                           {language === 'id' ? item.title_id : item.title_en}
                         </h3>
 
                         <div
-                          className="text-slate-500 text-base md:text-lg leading-relaxed font-medium line-clamp-2 mb-12 opacity-80 group-hover:opacity-100 transition-opacity flex-grow prose prose-sm max-w-none max-md:text-sm max-md:mb-6"
+                          className="text-slate-500 text-sm md:text-base lg:text-base leading-relaxed font-medium line-clamp-2 mb-12 opacity-80 group-hover:opacity-100 transition-opacity flex-grow prose prose-sm max-w-none max-md:text-sm max-md:mb-6"
                           dangerouslySetInnerHTML={{ __html: (language === 'id' ? item.excerpt_id : item.excerpt_en) || '' }}
                         />
 

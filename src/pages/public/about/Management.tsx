@@ -101,7 +101,7 @@ const Management: React.FC = () => {
                                 <Users size={14} className="text-primary" />
                                 Board Leadership
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase mb-4">
+                            <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 tracking-tight uppercase mb-4 md:italic">
                                 {language === 'id' ? 'Dewan' : 'Board of'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500">{language === 'id' ? 'Komisaris' : 'Commissioners'}</span>
                             </h2>
                             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
@@ -160,7 +160,7 @@ const Management: React.FC = () => {
                                 <Briefcase size={14} className="text-cyan-600" />
                                 Executive Leadership
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase mb-4">
+                            <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 tracking-tight uppercase mb-4">
                                 {language === 'id' ? 'Dewan' : 'Board of'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">{language === 'id' ? 'Direksi' : 'Directors'}</span>
                             </h2>
                             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
@@ -214,7 +214,7 @@ const Management: React.FC = () => {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                             <div className="relative z-10">
                                 <Briefcase className="text-primary mb-8 animate-pulse" size={48} />
-                                <h3 className="text-3xl font-black tracking-tighter uppercase italic mb-6">Strategic Governance</h3>
+                                <h3 className="text-2xl md:text-2xl lg:text-2xl xl:text-3xl font-black tracking-tighter uppercase md:italic mb-6">Strategic Governance</h3>
                                 <p className="text-white/60 leading-relaxed mb-10 max-w-sm">
                                     Operating as a public company since 2022, we maintain rigorous transparency and compliance in every strategic decision.
                                 </p>
@@ -226,7 +226,7 @@ const Management: React.FC = () => {
                         </div>
                         <div className="bg-white p-10 md:p-14 rounded-[3.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 group">
                             <Award className="text-cyan-500 mb-8 group-hover:rotate-12 transition-transform" size={48} />
-                            <h3 className="text-3xl font-black tracking-tighter uppercase italic mb-6 text-slate-900 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-500">Global Expertise</h3>
+                            <h3 className="text-2xl font-black tracking-tighter uppercase italic mb-6 text-slate-900 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-500">Global Expertise</h3>
                             <p className="text-slate-500 leading-relaxed mb-10 max-w-sm font-medium">
                                 Our executive team brings decades of combined experience from both local distribution and international healthcare landscapes.
                             </p>
@@ -281,7 +281,7 @@ const Management: React.FC = () => {
                                 <div className="p-10 md:p-20 flex-1 overflow-y-auto max-h-[60vh] md:max-h-none bg-white relative">
                                     <div className="mb-12 relative">
                                         <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 block">Executive Leadership Profile</span>
-                                        <h3 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter italic mb-4 leading-none">
+                                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 uppercase tracking-tighter italic mb-4 leading-none">
                                             {selectedMember.name}
                                         </h3>
                                         <div className="inline-block px-5 py-2 bg-slate-50 border border-slate-100 rounded-xl">

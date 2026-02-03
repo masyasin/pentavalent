@@ -89,13 +89,13 @@ const BusinessSection: React.FC = () => {
         setDivisions(sortedData.map(item => ({
           ...item,
           // Ensure colors are vibrant for Homepage
-          color_accent: item.slug === 'distribusi-farmasi' 
+          color_accent: item.slug === 'distribusi-farmasi'
             ? 'from-blue-600 to-indigo-600' // Better Pharma color
             : item.slug === 'distribusi-alkes'
-            ? 'from-cyan-500 to-blue-600'
-            : item.slug === 'produk-konsumen'
-            ? 'from-emerald-500 to-teal-600'
-            : item.color_accent,
+              ? 'from-cyan-500 to-blue-600'
+              : item.slug === 'produk-konsumen'
+                ? 'from-emerald-500 to-teal-600'
+                : item.color_accent,
           features: item.business_features
             ? item.business_features
               .sort((a: any, b: any) => a.sort_order - b.sort_order)
@@ -132,7 +132,7 @@ const BusinessSection: React.FC = () => {
           <span className="inline-block px-5 py-2 bg-slate-900/5 text-slate-900 rounded-sm text-[13px] font-bold tracking-[0.3em] uppercase mb-8 border border-slate-900/10 max-md:mb-4 max-md:text-[10px]">
             {language === 'id' ? 'Lini Usaha Utama' : 'Main Business Lines'}
           </span>
-          <h2 className="text-4xl md:text-7xl font-black text-slate-900 mb-0 tracking-tighter uppercase max-md:text-3xl">
+          <h2 className="text-3xl md:text-5xl lg:text-5xl xl:text-6xl font-black text-slate-900 mb-0 tracking-tighter uppercase max-md:text-3xl">
             {language === 'id' ? 'Bidang Operasional &' : 'Operational Fields &'} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic pr-4">{language === 'id' ? 'Layanan Terpadu' : 'Integrated Services'}</span>
           </h2>
@@ -154,11 +154,11 @@ const BusinessSection: React.FC = () => {
                 </div>
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 tracking-tight leading-tight transition-all max-md:text-xl">
+              <h3 className="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-black text-slate-900 mb-4 tracking-tight leading-tight transition-all max-md:text-xl">
                 {language === 'id' ? div.title_id : div.title_en}
               </h3>
 
-              <p className="text-slate-500 text-[15px] font-bold leading-relaxed mb-8 px-4 uppercase tracking-tighter max-md:text-xs max-md:mb-6">
+              <p className="text-slate-500 text-[13px] lg:text-[14px] font-bold leading-relaxed mb-8 px-4 uppercase tracking-tighter max-md:text-xs max-md:mb-6">
                 {language === 'id' ? div.subtitle_id : div.subtitle_en}
               </p>
 

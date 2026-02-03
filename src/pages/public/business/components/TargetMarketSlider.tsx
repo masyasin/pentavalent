@@ -100,7 +100,7 @@ const TargetMarketSlider: React.FC<TargetMarketSliderProps> = ({
             <div className="relative py-12 md:py-16 group/gal overflow-hidden">
                 {/* Root Embla Container */}
                 <div className="overflow-visible" ref={emblaRef}>
-                    <div className="flex touch-pan-y h-[400px] md:h-[550px] items-center">
+                    <div className="flex touch-pan-y h-[320px] md:h-[550px] items-center">
                         {validImages.map((img, idx) => {
                             const isActive = selectedIndex === idx;
 

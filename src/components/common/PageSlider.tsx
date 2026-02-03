@@ -83,14 +83,14 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
 
     useEffect(() => {
         if (!emblaApi) return;
-        
+
         const onSelect = () => {
             setSelectedIndex(emblaApi.selectedScrollSnap());
         };
 
         emblaApi.on('select', onSelect);
         emblaApi.on('reInit', onSelect);
-        
+
         // Initial set
         onSelect();
 
@@ -121,10 +121,10 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                     }}
                                     className={`w-full h-full object-cover transition-transform duration-[10000ms] ease-out ${selectedIndex === index ? 'scale-110' : 'scale-100'}`}
                                     loading={index === 0 ? "eager" : "lazy"}
-                                    fetchpriority={index === 0 ? "high" : "auto"}
+                                    fetchPriority={index === 0 ? "high" : "auto"}
                                     decoding="async"
                                     sizes="(max-width: 768px) 100vw, 100vw"
-                                    style={{ 
+                                    style={{
                                         willChange: 'transform',
                                         objectPosition: 'center 30%'
                                     }}
@@ -154,7 +154,7 @@ const PageSlider: React.FC<PageSliderProps> = ({ pagePath, breadcrumbLabel, pare
                                                     </span>
                                                 </div>
 
-                                                <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] tracking-tighter text-white italic drop-shadow-2xl mb-6 px-4">
+                                                <h1 className="text-3xl md:text-5xl lg:text-5xl xl:text-6xl font-black leading-[1.1] tracking-tighter text-white italic drop-shadow-2xl mb-6 px-4">
                                                     {language === 'id' ? slide.title_id : slide.title_en}
                                                 </h1>
 

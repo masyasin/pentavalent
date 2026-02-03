@@ -435,7 +435,7 @@ const BusinessPage: React.FC = () => {
 
         if (!businessData) return [];
         const slug = businessData.slug;
-        
+
         // If images from DB are empty, use fallback
         if (!businessData.images || businessData.images.length === 0) {
             return fallbackImages[slug] || [
@@ -544,8 +544,8 @@ const BusinessPage: React.FC = () => {
                                             <IconComp size={32} />
                                         </div>
                                         <div>
-                                            <div className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tighter italic">{stat.value}</div>
-                                            <div className="text-[10px] lg:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">
+                                            <div className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 tracking-tighter italic">{stat.value}</div>
+                                            <div className="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">
                                                 {language === 'id' ? stat.label_id : stat.label_en}
                                             </div>
                                             <p className="text-[10px] font-bold text-slate-500 mt-1 leading-tight">
@@ -581,7 +581,7 @@ const BusinessPage: React.FC = () => {
                                     Business Division
                                 </div>
 
-                                <h2 className="text-3xl md:text-5xl font-black mb-10 text-slate-900 tracking-tighter leading-tight md:italic">
+                                <h2 className="text-2xl md:text-4xl lg:text-4xl xl:text-5xl font-black mb-6 md:mb-10 text-slate-900 tracking-tighter leading-tight md:italic">
                                     {language === 'id' ? businessData.title_id : businessData.title_en}
                                 </h2>
 
@@ -611,7 +611,7 @@ const BusinessPage: React.FC = () => {
                                             <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-1">
                                                 <ShieldCheck size={20} />
                                             </div>
-                                            <p className="text-lg font-bold text-slate-700 md:italic leading-relaxed">
+                                            <p className="text-base lg:text-base xl:text-lg font-bold text-slate-700 md:italic leading-relaxed">
                                                 "{language === 'id' ? text.id : text.en}"
                                             </p>
                                         </div>
@@ -644,7 +644,7 @@ const BusinessPage: React.FC = () => {
                                                 <div className="relative z-10">
                                                     <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-4 block">Target 2025</span>
                                                     <div className="flex items-baseline gap-2 mb-2">
-                                                        <span className="text-4xl md:text-6xl font-black text-white md:italic tracking-tighter">
+                                                        <span className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black text-white md:italic tracking-tighter">
                                                             <CountUp end={17} />%
                                                         </span>
                                                         <motion.div
@@ -675,7 +675,7 @@ const BusinessPage: React.FC = () => {
                                                 <div className="relative z-10">
                                                     <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-4 block">Target 2025</span>
                                                     <div className="flex items-baseline gap-2 mb-2">
-                                                        <span className="text-4xl md:text-6xl font-black md:italic tracking-tighter">
+                                                        <span className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black md:italic tracking-tighter">
                                                             <CountUp end={40} />%
                                                         </span>
                                                         <motion.div
@@ -691,9 +691,9 @@ const BusinessPage: React.FC = () => {
                                         </div>
 
                                         {/* Performance Text with Modern Border */}
-                                        <div className="p-8 md:p-10 bg-slate-50 rounded-[2.5rem] border-l-8 border-cyan-500 shadow-inner relative">
-                                            <div className="absolute top-6 right-8 text-cyan-100 font-black text-6xl select-none">"</div>
-                                            <p className="text-slate-700 text-lg md:text-xl font-bold md:italic leading-relaxed relative z-10">
+                                        <div className="p-6 md:p-10 bg-slate-50 rounded-[2rem] md:rounded-[2.5rem] border-l-4 md:border-l-8 border-cyan-500 shadow-inner relative">
+                                            <div className="absolute top-4 right-6 text-cyan-100 font-black text-4xl md:text-6xl select-none">"</div>
+                                            <p className="text-slate-700 text-sm md:text-lg lg:text-lg xl:text-xl font-bold md:italic leading-relaxed relative z-10">
                                                 {language === 'id'
                                                     ? 'PEVE menunjukkan kinerja positif dengan tren pertumbuhan penjualan dan laba bersih yang stabil, meskipun kondisi ekonomi belum sepenuhnya kondusif.'
                                                     : 'PEVE shows positive performance with stable sales and net profit growth trends, even though economic conditions are not yet fully conducive.'
@@ -758,6 +758,9 @@ const BusinessPage: React.FC = () => {
                                                 src="/images/distribution-flow.jpg"
                                                 alt="Distribution Flow Diagram"
                                                 className="w-full h-auto transition-transform duration-700 group-hover/diagram:scale-[1.02]"
+                                                onError={(e) => {
+                                                    e.currentTarget.src = 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=1200';
+                                                }}
                                             />
                                             <div className="absolute inset-0 bg-slate-950/0 group-hover/diagram:bg-slate-950/5 transition-colors flex items-center justify-center">
                                                 <div className="px-6 py-3 bg-white/90 backdrop-blur-md rounded-full shadow-xl opacity-0 group-hover/diagram:opacity-100 transition-all translate-y-4 group-hover/diagram:translate-y-0 flex items-center gap-2">
@@ -837,13 +840,14 @@ const BusinessPage: React.FC = () => {
                                 {location.pathname.includes('target-market') && (
                                     <div className="mt-16 space-y-10">
                                         <div className="flex flex-col gap-6 items-center lg:items-start text-center lg:text-left w-full">
-                                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-white shrink-0">
-                                                    <Target size={16} />
+                                            <h3 className="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-4">
+                                                <div className="w-8 h-8 md:w-12 md:h-12 rounded-xl bg-cyan-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-cyan-500/20">
+                                                    <Target size={20} className="hidden md:block" />
+                                                    <Target size={16} className="md:hidden" />
                                                 </div>
                                                 {language === 'id' ? 'Target Pasar' : 'Target Market'}
                                             </h3>
-                                            
+
                                             {/* Mobile: Custom Sweet Dropdown Selection */}
                                             <div className="block lg:hidden w-full max-w-[280px] px-4 relative z-[110]">
                                                 <button
@@ -854,8 +858,8 @@ const BusinessPage: React.FC = () => {
                                                         <div className="w-5 h-5 text-cyan-500">
                                                             {getIcon(TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.icon || 'Target')}
                                                         </div>
-                                                        {language === 'id' 
-                                                            ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.label 
+                                                        {language === 'id'
+                                                            ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.label
                                                             : TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.labelEn}
                                                     </div>
                                                     <ChevronDown size={14} className={`transition-transform duration-500 ${isTargetDropdownOpen ? 'rotate-180' : ''}`} />
@@ -876,11 +880,10 @@ const BusinessPage: React.FC = () => {
                                                                         setActiveTargetTab(tab.id);
                                                                         setIsTargetDropdownOpen(false);
                                                                     }}
-                                                                    className={`w-full px-6 py-4 text-left flex items-center gap-4 transition-all ${
-                                                                        activeTargetTab === tab.id 
-                                                                        ? 'bg-slate-900 text-white' 
+                                                                    className={`w-full px-6 py-4 text-left flex items-center gap-4 transition-all ${activeTargetTab === tab.id
+                                                                        ? 'bg-slate-900 text-white'
                                                                         : 'text-slate-600 hover:bg-slate-50'
-                                                                    }`}
+                                                                        }`}
                                                                 >
                                                                     <div className={`w-4 h-4 ${activeTargetTab === tab.id ? 'text-cyan-400' : 'text-cyan-500'}`}>
                                                                         {getIcon(tab.icon)}
@@ -898,21 +901,35 @@ const BusinessPage: React.FC = () => {
                                                 </AnimatePresence>
                                             </div>
 
-                                            {/* Desktop: Filter Chips Selection */}
-                                            <div className="hidden lg:flex flex-wrap gap-3 relative z-[101] w-full">
+                                            {/* Desktop: Grid Selection */}
+                                            <div className="hidden lg:grid grid-cols-5 gap-6 relative z-[101] w-full px-4">
                                                 {TARGET_MARKET_DETAILS.map((tab) => (
                                                     <button
                                                         key={tab.id}
                                                         onClick={() => setActiveTargetTab(tab.id)}
-                                                        className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2 active:scale-95 whitespace-nowrap touch-manipulation cursor-pointer ${activeTargetTab === tab.id
-                                                            ? 'bg-slate-900 text-white shadow-lg shadow-slate-200 -translate-y-0.5'
-                                                            : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                                                        className={`relative overflow-hidden flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-500 group/tab border-b-4 active:scale-95 ${activeTargetTab === tab.id
+                                                            ? 'bg-slate-900 text-white shadow-2xl shadow-slate-900/30 -translate-y-2 border-slate-800'
+                                                            : 'bg-white text-slate-500 hover:bg-slate-50 hover:shadow-xl hover:-translate-y-1 border-slate-100'
                                                             }`}
                                                     >
-                                                        <div className={`w-3.5 h-3.5 shrink-0 ${activeTargetTab === tab.id ? 'text-cyan-400' : 'text-slate-400'}`}>
-                                                            {getIcon(tab.icon)}
+                                                        {activeTargetTab === tab.id && (
+                                                            <motion.div
+                                                                layoutId="active-tab-glow"
+                                                                className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent pointer-events-none"
+                                                            />
+                                                        )}
+
+                                                        <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-5 transition-all duration-500 ${activeTargetTab === tab.id
+                                                            ? 'bg-cyan-500/20 text-cyan-400 scale-110'
+                                                            : 'bg-slate-50 text-slate-300 group-hover/tab:text-slate-400 group-hover/tab:scale-110 shadow-inner'}`}>
+                                                            {getIcon(tab.icon, 36)}
                                                         </div>
-                                                        {language === 'id' ? tab.label : tab.labelEn}
+
+                                                        <span className="text-[11px] font-black uppercase tracking-[0.2em] text-center leading-tight relative z-10 transition-colors duration-300">
+                                                            {language === 'id' ? tab.label : tab.labelEn}
+                                                        </span>
+
+                                                        <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full transition-all duration-500 ${activeTargetTab === tab.id ? 'bg-cyan-400 scale-[3]' : 'bg-transparent scale-0'}`} />
                                                     </button>
                                                 ))}
                                             </div>
@@ -944,10 +961,10 @@ const BusinessPage: React.FC = () => {
                                                             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-cyan-500/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-cyan-400 border border-cyan-400/30 w-fit">
                                                                 {language === 'id' ? 'Visualisasi Pasar' : 'Market Visualization'}
                                                             </div>
-                                                            <h4 className="text-xl md:text-5xl font-black text-white md:italic tracking-tighter uppercase leading-none">
+                                                            <h4 className="text-xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-white md:italic tracking-tighter uppercase leading-none">
                                                                 {language === 'id' ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.label : TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.labelEn}
                                                             </h4>
-                                                            <p className="text-white/70 max-w-md text-sm md:text-base leading-relaxed font-medium">
+                                                            <p className="text-white/70 max-w-md text-sm lg:text-sm xl:text-base leading-relaxed font-medium">
                                                                 {language === 'id' ? TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.description : TARGET_MARKET_DETAILS.find(t => t.id === activeTargetTab)?.descriptionEn}
                                                             </p>
                                                         </div>

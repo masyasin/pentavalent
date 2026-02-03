@@ -65,7 +65,7 @@ const AboutSection: React.FC = () => {
             <span className="inline-block px-5 py-2 bg-primary/5 text-primary rounded-full text-[13px] font-black tracking-[0.2em] uppercase mb-8 border border-primary/10 max-md:mb-4 max-md:text-[10px]">
               {language === 'id' ? 'Kenapa Penta Valent' : 'Why Penta Valent'}
             </span>
-            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-10 tracking-tighter uppercase leading-none max-md:text-3xl max-md:mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-slate-900 mb-10 tracking-tighter uppercase leading-none max-md:text-3xl max-md:mb-6">
               {language === 'id' ? 'Keunggulan' : 'Reasons behind'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 italic inline-block pr-4">{language === 'id' ? 'Kompetitif Kami' : 'Our Excellence'}</span>
             </h2>
@@ -77,7 +77,7 @@ const AboutSection: React.FC = () => {
                       {item.icon}
                     </div>
                     <div>
-                      <h4 className="text-lg font-black text-slate-900 mb-1 transition-colors max-md:text-base">
+                      <h4 className="text-base lg:text-lg font-black text-slate-900 mb-1 transition-colors max-md:text-base">
                         {language === 'id' ? item.title_id : item.title_en}
                       </h4>
                       <p className="text-[15px] text-slate-500 font-medium leading-relaxed max-md:text-sm">

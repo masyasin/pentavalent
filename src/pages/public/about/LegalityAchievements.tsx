@@ -77,7 +77,7 @@ const LegalityAchievements: React.FC = () => {
                     {/* 1. Legalitas Perusahaan (Company Legality) */}
                     <section className="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden">
                         <div className="relative z-10">
-                            <h2 className="text-4xl md:text-5xl font-black text-slate-900 uppercase italic tracking-tighter mb-10 border-b border-slate-100 pb-6">
+                            <h2 className="text-3xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 uppercase italic tracking-tighter mb-10 border-b border-slate-100 pb-6">
                                 {language === 'id' ? 'Legalitas Perusahaan' : 'Company Legality'}
                             </h2>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -108,7 +108,7 @@ const LegalityAchievements: React.FC = () => {
 
                     {/* 2. Perizinan & Sertifikasi (Licenses & Certifications) */}
                     <section>
-                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 uppercase italic tracking-tighter mb-10 pl-6 border-l-4 border-primary">
+                        <h2 className="text-3xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 uppercase italic tracking-tighter mb-10 pl-6 border-l-4 border-primary">
                             {language === 'id' ? 'Perizinan & Sertifikasi' : 'Licenses & Certifications'}
                         </h2>
                         <div className="grid lg:grid-cols-2 gap-8">
@@ -156,7 +156,7 @@ const LegalityAchievements: React.FC = () => {
                         <section className="bg-slate-900 text-white p-10 md:p-14 rounded-[3.5rem] relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
-                            <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-10 relative z-10 flex items-center gap-3">
+                            <h2 className="text-2xl md:text-2xl lg:text-2xl xl:text-3xl font-black uppercase italic tracking-tighter mb-10 relative z-10 flex items-center gap-3">
                                 <ShieldCheck className="text-primary" />
                                 {language === 'id' ? 'Kepatuhan Regulasi' : 'Regulatory Compliance'}
                             </h2>
@@ -181,7 +181,7 @@ const LegalityAchievements: React.FC = () => {
 
                         {/* 4. Kebijakan Perusahaan */}
                         <section className="bg-white p-10 md:p-14 rounded-[3.5rem] border border-slate-100 shadow-xl relative overflow-hidden">
-                            <h2 className="text-3xl font-black text-slate-900 uppercase italic tracking-tighter mb-10">
+                            <h2 className="text-2xl md:text-2xl lg:text-2xl xl:text-3xl font-black text-slate-900 uppercase italic tracking-tighter mb-10">
                                 {language === 'id' ? 'Kebijakan Perusahaan' : 'Corporate Policies'}
                             </h2>
                             <div className="grid gap-4">

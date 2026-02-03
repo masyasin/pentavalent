@@ -86,7 +86,7 @@ const InvestorSection: React.FC = () => {
   };
 
   return (
-    <section id="investors" className="py-24 md:py-48 bg-white relative overflow-hidden max-md:py-16 max-md:overflow-x-hidden">
+    <section id="investors" className="pt-24 md:pt-48 pb-12 md:pb-24 bg-white relative overflow-hidden max-md:py-16 max-md:overflow-x-hidden">
       {/* Subtle Institutional Grid Background */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none max-md:hidden" style={{
         backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
@@ -102,7 +102,7 @@ const InvestorSection: React.FC = () => {
                 {language === 'id' ? 'Transparansi & Tata Kelola' : 'Transparency & Governance'}
               </span>
             </div>
-            <h2 className="text-4xl md:text-7xl font-black mb-0 text-slate-900 tracking-tighter leading-[1.05] max-md:text-3xl">
+            <h2 className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black mb-0 text-slate-900 tracking-tighter leading-[1.05] max-md:text-3xl">
               {language === 'id' ? 'Hubungan' : 'Investor'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-blue-900 to-slate-800 italic pr-4">{language === 'id' ? 'Investor' : 'Relations'}</span>
             </h2>
@@ -131,7 +131,7 @@ const InvestorSection: React.FC = () => {
           ].map((stat, i) => (
             <div key={i} className="bg-slate-50 p-10 md:p-14 rounded-[3rem] border border-slate-100 group hover:bg-white hover:shadow-2xl transition-all duration-500 max-md:p-6 max-md:rounded-2xl max-md:w-full max-md:min-h-auto">
               <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4 max-md:mb-2 max-md:text-[8px]">{stat.label}</div>
-              <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 mb-2 tracking-tighter max-md:text-4xl">{stat.value}</div>
+              <div className="text-4xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 mb-2 tracking-tighter max-md:text-4xl">{stat.value}</div>
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest max-md:text-[8px]">{stat.desc}</div>
             </div>
           ))}
@@ -140,7 +140,7 @@ const InvestorSection: React.FC = () => {
         {/* Resources Grid - Simplified structure */}
         <div className="grid lg:grid-cols-2 gap-12 max-md:gap-6">
           <div className="bg-slate-900 rounded-[3.5rem] p-12 md:p-20 text-white relative overflow-hidden group max-md:p-8 max-md:rounded-[2rem]">
-            <h3 className="text-4xl font-black text-white mb-10 tracking-tighter max-md:text-2xl max-md:mb-6">{t('investor.reports.title')}</h3>
+            <h3 className="text-3xl lg:text-3xl xl:text-4xl font-black text-white mb-10 tracking-tighter max-md:text-2xl max-md:mb-6">{t('investor.reports.title')}</h3>
             <div className="space-y-4 max-md:space-y-3">
               {[
                 { title: 'Annual Report 2024', date: 'Jan 2025' },
@@ -160,7 +160,7 @@ const InvestorSection: React.FC = () => {
           </div>
 
           <div className="bg-white rounded-[3.5rem] p-12 md:p-20 border border-slate-100 shadow-2xl relative max-md:p-8 max-md:rounded-[2rem]">
-            <h3 className="text-4xl font-black mb-12 tracking-tighter text-slate-900 max-md:text-2xl max-md:mb-6">{t('investor.calendar.title')}</h3>
+            <h3 className="text-3xl lg:text-3xl xl:text-4xl font-black mb-12 tracking-tighter text-slate-900 max-md:text-2xl max-md:mb-6">{t('investor.calendar.title')}</h3>
             <div className="space-y-10 max-md:space-y-6">
               {(calendar.length > 0 ? calendar : [
                 { title_id: 'Rilis Hasil Keuangan', title_en: 'Financial Results Release', event_date: '2025-03-15', event_type: 'Earnings' },
@@ -188,7 +188,7 @@ const InvestorSection: React.FC = () => {
         </div>
 
         {/* Quick Institutional Access */}
-        <div className="mt-24 pt-24 border-t border-slate-100 max-md:mt-12 max-md:pt-12">
+        <div className="mt-16 pt-16 border-t border-slate-100 max-md:mt-12 max-md:pt-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-md:gap-4">
             {[
               { label_id: 'Profil Perusahaan', label_en: 'Company Profile', link: '/about/profile', icon: '🏢', color: 'bg-blue-600' },

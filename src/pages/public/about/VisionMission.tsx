@@ -98,11 +98,11 @@ const VisionMission: React.FC = () => {
                                     <Target size={32} />
                                 </div>
 
-                                <h2 className="text-3xl md:text-4xl font-black mb-8 text-slate-900 tracking-tight uppercase italic pr-2">
+                                <h2 className="text-2xl md:text-2xl lg:text-3xl font-black mb-8 text-slate-900 tracking-tight uppercase md:italic pr-2">
                                     Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500">Vision</span>
                                 </h2>
 
-                                <p className="text-xl md:text-2xl font-black text-slate-700 leading-snug italic tracking-tight">
+                                <p className="text-lg md:text-2xl font-black text-slate-700 leading-snug md:italic tracking-tight">
                                     "{language === 'id' ? info?.vision_text_id : info?.vision_text_en}"
                                 </p>
 
@@ -127,7 +127,7 @@ const VisionMission: React.FC = () => {
                                     <Compass size={32} />
                                 </div>
 
-                                <h2 className="text-4xl md:text-5xl font-black mb-8 text-white tracking-tighter uppercase italic">
+                                <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black mb-8 text-white tracking-tighter uppercase md:italic">
                                     Our <span className="text-cyan-400">Mission</span>
                                 </h2>
 
@@ -189,7 +189,7 @@ const VisionMission: React.FC = () => {
                                 <Sparkles size={14} />
                                 Core Values
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 px-4">
+                            <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black text-slate-900 tracking-tight mb-4 px-4">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-600 to-purple-600">NILAI PERUSAHAAN</span>
                             </h2>
                             <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed px-4">
@@ -267,7 +267,7 @@ const VisionMission: React.FC = () => {
 
                                             {/* Text Label Overlay (Added for clarity & bilingual support) */}
                                             <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent pt-12">
-                                                <h3 className="text-white text-base md:text-2xl font-black italic tracking-tighter leading-none mb-1">{val.title_id}</h3>
+                                                <h3 className="text-white text-base md:text-xl lg:text-2xl font-black italic tracking-tighter leading-none mb-1">{val.title_id}</h3>
                                                 <p className="text-white/60 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">{val.title_en}</p>
                                             </div>
                                         </div>

@@ -325,8 +325,8 @@ const NetworkPartners: React.FC = () => {
                                     <div className="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden text-center max-w-5xl mx-auto mb-12 max-md:p-6 max-md:rounded-[2rem] max-md:mb-6">
                                         <div className="absolute top-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
                                         <div className="relative z-10">
-                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-slate-900 tracking-tighter uppercase italic max-md:text-xl max-md:mb-4">
-                                                Indonesia's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500 text-6xl max-md:text-2xl max-md:block">Logistics Backbone</span>
+                                            <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black mb-8 text-slate-900 tracking-tighter uppercase italic max-md:text-xl max-md:mb-4">
+                                                Indonesia's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500 text-5xl max-md:text-2xl max-md:block">Logistics Backbone</span>
                                             </h2>
                                             <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-3xl mx-auto max-md:text-sm">
                                                 Over 34 strategic operation hubs connecting major cities across the archipelago, ensuring medical supplies reach those who need them most.
@@ -448,7 +448,6 @@ const NetworkPartners: React.FC = () => {
                                                     </motion.div>
                                                 </div>
                                             </div>
-                                            </div>
 
                                             {/* Right: Real Leaflet Map (Free Replacement) */}
                                             <div className="flex-1 bg-slate-50 rounded-[3rem] border border-slate-200 relative overflow-hidden group/map max-md:rounded-2xl min-h-[400px] md:h-full w-full">
@@ -509,8 +508,8 @@ const NetworkPartners: React.FC = () => {
                                     <div className="bg-slate-900 p-10 md:p-14 rounded-[3.5rem] shadow-2xl shadow-slate-900/40 text-white relative overflow-hidden text-center max-w-5xl mx-auto max-md:p-6 max-md:rounded-[2rem]">
                                         <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[100px] translate-y-1/2 translate-x-1/2"></div>
                                         <div className="relative z-10">
-                                            <h2 className="text-4xl md:text-5xl font-black mb-8 text-white tracking-tighter uppercase italic max-md:text-2xl max-md:mb-4">
-                                                Strategic <span className="text-cyan-400 text-6xl max-md:text-3xl max-md:block">Global Alliances</span>
+                                            <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-black mb-8 text-white tracking-tighter uppercase italic max-md:text-2xl max-md:mb-4">
+                                                Strategic <span className="text-cyan-400 text-5xl max-md:text-3xl max-md:block">Global Alliances</span>
                                             </h2>
                                             <p className="text-white/60 font-medium text-lg leading-relaxed max-w-3xl mx-auto max-md:text-sm">
                                                 We bridge the gap between world-leading clinical innovators and the Indonesian market through resilient partnerships built on trust and efficiency.

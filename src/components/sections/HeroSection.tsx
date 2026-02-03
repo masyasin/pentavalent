@@ -77,7 +77,7 @@ const HeroSlideItem: React.FC<{
                 height={1080}
                 className="w-full h-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
-                fetchpriority={index === 0 ? "high" : "auto"}
+                fetchPriority={index === 0 ? "high" : "auto"}
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, 100vw"
                 onError={() => {
@@ -108,7 +108,7 @@ const HeroSlideItem: React.FC<{
             {/* Title */}
             {(language === 'id' ? slide.title_id : slide.title_en) && (
               <div className="relative mb-6 transform transition-all duration-1000 max-md:mb-4">
-                <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight transition-all duration-1000 drop-shadow-2xl max-md:text-3xl ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+                <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black text-white leading-[1.05] tracking-tight transition-all duration-1000 drop-shadow-2xl max-md:text-3xl ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
                   {language === 'id' ? slide.title_id : slide.title_en}
                 </h1>
               </div>
@@ -116,7 +116,7 @@ const HeroSlideItem: React.FC<{
 
             {/* Subtitle */}
             {(language === 'id' ? slide.subtitle_id : slide.subtitle_en) && (
-              <p className={`text-lg sm:text-xl md:text-2xl mb-10 max-w-3xl font-medium leading-relaxed text-blue-50/80 transition-all duration-1000 delay-300 drop-shadow-lg max-md:text-sm max-md:mb-6 max-md:leading-relaxed ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+              <p className={`text-lg sm:text-xl md:text-xl lg:text-xl xl:text-2xl mb-10 max-w-3xl font-medium leading-relaxed text-blue-50/80 transition-all duration-1000 delay-300 drop-shadow-lg max-md:text-sm max-md:mb-6 max-md:leading-relaxed ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
                 {language === 'id' ? slide.subtitle_id : slide.subtitle_en}
               </p>
             )}
