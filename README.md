@@ -1,13 +1,13 @@
-# Automotive Dealership Management System
+# Enterprise Corporate Web Portal - PT Pentavalent Tbk
 
-A modern, high-performance web application built to streamline automotive sales operations. This system provides a robust interface for tracking sales performance, managing vehicle inventory, and monitoring daily dealership workflows.
+A high-performance, responsive corporate website developed for a publicly traded enterprise. This platform serves as the primary digital touchpoint for stakeholders, investors, and clients, built with a strong focus on SEO, performance, and accessibility.
 
 ## Tech Stack
-* **Frontend:** React, TypeScript, Vite
-* **Styling:** TailwindCSS / SCSS *(sesuaikan dengan yang Anda pakai)*
-* **Architecture:** Component-driven design with strict TypeScript typing.
+* **Frontend:** TypeScript, React 
+* **Styling:** TailwindCSS
+* **Architecture:** SEO-optimized Server-Side Rendering (SSR) for maximum visibility.
 
 ## Key Features
-* 📊 Real-time Sales Tracking
-* 🚗 Vehicle Inventory Management
-* 🔒 Secure Authentication & Role-Based Access
+* 🏢 Dynamic Corporate & Investor Relations Dashboard
+* 🚀 High-speed loading with optimized asset delivery
+* 📱 Fully responsive UI/UX across all enterprise devices
